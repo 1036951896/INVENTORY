@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmación de Pedido - Inventory</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/ecommerce.css">
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <style>
+    body {
+      background-color: var(--gris-claro);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .confirmacion-contenedor {
+      background-color: var(--blanco);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      padding: 3rem;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      animation: slideUp 0.3s ease;
+    }
+
+    .confirmacion-icono {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: pulse 2s infinite;
+    }
+
+    .confirmacion-titulo {
+      color: var(--exito);
+      margin-bottom: 1rem;
+    }
+
+    .confirmacion-numero {
+      background-color: var(--gris-claro);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border-left: 4px solid var(--exito);
+    }
+
+    .confirmacion-numero p {
+      font-size: 0.9rem;
+      color: var(--gris-oscuro);
+      margin-bottom: 0.5rem;
+    }
+
+    .confirmacion-numero .numero {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--azul-oscuro);
+      font-family: monospace;
+    }
+
+    .confirmacion-detalles {
+      text-align: left;
+      background-color: var(--gris-claro);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
+
+    .detalle-fila {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #E0E0E0;
+    }
+
+    .detalle-fila:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .confirmacion-botones {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      justify-content: center;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .confirmacion-contenedor {
+        padding: 2rem 1.5rem;
+      }
+
+      .confirmacion-botones {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="confirmacion-contenedor">
+    <div class="confirmacion-icono">✓</div>
+    
+    <h1 class="confirmacion-titulo">¡Pedido Confirmado!</h1>
+    <p>Tu pedido ha sido registrado exitosamente</p>
+
+    <div class="confirmacion-numero">
+      <p>Número de Pedido:</p>
+      <div class="numero" id="numero-pedido">PED-0000000000</div>
+    </div>
+
+    <div class="confirmacion-detalles" id="detalles-pedido">
+      <!-- Se llenará con JavaScript -->
+    </div>
+
+    <div class="confirmacion-botones">
+      <button class="btn btn-principal" onclick="window.location.href='index.html'">
+        Ir al Inicio
+      </button>
+      <button class="btn btn-secundario" onclick="descargarRecibo()">
+        Descargar Recibo
+      </button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const params = new URLSearchParams(window.location.search);
+      const idPedido = params.get('pedido');
+
+      if (!idPedido) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Obtener el pedido
+      const pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+      const pedido = pedidos.find(p => p.id === idPedido);
+
+      if (!pedido) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Mostrar datos del pedido
+      document.getElementById('numero-pedido').textContent = pedido.id;
+
+      const detallesPedido = document.getElementById('detalles-pedido');
+      let html = `
+        <div class="detalle-fila">
+          <span><strong>Cliente:</strong></span>
+          <span>${pedido.cliente}</span>
+        </div>
+        <div class="detalle-fila">
+          <span><strong>Email:</strong></span>
+          <span>${pedido.email}</span>
+        </div>
+        <div class="detalle-fila">
+          <span><strong>Teléfono:</strong></span>
+          <span>${pedido.telefono || 'No proporcionado'}</span>
+        </div>
+        <div class="detalle-fila">
+          <span><strong>Fecha y Hora:</strong></span>
+          <span>${pedido.fecha} a las ${pedido.hora || 'N/A'}</span>
+        </div>
+        <div class="detalle-fila">
+          <span><strong>Estado:</strong></span>
+          <span style="background-color: #FFA500; color: white; padding: 0.3rem 0.8rem; border-radius: 4px; display: inline-block;">
+            ${pedido.estado.toUpperCase()}
+          </span>
+        </div>
+      `;
+      
+      // Agregar detalles de los items
+      html += `<hr style="margin: 1rem 0; border: none; border-top: 1px solid #E0E0E0;">`;
+      html += `<div class="detalle-fila"><strong>Productos Pedidos:</strong></div>`;
+      
+      pedido.items.forEach(item => {
+        const subtotal = item.precio * item.cantidad;
+        html += `
+          <div style="padding: 1rem; background-color: #F9F9F9; border-radius: 4px; margin: 0.5rem 0;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+              <strong>${item.nombre}</strong>
+              <span style="color: var(--azul-oscuro); font-weight: 600;">$${subtotal.toLocaleString('es-CO')}</span>
+            </div>
+            <div style="font-size: 0.9rem; color: var(--gris-oscuro);">
+              ${item.cantidad} unidad${item.cantidad > 1 ? 'es' : ''} × $${item.precio.toLocaleString('es-CO')}
+            </div>
+          </div>
+        `;
+      });
+      
+      html += `<hr style="margin: 1rem 0; border: none; border-top: 1px solid #E0E0E0;">`;
+      html += `
+        <div class="detalle-fila" style="font-size: 1.2rem; margin-top: 1rem;">
+          <span><strong>Total del Pedido:</strong></span>
+          <span style="font-weight: 700; color: var(--exito); font-size: 1.3rem;">
+            $${pedido.total.toLocaleString('es-CO')}
+          </span>
+        </div>
+      `;
+
+      detallesPedido.innerHTML = html;
+    });
+
+    function descargarRecibo() {
+      alert('Función de descarga disponible pronto');
+      // En producción, generar PDF con la información del pedido
+    }
+  </script>
+  <script>
+    window.BACKEND_URL = 'http://localhost:3000';
+  </script>
+</body>
+</html>

@@ -1,0 +1,1952 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Administrador - Inventory</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* ===== ESTILOS NOTIFICACIONES ===== */
+    .notificaciones-contenedor {
+      position: relative;
+      margin-right: 20px;
+    }
+
+    .btn-notificaciones {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      position: relative;
+      padding: 10px;
+      transition: transform 0.2s;
+    }
+
+    .btn-notificaciones:hover {
+      transform: scale(1.1);
+    }
+
+    .notif-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #ff4444;
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .notificaciones-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border: 2px solid #B6E1F2;
+      border-radius: 8px;
+      width: 350px;
+      max-height: 400px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      margin-top: 10px;
+    }
+
+    .notificaciones-dropdown.activa {
+      display: flex;
+    }
+
+    .notif-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid #B6E1F2;
+    }
+
+    .notif-header h3 {
+      margin: 0;
+      color: #386273;
+      font-size: 16px;
+    }
+
+    .btn-cerrar-notif {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .notif-lista {
+      flex: 1;
+      overflow-y: auto;
+      max-height: 300px;
+    }
+
+    .notif-item {
+      padding: 12px 15px;
+      border-bottom: 1px solid #f0f0f0;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .notif-item:hover {
+      background: #f5f5f5;
+    }
+
+    .notif-item.no-leida {
+      background: #f0f7ff;
+      font-weight: 500;
+    }
+
+    .notif-item-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .notif-item-icono {
+      font-size: 20px;
+      min-width: 30px;
+    }
+
+    .notif-item-text {
+      flex: 1;
+    }
+
+    .notif-item-titulo {
+      font-weight: bold;
+      color: #386273;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .notif-item-desc {
+      color: #666;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .notif-item-hora {
+      color: #999;
+      font-size: 11px;
+    }
+
+    .notif-vacia {
+      text-align: center;
+      padding: 30px 15px;
+      color: #999;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .notif-footer {
+      padding: 10px 15px;
+      border-top: 1px solid #B6E1F2;
+      text-align: center;
+    }
+
+    .btn-ver-todas {
+      background: #386273;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background 0.2s;
+    }
+
+    .btn-ver-todas:hover {
+      background: #2a4959;
+    }
+
+    .distribuidora-icono {
+      margin-right: 8px;
+      font-size: 18px;
+    }
+
+    .usuario-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-contenedor">
+    <!-- MENÚ LATERAL -->
+    <aside class="menu-lateral">
+      <a href="index.html" class="menu-lateral-logo" style="cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+        <img src="../assets/logo.svg" alt="Logo">
+        <span>Inventory</span>
+      </a>
+
+      <ul class="menu-lateral-lista">
+        <li class="menu-lateral-item">
+          <a href="#" class="menu-lateral-enlace activo" data-seccion="dashboard">
+            <span class="menu-lateral-icono">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="2" x2="12" y2="22"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </span>
+            <span>Inicio</span>
+          </a>
+        </li>
+        <li class="menu-lateral-item">
+          <a href="#" class="menu-lateral-enlace" data-seccion="productos">
+            <span class="menu-lateral-icono">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+            </span>
+            <span>Productos</span>
+          </a>
+        </li>
+        <li class="menu-lateral-item">
+          <a href="#" class="menu-lateral-enlace" data-seccion="categorias">
+            <span class="menu-lateral-icono">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                <line x1="9" y1="2" x2="9" y2="22"></line>
+                <line x1="15" y1="2" x2="15" y2="22"></line>
+              </svg>
+            </span>
+            <span>Categorías</span>
+          </a>
+        </li>
+        <li class="menu-lateral-item">
+          <a href="#" class="menu-lateral-enlace" data-seccion="pedidos">
+            <span class="menu-lateral-icono">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="1" cy="1" r="1"></circle>
+                <circle cx="1" cy="1" r="1"></circle>
+                <path d="M2 5h20"></path>
+                <path d="M2 5l1.754 12.686A2 2 0 0 0 5.741 20h12.523a2 2 0 0 0 1.986-2.314L22 5"></path>
+              </svg>
+            </span>
+            <span>Pedidos</span>
+          </a>
+        </li>
+        <li class="menu-lateral-item">
+          <a href="#" class="menu-lateral-enlace" data-seccion="usuarios">
+            <span class="menu-lateral-icono">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </span>
+            <span>Usuarios</span>
+          </a>
+        </li>
+        <li class="menu-lateral-item">
+          <a href="#" class="menu-lateral-enlace" data-seccion="reportes">
+            <span class="menu-lateral-icono">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 17"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+              </svg>
+            </span>
+            <span>Reportes</span>
+          </a>
+        </li>
+        <li class="menu-lateral-item">
+          <a href="#" class="menu-lateral-enlace" data-seccion="notificaciones">
+            <span class="menu-lateral-icono">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+            </span>
+            <span>Notificaciones</span>
+          </a>
+        </li>
+        <li class="menu-lateral-item">
+          <a href="#" class="menu-lateral-enlace" data-seccion="ofertas">
+            <span class="menu-lateral-icono">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 9H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-2"></path>
+                <path d="M6 5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2"></path>
+                <line x1="9" y1="14" x2="15" y2="14"></line>
+              </svg>
+            </span>
+            <span>Ofertas</span>
+          </a>
+        </li>
+        <li class="menu-lateral-item">
+          <a href="#" class="menu-lateral-enlace" data-seccion="configuracion">
+            <span class="menu-lateral-icono">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m0 5.08l-4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08 0l4.24 4.24M19.78 19.78l-4.24-4.24m0-5.08l4.24-4.24M23 12h-6m-6 0H5M19.78 4.22l-4.24 4.24m-5.08 0l-4.24-4.24"></path>
+              </svg>
+            </span>
+            <span>Configuración</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="menu-cerrar-sesion">
+        <button onclick="cerrarSesionAdmin()">Cerrar Sesión</button>
+      </div>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="contenido-principal">
+      <!-- BARRA SUPERIOR -->
+      <header class="barra-superior">
+        <div class="barra-titulo">
+          <h1 id="titulo-seccion">Dashboard</h1>
+        </div>
+
+        <div class="barra-acciones">
+          <div class="notificaciones-contenedor">
+            <button id="btn-notificaciones" class="btn-notificaciones">
+              <span class="campana-icono">🔔</span>
+              <span class="notif-badge" id="notif-count" style="display:none;">0</span>
+            </button>
+            <div class="notificaciones-dropdown" id="notif-dropdown">
+              <div class="notif-header">
+                <h3>Notificaciones</h3>
+                <button class="btn-cerrar-notif" onclick="cerrarNotificaciones()">✕</button>
+              </div>
+              <div class="notif-lista" id="notif-lista">
+                <p class="notif-vacia">No hay notificaciones</p>
+              </div>
+              <div class="notif-footer">
+                <button class="btn-ver-todas" onclick="irASeccion('notificaciones')">Ver todas</button>
+              </div>
+            </div>
+          </div>
+          <div class="usuario-info">
+            <span class="distribuidora-icono">🏢</span>
+            <span id="nombre-usuario">Inventory</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ÁREA DE CONTENIDO -->
+      <div class="area-contenido">
+        <!-- DASHBOARD -->
+        <section id="seccion-dashboard" class="seccion-contenido activa">
+          <div class="dashboard-stats">
+            <div class="stat-tarjeta">
+              <div class="stat-icono">📊</div>
+              <div class="stat-valor" id="total-ventas">$0.00</div>
+              <div class="stat-etiqueta">Total de Ventas</div>
+            </div>
+
+            <div class="stat-tarjeta">
+              <div class="stat-icono">📦</div>
+              <div class="stat-valor" id="total-productos">0</div>
+              <div class="stat-etiqueta">Productos</div>
+            </div>
+
+            <div class="stat-tarjeta">
+              <div class="stat-icono">🚚</div>
+              <div class="stat-valor" id="pedidos-pendientes">0</div>
+              <div class="stat-etiqueta">Pedidos Pendientes</div>
+            </div>
+
+            <div class="stat-tarjeta">
+              <div class="stat-icono">👥</div>
+              <div class="stat-valor" id="total-clientes">0</div>
+              <div class="stat-etiqueta">Clientes Registrados</div>
+            </div>
+
+            <div class="stat-tarjeta" id="stat-en-preparacion">
+              <div class="stat-icono">⚙️</div>
+              <div class="stat-valor">0</div>
+              <div class="stat-etiqueta">En Preparación</div>
+            </div>
+
+            <div class="stat-tarjeta" id="stat-entregados">
+              <div class="stat-icono">✅</div>
+              <div class="stat-valor">0</div>
+              <div class="stat-etiqueta">Entregados</div>
+            </div>
+
+            <div class="stat-tarjeta" id="stat-sin-stock">
+              <div class="stat-icono">⚠️</div>
+              <div class="stat-valor">0</div>
+              <div class="stat-etiqueta">Sin Stock</div>
+            </div>
+          </div>
+
+          <div class="graficos-container">
+            <div class="grafico-card">
+              <h3>Productos Más Vendidos</h3>
+              <canvas id="grafico-ventas"></canvas>
+            </div>
+
+            <div class="grafico-card">
+              <h3>Nivel de Inventario</h3>
+              <canvas id="grafico-inventario"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <!-- PRODUCTOS -->
+        <section id="seccion-productos" class="seccion-contenido" style="display: none;">
+          <div class="tabla-contenedor">
+            <div class="tabla-encabezado">
+              <h2>Gestión de Productos</h2>
+              <div class="tabla-acciones">
+                <button class="btn btn-principal" onclick="abrirModalProducto()">+ Agregar Producto</button>
+              </div>
+            </div>
+
+            <div id="contenedor-tabla-productos">
+              <table class="admin-tabla">
+                <thead>
+                  <tr>
+                    <th>Imagen</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tabla-productos-body">
+                  <!-- Se llenará con JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- PEDIDOS -->
+        <section id="seccion-pedidos" class="seccion-contenido" style="display: none;">
+          <div class="tabla-contenedor">
+            <div class="tabla-encabezado">
+              <h2>Gestión de Pedidos</h2>
+              <div class="tabla-acciones">
+                <input type="text" id="filtro-pedidos" placeholder="🔍 Buscar radicado, cliente..." class="campo-busqueda">
+              </div>
+            </div>
+            <div id="pedidosLista" style="overflow-x: auto;">
+              <table class="admin-tabla pedidos-tabla">
+                <thead>
+                  <tr>
+                    <th>Radicado</th>
+                    <th>Cliente</th>
+                    <th>Teléfono</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tabla-pedidos-body">
+                  <tr><td colspan="8" class="sin-datos">Cargando pedidos...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- MODAL DETALLE PEDIDO -->
+          <div id="modal-detalle-pedido" class="modal" style="display: none;">
+            <div class="modal-contenido modal-grande">
+              <div class="modal-encabezado">
+                <h2>Detalle del Pedido</h2>
+                <button class="cerrar-modal" onclick="cerrarModalDetallePedido()">&times;</button>
+              </div>
+              <div id="contenido-detalle-pedido"></div>
+              <div class="modal-acciones">
+                <button class="btn btn-secundario" onclick="cerrarModalDetallePedido()">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- USUARIOS -->
+        <section id="seccion-usuarios" class="seccion-contenido" style="display: none;">
+          <div class="tabla-contenedor">
+            <div class="tabla-encabezado">
+              <h2>Gestión de Usuarios</h2>
+            </div>
+
+            <table class="admin-tabla">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Correo</th>
+                  <th>Teléfono</th>
+                  <th>Tipo de Rol</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tabla-usuarios-body">
+                <!-- Se llenará con JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- CATEGORÍAS -->
+        <section id="seccion-categorias" class="seccion-contenido" style="display: none;">
+          <h2>Gestión de Categorías</h2>
+
+          <!-- Filtros de categorías -->
+          <div class="categorias-filtros">
+            <button class="filtro-btn activo" onclick="filtrarPorCategoria('todas')">
+              <span class="filtro-icono">📦</span>
+              <span class="filtro-texto">Todas</span>
+              <span class="filtro-contador" id="contador-todas">0</span>
+            </button>
+            <div id="botones-categorias">
+              <!-- Se generarán dinámicamente -->
+            </div>
+          </div>
+
+          <!-- Controlesde búsqueda, ordenamiento y exportación -->
+          <div class="categorias-controles">
+            <div class="control-busqueda">
+              <span class="icono-buscar">🔍</span>
+              <input type="text" id="input-buscar-productos" placeholder="Buscar productos por nombre..." onkeyup="buscarProductos(this.value)">
+            </div>
+
+            <div class="controles-acciones">
+              <select id="select-ordenar" onchange="ordenarProductos(this.value)" class="select-control">
+                <option value="">Ordenar por...</option>
+                <option value="nombre-asc">Nombre (A-Z)</option>
+                <option value="nombre-desc">Nombre (Z-A)</option>
+                <option value="precio-asc">Precio (menor a mayor)</option>
+                <option value="precio-desc">Precio (mayor a menor)</option>
+                <option value="stock-asc">Stock (menor a mayor)</option>
+                <option value="stock-desc">Stock (mayor a menor)</option>
+              </select>
+
+              <button class="btn btn-secundario" onclick="exportarCategorias()">
+                📥 Exportar PDF
+              </button>
+
+              <button class="btn btn-secundario" onclick="exportarCSV()">
+                📊 Exportar CSV
+              </button>
+            </div>
+          </div>
+
+          <!-- Estadísticas de categorías -->
+          <div class="categorias-stats">
+            <div class="stat-card">
+              <div class="stat-numero" id="stat-total-productos">0</div>
+              <div class="stat-label">Productos</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-numero" id="stat-stock-total">0</div>
+              <div class="stat-label">Stock Total</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-numero" id="stat-valor-inventario">$0</div>
+              <div class="stat-label">Valor Inventario</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-numero" id="stat-categorias-activas">0</div>
+              <div class="stat-label">Categorías</div>
+            </div>
+          </div>
+
+          <!-- Contenedor de productos por categoría -->
+          <div id="categorias-lista" class="categorias-contenedor">
+            <!-- Se generarán dinámicamente las tarjetas de productos -->
+          </div>
+
+          <!-- ESTILOS PARA CATEGORÍAS -->
+          <style>
+            .categorias-filtros {
+              display: flex;
+              gap: 12px;
+              margin-bottom: 25px;
+              padding: 15px;
+              background: linear-gradient(135deg, #f9f9f9 0%, #f5f5f5 100%);
+              border-radius: 10px;
+              flex-wrap: wrap;
+              border: 1px solid #eee;
+            }
+
+            .filtro-btn {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              padding: 10px 16px;
+              background: white;
+              border: 2px solid #B6E1F2;
+              border-radius: 8px;
+              cursor: pointer;
+              font-size: 13px;
+              transition: all 0.3s;
+              position: relative;
+              font-weight: 600;
+              color: #666;
+            }
+
+            .filtro-btn:hover {
+              border-color: #386273;
+              color: #386273;
+              box-shadow: 0 2px 8px rgba(56, 98, 115, 0.1);
+            }
+
+            .filtro-btn.activo {
+              background: linear-gradient(135deg, #386273 0%, #5a8fa3 100%);
+              color: white;
+              border-color: #386273;
+              box-shadow: 0 4px 12px rgba(56, 98, 115, 0.2);
+            }
+
+            .filtro-icono {
+              font-size: 16px;
+            }
+
+            .filtro-contador {
+              background: rgba(255, 255, 255, 0.3);
+              padding: 2px 8px;
+              border-radius: 12px;
+              font-size: 11px;
+              font-weight: bold;
+              min-width: 20px;
+              text-align: center;
+            }
+
+            .filtro-btn.activo .filtro-contador {
+              background: rgba(255, 255, 255, 0.5);
+            }
+
+            .categorias-stats {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+              gap: 15px;
+              margin-bottom: 30px;
+            }
+
+            .categorias-contenedor {
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+              gap: 20px;
+            }
+
+            .categoria-grupo {
+              animation: fadeIn 0.4s ease-in-out;
+              background: white;
+              border-radius: 12px;
+              overflow: hidden;
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+              transition: all 0.3s;
+            }
+
+            .categoria-grupo:hover {
+              box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+              transform: translateY(-4px);
+            }
+
+            .categoria-header {
+              background: linear-gradient(135deg, #386273 0%, #5a8fa3 100%);
+              color: white;
+              padding: 16px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
+
+            .categoria-titulo {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              font-size: 16px;
+              font-weight: bold;
+            }
+
+            .categoria-titulo-icono {
+              font-size: 24px;
+            }
+
+            .categoria-badge {
+              background: rgba(255, 255, 255, 0.3);
+              padding: 4px 12px;
+              border-radius: 12px;
+              font-size: 12px;
+              font-weight: bold;
+            }
+
+            .categoria-stats {
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 10px;
+              padding: 12px;
+              background: #f9f9f9;
+              border-bottom: 1px solid #eee;
+              text-align: center;
+            }
+
+            .categoria-stat-item {
+              font-size: 12px;
+            }
+
+            .categoria-stat-numero {
+              font-size: 18px;
+              font-weight: bold;
+              color: #386273;
+              display: block;
+            }
+
+            .categoria-stat-label {
+              color: #999;
+              font-size: 10px;
+            }
+
+            .categoria-productos {
+              padding: 16px;
+              max-height: 500px;
+              overflow-y: auto;
+            }
+
+            .categoria-producto {
+              display: flex;
+              gap: 12px;
+              margin-bottom: 12px;
+              padding: 12px;
+              background: #f9f9f9;
+              border-radius: 8px;
+              border-left: 4px solid #B6E1F2;
+              transition: all 0.2s;
+            }
+
+            .categoria-producto:hover {
+              background: #f0f7fa;
+              border-left-color: #386273;
+            }
+
+            .categoria-producto-imagen {
+              width: 60px;
+              height: 60px;
+              border-radius: 6px;
+              object-fit: contain;
+              background: white;
+              border: 1px solid #eee;
+            }
+
+            .categoria-producto-info {
+              flex: 1;
+              font-size: 13px;
+            }
+
+            .categoria-producto-nombre {
+              font-weight: bold;
+              color: #333;
+              margin-bottom: 4px;
+            }
+
+            .categoria-producto-precio {
+              color: #386273;
+              font-weight: bold;
+              margin-bottom: 4px;
+            }
+
+            .categoria-producto-stock {
+              display: inline-block;
+              padding: 2px 8px;
+              border-radius: 4px;
+              font-size: 11px;
+              background: #e8f5e9;
+              color: #2e7d32;
+              font-weight: bold;
+            }
+
+            .categoria-producto-stock.bajo {
+              background: #fff3cd;
+              color: #856404;
+            }
+
+            .categoria-producto-stock.agotado {
+              background: #ffccbc;
+              color: #bf360c;
+            }
+
+            @keyframes fadeIn {
+              from {
+                opacity: 0;
+                transform: translateY(10px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+
+            #categorias-lista::-webkit-scrollbar {
+              width: 6px;
+            }
+
+            #categorias-lista::-webkit-scrollbar-track {
+              background: #f1f1f1;
+              border-radius: 10px;
+            }
+
+            #categorias-lista::-webkit-scrollbar-thumb {
+              background: #B6E1F2;
+              border-radius: 10px;
+            }
+
+            #categorias-lista::-webkit-scrollbar-thumb:hover {
+              background: #386273;
+            }
+
+            .categoria-vacia {
+              grid-column: 1 / -1;
+              padding: 40px;
+              text-align: center;
+              color: #999;
+              background: #f9f9f9;
+              border-radius: 8px;
+            }
+
+            .categorias-controles {
+              display: flex;
+              gap: 15px;
+              margin-bottom: 25px;
+              flex-wrap: wrap;
+              align-items: center;
+            }
+
+            .control-busqueda {
+              flex: 1;
+              min-width: 250px;
+              position: relative;
+              display: flex;
+              align-items: center;
+            }
+
+            .icono-buscar {
+              position: absolute;
+              left: 12px;
+              font-size: 16px;
+              pointer-events: none;
+            }
+
+            #input-buscar-productos {
+              width: 100%;
+              padding: 10px 12px 10px 40px;
+              border: 2px solid #B6E1F2;
+              border-radius: 8px;
+              font-size: 13px;
+              transition: all 0.3s;
+            }
+
+            #input-buscar-productos:focus {
+              outline: none;
+              border-color: #386273;
+              box-shadow: 0 0 8px rgba(56, 98, 115, 0.2);
+            }
+
+            .controles-acciones {
+              display: flex;
+              gap: 10px;
+              flex-wrap: wrap;
+              align-items: center;
+            }
+
+            .select-control {
+              padding: 10px 12px;
+              border: 2px solid #B6E1F2;
+              border-radius: 8px;
+              font-size: 13px;
+              cursor: pointer;
+              transition: all 0.3s;
+              background: white;
+              color: #666;
+            }
+
+            .select-control:hover {
+              border-color: #386273;
+              color: #386273;
+            }
+
+            .select-control:focus {
+              outline: none;
+              border-color: #386273;
+              box-shadow: 0 0 8px rgba(56, 98, 115, 0.2);
+            }
+
+            .btn-secundario {
+              background: white;
+              color: #386273;
+              border: 2px solid #B6E1F2;
+              padding: 10px 16px;
+              border-radius: 8px;
+              cursor: pointer;
+              font-size: 13px;
+              font-weight: 600;
+              transition: all 0.3s;
+            }
+
+            .btn-secundario:hover {
+              background: #f0f7fa;
+              border-color: #386273;
+              box-shadow: 0 2px 8px rgba(56, 98, 115, 0.1);
+            }
+
+            .btn-secundario:active {
+              transform: translateY(1px);
+            }
+
+            @media (max-width: 768px) {
+              .categorias-controles {
+                flex-direction: column;
+              }
+
+              .control-busqueda {
+                width: 100%;
+              }
+
+              .controles-acciones {
+                width: 100%;
+              }
+            }
+          </style>
+        </section>
+
+        <!-- REPORTES -->
+        <section id="seccion-reportes" class="seccion-contenido" style="display: none;">
+          <h2>Reportes de Inventario</h2>
+          
+          <!-- Botones de selección de tipo de reporte -->
+          <div class="reportes-tabs">
+            <button class="tab-btn activo" onclick="mostrarReporte('inventario')">📦 Inventario Bajo Stock</button>
+            <button class="tab-btn" onclick="mostrarReporte('top-sellers')">🏆 Productos Más Vendidos</button>
+            <button class="tab-btn" onclick="mostrarReporte('sin-rotacion')">📉 Sin Rotación</button>
+          </div>
+
+          <!-- Filtros superiores -->
+          <div class="reportes-filtros">
+            <label>Rango de Fechas:</label>
+            <select id="filtro-periodo">
+              <option value="7">Últimos 7 días</option>
+              <option value="30" selected>Últimos 30 días</option>
+              <option value="90">Últimos 90 días</option>
+            </select>
+            <button class="btn btn-principal" onclick="actualizarReporte()">Actualizar</button>
+          </div>
+
+          <!-- REPORTE 1: INVENTARIO BAJO STOCK -->
+          <div id="reporte-inventario" class="reporte-contenedor">
+            <div class="reporte-header">
+              <h3>Productos con Bajo Stock</h3>
+              <p class="reporte-desc">Productos con menos de 5 unidades en stock</p>
+            </div>
+
+            <div class="reporte-stats">
+              <div class="stat-card">
+                <div class="stat-numero" id="stat-bajo-stock">0</div>
+                <div class="stat-label">Bajo Stock (<5)</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-numero" id="stat-agotados">0</div>
+                <div class="stat-label">Agotados (=0)</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-numero" id="stat-critico">0</div>
+                <div class="stat-label">Stock Crítico</div>
+              </div>
+            </div>
+
+            <canvas id="chart-inventario-dist" width="4" height="2"></canvas>
+
+            <div class="tabla-contenedor">
+              <table class="admin-tabla">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Stock Actual</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="tabla-inventario-body">
+                  <tr><td colspan="5" style="text-align:center; padding: 20px;">Cargando...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- REPORTE 2: TOP SELLERS -->
+          <div id="reporte-top-sellers" class="reporte-contenedor" style="display: none;">
+            <div class="reporte-header">
+              <h3>Productos Más Vendidos</h3>
+              <p class="reporte-desc">Top 10 productos por volumen de ventas</p>
+            </div>
+
+            <div class="reporte-stats">
+              <div class="stat-card">
+                <div class="stat-numero" id="stat-total-vendido">0</div>
+                <div class="stat-label">Unidades Vendidas</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-numero" id="stat-ingresos-totales">$0</div>
+                <div class="stat-label">Ingresos Totales</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-numero" id="stat-tickets-total">0</div>
+                <div class="stat-label">Órdenes Completadas</div>
+              </div>
+            </div>
+
+            <canvas id="chart-top-sellers" width="4" height="2"></canvas>
+
+            <div class="tabla-contenedor">
+              <table class="admin-tabla">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Unidades Vendidas</th>
+                    <th>Ingresos</th>
+                    <th>% del Total</th>
+                  </tr>
+                </thead>
+                <tbody id="tabla-top-sellers-body">
+                  <tr><td colspan="6" style="text-align:center; padding: 20px;">Cargando...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- REPORTE 3: SIN ROTACIÓN -->
+          <div id="reporte-sin-rotacion" class="reporte-contenedor" style="display: none;">
+            <div class="reporte-header">
+              <h3>Productos Sin Rotación</h3>
+              <p class="reporte-desc">Productos que no se han vendido o tienen ventas mínimas</p>
+            </div>
+
+            <div class="reporte-stats">
+              <div class="stat-card">
+                <div class="stat-numero" id="stat-sin-venta">0</div>
+                <div class="stat-label">Sin Ventas</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-numero" id="stat-stock-muerto">0</div>
+                <div class="stat-label">Stock Muerto (>20 u)</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-numero" id="stat-rotacion-minima">0</div>
+                <div class="stat-label">Rotación Mínima (<5 u)</div>
+              </div>
+            </div>
+
+            <canvas id="chart-sin-rotacion" width="4" height="2"></canvas>
+
+            <div class="tabla-contenedor">
+              <table class="admin-tabla">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Stock Actual</th>
+                    <th>Ventas Totales</th>
+                    <th>Problema</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="tabla-sin-rotacion-body">
+                  <tr><td colspan="6" style="text-align:center; padding: 20px;">Cargando...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ESTILOS PARA REPORTES -->
+          <style>
+            .reportes-tabs {
+              display: flex;
+              gap: 10px;
+              margin-bottom: 25px;
+              border-bottom: 2px solid #f0f0f0;
+              flex-wrap: wrap;
+            }
+
+            .tab-btn {
+              background: white;
+              border: none;
+              border-bottom: 3px solid transparent;
+              padding: 12px 20px;
+              cursor: pointer;
+              font-size: 14px;
+              transition: all 0.3s;
+              color: #666;
+            }
+
+            .tab-btn:hover {
+              color: #386273;
+              border-bottom-color: #B6E1F2;
+            }
+
+            .tab-btn.activo {
+              color: #386273;
+              border-bottom-color: #386273;
+              font-weight: bold;
+            }
+
+            .reportes-filtros {
+              display: flex;
+              gap: 15px;
+              align-items: center;
+              margin-bottom: 25px;
+              padding: 15px;
+              background: #f9f9f9;
+              border-radius: 8px;
+              flex-wrap: wrap;
+            }
+
+            .reportes-filtros label {
+              font-weight: bold;
+              color: #386273;
+            }
+
+            .reportes-filtros select {
+              padding: 8px 12px;
+              border: 1px solid #B6E1F2;
+              border-radius: 4px;
+              font-size: 13px;
+            }
+
+            .reporte-contenedor {
+              animation: fadeIn 0.3s ease-in;
+            }
+
+            @keyframes fadeIn {
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+
+            .reporte-header {
+              margin-bottom: 20px;
+              border-bottom: 2px solid #B6E1F2;
+              padding-bottom: 15px;
+            }
+
+            .reporte-header h3 {
+              margin: 0 0 5px 0;
+              color: #386273;
+            }
+
+            .reporte-desc {
+              margin: 0;
+              color: #999;
+              font-size: 13px;
+            }
+
+            .reporte-stats {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+              gap: 15px;
+              margin-bottom: 25px;
+            }
+
+            .stat-card {
+              background: linear-gradient(135deg, #386273 0%, #5a8fa3 100%);
+              padding: 20px;
+              border-radius: 8px;
+              color: white;
+              text-align: center;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+
+            .stat-numero {
+              font-size: 32px;
+              font-weight: bold;
+              margin-bottom: 5px;
+            }
+
+            .stat-label {
+              font-size: 12px;
+              opacity: 0.9;
+            }
+
+            #chart-inventario-dist,
+            #chart-top-sellers,
+            #chart-sin-rotacion {
+              max-height: 300px;
+              margin-bottom: 30px;
+            }
+          </style>
+        </section>
+
+        <!-- NOTIFICACIONES -->
+        <section id="seccion-notificaciones" class="seccion-contenido" style="display: none;">
+          <h2>Historial de Notificaciones</h2>
+          
+          <div class="filtros-notif">
+            <button class="btn-filtro activo" onclick="filtrarNotificaciones('todas')">Todas</button>
+            <button class="btn-filtro" onclick="filtrarNotificaciones('NUEVO_PEDIDO')">Pedidos</button>
+            <button class="btn-filtro" onclick="filtrarNotificaciones('PRODUCTO_AGOTADO')">Agotados</button>
+            <button class="btn-filtro" onclick="filtrarNotificaciones('ALERTA_STOCK')">Stock Bajo</button>
+          </div>
+
+          <div class="tabla-contenedor">
+            <table class="tabla-notif">
+              <thead>
+                <tr>
+                  <th>Tipo</th>
+                  <th>Título</th>
+                  <th>Descripción</th>
+                  <th>Hora</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody id="tabla-notif-body">
+                <tr>
+                  <td colspan="5" style="text-align:center; padding: 20px; color: #999;">
+                    Cargando notificaciones...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <style>
+            .filtros-notif {
+              display: flex;
+              gap: 10px;
+              margin-bottom: 20px;
+              flex-wrap: wrap;
+            }
+
+            .btn-filtro {
+              background: white;
+              border: 2px solid #B6E1F2;
+              padding: 8px 16px;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 13px;
+              transition: all 0.2s;
+            }
+
+            .btn-filtro:hover,
+            .btn-filtro.activo {
+              background: #386273;
+              color: white;
+              border-color: #386273;
+            }
+
+            .tabla-notif {
+              width: 100%;
+              border-collapse: collapse;
+            }
+
+            .tabla-notif th {
+              background: #f5f5f5;
+              padding: 12px;
+              text-align: left;
+              color: #386273;
+              font-weight: bold;
+              border-bottom: 2px solid #B6E1F2;
+            }
+
+            .tabla-notif td {
+              padding: 12px;
+              border-bottom: 1px solid #f0f0f0;
+            }
+
+            .tabla-notif tbody tr:hover {
+              background: #f9f9f9;
+            }
+
+            .notif-tipo-badge {
+              display: inline-block;
+              padding: 4px 12px;
+              border-radius: 12px;
+              font-size: 11px;
+              font-weight: bold;
+              text-align: center;
+              min-width: 60px;
+            }
+
+            .notif-tipo-badge.NUEVO_PEDIDO {
+              background: #c8e6c9;
+              color: #2e7d32;
+            }
+
+            .notif-tipo-badge.PRODUCTO_AGOTADO {
+              background: #ffe0b2;
+              color: #e65100;
+            }
+
+            .notif-tipo-badge.ALERTA_STOCK {
+              background: #ffccbc;
+              color: #bf360c;
+            }
+
+            .notif-estado {
+              display: inline-block;
+              padding: 4px 12px;
+              border-radius: 12px;
+              font-size: 11px;
+              text-align: center;
+            }
+
+            .notif-estado.leida {
+              background: #e8f5e9;
+              color: #2e7d32;
+            }
+
+            .notif-estado.no-leida {
+              background: #e3f2fd;
+              color: #1565c0;
+            }
+          </style>
+        </section>
+
+        <!-- OFERTAS -->
+        <section id="seccion-ofertas" class="seccion-contenido" style="display: none;">
+          <div class="tabla-contenedor">
+            <div class="tabla-encabezado">
+              <h2>Gestión de Ofertas</h2>
+              <div class="tabla-acciones">
+                <button class="btn btn-principal" onclick="abrirModalOferta()">+ Nueva Oferta</button>
+              </div>
+            </div>
+
+            <div id="contenedor-tabla-ofertas">
+              <table class="admin-tabla">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Precio Original</th>
+                    <th>Descuento</th>
+                    <th>Precio Final</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tabla-ofertas-body">
+                  <!-- Se llenará con JavaScript -->
+                </tbody>
+              </table>
+              <div id="sin-ofertas" style="text-align: center; padding: 40px; color: #999; display: none;">
+                <p>No hay ofertas creadas. ¡Crea la primera!</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODAL AGREGAR/EDITAR OFERTA -->
+          <div id="modal-oferta" class="modal" style="display: none;">
+            <div class="modal-contenido">
+              <div class="modal-header">
+                <h2 id="modal-oferta-titulo">Nueva Oferta</h2>
+                <button class="modal-cerrar" onclick="cerrarModalOferta()">✕</button>
+              </div>
+
+              <form id="formulario-oferta" style="display: flex; flex-direction: column; gap: 15px;">
+                <div>
+                  <label for="oferta-producto">Producto *</label>
+                  <select id="oferta-producto" required onchange="actualizarPrecioOferta()">
+                    <option value="">-- Selecciona un producto --</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label for="oferta-descuento">Descuento (%) *</label>
+                  <input type="number" id="oferta-descuento" min="1" max="100" value="10" required onchange="actualizarPrecioOferta()">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                  <div>
+                    <label>Precio Original</label>
+                    <input type="text" id="oferta-precio-original" readonly style="background: #f5f5f5;">
+                  </div>
+                  <div>
+                    <label>Precio Final</label>
+                    <input type="text" id="oferta-precio-final" readonly style="background: #f5f5f5;">
+                  </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px;">
+                  <button type="button" class="btn btn-secundario" onclick="cerrarModalOferta()">Cancelar</button>
+                  <button type="submit" class="btn btn-principal">Guardar Oferta</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <style>
+            #contenedor-tabla-ofertas {
+              overflow-x: auto;
+            }
+
+            .admin-tabla {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 15px;
+            }
+
+            .admin-tabla th {
+              background: #f5f5f5;
+              padding: 12px;
+              text-align: left;
+              font-weight: bold;
+              color: #386273;
+              border-bottom: 2px solid #B6E1F2;
+            }
+
+            .admin-tabla td {
+              padding: 12px;
+              border-bottom: 1px solid #eee;
+            }
+
+            .admin-tabla tbody tr:hover {
+              background: #f9f9f9;
+            }
+
+            .badge-descuento-admin {
+              background: #d4183d;
+              color: white;
+              padding: 4px 12px;
+              border-radius: 12px;
+              font-weight: bold;
+              font-size: 13px;
+            }
+
+            .btn-accion {
+              padding: 6px 12px;
+              margin-right: 5px;
+              font-size: 12px;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              transition: all 0.2s;
+            }
+
+            .btn-editar {
+              background: #B6E1F2;
+              color: #386273;
+            }
+
+            .btn-editar:hover {
+              background: #386273;
+              color: white;
+            }
+
+            .btn-eliminar {
+              background: #ffcccc;
+              color: #d4183d;
+            }
+
+            .btn-eliminar:hover {
+              background: #d4183d;
+              color: white;
+            }
+
+            .modal {
+              position: fixed;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background: rgba(0,0,0,0.5);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              z-index: 1000;
+            }
+
+            .modal-contenido {
+              background: white;
+              padding: 30px;
+              border-radius: 8px;
+              max-width: 500px;
+              width: 90%;
+              box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+
+            .modal-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 20px;
+            }
+
+            .modal-header h2 {
+              margin: 0;
+              color: #386273;
+            }
+
+            .modal-cerrar {
+              background: none;
+              border: none;
+              font-size: 24px;
+              cursor: pointer;
+              color: #999;
+            }
+
+            #formulario-oferta select,
+            #formulario-oferta input {
+              width: 100%;
+              padding: 10px;
+              border: 2px solid #B6E1F2;
+              border-radius: 4px;
+              font-size: 14px;
+            }
+
+            #formulario-oferta label {
+              display: block;
+              margin-bottom: 5px;
+              color: #386273;
+              font-weight: bold;
+              font-size: 13px;
+            }
+          </style>
+        </section>
+
+        <!-- CONFIGURACIÓN -->
+        <section id="seccion-configuracion" class="seccion-contenido" style="display: none;">
+          <div class="tabla-contenedor">
+            <h2>Configuración del Sistema</h2>
+
+            <div class="grupo-formulario">
+              <label>Nombre de la Tienda</label>
+              <input type="text" value="Inventory" placeholder="Nombre de la tienda">
+            </div>
+
+            <div class="grupo-formulario">
+              <label>Email de Contacto</label>
+              <input type="email" value="info@inventory.com" placeholder="Email">
+            </div>
+
+            <div class="grupo-formulario">
+              <label>Teléfono</label>
+              <input type="tel" value="+506 2345-6789" placeholder="Teléfono">
+            </div>
+
+            <div class="grupo-formulario">
+              <label>Dirección</label>
+              <textarea placeholder="Dirección completa">San José, Costa Rica</textarea>
+            </div>
+
+            <button class="btn btn-principal" onclick="guardarConfiguracion()">Guardar Cambios</button>
+
+            <hr style="margin: 1.5rem 0;">
+
+            <h3>Cuenta Admin</h3>
+            <div class="grupo-formulario">
+              <label>Correo Admin</label>
+              <input type="email" id="admin-email" readonly>
+            </div>
+
+            <div class="grupo-formulario">
+              <label>Contraseña Actual</label>
+              <input type="password" id="admin-current-password" placeholder="Contraseña actual">
+            </div>
+
+            <div class="grupo-formulario">
+              <label>Nueva Contraseña</label>
+              <input type="password" id="admin-new-password" placeholder="Nueva contraseña">
+            </div>
+
+            <div class="grupo-formulario">
+              <label>Confirmar Nueva Contraseña</label>
+              <input type="password" id="admin-confirm-password" placeholder="Confirmar nueva contraseña">
+            </div>
+
+            <button class="btn btn-principal" id="btn-change-admin-pass">Cambiar Contraseña</button>
+            <div id="admin-pass-msg" class="mensaje" style="margin-top:0.75rem;"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PRODUCTO -->
+  <div class="modal" id="modal-producto" style="display: none !important;">
+    <div class="modal-contenido">
+      <button class="modal-cerrar" onclick="cerrarModalProducto()">✕</button>
+      <h2>Agregar Producto</h2>
+
+      <form id="form-producto">
+        <div class="grupo-formulario">
+          <label for="prod-nombre">Nombre del Producto</label>
+          <input type="text" id="prod-nombre" required>
+        </div>
+
+        <div class="grupo-formulario-doble">
+          <div class="grupo-formulario">
+            <label for="prod-categoria">Categoría</label>
+            <select id="prod-categoria" required>
+              <option value="">Seleccionar categoría</option>
+              <option value="bebidas">Bebidas</option>
+              <option value="snacks">Snacks</option>
+              <option value="limpieza">Limpieza</option>
+              <option value="higiene">Higiene</option>
+            </select>
+          </div>
+
+          <div class="grupo-formulario">
+            <label for="prod-precio">Precio ($)</label>
+            <input type="number" id="prod-precio" step="0.01" required>
+          </div>
+        </div>
+
+        <div class="grupo-formulario-doble">
+          <div class="grupo-formulario">
+            <label for="prod-stock">Stock</label>
+            <input type="number" id="prod-stock" required>
+          </div>
+
+          <div class="grupo-formulario">
+            <label for="prod-imagen">URL de Imagen</label>
+            <input type="text" id="prod-imagen" placeholder="https://...">
+          </div>
+        </div>
+
+        <div class="grupo-formulario">
+          <label for="prod-descripcion">Descripción</label>
+          <textarea id="prod-descripcion"></textarea>
+        </div>
+
+        <div class="modal-botones">
+          <button type="button" class="btn btn-secundario" onclick="cerrarModalProducto()">Cancelar</button>
+          <button type="submit" class="btn btn-principal">Guardar Producto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/admin.js"></script>
+  <script>
+    // Inicializar campos de cuenta admin en la sección de configuración
+    async function initAdminAccountSection() {
+      const creds = await getAdminCredenciales();
+      if (creds && creds.email) document.getElementById('admin-email').value = creds.email;
+
+      document.getElementById('btn-change-admin-pass').addEventListener('click', async function() {
+        const current = document.getElementById('admin-current-password').value || '';
+        const nw = document.getElementById('admin-new-password').value || '';
+        const conf = document.getElementById('admin-confirm-password').value || '';
+        const msg = document.getElementById('admin-pass-msg');
+        msg.textContent = '';
+
+        if (!current || !nw || !conf) { msg.textContent = 'Por favor completa todos los campos.'; msg.className='mensaje mensaje-error'; return; }
+        if (nw !== conf) { msg.textContent = 'Las contraseñas nuevas no coinciden.'; msg.className='mensaje mensaje-error'; return; }
+
+        const active = await getAdminCredenciales();
+        if (!active) { msg.textContent = 'Error leyendo credenciales.'; msg.className='mensaje mensaje-error'; return; }
+
+        if (current !== active.password) { msg.textContent = 'Contraseña actual incorrecta.'; msg.className='mensaje mensaje-error'; return; }
+
+        const ok = await actualizarPasswordAdmin(nw);
+        if (ok) {
+          msg.textContent = '✓ Contraseña actualizada correctamente.'; msg.className='mensaje mensaje-exito';
+          // limpiar inputs
+          document.getElementById('admin-current-password').value = '';
+          document.getElementById('admin-new-password').value = '';
+          document.getElementById('admin-confirm-password').value = '';
+        } else {
+          msg.textContent = 'Error al actualizar la contraseña.'; msg.className='mensaje mensaje-error';
+        }
+      });
+    }
+
+    // Ejecutar al cargar el admin
+    document.addEventListener('DOMContentLoaded', function() {
+      initAdminAccountSection();
+    });
+  </script>
+  <script>
+    window.BACKEND_URL = 'http://localhost:3000';
+
+    // ===== SISTEMA DE NOTIFICACIONES =====
+    const notificaciones = [];
+    
+    // Tipo de notificaciones
+    const TIPOS_NOTIF = {
+      NUEVO_PEDIDO: { icono: '📦', color: '#4CAF50' },
+      PRODUCTO_AGOTADO: { icono: '⚠️', color: '#ff9800' },
+      BAJA_ROTACION: { icono: '📉', color: '#ff9800' },
+      ALERTA_STOCK: { icono: '⚠️', color: '#f44336' }
+    };
+
+    // Almacenar IDs de pedidos ya notificados (para evitar duplicados)
+    const pedidosNotificados = new Set();
+    const productosNotificadosAgotados = new Set();
+    const productosNotificadosBajoStock = new Set();
+
+    // Agregar notificación
+    function agregarNotificacion(tipo, titulo, descripcion, accion = null) {
+      const notif = {
+        id: Date.now(),
+        tipo,
+        titulo,
+        descripcion,
+        hora: new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }),
+        leida: false,
+        accion
+      };
+      
+      notificaciones.unshift(notif);
+      actualizarVistaNotificaciones();
+      
+      // Sonido de notificación (opcional)
+      if (notificaciones.length > 0) {
+        reproducirSonidoNotificacion();
+      }
+    }
+
+    // Actualizar vista de notificaciones
+    function actualizarVistaNotificaciones() {
+      const lista = document.getElementById('notif-lista');
+      const badge = document.getElementById('notif-count');
+      const noLeidasCount = notificaciones.filter(n => !n.leida).length;
+
+      if (notificaciones.length === 0) {
+        lista.innerHTML = '<p class="notif-vacia">No hay notificaciones</p>';
+        badge.style.display = 'none';
+      } else {
+        lista.innerHTML = notificaciones.slice(0, 5).map(notif => {
+          const tipo = TIPOS_NOTIF[notif.tipo] || { icono: '🔔', color: '#386273' };
+          return `
+            <div class="notif-item ${notif.leida ? '' : 'no-leida'}" onclick="marcarComoLeida(${notif.id})">
+              <div class="notif-item-content">
+                <div class="notif-item-icono">${tipo.icono}</div>
+                <div class="notif-item-text">
+                  <div class="notif-item-titulo">${notif.titulo}</div>
+                  <div class="notif-item-desc">${notif.descripcion}</div>
+                  <div class="notif-item-hora">${notif.hora}</div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        if (noLeidasCount > 0) {
+          badge.textContent = noLeidasCount;
+          badge.style.display = 'flex';
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+    }
+
+    // Marcar como leída
+    function marcarComoLeida(id) {
+      const notif = notificaciones.find(n => n.id === id);
+      if (notif) {
+        notif.leida = true;
+        actualizarVistaNotificaciones();
+      }
+    }
+
+    // Abrir/cerrar notificaciones
+    function abrirNotificaciones() {
+      const dropdown = document.getElementById('notif-dropdown');
+      dropdown.classList.toggle('activa');
+    }
+
+    function cerrarNotificaciones() {
+      const dropdown = document.getElementById('notif-dropdown');
+      dropdown.classList.remove('activa');
+    }
+
+    // Sonido de notificación
+    function reproducirSonidoNotificacion() {
+      try {
+        const audio = new Audio('data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==');
+        audio.play().catch(() => {});
+      } catch (e) {}
+    }
+
+    // Cargar notificaciones del backend
+    async function cargarNotificaciones() {
+      try {
+        const token = localStorage.getItem('admin-token');
+        if (!token) return;
+
+        // Obtener pedidos pendientes
+        try {
+          const pedidosResp = await fetch(`${BACKEND_URL}/api/v1/orders`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+
+          if (pedidosResp.ok) {
+            const pedidos = await pedidosResp.json();
+            
+            // Asegurarse que es un array
+            if (Array.isArray(pedidos)) {
+              // Alertar de pedidos nuevos (últimos 5 minutos)
+              const ahora = new Date();
+              pedidos.forEach(pedido => {
+                const createdAt = new Date(pedido.createdAt);
+                const diff = (ahora - createdAt) / 60000; // minutos
+                
+                // Si es nuevo y no ha sido notificado
+                if (diff < 5 && pedido.estado === 'PENDIENTE' && !pedidosNotificados.has(pedido.id)) {
+                  pedidosNotificados.add(pedido.id);
+                  agregarNotificacion(
+                    'NUEVO_PEDIDO',
+                    '🆕 Nuevo Pedido',
+                    `Pedido ${pedido.id.substring(0, 8)}... por $${(pedido.total / 1000).toFixed(1)}k`
+                  );
+                }
+              });
+            }
+          }
+        } catch (error) {
+          console.error('Error obteniendo pedidos:', error);
+        }
+
+        // Obtener productos
+        try {
+          const productosResp = await fetch(`${BACKEND_URL}/api/v1/products`);
+          if (productosResp.ok) {
+            const productos = await productosResp.json();
+            
+            // Asegurarse que es un array
+            if (Array.isArray(productos)) {
+              productos.forEach(prod => {
+                // Alerta de productos agotados
+                if (prod.stock === 0 && !productosNotificadosAgotados.has(prod.id)) {
+                  productosNotificadosAgotados.add(prod.id);
+                  agregarNotificacion(
+                    'PRODUCTO_AGOTADO',
+                    '⚠️ Producto Agotado',
+                    `${prod.nombre} no tiene stock disponible`
+                  );
+                }
+                
+                // Alerta de baja rotación (muy poco stock)
+                if (prod.stock < 5 && prod.stock > 0 && !productosNotificadosBajoStock.has(prod.id)) {
+                  productosNotificadosBajoStock.add(prod.id);
+                  agregarNotificacion(
+                    'ALERTA_STOCK',
+                    '📉 Stock Bajo',
+                    `${prod.nombre}: Solo quedan ${prod.stock} unidades`
+                  );
+                }
+              });
+            }
+          }
+        } catch (error) {
+          console.error('Error obteniendo productos:', error);
+        }
+      } catch (error) {
+        console.error('Error cargando notificaciones:', error);
+      }
+    }
+
+    // Eventos
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnNotif = document.getElementById('btn-notificaciones');
+      if (btnNotif) {
+        btnNotif.addEventListener('click', abrirNotificaciones);
+      }
+
+      // Cerrar dropdown al hacer clic fuera
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.notificaciones-contenedor')) {
+          cerrarNotificaciones();
+        }
+      });
+
+      // Cargar notificaciones cada 30 segundos
+      cargarNotificaciones();
+      setInterval(cargarNotificaciones, 30000);
+    });
+
+    // Función auxiliar para ir a secciones
+    function irASeccion(seccion) {
+      cerrarNotificaciones();
+      const enlace = document.querySelector(`[data-seccion="${seccion}"]`);
+      if (enlace) enlace.click();
+      
+      // Actualizar tabla si es notificaciones
+      if (seccion === 'notificaciones') {
+        setTimeout(() => {
+          actualizarTablaNotificaciones('todas');
+        }, 100);
+      }
+    }
+
+    // Variables globales de filtrado
+    let filtroActual = 'todas';
+
+    // Filtrar notificaciones
+    function filtrarNotificaciones(filtro) {
+      filtroActual = filtro;
+      
+      // Actualizar botones
+      document.querySelectorAll('.btn-filtro').forEach(btn => {
+        btn.classList.remove('activo');
+      });
+      event.target.classList.add('activo');
+      
+      actualizarTablaNotificaciones(filtro);
+    }
+
+    // Actualizar tabla de notificaciones
+    function actualizarTablaNotificaciones(filtro) {
+      const tbody = document.getElementById('tabla-notif-body');
+      if (!tbody) return;
+
+      let filtradas = notificaciones;
+      if (filtro !== 'todas') {
+        filtradas = notificaciones.filter(n => n.tipo === filtro);
+      }
+
+      if (filtradas.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" style="text-align:center; padding: 30px; color: #999;">
+              No hay notificaciones ${filtro !== 'todas' ? `de tipo "${filtro}"` : ''}
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtradas.map(notif => {
+        const tipoInfo = TIPOS_NOTIF[notif.tipo] || { icono: '🔔' };
+        const estadoClase = notif.leida ? 'leida' : 'no-leida';
+        const estadoTexto = notif.leida ? 'Leída' : 'No leída';
+        
+        return `
+          <tr>
+            <td>
+              <span class="notif-tipo-badge ${notif.tipo}">
+                ${tipoInfo.icono} ${notif.tipo}
+              </span>
+            </td>
+            <td>${notif.titulo}</td>
+            <td>${notif.descripcion}</td>
+            <td>${notif.hora}</td>
+            <td>
+              <span class="notif-estado ${estadoClase}">${estadoTexto}</span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+  </script>
+  <script>
+    window.BACKEND_URL = 'http://localhost:3000';
+  </script>
+</body>
+</html>

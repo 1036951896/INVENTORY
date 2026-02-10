@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seguimiento de Pedidos - Inventory</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <style>
+    .seguimiento-contenedor {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .seguimiento-header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .seguimiento-header h1 {
+      color: var(--azul-oscuro);
+      margin-bottom: 0.5rem;
+    }
+
+    .filtro-seguimiento {
+      background: #f5f5f5;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .filtro-seguimiento input {
+      flex: 1;
+      min-width: 200px;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    .filtro-seguimiento button {
+      padding: 0.75rem 1.5rem;
+      background: var(--azul-oscuro);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .filtro-seguimiento button:hover {
+      background: var(--azul);
+    }
+
+    .pedidos-lista-seguimiento {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .pedido-seguimiento {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .pedido-seguimiento-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .pedido-radicado {
+      font-weight: bold;
+      color: var(--azul-oscuro);
+      font-size: 1.2rem;
+    }
+
+    .estado-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    .estado-badge.pendiente {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .estado-badge.procesando {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .estado-badge.enviado {
+      background: #cfe2ff;
+      color: #084298;
+    }
+
+    .estado-badge.entregado {
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .pedido-detalles-seguimiento {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .detalle-item {
+      background: #f9f9f9;
+      padding: 1rem;
+      border-radius: 4px;
+    }
+
+    .detalle-label {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 0.25rem;
+    }
+
+    .detalle-valor {
+      font-size: 1rem;
+      color: var(--azul-oscuro);
+      font-weight: bold;
+    }
+
+    .timeline-seguimiento {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 2px solid #f0f0f0;
+    }
+
+    .timeline-title {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+
+    .timeline-items {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      padding: 0.5rem 0;
+    }
+
+    .timeline-item {
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .timeline-dot {
+      width: 12px;
+      height: 12px;
+      background: #ddd;
+      border-radius: 50%;
+      margin: 0 auto 0.5rem;
+      display: block;
+    }
+
+    .timeline-item.activo .timeline-dot {
+      background: var(--exito);
+      width: 18px;
+      height: 18px;
+      margin: -3px auto 0.5rem;
+    }
+
+    .timeline-label {
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .timeline-item.activo .timeline-label {
+      color: var(--exito);
+      font-weight: bold;
+    }
+
+    .pedido-items {
+      margin-top: 1rem;
+      background: #f9f9f9;
+      padding: 1rem;
+      border-radius: 4px;
+    }
+
+    .items-title {
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: var(--azul-oscuro);
+    }
+
+    .item-lista {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .item-fila {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .item-fila:last-child {
+      border-bottom: none;
+    }
+
+    .vacio-seguimiento {
+      text-align: center;
+      padding: 2rem;
+      color: #999;
+    }
+
+    .no-autenticado {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 1.5rem;
+      border-radius: 4px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .btn-ir-login {
+      background: var(--azul-oscuro);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+
+    .btn-ir-login:hover {
+      background: var(--azul);
+    }
+  </style>
+</head>
+<body style="background-color: #f5f5f5;">
+  <div class="seguimiento-contenedor">
+    <div class="seguimiento-header">
+      <h1>📦 Seguimiento de Pedidos</h1>
+      <p>Consulta el estado de tus pedidos en tiempo real</p>
+    </div>
+
+    <div class="filtro-seguimiento">
+      <input type="text" id="buscar-radicado" placeholder="Buscar por número de radicado (ej: PED-123456)">
+      <button onclick="buscarPedido()">Buscar</button>
+      <button onclick="cargarMisPedidos()" style="background: #666;">Mostrar Todos</button>
+      <button onclick="cerrarSesionCliente()" style="background: #c33;">Cerrar Sesión</button>
+    </div>
+
+    <div id="contenedor-seguimiento">
+      <!-- Se llenará con JavaScript -->
+    </div>
+  </div>
+
+  <script>
+    const BACKEND_URL = window.BACKEND_URL || 'http://localhost:3000';
+
+    document.addEventListener('DOMContentLoaded', function() {
+      verificarAutenticacionCliente();
+      cargarMisPedidos();
+      
+      // Actualizar cada 10 segundos
+      setInterval(cargarMisPedidos, 10000);
+    });
+
+    function verificarAutenticacionCliente() {
+      const usuarioStr = localStorage.getItem('usuario');
+      if (!usuarioStr) {
+        mostrarNoAutenticado();
+        return false;
+      }
+      return true;
+    }
+
+    function mostrarNoAutenticado() {
+      const contenedor = document.getElementById('contenedor-seguimiento');
+      contenedor.innerHTML = `
+        <div class="no-autenticado">
+          <p>⚠️ Debes iniciar sesión para ver tus pedidos</p>
+          <a href="login.html" class="btn-ir-login">Ir a Iniciar Sesión</a>
+        </div>
+      `;
+    }
+
+    async function cargarMisPedidos() {
+      if (!verificarAutenticacionCliente()) return;
+
+      const usuarioStr = localStorage.getItem('usuario');
+      const usuario = JSON.parse(usuarioStr);
+      const token = usuario.access_token;
+
+      try {
+        const resp = await fetch(`${BACKEND_URL}/api/v1/orders`, {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+
+        if (!resp.ok) {
+          if (resp.status === 401) {
+            mostrarNoAutenticado();
+            localStorage.removeItem('usuario');
+          }
+          return;
+        }
+
+        const pedidos = await resp.json();
+        mostrarPedidos(Array.isArray(pedidos) ? pedidos : (Array.isArray(pedidos.data) ? pedidos.data : []));
+      } catch (err) {
+        console.error('Error cargando pedidos:', err);
+        document.getElementById('contenedor-seguimiento').innerHTML = `
+          <div class="vacio-seguimiento">
+            <p>❌ Error al conectar con el servidor. Intenta más tarde.</p>
+          </div>
+        `;
+      }
+    }
+
+    function buscarPedido() {
+      const radicado = document.getElementById('buscar-radicado').value.trim();
+      if (!radicado) {
+        alert('Por favor ingresa un número de radicado');
+        return;
+      }
+
+      const usuarioStr = localStorage.getItem('usuario');
+      if (!usuarioStr) {
+        mostrarNoAutenticado();
+        return;
+      }
+
+      const usuario = JSON.parse(usuarioStr);
+      const token = usuario.access_token;
+
+      fetch(`${BACKEND_URL}/api/v1/orders`, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+        .then(r => r.json())
+        .then(data => {
+          const pedidos = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : []);
+          const encontrado = pedidos.filter(p => p.numero === radicado);
+          mostrarPedidos(encontrado);
+        });
+    }
+
+    function mostrarPedidos(pedidos) {
+      const contenedor = document.getElementById('contenedor-seguimiento');
+
+      if (pedidos.length === 0) {
+        contenedor.innerHTML = `
+          <div class="vacio-seguimiento">
+            <p>📭 No tienes pedidos aún</p>
+            <small>Haz tu primer compra y podrás seguir aquí</small>
+          </div>
+        `;
+        return;
+      }
+
+      contenedor.innerHTML = pedidos.map(pedido => generarTarjetaSeguimiento(pedido)).join('');
+    }
+
+    function generarTarjetaSeguimiento(pedido) {
+      const estadoClass = obtenerClaseEstado(pedido.estado);
+      const estadoTexto = obtenerTextoEstado(pedido.estado);
+      const timeline = generarTimeline(pedido.estado);
+
+      const fecha = new Date(pedido.createdAt);
+      const fechaFormato = fecha.toLocaleDateString('es-CO');
+      const horaFormato = fecha.toLocaleTimeString('es-CO');
+
+      const total = pedido.total || 0;
+      const itemsHtml = (pedido.items || []).map(item => `
+        <div class="item-fila">
+          <span>${item.producto?.nombre || 'Producto'}</span>
+          <span>${item.cantidad} × $${(item.precioUnitario || 0).toLocaleString('es-CO')}</span>
+        </div>
+      `).join('');
+
+      return `
+        <div class="pedido-seguimiento">
+          <div class="pedido-seguimiento-header">
+            <div class="pedido-radicado">${pedido.numero}</div>
+            <span class="estado-badge ${estadoClass}">${estadoTexto}</span>
+          </div>
+
+          <div class="pedido-detalles-seguimiento">
+            <div class="detalle-item">
+              <div class="detalle-label">📅 Fecha del Pedido</div>
+              <div class="detalle-valor">${fechaFormato} ${horaFormato}</div>
+            </div>
+            <div class="detalle-item">
+              <div class="detalle-label">👤 Cliente</div>
+              <div class="detalle-valor">${pedido.usuario?.nombre || 'Desconocido'}</div>
+            </div>
+            <div class="detalle-item">
+              <div class="detalle-label">📱 Teléfono</div>
+              <div class="detalle-valor">${pedido.usuario?.telefono || 'N/A'}</div>
+            </div>
+            <div class="detalle-item">
+              <div class="detalle-label">💵 Total</div>
+              <div class="detalle-valor">$${total.toLocaleString('es-CO')}</div>
+            </div>
+          </div>
+
+          <div class="pedido-items">
+            <div class="items-title">📦 Productos (${pedido.items?.length || 0} artículos)</div>
+            <div class="item-lista">
+              ${itemsHtml}
+            </div>
+          </div>
+
+          <div class="timeline-seguimiento">
+            <div class="timeline-title">🚚 Estado del Envío</div>
+            <div class="timeline-items">
+              ${timeline}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function obtenerClaseEstado(estado) {
+      switch(estado) {
+        case 'PENDIENTE': return 'pendiente';
+        case 'EN_PREPARACION': return 'procesando';
+        case 'ENVIADO': return 'enviado';
+        case 'ENTREGADO': return 'entregado';
+        default: return 'pendiente';
+      }
+    }
+
+    function obtenerTextoEstado(estado) {
+      switch(estado) {
+        case 'PENDIENTE': return '⏳ Pendiente';
+        case 'EN_PREPARACION': return '📦 En Preparación';
+        case 'ENVIADO': return '🚚 Enviado';
+        case 'ENTREGADO': return '✅ Entregado';
+        default: return estado;
+      }
+    }
+
+    function generarTimeline(estadoActual) {
+      const estados = ['PENDIENTE', 'EN_PREPARACION', 'ENVIADO', 'ENTREGADO'];
+      const etiquetas = ['Registrado', 'Preparando', 'Enviado', 'Entregado'];
+
+      return estados.map((estado, index) => {
+        const esActivo = estados.indexOf(estadoActual) >= index;
+        return `
+          <div class="timeline-item ${esActivo ? 'activo' : ''}">
+            <span class="timeline-dot"></span>
+            <div class="timeline-label">${etiquetas[index]}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function cerrarSesionCliente() {
+      if (confirm('¿Seguro que deseas cerrar sesión?')) {
+        localStorage.removeItem('usuario');
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
+  <script>
+    window.BACKEND_URL = 'http://localhost:3000';
+  </script>
+</body>
+</html>

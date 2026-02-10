@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalle del Producto - Inventory</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/ecommerce-figma.css">
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+    }
+
+    /* HEADER MEJORADO */
+    header {
+      background: linear-gradient(135deg, #386273 0%, #5a8fa3 100%);
+      box-shadow: 0 4px 15px rgba(56, 98, 115, 0.1);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .contenedor {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .encabezado-contenedor {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .logo img {
+      height: 40px;
+      width: 40px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+
+    .logo-text {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -0.5px;
+    }
+
+    .barra-busqueda-contenedor {
+      flex: 1;
+      max-width: 400px;
+    }
+
+    .barra-busqueda {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .icono-buscar {
+      position: absolute;
+      left: 12px;
+      width: 18px;
+      height: 18px;
+      color: #999;
+      pointer-events: none;
+    }
+
+    .input-buscar {
+      width: 100%;
+      padding: 10px 12px 10px 40px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      background: white;
+      transition: box-shadow 0.3s;
+    }
+
+    .input-buscar:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+    }
+
+    .menu-superior {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .icono-carrito {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      color: white;
+      transition: transform 0.3s;
+    }
+
+    .icono-carrito:hover {
+      transform: scale(1.1);
+    }
+
+    .icono-carrito svg {
+      width: 100%;
+      height: 100%;
+      stroke-width: 2;
+    }
+
+    .contador-carrito {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #ff6b6b;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    #menu-usuario button {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+
+    #menu-usuario button:hover {
+      background: white;
+      color: #386273;
+    }
+
+    .btn-icono {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.3s;
+    }
+
+    .btn-icono:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* VOLVER LINK */
+    .volver-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #386273;
+      text-decoration: none;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      transition: gap 0.3s;
+    }
+
+    .volver-link:hover {
+      gap: 12px;
+    }
+
+    /* CONTENEDOR DETALLE */
+    main.contenedor {
+      padding: 3rem 2rem;
+    }
+
+    .detalle-contenedor {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 3rem;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    /* IMAGEN DETALLE */
+    .detalle-imagen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border-radius: 12px;
+      min-height: 500px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .detalle-imagen img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      animation: slideIn 0.6s ease-out;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* INFO DETALLE */
+    .detalle-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .detalle-categoria {
+      display: inline-block;
+      background: linear-gradient(135deg, #386273 0%, #5a8fa3 100%);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      width: fit-content;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .detalle-nombre {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+
+    .detalle-descripcion {
+      font-size: 1rem;
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    /* PRECIO DESTACADO */
+    .detalle-precio {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* STOCK MEJORADO */
+    .detalle-stock {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #f0f7fa 0%, #e8f4f8 100%);
+      border-left: 4px solid #386273;
+      border-radius: 12px;
+      border-right: 1px solid #d0e8f2;
+    }
+
+    .detalle-stock label {
+      font-weight: 600;
+      color: #386273;
+      display: block;
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+    }
+
+    .detalle-stock-disponible {
+      font-size: 1.1rem;
+      color: #555;
+      font-weight: 500;
+    }
+
+    .detalle-stock-disponible.bajo {
+      color: #e67e22;
+      font-weight: 700;
+    }
+
+    .detalle-stock-disponible.sin {
+      color: #e74c3c;
+      font-weight: 700;
+    }
+
+    /* ACCIONES */
+    .detalle-acciones {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .detalle-cantidad {
+      display: flex;
+      align-items: center;
+      border: 2px solid #386273;
+      border-radius: 10px;
+      overflow: hidden;
+      background: white;
+    }
+
+    .detalle-cantidad button {
+      background: #386273;
+      color: white;
+      border: none;
+      width: 45px;
+      height: 45px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: bold;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .detalle-cantidad button:hover {
+      background: #2c5a6f;
+    }
+
+    .detalle-cantidad input {
+      width: 70px;
+      text-align: center;
+      border: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #386273;
+      font-family: inherit;
+    }
+
+    /* Ocultar flechas del input number en Chrome, Safari, Edge */
+    .detalle-cantidad input[type="number"]::-webkit-outer-spin-button,
+    .detalle-cantidad input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Ocultar flechas del input number en Firefox */
+    .detalle-cantidad input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    .detalle-agregar {
+      flex: 1;
+    }
+
+    .detalle-agregar button {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      background: #386273;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(56, 98, 115, 0.3);
+    }
+
+    .detalle-agregar button:hover {
+      background: #4a7a96;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(56, 98, 115, 0.4);
+    }
+
+    .detalle-agregar button:active {
+      transform: translateY(0);
+    }
+
+    .detalle-agregar.deshabilitado button {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* PRODUCTOS RELACIONADOS */
+    .seccion-relacionados {
+      margin-top: 4rem;
+      padding-top: 3rem;
+      border-top: 2px solid #eee;
+    }
+
+    .seccion-relacionados h3 {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      color: #2c3e50;
+      font-weight: 700;
+    }
+
+    .productos-grid-relacionados {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 2rem;
+    }
+
+    .tarjeta-producto-mini {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .tarjeta-producto-mini:hover {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      transform: translateY(-4px);
+      border-color: #386273;
+    }
+
+    .tarjeta-producto-mini-imagen {
+      width: 100%;
+      height: 180px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tarjeta-producto-mini-imagen img {
+      max-width: 85%;
+      max-height: 85%;
+      object-fit: contain;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tarjeta-producto-mini-info {
+      padding: 1.2rem;
+    }
+
+    .tarjeta-producto-mini-nombre {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      color: #2c3e50;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .tarjeta-producto-mini-precio {
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+    }
+
+    /* ANIMACIONES */
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .detalle-contenedor {
+        gap: 2rem;
+        padding: 2rem;
+      }
+
+      .detalle-imagen {
+        min-height: 400px;
+      }
+
+      .detalle-nombre {
+        font-size: 2rem;
+      }
+
+      .detalle-precio {
+        font-size: 2.2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .detalle-contenedor {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 1.5rem;
+      }
+
+      .encabezado-contenedor {
+        gap: 1rem;
+      }
+
+      .barra-busqueda-contenedor {
+        display: none;
+      }
+
+      .logo-text {
+        display: none;
+      }
+
+      .detalle-imagen {
+        min-height: 300px;
+      }
+
+      .detalle-nombre {
+        font-size: 1.6rem;
+      }
+
+      .detalle-precio {
+        font-size: 1.8rem;
+      }
+
+      .detalle-acciones {
+        flex-direction: column;
+      }
+
+      .detalle-agregar {
+        width: 100%;
+      }
+
+      .productos-grid-relacionados {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+
+      .carrito-panel {
+        width: 100%;
+        right: -100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="contenedor">
+      <div class="encabezado-contenedor">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+          <img src="../assets/logo.svg" alt="Logo Inventory">
+          <span class="logo-text">Inventory</span>
+        </div>
+        <div class="barra-busqueda-contenedor">
+          <div class="barra-busqueda">
+            <svg class="icono-buscar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input type="text" id="buscar" placeholder="Buscar producto..." class="input-buscar">
+            <button class="btn-limpiar-buscar" onclick="document.getElementById('buscar').value='';" style="display:none;">✕</button>
+          </div>
+        </div>
+        <div class="menu-superior">
+          <div class="icono-carrito" id="btn-carrito" title="Mi carrito">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="contador-carrito" id="contador">0</span>
+          </div>
+          <div id="menu-usuario">
+            <button class="btn btn-principal" onclick="window.location.href='login.html'" title="Iniciar sesión">👤</button>
+          </div>
+          <button class="btn-icono" onclick="window.location.href='index.html'" title="Volver al catálogo">⏠</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="contenedor">
+    <div class="detalle-contenedor">
+      <div class="detalle-imagen">
+        <img id="imagen-producto" src="../assets/product-placeholder.svg" alt="Producto">
+      </div>
+
+      <div class="detalle-info">
+        <span class="detalle-categoria" id="categoria-producto">Categoría</span>
+        
+        <h1 class="detalle-nombre" id="nombre-producto">Nombre del Producto</h1>
+        
+        <p class="detalle-descripcion" id="descripcion-producto">
+          Descripción del producto...
+        </p>
+
+        <div class="detalle-precio" id="precio-producto">$0</div>
+
+        <div class="detalle-stock">
+          <label>Disponibilidad en Stock:</label>
+          <div class="detalle-stock-disponible" id="stock-producto">
+            0 unidades disponibles
+          </div>
+        </div>
+
+        <div class="detalle-acciones" id="acciones-contenedor">
+          <div class="detalle-cantidad">
+            <button onclick="disminuirCantidad()">−</button>
+            <input type="number" id="cantidad-detalle" value="1" min="1" max="100" onchange="actualizarCantidadDetalle(this.value)">
+            <button onclick="aumentarCantidad()">+</button>
+          </div>
+          <div class="detalle-agregar" id="agregar-contenedor">
+            <button class="btn btn-principal" style="width: 100%; font-size: 1.1rem; padding: 1rem;" onclick="agregarAlCarritoDetalle()">
+              🛒 Agregar al Carrito
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="seccion-relacionados" id="seccion-relacionados" style="display: none;">
+      <h3>Productos Relacionados</h3>
+      <div class="productos-grid-relacionados" id="productos-relacionados">
+        <!-- Se cargarán aquí -->
+      </div>
+    </div>
+  </main>
+
+  <div class="carrito-panel" id="carrito-panel">
+    <div class="carrito-encabezado">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        Mi Carrito
+      </h3>
+      <button class="carrito-cerrar" id="cerrar-carrito">✕</button>
+    </div>
+    <div class="carrito-contenido" id="carrito-contenido">
+      <div class="carrito-vacio"><p>Tu carrito está vacío</p></div>
+    </div>
+    <div class="carrito-pie">
+      <div class="carrito-total">
+        <span>Total:</span>
+        <span id="total-carrito">$0.00</span>
+      </div>
+      <button class="btn btn-principal" id="finalizar-pedido" disabled>Finalizar Pedido</button>
+    </div>
+  </div>
+
+  <!-- <script src="../js/carrito.js"></script> -->
+  <script>
+    window.BACKEND_URL = 'http://localhost:3000';
+  </script>
+  <script src="../js/app.js"></script>
+  <script src="../js/detalle-producto.js"></script>
+</body>
+</html>

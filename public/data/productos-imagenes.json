@@ -1,0 +1,516 @@
+{
+  "productos": [
+    {
+      "id": "1",
+      "nombre": "PAPA CAFÉ X 2.5 FARM FRITES",
+      "precio": 22500,
+      "stock": 10,
+      "categoria": "Snacks",
+      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQP-hHelKU1wBs0C3oweTra7VxjKwbf5Q93oA&s"
+    },
+    {
+      "id": "2",
+      "nombre": "PAPA NACIONAL X 2.5",
+      "precio": 21600,
+      "stock": 10,
+      "categoria": "Snacks",
+      "imagen": "https://distriespeciales.com/wp-content/uploads/2020/07/WhatsApp-Image-2023-10-27-at-2.23.29-PM.jpeg"
+    },
+    {
+      "id": "3",
+      "nombre": "PAPA X 2 K FARM FRITES",
+      "precio": 15000,
+      "stock": 10,
+      "categoria": "Snacks",
+      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYwv5Ce0wRKIGHl-1HMqEG3B3unHiLKL27hg&s"
+    },
+    {
+      "id": "4",
+      "nombre": "PAPA X 2 K STAR FRITES",
+      "precio": 15000,
+      "stock": 10,
+      "categoria": "Snacks",
+      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwD9wBbCPzOfBM7zZP8KJ6Y3qwo9gu38928w&s"
+    },
+    {
+      "id": "5",
+      "nombre": "PAPA X 1 K CRUNCH HOUSE",
+      "precio": 9700,
+      "stock": 10,
+      "categoria": "Snacks",
+      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgqYRcGYCdTdAQAa8qiZ1dSe9Dz7ne7DMow&s"
+    },
+    {
+      "id": "6",
+      "nombre": "PAPA X 500 CRUNCH HOUSE",
+      "precio": 5400,
+      "stock": 10,
+      "categoria": "Snacks",
+      "imagen": "https://mercaenlinea.nyc3.digitaloceanspaces.com/2022/09/WhatsApp-Image-2022-09-29-at-5.07.38-PM.jpeg"
+    },
+    {
+      "id": "7",
+      "nombre": "RIPIO SAN MIGUEL X 1 K",
+      "precio": 9000,
+      "stock": 10,
+      "categoria": "Ripios",
+      "imagen": "https://images.rappi.com/products/1766787059267_1766787057259_1766787056253.jpg"
+    },
+    {
+      "id": "8",
+      "nombre": "RIPIO X 1 K SABROSURA DEL CAMPO",
+      "precio": 8000,
+      "stock": 10,
+      "categoria": "Ripios",
+      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlwfOtrzncIfO6mEloPf6NrUANwVhd6gRgPA&s"
+    },
+    {
+      "id": "9",
+      "nombre": "RIPIO X 500 SABROSURA DEL CAMPO",
+      "precio": 5500,
+      "stock": 10,
+      "categoria": "Ripios",
+      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlwfOtrzncIfO6mEloPf6NrUANwVhd6gRgPA&s"
+    },
+    {
+      "id": "10",
+      "nombre": "RIPIO X 250 SABROSURA DEL CAMPO",
+      "precio": 3500,
+      "stock": 10,
+      "categoria": "Ripios",
+      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlwfOtrzncIfO6mEloPf6NrUANwVhd6gRgPA&s"
+    },
+    {
+      "id": "11",
+      "nombre": "MAIZ SAN MIGUEL X 1 K",
+      "precio": 8700,
+      "stock": 10,
+      "categoria": "Maíz",
+      "imagen": "https://berpaadmin.com.co/backend/admin/backend/web/archivosDelCliente/items/images/4735-CARNES-FRIAS-CONGELADOS-Y-APANADOS-ALIMENTOS-APANADOS-Y-PRECOCIDOS-MAIZ-SAN-MIGUEL--GOURMET--TIERNO-XKL-473520230717173901.jpg"
+    },
+    {
+      "id": "12",
+      "nombre": "MAIZ SAN MIGUEL X 500 GR",
+      "precio": 4700,
+      "stock": 10,
+      "categoria": "Maíz",
+      "imagen": "https://berpaadmin.com.co/backend/admin/backend/web/archivosDelCliente/items/images/4735-CARNES-FRIAS-CONGELADOS-Y-APANADOS-ALIMENTOS-APANADOS-Y-PRECOCIDOS-MAIZ-SAN-MIGUEL--GOURMET--TIERNO-XKL-473520230717173901.jpg"
+    },
+    {
+      "id": "13",
+      "nombre": "MAIZ A GRANEL SAN MIGUEL X 10 K",
+      "precio": 80000,
+      "stock": 5,
+      "categoria": "Maíz",
+      "imagen": "https://images.rappi.com/products/3e3ddde4-e86b-4faf-90db-71dc9b2ac98e.png"
+    },
+    {
+      "id": "14",
+      "nombre": "MIX VERDURAS SAN MIGUEL X 500 GR",
+      "precio": 4700,
+      "stock": 10,
+      "categoria": "Maíz",
+      "imagen": "https://images.rappi.com/products/720806456789_lojvwhazwyuk_619792293508_yabpjywvineesc_7707933144148_1.jpg"
+    },
+    {
+      "id": "15",
+      "nombre": "YUCA ALRICO X 1 K",
+      "precio": 6900,
+      "stock": 10,
+      "categoria": "Tubérculos",
+      "imagen": "https://delagranja.co/wp-content/uploads/2024/01/croquetas-de-yuca.png"
+    },
+    {
+      "id": "16",
+      "nombre": "YUCA ALRICO X 500 GR",
+      "precio": 3800,
+      "stock": 10,
+      "categoria": "Tubérculos",
+      "imagen": "https://delagranja.co/wp-content/uploads/2024/01/croquetas-de-yuca.png"
+    },
+    {
+      "id": "17",
+      "nombre": "VINIPEL 20 MTS",
+      "precio": 1500,
+      "stock": 50,
+      "categoria": "Empaques",
+      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+    },
+    {
+      "id": "18",
+      "nombre": "VINILPEX X50 MTS",
+      "precio": 2700,
+      "stock": 50,
+      "categoria": "Empaques",
+      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+    },
+    {
+      "id": "19",
+      "nombre": "VINILPEX X100 MTS",
+      "precio": 4700,
+      "stock": 50,
+      "categoria": "Empaques",
+      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+    },
+    {
+      "id": "20",
+      "nombre": "VINILPEX X 300 MTS LARGO",
+      "precio": 8700,
+      "stock": 20,
+      "categoria": "Empaques",
+      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+    },
+    {
+      "id": "21",
+      "nombre": "GUANTES PLASTICOS TRANSPARENTE HAUSE",
+      "precio": 1670,
+      "stock": 10,
+      "categoria": "Guantes",
+      "imagen": "https://images.unsplash.com/photo-1584622714792-5d86903f900f?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "22",
+      "nombre": "GUANTES NITRILO NEGRO T M HAUSE",
+      "precio": 21600,
+      "stock": 10,
+      "categoria": "Guantes",
+      "imagen": "https://images.unsplash.com/photo-1584622714792-5d86903f900f?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "23",
+      "nombre": "GUANTES NITRILO NEGRO T L HAUSE",
+      "precio": 21600,
+      "stock": 10,
+      "categoria": "Guantes",
+      "imagen": "https://images.unsplash.com/photo-1584622714792-5d86903f900f?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "24",
+      "nombre": "LAM PARAFINADA 15X15 REGULAR LIBRA",
+      "precio": 9700,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1595521624603-47ecc28de4bf?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "25",
+      "nombre": "LAM PARAFINADA 15X15 ECOLOGICA LIBRA",
+      "precio": 7800,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1595521624603-47ecc28de4bf?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "26",
+      "nombre": "LAM PARAFINADA 15X15 COLOR REGULAR",
+      "precio": 9700,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1595521624603-47ecc28de4bf?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "27",
+      "nombre": "LAM PARAFINADA 30X30 COLOR REGULAR",
+      "precio": 9700,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1595521624603-47ecc28de4bf?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "28",
+      "nombre": "LAM PARAFINADA 30X30 ECOLOGICA",
+      "precio": 7800,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1595521624603-47ecc28de4bf?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "29",
+      "nombre": "ROLLO PARAFINADO X 50 MTS",
+      "precio": 17400,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1595521624603-47ecc28de4bf?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "30",
+      "nombre": "ROLLO PARAFINADO X 10 MTS",
+      "precio": 2800,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1595521624603-47ecc28de4bf?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "31",
+      "nombre": "ALUMINIO 7 MTS",
+      "precio": 2500,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+    },
+    {
+      "id": "32",
+      "nombre": "ALUMINIO 16 MTS",
+      "precio": 4700,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+    },
+    {
+      "id": "33",
+      "nombre": "ALUMINIO 40 MTS",
+      "precio": 9500,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+    },
+    {
+      "id": "34",
+      "nombre": "ALUMINIO 100 MTS",
+      "precio": 23000,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+    },
+    {
+      "id": "35",
+      "nombre": "BOLSA METALIZADA 6X6 ABTA",
+      "precio": 1900,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "36",
+      "nombre": "BOLSA METALIZADA 7X10",
+      "precio": 3500,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "37",
+      "nombre": "BOLSA METALIZADA 8X10",
+      "precio": 3900,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "38",
+      "nombre": "BOLSA METALIZADA 8X12",
+      "precio": 4800,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "39",
+      "nombre": "BOLSA METALIZADA 10X14",
+      "precio": 6900,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "40",
+      "nombre": "PORTA HAMBURGUESA CARTON",
+      "precio": 9000,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "41",
+      "nombre": "PORTA PERRO CARTON",
+      "precio": 9000,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "42",
+      "nombre": "SERVILLETA NUBE X 300",
+      "precio": 3600,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "43",
+      "nombre": "SERVILLETA MIA 1 A 1 X 200",
+      "precio": 2500,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "44",
+      "nombre": "TOHALLA MANO X 150",
+      "precio": 7600,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "45",
+      "nombre": "TOHALLA COCINA X 120",
+      "precio": 5720,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "46",
+      "nombre": "BOLSA PAPEL # 1",
+      "precio": 3100,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "47",
+      "nombre": "BOLSA PAPEL # 2",
+      "precio": 4200,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "48",
+      "nombre": "BOLSA PAPEL # 3",
+      "precio": 5300,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "49",
+      "nombre": "BOLSA PAPEL # 4",
+      "precio": 6300,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "50",
+      "nombre": "BOLSA PAPEL # 6",
+      "precio": 9000,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "51",
+      "nombre": "SACHET TOMATE 9GR X 102",
+      "precio": 7800,
+      "stock": 10,
+      "categoria": "Condimentos",
+      "imagen": "https://images.unsplash.com/photo-1585238341710-4913d3a3a48e?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "52",
+      "nombre": "SACHET TOMATE 6 GR X 204",
+      "precio": 11400,
+      "stock": 10,
+      "categoria": "Condimentos",
+      "imagen": "https://images.unsplash.com/photo-1585238341710-4913d3a3a48e?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "53",
+      "nombre": "SACHET MIEL 9GR X 102",
+      "precio": 7800,
+      "stock": 10,
+      "categoria": "Condimentos",
+      "imagen": "https://images.unsplash.com/photo-1585238341710-4913d3a3a48e?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "54",
+      "nombre": "SACHET ROSADA 9GR X 102",
+      "precio": 11400,
+      "stock": 10,
+      "categoria": "Condimentos",
+      "imagen": "https://images.unsplash.com/photo-1585238341710-4913d3a3a48e?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "55",
+      "nombre": "SALSA TOMATE X 4 K",
+      "precio": 25300,
+      "stock": 10,
+      "categoria": "Condimentos",
+      "imagen": "https://images.unsplash.com/photo-1585238341710-4913d3a3a48e?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "56",
+      "nombre": "MAYONESA X 4 K",
+      "precio": 34000,
+      "stock": 10,
+      "categoria": "Condimentos",
+      "imagen": "https://images.unsplash.com/photo-1585238341710-4913d3a3a48e?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "57",
+      "nombre": "CARNE DE HAMBURG 9GR X 10",
+      "precio": 12300,
+      "stock": 10,
+      "categoria": "Carnes",
+      "imagen": "https://images.unsplash.com/photo-1555939594-58d7cb561ada?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "58",
+      "nombre": "PATACON COCTELERO X 1000 GR",
+      "precio": 9600,
+      "stock": 10,
+      "categoria": "Snacks",
+      "imagen": "https://images.unsplash.com/photo-1568291935071-0fec3b57515f?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "59",
+      "nombre": "PATACON MEDIANO X 1000 GR",
+      "precio": 9600,
+      "stock": 10,
+      "categoria": "Snacks",
+      "imagen": "https://images.unsplash.com/photo-1568291935071-0fec3b57515f?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "60",
+      "nombre": "PATACON OVALADO X 1000 GR",
+      "precio": 9600,
+      "stock": 10,
+      "categoria": "Snacks",
+      "imagen": "https://images.unsplash.com/photo-1568291935071-0fec3b57515f?w=500&h=500&fit=crop&q=80"
+    },
+    {
+      "id": "61",
+      "nombre": "PATACON REDONDO X 1000 GR",
+      "precio": 9600,
+      "stock": 10,
+      "categoria": "Snacks",
+      "imagen": "https://d2k4sjwe339e7u.cloudfront.net/productos/DPL01.png"
+    },
+    {
+      "id": "62",
+      "nombre": "BOLSA T 20 LEC BIO-SOSTENIBLE",
+      "precio": 2800,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRqvGtxpA-BIMEPjD8jHJn9p5JrbIhXKI85A&s"
+    },
+    {
+      "id": "63",
+      "nombre": "BOLSA T-25 LEC R.U BIO-SOSTENIBLE",
+      "precio": 3600,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://acdn-us.mitiendanube.com/stores/257/518/products/t25-blanca-67744d48d6cfbc0f1817510367710064-640-0.webp"
+    },
+    {
+      "id": "64",
+      "nombre": "BOLSA T-30 LEC ECONOMICA R.U BIO-SOSTENIBLE",
+      "precio": 5700,
+      "stock": 10,
+      "categoria": "Empaques",
+      "imagen": "https://acdn-us.mitiendanube.com/stores/257/518/products/t30-blanca-re-7af0c2da679cde51f917510396445454-480-0.webp"
+    }
+  ]
+}

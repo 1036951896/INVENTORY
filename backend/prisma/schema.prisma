@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===== ENUMS =====
+enum UserRole {
+  ADMIN
+  CLIENTE
+}
+
+enum OrderStatus {
+  PENDIENTE
+  EN_PREPARACION
+  ENTREGADO
+  CANCELADO
+}
+
+// ===== MODELS =====
+
+/// Usuario del sistema (Admin o Cliente)
+model User {
+  id        String     @id @default(cuid())
+  nombre    String
+  email     String     @unique
+  password  String
+  telefono  String?
+  rol       UserRole   @default(CLIENTE)
+  activo    Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  // Relations
+  ordenes Order[]
+
+  @@index([email])
+  @@map("users")
+}
+
+/// Categoría de productos
+model Category {
+  id        String    @id @default(cuid())
+  nombre    String    @unique
+  descripcion String?
+  icono     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Relations
+  productos Product[]
+
+  @@map("categories")
+}
+
+/// Producto del inventario
+model Product {
+  id          String    @id @default(cuid())
+  nombre      String
+  descripcion String?
+  precio      Int       // Precio en centavos de COP (ej: 2250000 = $22.500 COP)
+  stock       Int       @default(0)
+  imagen      String?
+  activo      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Foreign keys
+  categoriaId String
+  categoria   Category  @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
+
+  // Relations
+  orderItems OrderItem[]
+
+  @@index([categoriaId])
+  @@index([nombre])
+  @@map("products")
+}
+
+/// Orden (Pedido) del cliente
+model Order {
+  id        String      @id @default(cuid())
+  numero    String      @unique // Ej: PED-1234567890
+  total     Int         // Total en centavos de COP
+  estado    OrderStatus @default(PENDIENTE)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  entregaEn DateTime?
+  notasEntrega String?
+
+  // Foreign keys
+  usuarioId String
+  usuario   User        @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  // Relations
+  items     OrderItem[]
+
+  @@index([usuarioId])
+  @@index([numero])
+  @@map("orders")
+}
+
+/// Item dentro de una orden
+model OrderItem {
+  id        String   @id @default(cuid())
+  cantidad  Int
+  precioUnitario Int // Precio al momento de la orden en centavos
+  subtotal  Int      // Cantidad × PrecioUnitario
+  createdAt DateTime @default(now())
+
+  // Foreign keys
+  ordenId   String
+  orden     Order    @relation(fields: [ordenId], references: [id], onDelete: Cascade)
+  
+  productoId String
+  producto   Product  @relation(fields: [productoId], references: [id], onDelete: Restrict)
+
+  @@unique([ordenId, productoId])
+  @@index([ordenId])
+  @@index([productoId])
+  @@map("order_items")
+}

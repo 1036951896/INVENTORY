@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory - E-Commerce</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/ecommerce-figma.css">
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+</head>
+<body>
+  <!-- ENCABEZADO -->
+  <header>
+    <div class="contenedor">
+      <div class="encabezado-contenedor">
+        <!-- LOGO -->
+        <div class="logo">
+          <img src="../assets/logo.svg" alt="Logo Inventory" class="logo-img">
+          <span class="logo-text">Inventory</span>
+        </div>
+
+        <!-- BARRA DE BÚSQUEDA MODERNA -->
+        <div class="barra-busqueda-contenedor">
+          <div class="barra-busqueda">
+            <svg class="icono-buscar-fijo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input type="text" id="buscar" placeholder="Buscar producto..." class="input-buscar">
+            <button class="btn-limpiar-buscar" onclick="document.getElementById('buscar').value=''; configurarEventos();" style="display:none;">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- MENU SUPERIOR -->
+        <div class="menu-superior">
+          <!-- CARRITO -->
+          <div class="icono-carrito" id="btn-carrito" title="Mi carrito">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="contador-carrito" id="contador">0</span>
+          </div>
+
+          <!-- USUARIO -->
+          <div id="menu-usuario">
+            <button class="btn-icono" onclick="window.location.href='login.html'" title="Iniciar sesión">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- SEGUIMIENTO -->
+          <a href="seguimiento-pedidos.html" class="btn-icono" title="Ver mis pedidos">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5s-5 2.24-5 5v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6-2c1.66 0 3 1.34 3 3v2h-6V9c0-1.66 1.34-3 3-3zm6 16H6V10h12v12zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CATEGORÍAS -->
+    <div class="categorias">
+      <div class="contenedor">
+        <div class="categorias-lista" id="categorias-lista">
+          <a href="#" class="categoria activo" data-categoria="todas" onclick="filtrarPorCategoria('todas', event)">
+            <svg class="icono-categoria" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 5h2v2H3zm4 0h14v2H7zm0 4h14v2H7zm0 4h14v2H7zm0 4h14v2H7zM3 9h2v2H3zm0 4h2v2H3zm0 4h2v2H3z"/>
+            </svg>
+            <span>Todas</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main>
+    <!-- BANNER PROMOCIONAL -->
+    <section class="banner">
+      <h2>¡Descuentos Especiales!</h2>
+      <p>Obtén hasta 40% de descuento en productos seleccionados</p>
+      <a href="ofertas.html" class="btn btn-secundario">Ver ofertas</a>
+    </section>
+
+    <!-- GRID DE PRODUCTOS -->
+    <section>
+      <h2>Catálogo de Productos</h2>
+      <div class="productos-grid" id="productos-grid">
+        <!-- Los productos se cargarán aquí con JavaScript -->
+      </div>
+    </section>
+  </main>
+
+  <!-- CARRITO LATERAL -->
+  <div class="carrito-panel" id="carrito-panel">
+    <div class="carrito-encabezado">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        Mi Carrito
+      </h3>
+      <button class="carrito-cerrar" id="cerrar-carrito">✕</button>
+    </div>
+
+    <div class="carrito-contenido" id="carrito-contenido">
+      <div class="carrito-vacio">
+        <p>Tu carrito está vacío</p>
+      </div>
+    </div>
+
+    <div class="carrito-pie">
+      <div class="carrito-total">
+        <span>Total:</span>
+        <span id="total-carrito">$0.00</span>
+      </div>
+      <button class="btn btn-principal" id="finalizar-pedido" disabled>Finalizar Pedido</button>
+    </div>
+  </div>
+
+  <!-- BOTÓN FLOTANTE DE CHAT -->
+  <a href="https://wa.me/573155508228" target="_blank" class="boton-whatsapp" title="Chatea con nosotros en WhatsApp">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Burbuja de chat -->
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      <!-- Puntos indicadores de escritura -->
+      <circle cx="8" cy="10" r="1.5" fill="currentColor" opacity="0.7"></circle>
+      <circle cx="12" cy="10" r="1.5" fill="currentColor" opacity="0.7"></circle>
+      <circle cx="16" cy="10" r="1.5" fill="currentColor" opacity="0.7"></circle>
+    </svg>
+    <span class="tooltip-whatsapp">Chatea con nosotros</span>
+  </a>
+
+  <!-- PIE DE PÁGINA -->
+  <footer>
+    <div class="footer-contenido">
+      <div class="footer-seccion">
+        <h3>Sobre Nosotros</h3>
+        <p>Inventory es tu distribuidora de confianza para productos de hogar y abarrotes de la mejor calidad.</p>
+        <div class="redes-sociales">
+          <a href="#" title="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+          <a href="#" title="Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.117.6c-.388.15-.76.368-1.085.683-.315.309-.533.697-.686 1.086-.266.79-.467 1.66-.527 2.938C1.031 8.333 1.016 8.74 1.016 12s.015 3.667.072 4.947c.06 1.277.261 2.148.527 2.938.153.389.37.756.686 1.084.309.317.677.533 1.07.687.76.272 1.632.474 2.898.536 1.22.057 1.627.072 4.947.072s3.728-.015 4.947-.072c1.266-.062 2.139-.263 2.898-.536.389-.153.756-.37 1.084-.686.317-.309.533-.677.687-1.07.272-.76.474-1.632.536-2.898.057-1.22.072-1.627.072-4.947s-.015-3.667-.072-4.947c-.062-1.266-.263-2.139-.536-2.898-.153-.389-.37-.756-.686-1.084-.309-.317-.677-.533-1.07-.687-.76-.272-1.632-.474-2.898-.536C15.667 1.031 15.26 1.016 12 1.016s-3.667.015-4.947.072zm0 2.016c3.183 0 3.556.01 4.812.063 1.161.053 1.792.247 2.21.412.557.217.953.477 1.369.893.416.416.676.812.893 1.369.165.418.36 1.049.412 2.21.053 1.255.063 1.629.063 4.812s-.01 3.557-.063 4.812c-.053 1.161-.247 1.792-.412 2.21-.217.557-.477.953-.893 1.369-.416.416-.812.676-1.369.893-.418.165-1.049.36-2.21.412-1.255.053-1.629.063-4.812.063s-3.557-.01-4.812-.063c-1.161-.053-1.792-.247-2.21-.412-.557-.217-.953-.477-1.369-.893-.416-.416-.676-.812-.893-1.369-.165-.418-.36-1.049-.412-2.21-.053-1.255-.063-1.629-.063-4.812s.01-3.557.063-4.812c.053-1.161.247-1.792.412-2.21.217-.557.477-.953.893-1.369.416-.416.812-.676 1.369-.893.418-.165 1.049-.36 2.21-.412 1.255-.053 1.629-.063 4.812-.063z"/>
+              <circle cx="12" cy="12" r="3.206"/>
+              <circle cx="18.406" cy="5.594" r=".75"/>
+            </svg>
+          </a>
+          <a href="#" title="Twitter">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            </svg>
+          </a>
+          <a href="https://wa.me/573155508228" target="_blank" title="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              <circle cx="8" cy="10" r="1.5" fill="currentColor" opacity="0.7"></circle>
+              <circle cx="12" cy="10" r="1.5" fill="currentColor" opacity="0.7"></circle>
+              <circle cx="16" cy="10" r="1.5" fill="currentColor" opacity="0.7"></circle>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-seccion">
+        <h3>Información</h3>
+        <a href="#">Preguntas Frecuentes</a>
+        <a href="#">Política de Privacidad</a>
+        <a href="#">Términos y Condiciones</a>
+        <a href="#">Contacto</a>
+      </div>
+
+      <div class="footer-seccion">
+        <h3>Contacto</h3>
+        <p>📍 Carrera 64 b # 40-33</p>
+        <p>📍 Barrio El Porvenir, Primera etapa (Al lado del supermercado Distrimar)</p>
+        <p>📞 +57 315 5508228</p>
+        <p>⏰ Lun - Vie: 8am - 6pm</p>
+        <p><a href="https://wa.me/573155508228" target="_blank" style="color: rgba(255, 255, 255, 0.85); font-weight: 600; text-decoration: none; transition: all 0.3s ease;" onmouseover="this.style.color='#B6E1F2'" onmouseout="this.style.color='rgba(255, 255, 255, 0.85)'">💬 Chatea con nosotros en WhatsApp</a></p>
+      </div>
+
+      <div class="footer-seccion">
+        <h3>Métodos de Pago</h3>
+        <p>💳 Tarjeta de Crédito/Débito</p>
+        <p>🏦 Transferencia Bancaria</p>
+        <p>💰 Efectivo Contra Entrega</p>
+        <p>📱 Billetera Digital</p>
+      </div>
+    </div>
+
+    <div class="footer-separador">
+      <p>&copy; 2026 Inventory. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    window.BACKEND_URL = 'http://localhost:3000';
+  </script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

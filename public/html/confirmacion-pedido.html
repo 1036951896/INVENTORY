@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedido Enviado - Inventory</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/ecommerce.css">
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .confirmacion-contenedor {
+      background: linear-gradient(135deg, var(--blanco) 0%, #f8fafb 100%);
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+      padding: 3rem;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border: 1px solid rgba(182, 225, 242, 0.3);
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .estado-icono {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .estado-titulo {
+      color: var(--azul-oscuro);
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .estado-subtitulo {
+      color: var(--gris-oscuro);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .radicado-box {
+      background: linear-gradient(135deg, var(--azul-claro) 0%, #a8d8f0 100%);
+      padding: 2rem;
+      border-radius: 12px;
+      margin: 2rem 0;
+      border: 2px solid var(--azul);
+    }
+
+    .radicado-label {
+      color: var(--azul-oscuro);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+
+    .radicado-numero {
+      color: var(--azul-oscuro);
+      font-size: 2rem;
+      font-weight: 800;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 2px;
+    }
+
+    .estado-espera {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      text-align: left;
+    }
+
+    .estado-espera h4 {
+      color: #856404;
+      margin-bottom: 0.5rem;
+    }
+
+    .estado-espera p {
+      color: #856404;
+      margin-bottom: 0;
+    }
+
+    .detalles-pedido {
+      background-color: var(--gris-claro);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      text-align: left;
+    }
+
+    .detalle-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .detalle-item:last-child {
+      border-bottom: none;
+    }
+
+    .detalle-label {
+      color: var(--gris-oscuro);
+    }
+
+    .detalle-valor {
+      color: var(--azul-oscuro);
+      font-weight: 600;
+    }
+
+    .botones-acciones {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #25d366 0%, #20ba5f 100%);
+      color: white !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-whatsapp:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+    }
+
+    .btn-volver {
+      background-color: var(--gris-claro);
+      color: var(--azul-oscuro) !important;
+      border: 2px solid var(--azul-oscuro);
+    }
+
+    .btn-volver:hover {
+      background-color: var(--azul-oscuro);
+      color: var(--blanco) !important;
+    }
+
+    .loader {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--azul);
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .estado-confirmacion {
+      display: none;
+      padding: 1.5rem;
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
+
+    .estado-confirmacion.activo {
+      display: block;
+      animation: slideUp 0.5s ease;
+    }
+
+    .estado-confirmacion h4 {
+      color: #155724;
+      margin-bottom: 0.5rem;
+    }
+
+    .estado-confirmacion p {
+      color: #155724;
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 480px) {
+      .confirmacion-contenedor {
+        padding: 2rem 1.5rem;
+      }
+
+      .estado-titulo {
+        font-size: 1.5rem;
+      }
+
+      .radicado-numero {
+        font-size: 1.5rem;
+      }
+
+      .botones-acciones {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="confirmacion-contenedor">
+    <!-- ESTADO PENDIENTE -->
+    <div id="estadoPendiente">
+      <div class="estado-icono">📬</div>
+      <h1 class="estado-titulo">¡Pedido Recibido!</h1>
+      <p class="estado-subtitulo">Tu pedido ha sido registrado y está siendo procesado</p>
+
+      <div class="radicado-box">
+        <div class="radicado-label">Número de Radicado</div>
+        <div class="radicado-numero" id="numeroRadicado">RAD-0000000-000</div>
+      </div>
+
+      <div class="estado-espera">
+        <h4>⏳ Esperando Confirmación</h4>
+        <p>Tu pedido ha sido enviado al administrador. Por favor espera la confirmación. Recibirás un mensaje de confirmación en breve.</p>
+      </div>
+
+      <div class="detalles-pedido" id="detallesPedido">
+        <div class="detalle-item">
+          <span class="detalle-label">Cliente:</span>
+          <span class="detalle-valor" id="clienteNombre">-</span>
+        </div>
+        <div class="detalle-item">
+          <span class="detalle-label">Teléfono:</span>
+          <span class="detalle-valor" id="clienteTelefono">-</span>
+        </div>
+        <div class="detalle-item">
+          <span class="detalle-label">Total Items:</span>
+          <span class="detalle-valor" id="totalItems">0</span>
+        </div>
+        <div class="detalle-item">
+          <span class="detalle-label">Monto Total:</span>
+          <span class="detalle-valor" id="montoTotal">$0.00</span>
+        </div>
+        <div class="detalle-item">
+          <span class="detalle-label">Hora:</span>
+          <span class="detalle-valor" id="horaCreacion">-</span>
+        </div>
+      </div>
+
+      <div class="botones-acciones">
+        <a href="https://wa.me/573116579677" target="_blank" class="btn btn-whatsapp" onclick="enviarWhatsAppManual()">
+          📱 Enviar Recordatorio por WhatsApp
+        </a>
+        <a href="index.html" class="btn btn-volver">
+          ← Volver al Inicio
+        </a>
+      </div>
+    </div>
+
+    <!-- ESTADO CONFIRMADO -->
+    <div id="estadoConfirmado" style="display: none;">
+      <div class="estado-icono">✅</div>
+      <h1 class="estado-titulo">¡Pedido Confirmado!</h1>
+      <p class="estado-subtitulo">El administrador ha autorizado tu pedido</p>
+
+      <div class="radicado-box">
+        <div class="radicado-label">Número de Guía / Radicado</div>
+        <div class="radicado-numero" id="numeroRadicadoConfirmado">RAD-0000000-000</div>
+      </div>
+
+      <div class="estado-confirmacion activo">
+        <h4>✓ Pedido Confirmado</h4>
+        <p>Tu pedido ha sido confirmado por el administrador. Pronto recibirás información del envío.</p>
+      </div>
+
+      <div class="detalles-pedido" id="detallesPedidoConfirmado">
+        <!-- Se llena con JavaScript -->
+      </div>
+
+      <div class="botones-acciones">
+        <a href="index.html" class="btn btn-principal">
+          🏠 Volver al Inicio
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const BACKEND_URL = window.BACKEND_URL || 'http://localhost:3000';
+
+    function enviarWhatsAppManual() {
+      const urlGuardada = localStorage.getItem('urlWhatsAppPendiente');
+      if (urlGuardada) {
+        window.open(urlGuardada, '_blank');
+      }
+    }
+
+    // Al cargar la página, obtener detalles del pedido desde el backend
+    window.addEventListener('DOMContentLoaded', function() {
+      const params = new URLSearchParams(window.location.search);
+      const idPedido = params.get('pedido');
+      
+      if (!idPedido) {
+        console.error('No se proporcionó ID de pedido en la URL');
+        return;
+      }
+
+      // Obtener token del cliente desde localStorage
+      const usuarioJSON = localStorage.getItem('usuario');
+      const usuario = usuarioJSON ? JSON.parse(usuarioJSON) : null;
+      const token = usuario?.access_token || localStorage.getItem('user-token');
+
+      if (!token) {
+        console.error('No hay token de autenticación. Por favor inicia sesión.');
+        document.getElementById('clienteNombre').textContent = 'Error: No autenticado. Inicia sesión nuevamente.';
+        return;
+      }
+      
+      fetch(`${BACKEND_URL}/api/v1/orders/${idPedido}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        }
+      })
+        .then(resp => {
+          if (!resp.ok) {
+            if (resp.status === 401) {
+              throw new Error(`Error 401: No autorizado. Token inválido o expirado. Por favor inicia sesión de nuevo.`);
+            }
+            throw new Error(`Error ${resp.status}: ${resp.statusText}`);
+          }
+          return resp.json();
+        })
+        .then(data => {
+          console.log('Datos del pedido desde backend:', data);
+          
+          const pedido = data.data || data;
+          if (pedido) {
+            // Mostrar número de radicado (usar el número del pedido)
+            const numeroRadicado = pedido.numero || pedido.id || idPedido;
+            document.getElementById('numeroRadicado').textContent = numeroRadicado;
+            
+            // Cliente
+            const nombreCliente = pedido.usuario?.nombre || pedido.cliente || '-';
+            document.getElementById('clienteNombre').textContent = nombreCliente;
+            
+            // Teléfono
+            const telefonoCliente = pedido.usuario?.telefono || pedido.telefono || '-';
+            document.getElementById('clienteTelefono').textContent = telefonoCliente;
+            
+            // Total items
+            const totalItems = pedido.items ? pedido.items.length : 0;
+            document.getElementById('totalItems').textContent = totalItems;
+            
+            // Monto total
+            const montoTotal = pedido.total || 0;
+            document.getElementById('montoTotal').textContent = '$' + montoTotal.toLocaleString('es-CO');
+            
+            // Hora de creación
+            const horaCreacion = pedido.createdAt ? new Date(pedido.createdAt).toLocaleTimeString('es-CO') : '-';
+            document.getElementById('horaCreacion').textContent = horaCreacion;
+
+            // Si el pedido está confirmado (estado EN_PREPARACION o ENTREGADO)
+            const estadoConfirmado = pedido.estado === 'EN_PREPARACION' || pedido.estado === 'ENTREGADO' || pedido.confirmado;
+            if (estadoConfirmado) {
+              document.getElementById('estadoPendiente').style.display = 'none';
+              document.getElementById('estadoConfirmado').style.display = 'block';
+              document.getElementById('numeroRadicadoConfirmado').textContent = numeroRadicado;
+              
+              let detallesHTML = `
+                <div class="detalle-item">
+                  <span class="detalle-label">Cliente:</span>
+                  <span class="detalle-valor">${nombreCliente}</span>
+                </div>
+                <div class="detalle-item">
+                  <span class="detalle-label">Teléfono:</span>
+                  <span class="detalle-valor">${telefonoCliente}</span>
+                </div>
+                <div class="detalle-item">
+                  <span class="detalle-label">Total Items:</span>
+                  <span class="detalle-valor">${totalItems}</span>
+                </div>
+                <div class="detalle-item">
+                  <span class="detalle-label">Monto Total:</span>
+                  <span class="detalle-valor">$${montoTotal.toLocaleString('es-CO')}</span>
+                </div>
+              `;
+              document.getElementById('detallesPedidoConfirmado').innerHTML = detallesHTML;
+            }
+          } else {
+            console.error('No se encontraron datos del pedido');
+          }
+        })
+        .catch(err => {
+          console.error('Error al cargar el pedido:', err);
+          document.getElementById('clienteNombre').textContent = 'Error cargando datos';
+        });
+    });
+  </script>
+  <script>
+    window.BACKEND_URL = 'http://localhost:3000';
+  </script>
+</body>
+</html>

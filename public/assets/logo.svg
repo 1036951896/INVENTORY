@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Fondo -->
+  <rect width="200" height="200" fill="#f8f9fa"/>
+  
+  <!-- Cuadrado con checkmark -->
+  <g transform="translate(50, 30)">
+    <!-- Cuadrado exterior -->
+    <rect x="10" y="10" width="80" height="80" rx="12" fill="none" stroke="#001f3f" stroke-width="8"/>
+    
+    <!-- Checkmark -->
+    <path d="M 30 55 L 45 70 L 75 40" fill="none" stroke="#0d7a9a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Texto "Inventory" -->
+  <text x="100" y="140" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#001f3f" text-anchor="middle">Inventory</text>
+</svg>

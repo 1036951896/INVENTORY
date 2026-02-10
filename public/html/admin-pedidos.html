@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin - Pedidos - Inventory</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/ecommerce.css">
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <style>
+    body {
+      background-color: var(--gris-claro);
+    }
+
+    .admin-contenedor {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .admin-titulo {
+      color: var(--azul-oscuro);
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
+
+    .pedidos-lista {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .pedido-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid var(--azul-claro);
+    }
+
+    .pedido-card.pendiente {
+      border-left-color: #ffc107;
+    }
+
+    .pedido-card.confirmado {
+      border-left-color: var(--exito);
+      background: #f0fff4;
+    }
+
+    .pedido-encabezado {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+
+    .pedido-info h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--azul-oscuro);
+    }
+
+    .pedido-estado {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .estado-pendiente {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .estado-confirmado {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .pedido-detalles {
+      background: var(--gris-claro);
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+
+    .detalle-fila {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .detalle-fila:last-child {
+      border-bottom: none;
+    }
+
+    .detalle-label {
+      color: var(--gris-oscuro);
+      font-weight: 500;
+    }
+
+    .detalle-valor {
+      color: var(--azul-oscuro);
+      font-weight: 600;
+    }
+
+    .items-lista {
+      margin: 1rem 0;
+    }
+
+    .item {
+      padding: 0.75rem;
+      background: white;
+      border-left: 3px solid var(--azul-claro);
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+    }
+
+    .item-nombre {
+      font-weight: 600;
+      color: var(--azul-oscuro);
+    }
+
+    .item-cantidad {
+      color: var(--gris-oscuro);
+      font-size: 0.9rem;
+    }
+
+    .pedido-acciones {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .btn-confirmar {
+      background: var(--exito);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-confirmar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+    }
+
+    .btn-confirmar:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .vacio {
+      text-align: center;
+      padding: 3rem;
+      background: white;
+      border-radius: 12px;
+      color: var(--gris-oscuro);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="contenedor">
+      <div class="encabezado-contenedor">
+        <div class="logo">
+          <img src="../assets/logo.svg" alt="Logo" class="logo-img">
+          <span class="logo-text">Admin Pedidos</span>
+        </div>
+        <button onclick="salirAdmin()" class="btn btn-peligro">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-contenedor">
+    <h1 class="admin-titulo">Gestión de Pedidos</h1>
+
+    <div class="pedidos-lista" id="pedidosLista">
+      <div class="vacio">Cargando pedidos...</div>
+    </div>
+  </main>
+
+  <script>
+    // Verificar que el admin esté autenticado
+    function verificarAdminLogueado() {
+      const token = localStorage.getItem('admin-token');
+      const usuario = JSON.parse(localStorage.getItem('admin-usuario'));
+
+      if (!token || !usuario) {
+        // Redirigir al login de admin si no está autenticado
+        window.location.href = 'login-admin.html';
+        return false;
+      }
+
+      return true;
+    }
+
+    // Cargar y mostrar pedidos
+    function cargarPedidos() {
+      if (!verificarAdminLogueado()) return;
+      const pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+      const lista = document.getElementById('pedidosLista');
+
+      if (pedidos.length === 0) {
+        lista.innerHTML = '<div class="vacio">No hay pedidos aún</div>';
+        return;
+      }
+
+      // Ordenar pedidos por más nuevos primero
+      const pedidosOrdenados = [...pedidos].sort((a, b) => 
+        new Date(b.fechaCreacion) - new Date(a.fechaCreacion)
+      );
+
+      lista.innerHTML = pedidosOrdenados.map(pedido => `
+        <div class="pedido-card ${pedido.confirmado ? 'confirmado' : 'pendiente'}">
+          <div class="pedido-encabezado">
+            <div class="pedido-info">
+              <h3>${pedido.cliente}</h3>
+              <p style="margin: 0; color: var(--gris-oscuro); font-size: 0.9rem;">
+                ${pedido.fecha} ${pedido.hora}
+              </p>
+            </div>
+            <span class="pedido-estado ${pedido.confirmado ? 'estado-confirmado' : 'estado-pendiente'}">
+              ${pedido.confirmado ? '✓ Confirmado' : '⏳ Pendiente'}
+            </span>
+          </div>
+
+          <div class="pedido-detalles">
+            <div class="detalle-fila">
+              <span class="detalle-label">Radicado:</span>
+              <span class="detalle-valor">${pedido.radicado}</span>
+            </div>
+            <div class="detalle-fila">
+              <span class="detalle-label">Teléfono:</span>
+              <span class="detalle-valor">${pedido.telefono}</span>
+            </div>
+            <div class="detalle-fila">
+              <span class="detalle-label">Email:</span>
+              <span class="detalle-valor">${pedido.email}</span>
+            </div>
+            <div class="detalle-fila">
+              <span class="detalle-label">Total Items:</span>
+              <span class="detalle-valor">${pedido.items.length}</span>
+            </div>
+            <div class="detalle-fila">
+              <span class="detalle-label">Monto Total:</span>
+              <span class="detalle-valor">$${pedido.total.toLocaleString('es-CO')}</span>
+            </div>
+          </div>
+
+          <div>
+            <strong style="color: var(--azul-oscuro);">Items del Pedido:</strong>
+            <div class="items-lista">
+              ${pedido.items.map(item => `
+                <div class="item">
+                  <div class="item-nombre">${item.nombre}</div>
+                  <div class="item-cantidad">Cantidad: ${item.cantidad} × $${item.precio.toLocaleString('es-CO')}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          ${!pedido.confirmado ? `
+            <div class="pedido-acciones">
+              <button class="btn-confirmar" onclick="confirmarPedido('${pedido.id}')">
+                ✓ Confirmar Pedido
+              </button>
+              <a href="https://wa.me/${pedido.telefono.replace(/\D/g, '')}" target="_blank" class="btn" style="background: #25d366; color: white; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                📱 WhatsApp
+              </a>
+            </div>
+          ` : `
+            <p style="color: var(--exito); font-weight: 600; margin-top: 1rem;">✓ Pedido Confirmado</p>
+          `}
+        </div>
+      `).join('');
+    }
+
+    function confirmarPedido(idPedido) {
+      if (!verificarAdminLogueado()) return;
+
+      const pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+      const pedido = pedidos.find(p => p.id === idPedido);
+
+      if (pedido) {
+        pedido.confirmado = true;
+        pedido.estado = 'confirmado';
+        localStorage.setItem('pedidos', JSON.stringify(pedidos));
+        
+        // Recargar la lista
+        cargarPedidos();
+        
+        alert('✓ Pedido confirmado exitosamente!');
+      }
+    }
+
+    function salirAdmin() {
+      window.location.href = 'index.html';
+    }
+
+    // Cargar pedidos al abrir la página y actualizar cada 5 segundos
+    cargarPedidos();
+    setInterval(cargarPedidos, 5000);
+  </script>
+  <script>
+    window.BACKEND_URL = 'http://localhost:3000';
+  </script>
+</body>
+</html>
