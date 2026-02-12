@@ -44,6 +44,9 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package*.json ./
 
+# Generar Prisma Client nuevamente en producción
+RUN npx prisma generate
+
 # Crear usuario no-root
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nodejs -u 1001

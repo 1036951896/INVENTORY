@@ -44,8 +44,8 @@ services:
         value: santis3268@gmail.com
     
     # Configuración de build y start
-    buildCommand: npm install && npm run prisma:generate && npm run build
-    startCommand: npm run start:prod
+    buildCommand: npm install --legacy-peer-deps && npm run prisma:generate && npm run build
+    startCommand: node dist/main.js
     
     # Automático redeploy en push
     autoDeploy: true
