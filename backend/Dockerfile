@@ -44,10 +44,6 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package*.json ./
 
-# Copiar script de inicio
-COPY start.sh ./start.sh
-RUN chmod +x ./start.sh
-
 # Generar Prisma Client nuevamente en producción
 RUN npx prisma generate
 
@@ -71,5 +67,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
 # Usar dumb-init para manejar signals correctamente
 ENTRYPOINT ["/sbin/dumb-init", "--"]
 
-# Comando de inicio
-CMD ["sh", "./start.sh"]
+# Comando de inicio - sincronizar BD y luego iniciar app
+CMD ["sh", "-c", "npx prisma db push --skip-generate && node dist/main.js"]
