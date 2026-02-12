@@ -42,7 +42,6 @@ services:
 
     buildCommand: npm install --legacy-peer-deps && npm run build
     startCommand: node dist/main.js
-    preDeployCommand: npx prisma db push --skip-generate
     autoDeploy: true
 
     # Esperar a BD

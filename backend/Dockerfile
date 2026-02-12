@@ -25,5 +25,5 @@ RUN npm run build
 # Exponer puerto
 EXPOSE 3000
 
-# Comando de inicio
-CMD ["node", "dist/main.js"]
+# Comando de inicio (ejecutar migraciones primero)
+CMD ["sh", "-c", "npx prisma db push --skip-generate && node dist/main.js"]
