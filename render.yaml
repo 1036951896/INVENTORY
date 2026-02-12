@@ -49,6 +49,8 @@ services:
     # Esperar a BD
     dependsOn:
       - inventory-db
+    
+    healthCheckPath: /api/v1/health
 
   # ============================================================================
   # PostgreSQL Database
