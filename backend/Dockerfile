@@ -44,17 +44,18 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package*.json ./
 
-# Copiar script de inicialización (migraciones + app)
+# Copiar script de inicialización
 COPY init.js ./init.js
+RUN chmod +x ./init.js
 
 # Generar Prisma Client nuevamente en producción
 RUN npx prisma generate
 
-# Crear usuario no-root
+# Crear usuario no-root pero permitir ejecutar init
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nodejs -u 1001
 
-# Crear directorio de uploads
+# Crear directorio de uploads y asignar permisos
 RUN mkdir -p /app/uploads && \
     chown -R nodejs:nodejs /app
 
@@ -64,7 +65,7 @@ USER nodejs
 EXPOSE 3000
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:3000/api/v1/health || exit 1
 
 # Usar dumb-init para manejar signals correctamente
