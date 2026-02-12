@@ -1338,29 +1338,37 @@ footer {
 
 .btn-hamburguesa {
   display: none;
-  background: none;
-  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: white;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  padding: 0.6rem 1rem;
-  border-radius: 4px;
+  padding: 0.7rem 1.2rem;
+  border-radius: 6px;
   transition: all 0.3s ease;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  white-space: nowrap;
 }
 
 .btn-hamburguesa:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-hamburguesa:active {
+  transform: scale(0.98);
 }
 
 .btn-hamburguesa svg {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
 }
 
-/* En celular: mostrar hamburguesa y ocultar categorías */
+/* En celular: mostrar hamburguesa y ocultar categorías horizontales */
 @media (max-width: 768px) {
   .btn-hamburguesa {
     display: flex;
@@ -1369,23 +1377,37 @@ footer {
   .categorias .contenedor {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 1rem;
   }
 
   .categorias-lista {
     display: none;
     position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    width: 100%;
+    top: calc(100% + 10px);
+    left: 1rem;
+    right: 1rem;
+    width: auto;
     flex-direction: column;
-    background: #386273;
-    padding: 1rem 2rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    gap: 0.5rem;
-    z-index: 100;
+    background: linear-gradient(135deg, #2a4958 0%, #386273 100%);
+    padding: 1rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    gap: 0.8rem;
+    z-index: 1000;
+    animation: slideDown 0.3s ease forwards;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .categorias-lista.activo {
@@ -1395,6 +1417,21 @@ footer {
   .categoria {
     width: 100%;
     justify-content: flex-start;
+    padding: 0.7rem 1rem;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+  }
+
+  .categoria:hover {
+    background: rgba(255, 255, 255, 0.1);
+    padding-left: 1.3rem;
+  }
+
+  .categoria.activo {
+    background: rgba(255, 255, 255, 0.15);
+    border-left: 3px solid #fff;
+    padding-left: 0.7rem;
   }
 
   .categorias {
