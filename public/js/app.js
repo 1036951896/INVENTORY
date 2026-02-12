@@ -10,27 +10,6 @@ function validarPermisosCliente(permisoRequerido) {
 
 // ===== MENÚ HAMBURGUESA CATEGORÍAS =====
 document.addEventListener('DOMContentLoaded', () => {
-  // ===== HEADER QUE SE CONTRAE AL SCROLLEAR (con debounce) =====
-  let lastScroll = 0;
-  let scrollTimeout;
-  const header = document.querySelector('header');
-
-  if (header) {
-    window.addEventListener('scroll', () => {
-      clearTimeout(scrollTimeout);
-      const currentScroll = window.pageYOffset;
-
-      if (currentScroll > 100 && currentScroll > lastScroll) {
-        // Scroll hacia abajo - contraer header
-        header.classList.add('header-hidden');
-      } else if (currentScroll < 100 || currentScroll <= lastScroll) {
-        // Scroll hacia arriba o al principio - expandir header
-        header.classList.remove('header-hidden');
-      }
-
-      lastScroll = currentScroll <= 0 ? 0 : currentScroll;
-    }, { passive: true });
-  }
 
   const btnCategoriasMenu = document.getElementById('btn-categorias-menu');
   const categoriasLista = document.getElementById('categorias-lista');

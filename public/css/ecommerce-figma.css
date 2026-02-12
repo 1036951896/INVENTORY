@@ -11,19 +11,6 @@ header {
   transition: all 0.3s ease;
 }
 
-/* Header comprimido al scrollear */
-header.header-hidden {
-  padding: 8px 0;
-}
-
-header.header-hidden .logo-text {
-  display: none;
-}
-
-header.header-hidden .categorias {
-  display: none;
-}
-
 header .contenedor {
   display: flex;
   align-items: center;
@@ -349,6 +336,7 @@ header .contenedor {
   background-color: #f0f0f0;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: white;
 }
 
 .categoria.activo {
@@ -1420,6 +1408,7 @@ footer {
 .categoria:hover {
   background: rgba(255, 255, 255, 0.1);
   padding-left: 1.3rem;
+  color: white;
 }
 
 .categoria.activo {
