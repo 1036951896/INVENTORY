@@ -6,6 +6,9 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+# Install OpenSSL (required for Prisma)
+RUN apk add --no-cache openssl
+
 # Copiar package files
 COPY package*.json ./
 COPY tsconfig.json ./
