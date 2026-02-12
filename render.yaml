@@ -67,8 +67,8 @@ services:
     env: node
     repo: https://github.com/1036951896/INVENTORY
 
-    # Build & Start
-    buildCommand: npm install --legacy-peer-deps
+    # Build & Start desde raíz del proyecto
+    buildCommand: npm install --legacy-peer-deps --production
     startCommand: npm start
 
     # Variables
