@@ -67,5 +67,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
 # Usar dumb-init para manejar signals correctamente
 ENTRYPOINT ["/sbin/dumb-init", "--"]
 
-# Comando de inicio - sincronizar BD y luego iniciar app
-CMD ["sh", "-c", "npx prisma db push --skip-generate && node dist/main.js"]
+# Comando de inicio - solo la app, dejamos que NestJS maneje las migraciones
+CMD ["node", "dist/main.js"]
