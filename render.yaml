@@ -69,8 +69,8 @@ services:
     rootDir: frontend
 
     # Build
-    buildCommand: npm install --include=dev --legacy-peer-deps && npm run build
-    startCommand: npm start
+    buildCommand: cd frontend && npm install --include=dev --legacy-peer-deps && npm run build
+    startCommand: cd frontend && node server.js
 
     # Variables
     envVars:
