@@ -5,7 +5,7 @@ services:
   - type: web
     name: inventory-api
     env: docker
-    repo: https://github.com/1036951896/inventory-app
+    repo: https://github.com/1036951896/INVENTORY
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     
@@ -45,7 +45,7 @@ services:
     
     # Configuración de build y start
     buildCommand: npm install --legacy-peer-deps && npm run prisma:generate && npm run build
-    startCommand: npx prisma db push --skip-generate || true && node dist/main.js
+    startCommand: sh -c "npx prisma db push --skip-generate 2>/dev/null; node dist/main.js"
     
     # Automático redeploy en push
     autoDeploy: true
@@ -71,7 +71,7 @@ services:
   - type: web
     name: inventory-frontend
     env: node
-    repo: https://github.com/1036951896/inventory-app
+    repo: https://github.com/1036951896/INVENTORY
     rootDir: frontend
     
     # Build
