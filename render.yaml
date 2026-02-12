@@ -45,7 +45,7 @@ services:
     
     # Configuración de build y start
     buildCommand: npm install --legacy-peer-deps && npm run prisma:generate && npm run build
-    startCommand: sh -c "npx prisma db push --skip-generate --accept-data-loss 2>/dev/null || true; node dist/main.js"
+    startCommand: node dist/main.js
     
     # Automático redeploy en push
     autoDeploy: true
