@@ -75,9 +75,18 @@
       </div>
     </div>
 
-    <!-- CATEGORÍAS -->
+    <!-- CATEGORÍAS + BOTÓN HAMBURGUESA -->
     <div class="categorias">
       <div class="contenedor">
+        <!-- Botón Hamburguesa (solo visible en celular) -->
+        <button class="btn-hamburguesa" id="btn-hamburguesa" onclick="toggleCategorias()">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+            <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
+          </svg>
+          <span>Filtros</span>
+        </button>
+
+        <!-- Categorías (se ocultan en celular) -->
         <div class="categorias-lista" id="categorias-lista">
           <a href="#" class="categoria activo" data-categoria="todas" onclick="filtrarPorCategoria('todas', event)">
             <svg class="icono-categoria" viewBox="0 0 24 24" fill="currentColor">
@@ -230,7 +239,27 @@
 
   <!-- SCRIPTS -->
   <script>
-    window.BACKEND_URL = 'http://localhost:3000';
+    window.BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3000'
+      : 'https://inventory-api-74yl.onrender.com';
+
+    // Toggle menú categorías en celular
+    function toggleCategorias() {
+      const categoriasList = document.getElementById('categorias-lista');
+      categoriasList.classList.toggle('activo');
+    }
+
+    // Cerrar menú al seleccionar categoría
+    document.addEventListener('DOMContentLoaded', function() {
+      const categoriasLinks = document.querySelectorAll('.categoria');
+      categoriasLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          if (window.innerWidth <= 768) {
+            document.getElementById('categorias-lista').classList.remove('activo');
+          }
+        });
+      });
+    });
   </script>
   <script src="../js/direcciones.js"></script>
   <script src="../js/app.js"></script>
