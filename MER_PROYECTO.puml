@@ -1,0 +1,209 @@
+@startuml MER_Inventario_Completo
+!define TABLENAME(name) class name << (T,#FFAAAA) >>
+!define PRIMARY_KEY {id}
+!define FOREIGN_KEY {id}
+
+' Define entities
+entity "USER" as USER {
+  * id : String (PK)
+  --
+  nombre : String
+  email : String (UQ)
+  password : String
+  telefono : String [NULL]
+  rol : Enum (ADMIN | CLIENTE)
+  activo : Boolean
+  createdAt : DateTime
+  updatedAt : DateTime
+}
+
+entity "ADDRESS" as ADDRESS {
+  * id : String (PK)
+  --
+  calle : String
+  numero : String
+  apartamento : String [NULL]
+  ciudad : String
+  departamento : String
+  codigoPostal : String [NULL]
+  pais : String (default: Colombia)
+  detallesAdicionales : String [NULL]
+  esPrincipal : Boolean
+  usuarioId : String (FK)
+  createdAt : DateTime
+  updatedAt : DateTime
+}
+
+entity "CART" as CART {
+  * id : String (PK)
+  --
+  usuarioId : String (FK, UQ)
+  createdAt : DateTime
+  updatedAt : DateTime
+}
+
+entity "CART_ITEM" as CART_ITEM {
+  * id : String (PK)
+  --
+  cantidad : Integer
+  precioUnitario : Integer (centavos)
+  carritoId : String (FK)
+  productoId : String (FK)
+  createdAt : DateTime
+  updatedAt : DateTime
+}
+
+entity "CATEGORY" as CATEGORY {
+  * id : String (PK)
+  --
+  nombre : String (UQ)
+  descripcion : String [NULL]
+  icono : String [NULL]
+  createdAt : DateTime
+  updatedAt : DateTime
+}
+
+entity "PRODUCT" as PRODUCT {
+  * id : String (PK)
+  --
+  nombre : String
+  descripcion : String [NULL]
+  precio : Integer (centavos COP)
+  stock : Integer
+  activo : Boolean
+  categoriaId : String (FK)
+  createdAt : DateTime
+  updatedAt : DateTime
+}
+
+entity "PRODUCT_IMAGE" as PRODUCT_IMAGE {
+  * id : String (PK)
+  --
+  url : String
+  orden : Integer
+  principal : Boolean
+  productoId : String (FK)
+  createdAt : DateTime
+}
+
+entity "ORDER" as ORDER {
+  * id : String (PK)
+  --
+  numero : String (UQ)
+  total : Integer (centavos COP)
+  estado : Enum (PENDIENTE | EN_PREPARACION | ENTREGADO | CANCELADO)
+  usuarioId : String (FK)
+  direccionId : String (FK)
+  entregaEn : DateTime [NULL]
+  notasEntrega : String [NULL]
+  createdAt : DateTime
+  updatedAt : DateTime
+}
+
+entity "ORDER_ITEM" as ORDER_ITEM {
+  * id : String (PK)
+  --
+  cantidad : Integer
+  precioUnitario : Integer (centavos)
+  subtotal : Integer
+  ordenId : String (FK)
+  productoId : String (FK)
+  createdAt : DateTime
+}
+
+entity "STOCK_MOVEMENT" as STOCK_MOVEMENT {
+  * id : String (PK)
+  --
+  tipo : String (ENTRADA | SALIDA | DEVOLUCIÓN | AJUSTE)
+  cantidad : Integer
+  razon : String
+  referencia : String [NULL]
+  productoId : String (FK)
+  usuarioId : String [FK, NULL]
+  createdAt : DateTime
+}
+
+' Define relationships
+USER ||--o| CART : "tiene (1:1)"
+USER ||--o{ ADDRESS : "tiene (1:N)"
+USER ||--o{ ORDER : "realiza (1:N)"
+USER ||--o{ STOCK_MOVEMENT : "registra (1:N)"
+ADDRESS ||--o{ ORDER : "entrega_a (1:N)"
+CART ||--o{ CART_ITEM : "contiene (1:N)"
+CATEGORY ||--o{ PRODUCT : "contiene (1:N)"
+PRODUCT ||--o{ PRODUCT_IMAGE : "tiene (1:N)"
+PRODUCT ||--o{ ORDER_ITEM : "aparece_en (1:N)"
+PRODUCT ||--o{ STOCK_MOVEMENT : "afecta (1:N)"
+PRODUCT ||--o{ CART_ITEM : "esta_en (1:N)"
+ORDER ||--o{ ORDER_ITEM : "incluye (1:N)"
+
+note right of USER
+  - Un carrito por usuario
+  - Múltiples direcciones
+end note
+
+note right of ADDRESS
+  - Direcciones de entrega del usuario
+  - Múltiples direcciones por usuario
+  - Una principal por defecto
+  - Usada en creación de órdenes
+end note
+
+note right of CART
+  - Carrito persistente del cliente
+  - Un carrito por usuario (1:1)
+  - Se crea automáticamente
+  - Mejora UX entre sesiones
+end note
+
+note right of CART_ITEM
+  - Items guardados en carrito
+  - Sin comprometer el pedido
+  - Conserva precio oferta
+  - Producto + cantidadsuario
+  - Múltiples direcciones por usuario
+  - Una principal por defecto
+  - Usada en creación de órdenes
+end note
+
+note right of CATEGORY
+  - Categorías de productos
+  - Nombre único
+  - Con icono opcional
+end note
+
+note right of PRODUCT
+  - Productos del inventario
+  - Referencia a categoría
+  - Precio en centavos
+  - Stock dinámico
+end note
+
+note right of PRODUCT_IMAGE
+  - Múltiples imágenes por producto
+  - Una imagen principal
+  - Ordenadas por prioridad
+  - Mejora experiencia visual
+end note
+
+note right of ORDER
+  - Órdenes/Pedidos de clientes
+  - Número único de pedido (radicado)
+  - Seguimiento de entrega
+  - Dirección seleccionable por usuario
+end note
+
+note right of ORDER_ITEM
+  - Items de cada orden
+  - Guarda precio histórico
+  - Relación composite
+end note
+
+note right of STOCK_MOVEMENT
+  - Auditoría de movimientos de inventario
+  - Registro de entrada/salida
+  - Trazabilidad completa
+  - Profesional y auditable
+end note
+
+@enduml

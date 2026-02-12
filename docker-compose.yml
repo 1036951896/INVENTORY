@@ -1,0 +1,190 @@
+version: "3.8"
+
+services:
+  # ============================================================================
+  # PostgreSQL Database
+  # ============================================================================
+  db:
+    image: postgres:15-alpine
+    container_name: inventory_db_prod
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-inventory_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secure_password_change_me}
+      POSTGRES_DB: ${DB_NAME:-inventory_prod}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backups:/backups
+    ports:
+      - "5432:5432"
+    networks:
+      - inventory_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-inventory_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================================================
+  # Redis Cache
+  # ============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: inventory_redis_prod
+    restart: always
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_password_change_me}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - inventory_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================================================
+  # NestJS API Backend
+  # ============================================================================
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: inventory_api_prod
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      # Database
+      DATABASE_URL: postgresql://${DB_USER:-inventory_user}:${DB_PASSWORD:-secure_password_change_me}@db:5432/${DB_NAME:-inventory_prod}
+
+      # JWT
+      JWT_SECRET: ${JWT_SECRET:-YourProductionSecretKey1234567890abcdefgh}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-YourRefreshSecretKey1234567890abcdefgh}
+      JWT_EXPIRY: ${JWT_EXPIRY:-3600}
+      JWT_REFRESH_EXPIRY: ${JWT_REFRESH_EXPIRY:-604800}
+
+      # API Configuration
+      NODE_ENV: production
+      API_PORT: 3000
+      API_URL: ${API_URL:-https://api.tudominio.com}
+      CORS_ORIGIN: ${CORS_ORIGIN:-https://app.tudominio.com,https://www.tudominio.com}
+
+      # Email/SMTP
+      SMTP_HOST: ${SMTP_HOST:-smtp.sendgrid.net}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-apikey}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-SG.your_sendgrid_key}
+      EMAIL_FROM: ${EMAIL_FROM:-noreply@tudominio.com}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@tudominio.com}
+
+      # WhatsApp/Twilio
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
+      TWILIO_PHONE_FROM: ${TWILIO_PHONE_FROM:-}
+
+      # AWS S3
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      AWS_S3_BUCKET: ${AWS_S3_BUCKET:-inventory-bucket}
+      AWS_S3_REGION: ${AWS_S3_REGION:-us-east-1}
+
+      # Redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis_password_change_me}
+
+      # Logging
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+
+      # Security
+      ENABLE_HELMET: ${ENABLE_HELMET:-true}
+      RATE_LIMIT_WINDOW: ${RATE_LIMIT_WINDOW:-900000}
+      RATE_LIMIT_MAX: ${RATE_LIMIT_MAX:-100}
+
+      # Payments
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY:-}
+      PAYPAL_CLIENT_ID: ${PAYPAL_CLIENT_ID:-}
+      PAYPAL_CLIENT_SECRET: ${PAYPAL_CLIENT_SECRET:-}
+
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/uploads:/app/uploads
+    networks:
+      - inventory_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ============================================================================
+  # Nginx Reverse Proxy
+  # ============================================================================
+  nginx:
+    image: nginx:alpine
+    container_name: inventory_nginx_prod
+    restart: always
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./frontend/dist:/usr/share/nginx/html:ro
+    networks:
+      - inventory_network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============================================================================
+  # PostgreSQL Backup Service (opcional)
+  # ============================================================================
+  # backup:
+  #   image: postgres:15-alpine
+  #   container_name: inventory_backup_prod
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     PGPASSWORD: ${DB_PASSWORD:-secure_password_change_me}
+  #   volumes:
+  #     - ./backups:/backups
+  #     - ./scripts/backup.sh:/backup.sh:ro
+  #   command: /backup.sh
+  #   networks:
+  #     - inventory_network
+
+networks:
+  inventory_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local

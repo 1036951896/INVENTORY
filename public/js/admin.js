@@ -21,7 +21,7 @@ function validarPermisosAdmin(permisoRequerido) {
   return adminUsuario.permisos && adminUsuario.permisos[permisoRequerido];
 }
 
-// Cargar productos desde JSON
+// Cargar productos desde el backend (API REST)
 async function cargarProductosFromJSON() {
   try {
     // Validar que el usuario tiene permisos para ver productos
@@ -30,11 +30,42 @@ async function cargarProductosFromJSON() {
       return [];
     }
     
-    // Cargar desde JSON local
+    const token = localStorage.getItem('admin-token') || '';
+    
+    // Intentar cargar desde el backend API primero
+    console.log('🔍 Cargando productos desde el backend...');
+    const response = await fetch(`${BACKEND_URL}/api/v1/products?page=1&limit=1000`, {
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      const productos = (data.data || data).map(prod => ({
+        id: String(prod.id),
+        nombre: prod.nombre,
+        categoria: prod.categoria?.nombre || prod.categoriaId || '',
+        categoriaId: prod.categoriaId,  // Incluir el ID para editar
+        precio: prod.precio,
+        stock: prod.stock,
+        imagen: normalizarImagenUrlAdmin(prod.imagen || prod.imagenes?.[0]?.url),
+        descripcion: prod.descripcion || prod.nombre
+      }));
+      console.log('✅ Productos del backend cargados:', productos.length);
+      return productos;
+    } else if (response.status === 401) {
+      console.warn('⚠️ Token inválido o expirado. Usando JSON local como fallback.');
+    } else {
+      console.warn(`⚠️ Error del backend (${response.status}). Intentando JSON local como fallback.`);
+    }
+    
+    // Fallback: cargar desde JSON local si el backend no responde
+    console.log('🔍 Cargando productos desde JSON local...');
     const responseLocal = await fetch('../data/productos-imagenes.json');
     if (responseLocal.ok) {
       const dataLocal = await responseLocal.json();
-      console.log('✅ Productos del admin cargados desde JSON');
+      console.log('✅ Productos del JSON cargados');
       return dataLocal.productos.map(prod => ({
         id: String(prod.id),
         nombre: prod.nombre,
@@ -46,7 +77,7 @@ async function cargarProductosFromJSON() {
       }));
     }
   } catch (error) {
-    console.error('❌ Error cargando productos desde JSON:', error);
+    console.error('❌ Error cargando productos:', error);
   }
   // Si falla, retornar vacío
   return [];
@@ -113,6 +144,18 @@ document.addEventListener('DOMContentLoaded', function() {
       actualizarDashboard();
     }
   }, 10000);
+
+  // Cargar categorías para el formulario de productos
+  cargarCategoriasAdmin();
+
+  // Configurar listener del formulario de producto
+  const formProducto = document.getElementById('form-producto');
+  if (formProducto) {
+    formProducto.addEventListener('submit', function(e) {
+      e.preventDefault();
+      guardarProducto();
+    });
+  }
 });
 
 // Helper para obtener credenciales admin
@@ -225,7 +268,7 @@ function configurarMenu() {
         // Actualizar tablas al cambiar de sección
         if (seccion === 'pedidos') cargarTablaPedidos();
         if (seccion === 'usuarios') cargarTablaUsuarios();
-        if (seccion === 'categorias') cargarCategoriasAdmin();
+        if (seccion === 'categorias') mostrarCategoriasConProductos();
         if (seccion === 'notificaciones') actualizarTablaNotificaciones('todas');
         if (seccion === 'reportes') generarReporteInventario();
         if (seccion === 'ofertas') cargarTablaOfertas();
@@ -409,8 +452,8 @@ function cargarTablaProductos() {
         ${producto.stock < 20 ? '<span style="color: var(--error);"> ⚠️ Bajo</span>' : ''}
       </td>
       <td class="acciones-tabla">
-        <button class="btn-editar" onclick="editarProducto(${producto.id})">✎ Editar</button>
-        <button class="btn-eliminar" onclick="eliminarProducto(${producto.id})">🗑️ Eliminar</button>
+        <button class="btn-editar" onclick="editarProducto('${producto.id}')">✎ Editar</button>
+        <button class="btn-eliminar" onclick="eliminarProducto('${producto.id}')">🗑️ Eliminar</button>
       </td>
     `;
     tbody.appendChild(fila);
@@ -453,11 +496,20 @@ function cargarTablaPedidos() {
         <td><span class="badge-items">${cantidadItems} items</span></td>
         <td><strong>$${totalPedido}</strong></td>
         <td><span class="badge ${badgeEstado}">${estado}</span></td>
-        <td>${fechaPedido}</td>
+        <td>${fechaPedido}${pedido.entregaEn ? `<br><small style="color: #666;">Entregado: ${new Date(pedido.entregaEn).toLocaleDateString('es-CO')}</small>` : ''}</td>
         <td class="acciones-tabla">
-          <button class="btn-ver" onclick="abrirDetallePedido('${pedido.id}')" title="Ver detalles">👁️</button>
-          ${!estaConfirmado ? `<button class="btn-confirmar-mini" onclick="confirmarPedido('${pedido.id}')" title="Confirmar">✓</button>` : ''}
-          <a href="https://wa.me/${(telefonoCliente || '').replace(/\D/g, '')}" target="_blank" class="btn-whatsapp" title="WhatsApp">💬</a>
+          <div class="accion-item">
+            <button class="btn-ver" onclick="abrirDetallePedido('${pedido.id}')" title="Ver detalles">👁️ Ver</button>
+          </div>
+          <div class="accion-item">
+            ${!estaConfirmado ? `<button class="btn-confirmar-mini" onclick="confirmarPedido('${pedido.id}')" title="Confirmar">✓ Confirmar</button>` : `<span class="estado-confirmado">✓ Confirmado</span>`}
+          </div>
+          <div class="accion-item">
+            ${estado !== 'ENTREGADO' && estado !== 'CANCELADO' && (estado === 'EN_PREPARACION' || estado === 'ENVIADO') ? `<button class="btn-entregado" onclick="marcarComoEntregado('${pedido.id}')" title="Marcar como Entregado">📦 Entregado</button>` : ''}
+          </div>
+          <div class="accion-item">
+            <a href="https://wa.me/${(telefonoCliente || '').replace(/\D/g, '')}" target="_blank" class="btn-whatsapp" title="WhatsApp">💬 Contactar</a>
+          </div>
         </td>
       </tr>
     `;
@@ -625,13 +677,42 @@ function cargarTablaUsuarios() {
 
 // Modal de producto
 function abrirModalProducto() {
-  document.getElementById('modal-producto').classList.add('activo');
-  document.getElementById('form-producto').reset();
-  document.getElementById('form-producto').removeAttribute('data-id');
+  const modal = document.getElementById('modal-producto');
+  const form = document.getElementById('form-producto');
+  const modalTitulo = document.getElementById('modal-titulo-producto');
+  
+  if (!modal || !form) {
+    console.error('❌ Modal o formulario no encontrado');
+    return;
+  }
+  
+  // Determinar si es nuevo o edición
+  const productoId = form.getAttribute('data-id');
+  const esNuevo = !productoId;
+  
+  // Actualizar título
+  if (modalTitulo) {
+    modalTitulo.textContent = esNuevo ? 'Agregar Producto' : 'Editar Producto';
+  }
+  
+  // Limpiar formulario solo si es nuevo producto
+  if (esNuevo) {
+    form.reset();
+  }
+  
+  // Mostrar modal con display: flex para que se centre correctamente
+  modal.style.display = 'flex';
+  modal.classList.add('activo');
+  
+  console.log('✏️ Modal abierto -', esNuevo ? 'Nuevo producto' : 'Editando producto');
 }
 
 function cerrarModalProducto() {
-  document.getElementById('modal-producto').classList.remove('activo');
+  const modal = document.getElementById('modal-producto');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('activo');
+  }
 }
 
 function editarProducto(id) {
@@ -641,16 +722,26 @@ function editarProducto(id) {
     return;
   }
   
-  const producto = productosAdmin.find(p => p.id === id);
-  if (!producto) return;
+  // Asegurar que el ID es string
+  const idString = String(id);
+  const producto = productosAdmin.find(p => String(p.id) === idString);
+  if (!producto) {
+    console.error('❌ Producto no encontrado. ID:', idString, 'Productos disponibles:', productosAdmin.map(p => p.id).slice(0, 5));
+    mostrarMensajeAdmin('❌ Producto no encontrado', 'error');
+    return;
+  }
+
+  console.log('✏️ Editando producto:', producto);
 
   document.getElementById('prod-nombre').value = producto.nombre;
-  document.getElementById('prod-categoria').value = producto.categoria;
+  // Usar categoriaId si está disponible, sino usar categoria
+  const categoriaId = producto.categoriaId || producto.categoria;
+  document.getElementById('prod-categoria').value = categoriaId;
   document.getElementById('prod-precio').value = producto.precio;
   document.getElementById('prod-stock').value = producto.stock;
-  document.getElementById('prod-imagen').value = producto.imagen;
+  document.getElementById('prod-imagen').value = producto.imagen || '';
   document.getElementById('prod-descripcion').value = producto.descripcion || '';
-  document.getElementById('form-producto').setAttribute('data-id', id);
+  document.getElementById('form-producto').setAttribute('data-id', idString);
 
   abrirModalProducto();
 }
@@ -663,9 +754,10 @@ function eliminarProducto(id) {
   }
   
   if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+    // Asegurar que el ID es string
+    const idString = String(id);
     // Eliminar producto en el backend
-    // ...existing code...
-    fetch(`${BACKEND_URL}/api/v1/products/${id}`, {
+    fetch(`${BACKEND_URL}/api/v1/products/${idString}`, {
       method: 'DELETE',
       headers: {
         'Authorization': 'Bearer ' + (localStorage.getItem('admin-token') || '')
@@ -681,6 +773,136 @@ function eliminarProducto(id) {
       })
       .catch(() => mostrarMensajeAdmin('Error de red al eliminar producto', 'error'));
   }
+}
+
+// Cargar categorías desde el backend
+async function cargarCategoriasAdmin() {
+  try {
+    const token = localStorage.getItem('admin-token') || '';
+    console.log('🔍 Cargando categorías con token:', token.substring(0, 20) + '...');
+    
+    const resp = await fetch(`${BACKEND_URL}/api/v1/categories`, {
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    });
+    
+    console.log('📡 Response Status:', resp.status);
+    
+    if (resp.ok) {
+      const categorias = await resp.json();
+      const selectCateg = document.getElementById('prod-categoria');
+      
+      if (!selectCateg) {
+        console.error('❌ Select prod-categoria no encontrado en el DOM');
+        return;
+      }
+      
+      // Limpiar opciones previas (excepto la primera)
+      while (selectCateg.options.length > 1) {
+        selectCateg.remove(1);
+      }
+      
+      // Agregar categorías desde el backend
+      if (Array.isArray(categorias) && categorias.length > 0) {
+        categorias.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat.id;
+          option.textContent = cat.nombre;
+          selectCateg.appendChild(option);
+          console.log(`  ✓ ${cat.nombre} (${cat.id})`);
+        });
+        console.log('✅ Categorías cargadas:', categorias.length);
+      } else {
+        console.warn('⚠️ No hay categorías en la respuesta o respuesta no es array');
+      }
+    } else {
+      const errorData = await resp.text();
+      console.error('❌ Error cargando categorías:', resp.status, errorData);
+      mostrarMensajeAdmin(`Error al cargar categorías (${resp.status})`, 'error');
+    }
+  } catch (err) {
+    console.error('❌ Error fetching categorías:', err);
+    mostrarMensajeAdmin('Error de red al cargar categorías: ' + err.message, 'error');
+  }
+}
+
+// Guardar producto
+function guardarProducto() {
+  // Validar permisos de administrador
+  if (!validarPermisosAdmin('crear_productos')) {
+    mostrarMensajeAdmin('❌ No tienes permisos para crear productos', 'error');
+    return;
+  }
+
+  const nombre = document.getElementById('prod-nombre').value.trim();
+  const categoriaId = document.getElementById('prod-categoria').value;
+  const precio = parseFloat(document.getElementById('prod-precio').value);
+  const stock = parseInt(document.getElementById('prod-stock').value);
+  const imagen = document.getElementById('prod-imagen').value.trim();
+  const descripcion = document.getElementById('prod-descripcion').value.trim();
+  const form = document.getElementById('form-producto');
+  const productoId = form.getAttribute('data-id');
+
+  // Validar campos requeridos
+  if (!nombre || !categoriaId || isNaN(precio) || isNaN(stock)) {
+    mostrarMensajeAdmin('❌ Por favor completa todos los campos requeridos', 'error');
+    return;
+  }
+
+  if (precio < 0 || stock < 0) {
+    mostrarMensajeAdmin('❌ Precio y stock no pueden ser negativos', 'error');
+    return;
+  }
+
+  const productData = {
+    nombre,
+    categoriaId,
+    precio,
+    stock,
+    imagen: imagen || null,
+    descripcion: descripcion || null
+  };
+
+  console.log('📤 Enviando datos del producto:', productData);
+
+  const method = productoId ? 'PUT' : 'POST';
+  const url = productoId 
+    ? `${BACKEND_URL}/api/v1/products/${productoId}`
+    : `${BACKEND_URL}/api/v1/products`;
+
+  fetch(url, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + (localStorage.getItem('admin-token') || '')
+    },
+    body: JSON.stringify(productData)
+  })
+    .then(resp => {
+      console.log('📡 Response Status:', resp.status);
+      
+      if (resp.ok) {
+        const action = productoId ? 'actualizado' : 'creado';
+        mostrarMensajeAdmin(`✓ Producto ${action} correctamente`, 'exito');
+        cerrarModalProducto();
+        cargarDatosAdmin();
+      } else {
+        // Intentar leer el error del servidor
+        resp.json().then(data => {
+          const errorMsg = data.message || data.error || 'Error desconocido';
+          console.error('❌ Error del servidor:', errorMsg);
+          mostrarMensajeAdmin(`Error: ${errorMsg}`, 'error');
+        }).catch(err => {
+          console.error('❌ Error al guardar el producto:', resp.status, resp.statusText);
+          mostrarMensajeAdmin(`❌ Error al guardar el producto (${resp.status})`, 'error');
+        });
+      }
+    })
+    .catch(err => {
+      console.error('❌ Error de red guardando producto:', err);
+      mostrarMensajeAdmin('❌ Error de red al guardar producto: ' + err.message, 'error');
+    });
 }
 
 // Confirmar pedido (cambia estado a EN_PREPARACION)
@@ -713,6 +935,41 @@ function confirmarPedido(idPedido) {
         }
       })
       .catch(() => mostrarMensajeAdmin('Error de red al confirmar pedido', 'error'));
+  }
+}
+
+// Marcar pedido como entregado
+function marcarComoEntregado(idPedido) {
+  // Validar permisos de administrador
+  if (!validarPermisosAdmin('editar_pedidos')) {
+    mostrarMensajeAdmin('❌ No tienes permisos para marcar pedidos como entregados', 'error');
+    return;
+  }
+  
+  if (confirm('¿Deseas marcar este pedido como ENTREGADO?')) {
+    fetch(`${window.BACKEND_URL}/api/v1/orders/${idPedido}/status`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + (localStorage.getItem('admin-token') || '')
+      },
+      body: JSON.stringify({
+        estado: 'ENTREGADO',
+        notasEntrega: 'Pedido entregado al cliente'
+      })
+    })
+      .then(resp => {
+        if (resp.ok) {
+          mostrarMensajeAdmin('✓ Pedido marcado como entregado.', 'exito');
+          cargarDatosAdmin();
+          cargarTablaPedidos();
+        } else {
+          resp.json().then(data => {
+            mostrarMensajeAdmin(`Error: ${data.message || 'No se pudo marcar como entregado'}`, 'error');
+          }).catch(() => mostrarMensajeAdmin('Error al marcar pedido como entregado', 'error'));
+        }
+      })
+      .catch(() => mostrarMensajeAdmin('Error de red al marcar como entregado', 'error'));
   }
 }
 
@@ -818,7 +1075,7 @@ function cerrarSesionAdmin() {
 // Mostrar productos agrupados por categoría en la sección de categorías
 let categoriaFiltroActual = 'todas';
 
-async function cargarCategoriasAdmin() {
+async function mostrarCategoriasConProductos() {
   try {
     const token = localStorage.getItem('admin-token');
     let productos = [];
@@ -1015,7 +1272,7 @@ function buscarProductos(termino) {
   
   if (!busquedaActual) {
     // Si está vacío, mostrar todos
-    cargarCategoriasAdmin();
+    mostrarCategoriasConProductos();
     return;
   }
 
@@ -1051,7 +1308,7 @@ function ordenarProductos(criterio) {
   ordenActual = criterio;
   
   if (!criterio) {
-    cargarCategoriasAdmin();
+    mostrarCategoriasConProductos();
     return;
   }
 
@@ -1409,7 +1666,7 @@ async function generarReporteInventario() {
           </span>
         </td>
         <td>
-          <button class="btn btn-pequeno" onclick="editarProducto(${prod.id})">Editar</button>
+          <button class="btn btn-pequeno" onclick="editarProducto('${prod.id}')">Editar</button>
         </td>
       </tr>
     `).join('');
@@ -1632,7 +1889,7 @@ async function generarReporteSinRotacion() {
           </span>
         </td>
         <td>
-          <button class="btn btn-pequeno" onclick="editarProducto(${prod.id})">Editar</button>
+          <button class="btn btn-pequeno" onclick="editarProducto('${prod.id}')">Editar</button>
         </td>
       </tr>
     `).join('');
@@ -1723,24 +1980,53 @@ function cargarTablaOfertas() {
       const producto = productos.find(p => String(p.id) === String(oferta.productoId));
       if (!producto) return;
 
-      const precioOriginal = producto.precio;
-      const descuento = oferta.descuento || 0;
-      const precioFinal = Math.floor(precioOriginal * (1 - descuento / 100));
+      let fila = '';
+      
+      if (oferta.tipo === 'porcentaje' || oferta.descuento) {
+        // Tipo: Descuento por porcentaje
+        const precioOriginal = producto.precio;
+        const descuento = oferta.descuento || 0;
+        const precioFinal = Math.floor(precioOriginal * (1 - descuento / 100));
 
-      html += `
-        <tr>
-          <td>${producto.nombre}</td>
-          <td>${producto.categoria}</td>
-          <td>$${precioOriginal.toLocaleString('es-CO')}</td>
-          <td><span class="badge-descuento-admin">-${descuento}%</span></td>
-          <td>$${precioFinal.toLocaleString('es-CO')}</td>
-          <td><span style="color: #27AE60; font-weight: bold;">✓ Activa</span></td>
-          <td style="white-space: nowrap;">
-            <button class="btn-accion btn-editar" onclick="editarOferta('${oferta.id}')">Editar</button>
-            <button class="btn-accion btn-eliminar" onclick="eliminarOferta('${oferta.productoId}')">Eliminar</button>
-          </td>
-        </tr>
-      `;
+        fila = `
+          <tr>
+            <td>${producto.nombre}</td>
+            <td>${producto.categoria}</td>
+            <td>$${precioOriginal.toLocaleString('es-CO')}</td>
+            <td><span class="badge-descuento-admin">-${descuento}%</span></td>
+            <td>$${precioFinal.toLocaleString('es-CO')}</td>
+            <td><span style="background: #E74C3C; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8em;">Descuento</span></td>
+            <td><span style="color: #27AE60; font-weight: bold;">✓ Activa</span></td>
+            <td style="white-space: nowrap;">
+              <button class="btn-accion btn-editar" onclick="editarOferta('${oferta.id}')">Editar</button>
+              <button class="btn-accion btn-eliminar" onclick="eliminarOferta('${oferta.productoId}')">Eliminar</button>
+            </td>
+          </tr>
+        `;
+      } else if (oferta.tipo === 'cantidad' && oferta.cantidadMinima && oferta.precioEspecial) {
+        // Tipo: Precio especial por cantidad
+        const precioNormal = producto.precio * oferta.cantidadMinima;
+        const precioEspecial = oferta.precioEspecial * oferta.cantidadMinima;
+        const ahorro = precioNormal - precioEspecial;
+
+        fila = `
+          <tr>
+            <td>${producto.nombre}</td>
+            <td>${producto.categoria}</td>
+            <td>$${producto.precio.toLocaleString('es-CO')} c/u</td>
+            <td><span class="badge-descuento-admin">${oferta.cantidadMinima} x $${oferta.precioEspecial.toLocaleString('es-CO')}</span></td>
+            <td>Ahorra $${ahorro.toLocaleString('es-CO')}</td>
+            <td><span style="background: #27AE60; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8em;">Cantidad</span></td>
+            <td><span style="color: #27AE60; font-weight: bold;">✓ Activa</span></td>
+            <td style="white-space: nowrap;">
+              <button class="btn-accion btn-editar" onclick="editarOferta('${oferta.id}')">Editar</button>
+              <button class="btn-accion btn-eliminar" onclick="eliminarOferta('${oferta.productoId}')">Eliminar</button>
+            </td>
+          </tr>
+        `;
+      }
+
+      html += fila;
     });
 
     tbody.innerHTML = html;
@@ -1752,9 +2038,12 @@ function abrirModalOferta() {
   const modal = document.getElementById('modal-oferta');
   const formulario = document.getElementById('formulario-oferta');
   const titulo = document.getElementById('modal-oferta-titulo');
+  const tipoSelect = document.getElementById('oferta-tipo');
 
   titulo.textContent = 'Nueva Oferta';
   formulario.reset();
+  tipoSelect.value = 'porcentaje';
+  cambiarTipoOferta();
   
   // Cargar productos en el select
   cargarProductosFromJSON().then(productos => {
@@ -1793,6 +2082,8 @@ function editarOferta(ofertaId) {
   // Cargar productos
   cargarProductosFromJSON().then(productos => {
     const select = document.getElementById('oferta-producto');
+    const tipoSelect = document.getElementById('oferta-tipo');
+    
     select.innerHTML = '<option value="">-- Selecciona un producto --</option>';
     
     productos.forEach(prod => {
@@ -1805,7 +2096,18 @@ function editarOferta(ofertaId) {
       select.appendChild(option);
     });
 
-    document.getElementById('oferta-descuento').value = oferta.descuento;
+    // Cargar tipo de oferta
+    tipoSelect.value = oferta.tipo || 'porcentaje';
+    cambiarTipoOferta();
+
+    // Cargar datos según el tipo
+    if (oferta.tipo === 'porcentaje' || oferta.descuento) {
+      document.getElementById('oferta-descuento').value = oferta.descuento || 10;
+    } else if (oferta.tipo === 'cantidad') {
+      document.getElementById('oferta-cantidad-minima').value = oferta.cantidadMinima || 3;
+      document.getElementById('oferta-precio-especial').value = oferta.precioEspecial || 0;
+    }
+
     actualizarPrecioOferta();
   });
 
@@ -1817,27 +2119,58 @@ function editarOferta(ofertaId) {
   modal.style.display = 'flex';
 }
 
+// Cambiar tipo de oferta
+function cambiarTipoOferta() {
+  const tipo = document.getElementById('oferta-tipo').value;
+  const seccionPorcentaje = document.getElementById('seccion-porcentaje');
+  const seccionCantidad = document.getElementById('seccion-cantidad');
+
+  if (tipo === 'porcentaje') {
+    seccionPorcentaje.style.display = 'block';
+    seccionCantidad.style.display = 'none';
+  } else {
+    seccionPorcentaje.style.display = 'none';
+    seccionCantidad.style.display = 'block';
+  }
+  actualizarPrecioOferta();
+}
+
 // Actualizar visualización del precio de oferta
 function actualizarPrecioOferta() {
   const productoSelect = document.getElementById('oferta-producto');
-  const descuentoInput = document.getElementById('oferta-descuento');
-  const precioOriginal = document.getElementById('oferta-precio-original');
-  const precioFinal = document.getElementById('oferta-precio-final');
+  const tipoSelect = document.getElementById('oferta-tipo');
+  const tipo = tipoSelect.value;
 
   cargarProductosFromJSON().then(productos => {
     const productoId = productoSelect.value;
     const producto = productos.find(p => String(p.id) === String(productoId));
 
-    if (producto) {
+    if (!producto) return;
+
+    if (tipo === 'porcentaje') {
+      const descuentoInput = document.getElementById('oferta-descuento');
+      const precioOriginal = document.getElementById('oferta-precio-original');
+      const precioFinal = document.getElementById('oferta-precio-final');
+
       const precio = producto.precio;
       const descuento = Number(descuentoInput.value) || 0;
       const final = Math.floor(precio * (1 - descuento / 100));
 
       precioOriginal.value = `$${precio.toLocaleString('es-CO')}`;
       precioFinal.value = `$${final.toLocaleString('es-CO')}`;
-    } else {
-      precioOriginal.value = '';
-      precioFinal.value = '';
+    } else if (tipo === 'cantidad') {
+      const cantidadInput = document.getElementById('oferta-cantidad-minima');
+      const precioEspecialInput = document.getElementById('oferta-precio-especial');
+      const precioNormalCantidad = document.getElementById('oferta-precio-normal-cantidad');
+      const totalEspecial = document.getElementById('oferta-total-especial');
+
+      const cantidad = Number(cantidadInput.value) || 1;
+      const precioNormal = producto.precio * cantidad;
+      const precioEspecial = Number(precioEspecialInput.value) || 0;
+      const totalEsp = precioEspecial * cantidad;
+
+      precioNormalCantidad.value = `$${precioNormal.toLocaleString('es-CO')} (${cantidad} × $${producto.precio.toLocaleString('es-CO')})`;
+      totalEspecial.value = `$${totalEsp.toLocaleString('es-CO')} (${cantidad} × $${precioEspecial.toLocaleString('es-CO')})`;
     }
   });
 }
@@ -1845,22 +2178,46 @@ function actualizarPrecioOferta() {
 // Guardar oferta
 function guardarOferta(ofertaId = null) {
   const productoId = document.getElementById('oferta-producto').value;
-  const descuento = Number(document.getElementById('oferta-descuento').value);
+  const tipo = document.getElementById('oferta-tipo').value;
 
-  if (!productoId || !descuento || descuento < 1 || descuento > 100) {
-    alert('❌ Por favor completa todos los campos correctamente');
+  if (!productoId) {
+    alert('❌ Por favor selecciona un producto');
     return;
+  }
+
+  let nuevaOferta = {
+    id: ofertaId || 'oferta_' + Date.now(),
+    productoId: productoId,
+    tipo: tipo,
+    fechaCreacion: new Date().toISOString(),
+    activa: true
+  };
+
+  if (tipo === 'porcentaje') {
+    const descuento = Number(document.getElementById('oferta-descuento').value);
+    if (!descuento || descuento < 1 || descuento > 100) {
+      alert('❌ Ingresa un descuento válido (1-100)');
+      return;
+    }
+    nuevaOferta.descuento = descuento;
+  } else if (tipo === 'cantidad') {
+    const cantidadMinima = Number(document.getElementById('oferta-cantidad-minima').value);
+    const precioEspecial = Number(document.getElementById('oferta-precio-especial').value);
+    if (!cantidadMinima || cantidadMinima < 2 || !precioEspecial || precioEspecial < 0) {
+      alert('❌ Ingresa una cantidad válida (mínimo 2) y un precio especial');
+      return;
+    }
+    nuevaOferta.cantidadMinima = cantidadMinima;
+    nuevaOferta.precioEspecial = precioEspecial;
   }
 
   let ofertas = cargarOfertasAdmin();
 
   if (ofertaId) {
     // Actualizar oferta existente
-    const oferta = ofertas.find(o => o.id === ofertaId);
-    if (oferta) {
-      oferta.productoId = productoId;
-      oferta.descuento = descuento;
-      oferta.fechaCreacion = new Date().toISOString();
+    const indexOferta = ofertas.findIndex(o => o.id === ofertaId);
+    if (indexOferta > -1) {
+      ofertas[indexOferta] = nuevaOferta;
     }
   } else {
     // Verificar si el producto ya tiene oferta
@@ -1869,21 +2226,13 @@ function guardarOferta(ofertaId = null) {
       alert('❌ Este producto ya tiene una oferta activa');
       return;
     }
-
-    // Crear nueva oferta
-    ofertas.push({
-      id: 'oferta_' + Date.now(),
-      productoId: productoId,
-      descuento: descuento,
-      fechaCreacion: new Date().toISOString(),
-      activa: true
-    });
+    ofertas.push(nuevaOferta);
   }
 
   guardarOfertasAdmin(ofertas);
   cerrarModalOferta();
   cargarTablaOfertas();
-  alert('✓ Oferta guardada exitosamente');
+  mostrarMensajeAdmin('✓ Oferta guardada exitosamente', 'exito');
 }
 
 // Eliminar oferta
@@ -1903,4 +2252,65 @@ function eliminarOferta(productoId) {
 // Cerrar modal de oferta
 function cerrarModalOferta() {
   document.getElementById('modal-oferta').style.display = 'none';
+}
+
+// ===== INICIALIZACIÓN DE SECCIÓN DE CONFIGURACIÓN =====
+// Esta función se ejecuta después de que todo el script está cargado
+async function initAdminAccountSection() {
+  const creds = await getAdminCredenciales();
+  if (creds && creds.email) {
+    const emailInput = document.getElementById('admin-email');
+    if (emailInput) emailInput.value = creds.email;
+  }
+
+  const btnChangePass = document.getElementById('btn-change-admin-pass');
+  if (btnChangePass) {
+    btnChangePass.addEventListener('click', async function() {
+      const current = document.getElementById('admin-current-password').value || '';
+      const nw = document.getElementById('admin-new-password').value || '';
+      const conf = document.getElementById('admin-confirm-password').value || '';
+      const msg = document.getElementById('admin-pass-msg');
+      msg.textContent = '';
+
+      if (!current || !nw || !conf) { 
+        msg.textContent = 'Por favor completa todos los campos.'; 
+        msg.className='mensaje mensaje-error'; 
+        return; 
+      }
+      if (nw !== conf) { 
+        msg.textContent = 'Las contraseñas nuevas no coinciden.'; 
+        msg.className='mensaje mensaje-error'; 
+        return; 
+      }
+
+      const stored = localStorage.getItem('admin-cred');
+      const adminCred = stored ? JSON.parse(stored) : {};
+
+      if (adminCred.password !== current) {
+        msg.textContent = 'Contraseña actual incorrecta.';
+        msg.className='mensaje mensaje-error';
+        return;
+      }
+
+      adminCred.password = nw;
+      localStorage.setItem('admin-cred', JSON.stringify(adminCred));
+      msg.textContent = 'Contraseña actualizada correctamente';
+      msg.className='mensaje mensaje-exito';
+
+      setTimeout(() => {
+        document.getElementById('admin-current-password').value = '';
+        document.getElementById('admin-new-password').value = '';
+        document.getElementById('admin-confirm-password').value = '';
+        msg.textContent = '';
+      }, 2000);
+    });
+  }
+}
+
+// Ejecutar inicialización cuando el DOM esté listo
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAdminAccountSection);
+} else {
+  // El DOM ya está cargado (esto puede pasar si el script se carga después)
+  initAdminAccountSection();
 }

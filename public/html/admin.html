@@ -1365,19 +1365,54 @@
                 </div>
 
                 <div>
-                  <label for="oferta-descuento">Descuento (%) *</label>
-                  <input type="number" id="oferta-descuento" min="1" max="100" value="10" required onchange="actualizarPrecioOferta()">
+                  <label for="oferta-tipo">Tipo de Oferta *</label>
+                  <select id="oferta-tipo" required onchange="cambiarTipoOferta()">
+                    <option value="porcentaje">Descuento por Porcentaje (%)</option>
+                    <option value="cantidad">Precio Especial por Cantidad</option>
+                  </select>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                  <div>
-                    <label>Precio Original</label>
-                    <input type="text" id="oferta-precio-original" readonly style="background: #f5f5f5;">
+                <!-- Tipo 1: Descuento por Porcentaje -->
+                <div id="seccion-porcentaje">
+                  <label for="oferta-descuento">Descuento (%) *</label>
+                  <input type="number" id="oferta-descuento" min="1" max="100" value="10" onchange="actualizarPrecioOferta()">
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                    <div>
+                      <label>Precio Original</label>
+                      <input type="text" id="oferta-precio-original" readonly style="background: #f5f5f5;">
+                    </div>
+                    <div>
+                      <label>Precio Final</label>
+                      <input type="text" id="oferta-precio-final" readonly style="background: #f5f5f5;">
+                    </div>
                   </div>
-                  <div>
-                    <label>Precio Final</label>
-                    <input type="text" id="oferta-precio-final" readonly style="background: #f5f5f5;">
+                </div>
+
+                <!-- Tipo 2: Precio Especial por Cantidad -->
+                <div id="seccion-cantidad" style="display: none;">
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                      <label for="oferta-cantidad-minima">Cantidad Mínima *</label>
+                      <input type="number" id="oferta-cantidad-minima" min="2" value="3" onchange="actualizarPrecioOferta()">
+                    </div>
+                    <div>
+                      <label for="oferta-precio-especial">Precio Especial por Unidad *</label>
+                      <input type="number" id="oferta-precio-especial" min="0" value="0" onchange="actualizarPrecioOferta()">
+                    </div>
                   </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                    <div>
+                      <label>Precio Normal</label>
+                      <input type="text" id="oferta-precio-normal-cantidad" readonly style="background: #f5f5f5;">
+                    </div>
+                    <div>
+                      <label>Total Especial</label>
+                      <input type="text" id="oferta-total-especial" readonly style="background: #f5f5f5;">
+                    </div>
+                  </div>
+                  <small style="color: #666; margin-top: 10px;">Ejemplo: 3 unidades a $X c/u</small>
                 </div>
 
                 <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px;">
@@ -1576,10 +1611,10 @@
   </div>
 
   <!-- MODAL PRODUCTO -->
-  <div class="modal" id="modal-producto" style="display: none !important;">
+  <div class="modal" id="modal-producto" style="display: none;">
     <div class="modal-contenido">
       <button class="modal-cerrar" onclick="cerrarModalProducto()">✕</button>
-      <h2>Agregar Producto</h2>
+      <h2 id="modal-titulo-producto">Agregar Producto</h2>
 
       <form id="form-producto">
         <div class="grupo-formulario">
@@ -1592,10 +1627,7 @@
             <label for="prod-categoria">Categoría</label>
             <select id="prod-categoria" required>
               <option value="">Seleccionar categoría</option>
-              <option value="bebidas">Bebidas</option>
-              <option value="snacks">Snacks</option>
-              <option value="limpieza">Limpieza</option>
-              <option value="higiene">Higiene</option>
+              <!-- Las opciones se cargarán dinámicamente desde el API -->
             </select>
           </div>
 
@@ -1631,45 +1663,7 @@
   </div>
 
   <script src="../js/admin.js"></script>
-  <script>
-    // Inicializar campos de cuenta admin en la sección de configuración
-    async function initAdminAccountSection() {
-      const creds = await getAdminCredenciales();
-      if (creds && creds.email) document.getElementById('admin-email').value = creds.email;
-
-      document.getElementById('btn-change-admin-pass').addEventListener('click', async function() {
-        const current = document.getElementById('admin-current-password').value || '';
-        const nw = document.getElementById('admin-new-password').value || '';
-        const conf = document.getElementById('admin-confirm-password').value || '';
-        const msg = document.getElementById('admin-pass-msg');
-        msg.textContent = '';
-
-        if (!current || !nw || !conf) { msg.textContent = 'Por favor completa todos los campos.'; msg.className='mensaje mensaje-error'; return; }
-        if (nw !== conf) { msg.textContent = 'Las contraseñas nuevas no coinciden.'; msg.className='mensaje mensaje-error'; return; }
-
-        const active = await getAdminCredenciales();
-        if (!active) { msg.textContent = 'Error leyendo credenciales.'; msg.className='mensaje mensaje-error'; return; }
-
-        if (current !== active.password) { msg.textContent = 'Contraseña actual incorrecta.'; msg.className='mensaje mensaje-error'; return; }
-
-        const ok = await actualizarPasswordAdmin(nw);
-        if (ok) {
-          msg.textContent = '✓ Contraseña actualizada correctamente.'; msg.className='mensaje mensaje-exito';
-          // limpiar inputs
-          document.getElementById('admin-current-password').value = '';
-          document.getElementById('admin-new-password').value = '';
-          document.getElementById('admin-confirm-password').value = '';
-        } else {
-          msg.textContent = 'Error al actualizar la contraseña.'; msg.className='mensaje mensaje-error';
-        }
-      });
-    }
-
-    // Ejecutar al cargar el admin
-    document.addEventListener('DOMContentLoaded', function() {
-      initAdminAccountSection();
-    });
-  </script>
+  <!-- initAdminAccountSection ya se ejecuta automáticamente desde admin.js -->
   <script>
     window.BACKEND_URL = 'http://localhost:3000';
 

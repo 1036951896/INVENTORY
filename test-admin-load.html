@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Admin Load</title>
+</head>
+<body>
+    <h1>Testing Admin Panel Load</h1>
+    <div id="test-result">Loading...</div>
+    
+    <script>
+        // Test if admin.js loads without syntax errors
+        window.BACKEND_URL = 'http://localhost:3000';
+        
+        // Mock the required DOM elements
+        document.body.innerHTML += `
+            <input id="admin-email" type="text">
+            <input id="admin-current-password" type="password">
+            <input id="admin-new-password" type="password">
+            <input id="admin-confirm-password" type="password">
+            <button id="btn-change-admin-pass">Change Password</button>
+            <div id="admin-pass-msg"></div>
+            
+            <div id="modal-producto"></div>
+            <form id="form-producto"></form>
+            <input id="prod-nome" type="text">
+            <input id="prod-categoria" type="text">
+            <input id="prod-precio" type="text">
+            <input id="prod-stock" type="text">
+            <input id="prod-imagen" type="text">
+            <input id="prod-descripcion" type="text">
+            <div id="modal-titulo-producto"></div>
+            
+            <table id="tabla-productos-body"></table>
+            <div id="seccion-productos"></div>
+            <div id="seccion-configuracion"></div>
+            <div id="nombre-usuario"></div>
+            <div id="modal-detalle-pedido"></div>
+            <div id="contenido-detalle-pedido"></div>
+            <table id="tabla-pedidos-body"></table>
+            <table id="tabla-usuarios-body"></table>
+            <div id="titulo-seccion"></div>
+            <div id="seccion-dashboard"></div>
+            <div id="filtro-pedidos"></div>
+            <div id="categorias-lista"></div>
+            <div id="botones-categorias"></div>
+            <div id="input-buscar-productos"></div>
+            <div id="select-ordenar"></div>
+            <div id="stat-total-productos"></div>
+            <div id="stat-stock-total"></div>
+            <div id="stat-valor-inventario"></div>
+            <div id="stat-categorias-activas"></div>
+            <div id="contador-todas"></div>
+            <table id="tabla-ofertas-body"></table>
+            <div id="sin-ofertas"></div>
+            <div id="modal-oferta"></div>
+            <form id="formulario-oferta"></form>
+            <div id="modal-oferta-titulo"></div>
+            <select id="oferta-producto"></select>
+            <select id="oferta-tipo"></select>
+            <input id="oferta-descuento" type="text">
+            <input id="oferta-cantidad-minima" type="text">
+            <input id="oferta-precio-especial" type="text">
+            <input id="oferta-precio-original" type="text">
+            <input id="oferta-precio-final" type="text">
+            <input id="oferta-precio-normal-cantidad" type="text">
+            <input id="oferta-total-especial" type="text">
+            <div id="seccion-porcentaje"></div>
+            <div id="seccion-cantidad"></div>
+            <div id="reporte-inventario"></div>
+            <div id="reporte-top-sellers"></div>
+            <div id="reporte-sin-rotacion"></div>
+            <div id="seccion-reportes"></div>
+            <div id="seccion-categorias"></div>
+            <div id="seccion-notificaciones"></div>
+            <div id="seccion-pedidos"></div>
+            <div id="seccion-ofertas"></div>
+            <table id="tabla-inventario-body"></table>
+            <table id="tabla-top-sellers-body"></table>
+            <table id="tabla-sin-rotacion-body"></table>
+            <canvas id="grafico-ventas"></canvas>
+            <canvas id="grafico-inventario"></canvas>
+            <canvas id="grafico-ventas-mes"></canvas>
+            <canvas id="grafico-categorias"></canvas>
+            <canvas id="chart-inventario-dist"></canvas>
+            <canvas id="chart-top-sellers"></canvas>
+            <canvas id="chart-sin-rotacion"></canvas>
+            <div id="total-ventas"></div>
+            <div id="total-productos"></div>
+            <div id="pedidos-pendientes"></div>
+            <div id="total-clientes"></div>
+            <div id="stat-en-preparacion"></div>
+            <div id="stat-entregados"></div>
+            <div id="stat-sin-stock"></div>
+            <div id="stat-bajo-stock"></div>
+            <div id="stat-agotados"></div>
+            <div id="stat-critico"></div>
+            <div id="stat-total-vendido"></div>
+            <div id="stat-ingresos-totales"></div>
+            <div id="stat-tickets-total"></div>
+            <div id="stat-sin-venta"></div>
+            <div id="stat-stock-muerto"></div>
+            <div id="stat-rotacion-minima"></div>
+        `;
+    </script>
+    
+    <script src="public/js/admin.js"></script>
+    
+    <script>
+        // Test if functions are available
+        const testResult = document.getElementById('test-result');
+        
+        let errors = [];
+        
+        try {
+            // Check if key functions exist
+            if (typeof getAdminCredenciales !== 'function') errors.push('getAdminCredenciales not found');
+            if (typeof initAdminAccountSection !== 'function') errors.push('initAdminAccountSection not found');
+            if (typeof cargarDatosAdmin !== 'function') errors.push('cargarDatosAdmin not found');
+            if (typeof abrirModalProducto !== 'function') errors.push('abrirModalProducto not found');
+            if (typeof editarProducto !== 'function') errors.push('editarProducto not function');
+            if (typeof guardarProducto !== 'function') errors.push('guardarProducto not found');
+            
+            if (errors.length === 0) {
+                testResult.innerHTML = '<h2 style="color: green;">✓ All functions loaded successfully!</h2>';
+            } else {
+                testResult.innerHTML = '<h2 style="color: red;">✗ Errors found:</h2>';
+                errors.forEach(err => {
+                    testResult.innerHTML += `<p>${err}</p>`;
+                });
+            }
+        } catch (err) {
+            testResult.innerHTML = `<h2 style="color: red;">✗ JavaScript Error: ${err.message}</h2>`;
+            console.error('Test error:', err);
+        }
+    </script>
+</body>
+</html>

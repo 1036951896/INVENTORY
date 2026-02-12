@@ -42,7 +42,7 @@ export class CategoriesService {
             nombre: true,
             precio: true,
             stock: true,
-            imagen: true,
+            imagenes: true,
           },
         },
         _count: {

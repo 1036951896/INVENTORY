@@ -17,6 +17,15 @@ export class OrdersService {
       throw new BadRequestException('La orden debe contener al menos un item');
     }
 
+    // Validate that address belongs to user
+    const address = await this.prisma.address.findUnique({
+      where: { id: createOrderDto.direccionId },
+    });
+
+    if (!address || address.usuarioId !== usuarioId) {
+      throw new BadRequestException('Dirección no válida o no pertenece al usuario');
+    }
+
     // Validate products and stock
     let total = 0;
     for (const item of createOrderDto.items) {
@@ -50,6 +59,7 @@ export class OrdersService {
         total,
         estado: OrderStatus.PENDIENTE,
         usuarioId,
+        direccionId: createOrderDto.direccionId,
         notasEntrega: createOrderDto.notasEntrega,
         items: {
           create: createOrderDto.items.map(item => ({
@@ -69,13 +79,23 @@ export class OrdersService {
             telefono: true,
           },
         },
+        direccion: {
+          select: {
+            id: true,
+            calle: true,
+            numero: true,
+            apartamento: true,
+            ciudad: true,
+            departamento: true,
+            pais: true,
+          },
+        },
         items: {
           include: {
             producto: {
               select: {
                 id: true,
                 nombre: true,
-                imagen: true,
               },
             },
           },
@@ -83,7 +103,7 @@ export class OrdersService {
       },
     });
 
-    // Update stock for each product
+    // Update stock for each product and register stock movement
     for (const item of createOrderDto.items) {
       await this.prisma.product.update({
         where: { id: item.productoId },
@@ -91,6 +111,17 @@ export class OrdersService {
           stock: {
             decrement: item.cantidad,
           },
+        },
+      });
+
+      // Register stock movement
+      await this.prisma.stockMovement.create({
+        data: {
+          tipo: 'SALIDA',
+          cantidad: item.cantidad,
+          razon: `Venta - Pedido ${numero}`,
+          referencia: numero,
+          productoId: item.productoId,
         },
       });
     }
@@ -127,9 +158,19 @@ export class OrdersService {
               select: {
                 id: true,
                 nombre: true,
-                imagen: true,
               },
             },
+          },
+        },
+        direccion: {
+          select: {
+            id: true,
+            calle: true,
+            numero: true,
+            apartamento: true,
+            ciudad: true,
+            departamento: true,
+            pais: true,
           },
         },
       },
@@ -157,9 +198,19 @@ export class OrdersService {
               select: {
                 id: true,
                 nombre: true,
-                imagen: true,
               },
             },
+          },
+        },
+        direccion: {
+          select: {
+            id: true,
+            calle: true,
+            numero: true,
+            apartamento: true,
+            ciudad: true,
+            departamento: true,
+            pais: true,
           },
         },
       },
@@ -219,9 +270,19 @@ export class OrdersService {
               select: {
                 id: true,
                 nombre: true,
-                imagen: true,
               },
             },
+          },
+        },
+        direccion: {
+          select: {
+            id: true,
+            calle: true,
+            numero: true,
+            apartamento: true,
+            ciudad: true,
+            departamento: true,
+            pais: true,
           },
         },
       },
@@ -287,9 +348,19 @@ export class OrdersService {
               select: {
                 id: true,
                 nombre: true,
-                imagen: true,
               },
             },
+          },
+        },
+        direccion: {
+          select: {
+            id: true,
+            calle: true,
+            numero: true,
+            apartamento: true,
+            ciudad: true,
+            departamento: true,
+            pais: true,
           },
         },
       },
@@ -307,6 +378,7 @@ export class OrdersService {
       notasEntrega: order.notasEntrega,
       entregaEn: order.entregaEn,
       usuario: order.usuario,
+      direccion: order.direccion,
       items: order.items,
       createdAt: order.createdAt,
       updatedAt: order.updatedAt,

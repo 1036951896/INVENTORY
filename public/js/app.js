@@ -1,7 +1,6 @@
 
 // ===== APLICACIÓN E-COMMERCE =====
-// URL base del backend
-const BACKEND_URL = window.BACKEND_URL || 'http://localhost:3000';
+// URL base del backend - definida en index.html antes de los scripts
 
 // Validar permisos de cliente
 function validarPermisosCliente(permisoRequerido) {
@@ -95,6 +94,34 @@ function actualizarCarrito() {
   carritoContenido.innerHTML = html;
   totalCarrito.textContent = '$' + total.toLocaleString('es-CO');
   btnFinalizar.disabled = false;
+  
+  // Actualizar dirección mostrada
+  actualizarDireccionMostrada();
+}
+
+/**
+ * Actualizar dirección mostrada en el carrito
+ */
+async function actualizarDireccionMostrada() {
+  const direccionDisplay = document.getElementById('direccion-display');
+  if (!direccionDisplay) return;
+
+  try {
+    const direccion = await obtenerDireccionSeleccionada();
+    
+    if (direccion) {
+      direccionDisplay.innerHTML = `
+        <strong>${direccion.calle} ${direccion.numero}${direccion.apartamento ? ', ' + direccion.apartamento : ''}</strong><br>
+        <span style="color: #666;">${direccion.ciudad}, ${direccion.departamento}</span>
+        ${direccion.codigoPostal ? `<br><span style="color: #999; font-size: 0.85rem;">${direccion.codigoPostal}</span>` : ''}
+      `;
+    } else {
+      direccionDisplay.innerHTML = '<span style="color: #999;">❌ Sin dirección de entrega. Por favor selecciona una.</span>';
+    }
+  } catch (err) {
+    console.error('Error actualizando dirección:', err);
+    direccionDisplay.innerHTML = '<span style="color: #999;">⚠️ Error cargando dirección</span>';
+  }
 }
 
 function modificarCantidad(id, cambio) {
@@ -145,6 +172,71 @@ function eliminarDelCarrito(id) {
 // Base de datos de productos por defecto
 let productos = [];
 let productosFiltrados = [];
+let ofertas = [];
+
+// Cargar ofertas desde localStorage
+function cargarOfertas() {
+  try {
+    const ofertasGuardadas = localStorage.getItem('ofertas');
+    if (ofertasGuardadas) {
+      ofertas = JSON.parse(ofertasGuardadas);
+      console.log('✓ Ofertas cargadas:', ofertas);
+    } else {
+      ofertas = [];
+    }
+  } catch (error) {
+    console.error('❌ Error cargando ofertas:', error);
+    ofertas = [];
+  }
+}
+
+// Obtener oferta de un producto
+function obtenerOferta(productoId) {
+  return ofertas.find(o => String(o.productoId) === String(productoId));
+}
+
+// Calcular precio con oferta
+function calcularPrecioConOferta(producto) {
+  const oferta = obtenerOferta(producto.id);
+  if (!oferta) {
+    return {
+      precio: producto.precio,
+      tieneOferta: false
+    };
+  }
+
+  // Tipo 1: Descuento por porcentaje
+  if (oferta.tipo === 'porcentaje' || oferta.descuento) {
+    const descuento = oferta.descuento || 0;
+    const precioFinal = Math.floor(producto.precio * (1 - descuento / 100));
+    return {
+      precioOriginal: producto.precio,
+      precio: precioFinal,
+      tieneOferta: true,
+      tipo: 'porcentaje',
+      descuento: descuento,
+      ahorros: producto.precio - precioFinal
+    };
+  }
+
+  // Tipo 2: Precio especial por cantidad
+  if (oferta.tipo === 'cantidad' && oferta.cantidadMinima && oferta.precioEspecial) {
+    return {
+      precioOriginal: producto.precio,
+      precio: producto.precio,
+      tieneOferta: true,
+      tipo: 'cantidad',
+      cantidadMinima: oferta.cantidadMinima,
+      precioEspecial: oferta.precioEspecial,
+      texto: `${oferta.cantidadMinima} por $${oferta.precioEspecial.toLocaleString('es-CO')}`
+    };
+  }
+
+  return {
+    precio: producto.precio,
+    tieneOferta: false
+  };
+}
 
 // Cargar productos desde JSON local (tiene imágenes y datos correctos)
 async function cargarProductosJSON() {
@@ -216,6 +308,9 @@ function normalizarImagenUrl(url) {
 document.addEventListener('DOMContentLoaded', function() {
   // Cargar primero los productos desde JSON
   cargarProductosJSON().then(() => {
+    // Cargar ofertas
+    cargarOfertas();
+    
     // Normalizar imágenes de productos cargados
     productos = productos.map(p => ({ ...p, imagen: normalizarImagenUrl(p.imagen) }));
     cargarProductos();
@@ -292,19 +387,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Enviar pedido al backend
         try {
+          console.log('📤 Obteniendo dirección seleccionada...');
+          
+          // Obtener dirección seleccionada (o principal si no hay selección)
+          const direccion = await obtenerDireccionSeleccionada();
+
+          if (!direccion) {
+            console.warn('⚠️ No hay dirección disponible, mostrando selector...');
+            mostrarSelectorDirecciones();
+            return;
+          }
+
+          console.log('✅ Dirección obtenida:', direccion);
+
           console.log('📤 Enviando orden al backend...');
-          console.log('URL:', `${BACKEND_URL}/api/v1/orders`);
+          console.log('URL:', `${window.BACKEND_URL}/api/v1/orders`);
           console.log('Token presente:', !!usuario.access_token);
           console.log('Items:', items);
+          console.log('Dirección ID:', direccion.id);
           
-          const resp = await fetch(`${BACKEND_URL}/api/v1/orders`, {
+          const resp = await fetch(`${window.BACKEND_URL}/api/v1/orders`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${usuario.access_token}`
             },
             body: JSON.stringify({
-              items: items
+              items: items,
+              direccionId: direccion.id
             })
           });
 
@@ -328,7 +438,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (resp.status === 401) {
               msg = data.message || 'No autorizado. Inicia sesión nuevamente.';
             } else if (resp.status === 404) {
-              msg = `Endpoint no encontrado: ${BACKEND_URL}/api/v1/orders`;
+              msg = `Endpoint no encontrado: ${window.BACKEND_URL}/api/v1/orders`;
               console.error('Verifica que el backend esté ejecutándose y la ruta sea correcta');
             } else if (resp.status === 400) {
               msg = data.message || 'Datos inválidos.';
@@ -365,6 +475,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Inicializar vista del carrito
     actualizarCarrito();
+    
+    // Escuchar cambios en la dirección seleccionada
+    window.addEventListener('direccionSeleccionada', () => {
+      actualizarDireccionMostrada();
+    });
 
 // --- GESTIÓN DE EVENTOS DEL CARRITO ---
 function bindCartEvents() {
@@ -492,14 +607,37 @@ function cargarProductos(productosMostrar = productos) {
     const tarjeta = document.createElement('div');
     tarjeta.className = 'tarjeta-producto';
     const nombreCategoria = obtenerNombreCategoria(producto.categoria);
-      tarjeta.innerHTML = `
+    const ofertaInfo = calcularPrecioConOferta(producto);
+    
+    // Generar HTML basado en si tiene oferta o no
+    let precioHTML = '';
+    if (ofertaInfo.tieneOferta && ofertaInfo.tipo === 'porcentaje') {
+      precioHTML = `
+        <div class="tarjeta-producto-precio-oferta">
+          <span class="precio-original" style="text-decoration: line-through; color: #999;">$${ofertaInfo.precioOriginal.toLocaleString('es-CO')}</span>
+          <span class="precio-final" style="color: #E74C3C; font-size: 1.2em; font-weight: bold;">$${ofertaInfo.precio.toLocaleString('es-CO')}</span>
+          <span class="oferta-badge" style="background: #E74C3C; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8em; font-weight: bold;">-${ofertaInfo.descuento}%</span>
+        </div>
+      `;
+    } else if (ofertaInfo.tieneOferta && ofertaInfo.tipo === 'cantidad') {
+      precioHTML = `
+        <div class="tarjeta-producto-precio-oferta">
+          <span class="precio-normal">$${ofertaInfo.precio.toLocaleString('es-CO')}</span>
+          <span class="oferta-badge" style="background: #27AE60; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8em; font-weight: bold;">🎉 ${ofertaInfo.texto}</span>
+        </div>
+      `;
+    } else {
+      precioHTML = `<div class="tarjeta-producto-precio">$${producto.precio.toLocaleString('es-CO')}</div>`;
+    }
+    
+    tarjeta.innerHTML = `
       <div class="tarjeta-producto-imagen">
         <img src="${producto.imagen}" alt="${producto.nombre}" onerror="this.onerror=null;this.src='../assets/product-placeholder.svg'">
       </div>
       <div class="tarjeta-producto-contenido">
         <div class="tarjeta-producto-nombre">${producto.nombre}</div>
         <div class="tarjeta-producto-categoria">${nombreCategoria}</div>
-        <div class="tarjeta-producto-precio">$${producto.precio.toLocaleString('es-CO')}</div>
+        ${precioHTML}
         <div class="tarjeta-producto-stock">
           Stock: <strong>${producto.stock}</strong>
         </div>

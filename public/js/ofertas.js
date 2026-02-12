@@ -1,7 +1,6 @@
 // ===== SISTEMA DE OFERTAS =====
 
-// Variable global para almacenar ofertas
-let ofertas = [];
+// Variables globales para almacenar ofertas (ofertas viene de app.js)
 let ofertasFiltradas = [];
 
 // Cargar ofertas desde localStorage
@@ -281,10 +280,15 @@ document.addEventListener('DOMContentLoaded', function() {
   cargarProductosJSON().then(() => {
     productos = productos.map(p => ({ ...p, imagen: normalizarImagenUrl(p.imagen) }));
     
-    // Luego cargar ofertas
+    // Cargar ofertas
     cargarOfertas();
     
-    // Mostrar productos en oferta
+    // IMPORTANTE: Sobrescribir cargarProductos para que no interfiera
+    window.cargarProductos = function() {
+      // No hacer nada, ya que usa cargarProductosOferta en su lugar
+    };
+    
+    // Mostrar solo productos en oferta
     cargarProductosOferta();
     cargarFiltrosOfertas();
     
@@ -303,20 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
 
-    // Eventos del carrito
-    const btnCarrito = document.getElementById('btn-carrito');
-    if (btnCarrito) {
-      btnCarrito.addEventListener('click', function() {
-        document.getElementById('carrito-panel').classList.toggle('activo');
-      });
-    }
-
-    const btnCerrar = document.getElementById('cerrar-carrito');
-    if (btnCerrar) {
-      btnCerrar.addEventListener('click', function() {
-        document.getElementById('carrito-panel').classList.remove('activo');
-      });
-    }
+    // Los eventos del carrito se configuran al final con bindCartEvents()
 
     // Botón finalizar pedido
     const btnFinalizar = document.getElementById('finalizar-pedido');
@@ -365,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
           console.log('📤 Enviando orden al backend...');
           
-          const resp = await fetch(`${BACKEND_URL}/api/v1/orders`, {
+          const resp = await fetch(`${window.BACKEND_URL}/api/v1/orders`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -388,7 +379,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (resp.status === 401) {
               msg = data.message || 'No autorizado. Inicia sesión nuevamente.';
             } else if (resp.status === 404) {
-              msg = `Endpoint no encontrado: ${BACKEND_URL}/api/v1/orders`;
+              msg = `Endpoint no encontrado: ${window.BACKEND_URL}/api/v1/orders`;
             } else if (resp.status === 400) {
               msg = data.message || 'Datos inválidos.';
             } else if (resp.status === 500) {
@@ -427,27 +418,54 @@ document.addEventListener('DOMContentLoaded', function() {
       const btnCarrito = document.getElementById('btn-carrito');
       const btnCerrar = document.getElementById('cerrar-carrito');
       
-      if (btnCarrito && carritoPanel) {
-        btnCarrito.addEventListener('click', function(e) {
-          e.stopPropagation();
-          carritoPanel.classList.toggle('activo');
-        });
+      console.log('🔧 Configurando eventos del carrito...');
+      console.log('- Carrito Panel:', !!carritoPanel);
+      console.log('-Btn Carrito:', !!btnCarrito);
+      console.log('- Btn Cerrar:', !!btnCerrar);
+      
+      if (!btnCarrito || !carritoPanel) {
+        console.error('❌ Elementos del carrito no encontrados!');
+        return;
       }
       
-      if (btnCerrar && carritoPanel) {
+      // Click en el botón del carrito
+      btnCarrito.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('🛒 Toggle carrito');
+        carritoPanel.classList.toggle('activo');
+      });
+      
+      // Click en el botón cerrar
+      if (btnCerrar) {
         btnCerrar.addEventListener('click', function(e) {
+          e.preventDefault();
           e.stopPropagation();
+          console.log('✕ Cerrando carrito');
           carritoPanel.classList.remove('activo');
         });
       }
       
-      document.addEventListener('click', function(e) {
-        if (carritoPanel && carritoPanel.classList.contains('activo') && !carritoPanel.contains(e.target) && e.target.id !== 'btn-carrito') {
+      // Cerrar carrito cuando se hace click fuera (con validaciones)
+      document.addEventListener('click', function closeCarritoOnClickOutside(e) {
+        if (!carritoPanel) return;
+        
+        const isClickInsideCarrito = carritoPanel.contains(e.target);
+        const isClickOnBtn = e.target === btnCarrito || btnCarrito.contains(e.target);
+        const isCarritoActivo = carritoPanel.classList.contains('activo');
+        
+        if (isCarritoActivo && !isClickInsideCarrito && !isClickOnBtn) {
+          console.log('🔒 Cerrando carrito por click afuera');
           carritoPanel.classList.remove('activo');
         }
-      });
+      }, true); // Usar captura de eventos para mayor confiabilidad
+      
+      console.log('✓ Eventos del carrito configurados');
     }
 
-    bindCartEvents();
+    // Llamar a bindCartEvents después de configurar todo
+    setTimeout(() => {
+      bindCartEvents();
+    }, 100);
   });
 });

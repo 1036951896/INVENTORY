@@ -1,0 +1,89 @@
+services:
+  # ============================================================================
+  # Backend NestJS API
+  # ============================================================================
+  - type: web
+    name: inventory-api
+    env: docker
+    repo: https://github.com/1036951896/inventory-app
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    
+    # Port
+    port: 3000
+    
+    # Variables de entorno
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: API_PORT
+        value: 3000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: inventory-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: https://inventory-frontend.onrender.com
+      - key: API_URL
+        value: https://inventory-api.onrender.com
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USER
+        value: santis3268@gmail.com
+      - key: SMTP_PASSWORD
+        value: (configura en Render UI)
+      - key: EMAIL_FROM
+        value: noreply@inventory.com
+      - key: ADMIN_EMAIL
+        value: santis3268@gmail.com
+    
+    # Configuración de build y start
+    buildCommand: cd backend && npm install && npm run prisma:generate && npm run build
+    startCommand: cd backend && npm run start:prod
+    
+    # Automático redeploy en push
+    autoDeploy: true
+    
+    # Esperar a BD
+    dependsOn:
+      - inventory-db
+    
+    healthCheckPath: /api/v1/health
+
+  # ============================================================================
+  # PostgreSQL Database
+  # ============================================================================
+  - type: pserv
+    name: inventory-db
+    ipAllowList: []
+    plan: free
+    postgresMajorVersion: 15
+
+  # ============================================================================
+  # Frontend React
+  # ============================================================================
+  - type: web
+    name: inventory-frontend
+    env: node
+    repo: https://github.com/1036951896/inventory-app
+    rootDir: frontend
+    
+    # Build
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    
+    # Variables
+    envVars:
+      - key: VITE_API_URL
+        value: https://inventory-api.onrender.com
+      - key: NODE_ENV
+        value: production
+
+    autoDeploy: true
+

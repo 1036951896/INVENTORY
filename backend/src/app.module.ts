@@ -9,6 +9,11 @@ import { UsersModule } from './modules/users/users.module';
 import { ProductsModule } from './modules/products/products.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
+import { AddressesModule } from './modules/addresses/addresses.module';
+import { StockMovementsModule } from './modules/stock-movements/stock-movements.module';
+import { ProductImagesModule } from './modules/product-images/product-images.module';
+import { CartModule } from './modules/cart/cart.module';
 
 @Module({
   imports: [
@@ -29,6 +34,11 @@ import { OrdersModule } from './modules/orders/orders.module';
     ProductsModule,
     CategoriesModule,
     OrdersModule,
+    NotificationsModule,
+    AddressesModule,
+    StockMovementsModule,
+    ProductImagesModule,
+    CartModule,
   ],
   controllers: [],
   providers: [],

@@ -109,6 +109,12 @@ function iniciarSesion(e) {
         console.log('Token:', data.access_token?.substring(0, 20) + '...');
         console.log('Usuario:', usuarioCliente);
         localStorage.setItem('usuario', JSON.stringify(usuarioCliente));
+        
+        // Crear dirección predeterminada si no tiene ninguna
+        if (typeof crearDireccionPredeterminada === 'function') {
+          crearDireccionPredeterminada();
+        }
+        
         mostrarMensaje(mensajeEl, '✓ Inicio de sesión exitoso. Redirigiendo...', 'exito');
         setTimeout(() => {
           window.location.href = 'index.html';

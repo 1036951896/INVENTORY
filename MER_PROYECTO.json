@@ -1,0 +1,424 @@
+{
+  "project": "Sistema de Inventario",
+  "version": "1.0",
+  "database": "PostgreSQL",
+  "entities": [
+    {
+      "name": "USER",
+      "description": "Usuarios del sistema (Admin o Cliente)",
+      "table": "users",
+      "columns": [
+        {
+          "name": "id",
+          "type": "String",
+          "primaryKey": true,
+          "unique": false,
+          "nullable": false,
+          "description": "Identificador único CUID"
+        },
+        {
+          "name": "nombre",
+          "type": "String",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "description": "Nombre del usuario"
+        },
+        {
+          "name": "email",
+          "type": "String",
+          "primaryKey": false,
+          "unique": true,
+          "nullable": false,
+          "description": "Email del usuario"
+        },
+        {
+          "name": "password",
+          "type": "String",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "description": "Contraseña encriptada"
+        },
+        {
+          "name": "telefono",
+          "type": "String",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": true,
+          "description": "Número de teléfono"
+        },
+        {
+          "name": "rol",
+          "type": "Enum",
+          "enum": ["ADMIN", "CLIENTE"],
+          "primaryKey": false,
+          "default": "CLIENTE",
+          "nullable": false,
+          "description": "Rol del usuario en el sistema"
+        },
+        {
+          "name": "activo",
+          "type": "Boolean",
+          "primaryKey": false,
+          "default": true,
+          "nullable": false,
+          "description": "Estado del usuario"
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "primaryKey": false,
+          "default": "now()",
+          "nullable": false,
+          "description": "Fecha de creación"
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "primaryKey": false,
+          "default": "now()",
+          "nullable": false,
+          "description": "Fecha de última actualización"
+        }
+      ]
+    },
+    {
+      "name": "CATEGORY",
+      "description": "Categorías de productos",
+      "table": "categories",
+      "columns": [
+        {
+          "name": "id",
+          "type": "String",
+          "primaryKey": true,
+          "unique": false,
+          "nullable": false,
+          "description": "Identificador único CUID"
+        },
+        {
+          "name": "nombre",
+          "type": "String",
+          "primaryKey": false,
+          "unique": true,
+          "nullable": false,
+          "description": "Nombre de la categoría"
+        },
+        {
+          "name": "descripcion",
+          "type": "String",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": true,
+          "description": "Descripción de la categoría"
+        },
+        {
+          "name": "icono",
+          "type": "String",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": true,
+          "description": "Ícono de la categoría"
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "primaryKey": false,
+          "default": "now()",
+          "nullable": false,
+          "description": "Fecha de creación"
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "primaryKey": false,
+          "default": "now()",
+          "nullable": false,
+          "description": "Fecha de última actualización"
+        }
+      ]
+    },
+    {
+      "name": "PRODUCT",
+      "description": "Productos del inventario",
+      "table": "products",
+      "columns": [
+        {
+          "name": "id",
+          "type": "String",
+          "primaryKey": true,
+          "unique": false,
+          "nullable": false,
+          "description": "Identificador único CUID"
+        },
+        {
+          "name": "nombre",
+          "type": "String",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "description": "Nombre del producto"
+        },
+        {
+          "name": "descripcion",
+          "type": "String",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": true,
+          "description": "Descripción del producto"
+        },
+        {
+          "name": "precio",
+          "type": "Integer",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "description": "Precio en centavos de COP (ej: 2250000 = $22.500 COP)"
+        },
+        {
+          "name": "stock",
+          "type": "Integer",
+          "primaryKey": false,
+          "default": 0,
+          "nullable": false,
+          "description": "Cantidad disponible en inventario"
+        },
+        {
+          "name": "imagen",
+          "type": "String",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": true,
+          "description": "URL de la imagen del producto"
+        },
+        {
+          "name": "activo",
+          "type": "Boolean",
+          "primaryKey": false,
+          "default": true,
+          "nullable": false,
+          "description": "Estado del producto"
+        },
+        {
+          "name": "categoriaId",
+          "type": "String",
+          "primaryKey": false,
+          "foreignKey": "CATEGORY.id",
+          "nullable": false,
+          "description": "Referencia a la categoría del producto"
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "primaryKey": false,
+          "default": "now()",
+          "nullable": false,
+          "description": "Fecha de creación"
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "primaryKey": false,
+          "default": "now()",
+          "nullable": false,
+          "description": "Fecha de última actualización"
+        }
+      ]
+    },
+    {
+      "name": "ORDER",
+      "description": "Órdenes/Pedidos del cliente",
+      "table": "orders",
+      "columns": [
+        {
+          "name": "id",
+          "type": "String",
+          "primaryKey": true,
+          "unique": false,
+          "nullable": false,
+          "description": "Identificador único CUID"
+        },
+        {
+          "name": "numero",
+          "type": "String",
+          "primaryKey": false,
+          "unique": true,
+          "nullable": false,
+          "description": "Número de orden único (Ej: PED-1234567890)"
+        },
+        {
+          "name": "total",
+          "type": "Integer",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "description": "Total de la orden en centavos de COP"
+        },
+        {
+          "name": "estado",
+          "type": "Enum",
+          "enum": ["PENDIENTE", "EN_PREPARACION", "ENTREGADO", "CANCELADO"],
+          "primaryKey": false,
+          "default": "PENDIENTE",
+          "nullable": false,
+          "description": "Estado actual de la orden"
+        },
+        {
+          "name": "usuarioId",
+          "type": "String",
+          "primaryKey": false,
+          "foreignKey": "USER.id",
+          "nullable": false,
+          "description": "Referencia al usuario que realizó la orden"
+        },
+        {
+          "name": "entregaEn",
+          "type": "DateTime",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": true,
+          "description": "Fecha prevista de entrega"
+        },
+        {
+          "name": "notasEntrega",
+          "type": "String",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": true,
+          "description": "Notas especiales para la entrega"
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "primaryKey": false,
+          "default": "now()",
+          "nullable": false,
+          "description": "Fecha de creación de la orden"
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "primaryKey": false,
+          "default": "now()",
+          "nullable": false,
+          "description": "Fecha de última actualización"
+        }
+      ]
+    },
+    {
+      "name": "ORDER_ITEM",
+      "description": "Items dentro de una orden",
+      "table": "order_items",
+      "columns": [
+        {
+          "name": "id",
+          "type": "String",
+          "primaryKey": true,
+          "unique": false,
+          "nullable": false,
+          "description": "Identificador único CUID"
+        },
+        {
+          "name": "cantidad",
+          "type": "Integer",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "description": "Cantidad del producto"
+        },
+        {
+          "name": "precioUnitario",
+          "type": "Integer",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "description": "Precio unitario al momento de la orden (centavos)"
+        },
+        {
+          "name": "subtotal",
+          "type": "Integer",
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "description": "Subtotal (cantidad × precioUnitario)"
+        },
+        {
+          "name": "ordenId",
+          "type": "String",
+          "primaryKey": false,
+          "foreignKey": "ORDER.id",
+          "nullable": false,
+          "description": "Referencia a la orden"
+        },
+        {
+          "name": "productoId",
+          "type": "String",
+          "primaryKey": false,
+          "foreignKey": "PRODUCT.id",
+          "nullable": false,
+          "description": "Referencia al producto"
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "primaryKey": false,
+          "default": "now()",
+          "nullable": false,
+          "description": "Fecha de creación"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "from": "USER",
+      "to": "ORDER",
+      "type": "one-to-many",
+      "foreignKey": "usuarioId",
+      "description": "Un usuario puede tener múltiples órdenes",
+      "cascadeDelete": true
+    },
+    {
+      "from": "CATEGORY",
+      "to": "PRODUCT",
+      "type": "one-to-many",
+      "foreignKey": "categoriaId",
+      "description": "Una categoría puede tener múltiples productos",
+      "cascadeDelete": true
+    },
+    {
+      "from": "ORDER",
+      "to": "ORDER_ITEM",
+      "type": "one-to-many",
+      "foreignKey": "ordenId",
+      "description": "Una orden puede tener múltiples items",
+      "cascadeDelete": true
+    },
+    {
+      "from": "PRODUCT",
+      "to": "ORDER_ITEM",
+      "type": "one-to-many",
+      "foreignKey": "productoId",
+      "description": "Un producto puede aparecer en múltiples items de órdenes",
+      "cascadeDelete": false
+    }
+  ],
+  "enums": [
+    {
+      "name": "UserRole",
+      "values": ["ADMIN", "CLIENTE"],
+      "description": "Roles disponibles en el sistema"
+    },
+    {
+      "name": "OrderStatus",
+      "values": ["PENDIENTE", "EN_PREPARACION", "ENTREGADO", "CANCELADO"],
+      "description": "Estados posibles de una orden"
+    }
+  ],
+  "notes": {
+    "pricing": "Todos los precios se almacenan en centavos de COP",
+    "orderNumber": "Formato: PED-XXXXXXXXXX",
+    "ids": "Se usan CUID como identificadores únicos",
+    "timestamps": "Todas las entidades tienen createdAt y updatedAt"
+  }
+}

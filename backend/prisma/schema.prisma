@@ -39,6 +39,9 @@ model User {
 
   // Relations
   ordenes Order[]
+  direcciones Address[]
+  movimientosStock StockMovement[]
+  carrito Cart?
 
   @@index([email])
   @@map("users")
@@ -66,7 +69,6 @@ model Product {
   descripcion String?
   precio      Int       // Precio en centavos de COP (ej: 2250000 = $22.500 COP)
   stock       Int       @default(0)
-  imagen      String?
   activo      Boolean   @default(true)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -77,10 +79,114 @@ model Product {
 
   // Relations
   orderItems OrderItem[]
+  imagenes ProductImage[]
+  movimientosStock StockMovement[]
+  carritoItems CartItem[]
 
   @@index([categoriaId])
   @@index([nombre])
   @@map("products")
+}
+
+/// Dirección de entrega del usuario
+model Address {
+  id               String   @id @default(cuid())
+  calle            String
+  numero           String
+  apartamento      String?
+  ciudad           String
+  departamento     String
+  codigoPostal     String?
+  pais             String   @default("Colombia")
+  detallesAdicionales String?
+  esPrincipal      Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Foreign keys
+  usuarioId String
+  usuario   User     @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  // Relations
+  ordenes   Order[]
+
+  @@index([usuarioId])
+  @@map("addresses")
+}
+
+/// Carrito de compras del usuario
+model Cart {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Foreign keys
+  usuarioId String @unique
+  usuario   User   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  // Relations
+  items CartItem[]
+
+  @@index([usuarioId])
+  @@map("carts")
+}
+
+/// Item en el carrito
+model CartItem {
+  id        String   @id @default(cuid())
+  cantidad  Int
+  precioUnitario Int // Precio al momento de agregar al carrito
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Foreign keys
+  carritoId String
+  carrito   Cart     @relation(fields: [carritoId], references: [id], onDelete: Cascade)
+
+  productoId String
+  producto   Product  @relation(fields: [productoId], references: [id], onDelete: Restrict)
+
+  @@unique([carritoId, productoId])
+  @@index([carritoId])
+  @@index([productoId])
+  @@map("cart_items")
+}
+
+/// Imagen del producto
+model ProductImage {
+  id        String   @id @default(cuid())
+  url       String
+  orden     Int      @default(0)
+  principal Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Foreign keys
+  productoId String
+  producto   Product  @relation(fields: [productoId], references: [id], onDelete: Cascade)
+
+  @@index([productoId])
+  @@map("product_images")
+}
+
+/// Movimiento de inventario (entrada/salida/ajuste)
+model StockMovement {
+  id        String   @id @default(cuid())
+  tipo      String   // "ENTRADA", "SALIDA", "DEVOLUCIÓN", "AJUSTE"
+  cantidad  Int
+  razon     String   // "Venta", "Devolución", "Ajuste manual", "Reposición", etc
+  referencia String? // Ej: número de orden si es por venta
+  createdAt DateTime @default(now())
+
+  // Foreign keys
+  productoId String
+  producto   Product  @relation(fields: [productoId], references: [id], onDelete: Restrict)
+
+  usuarioId  String?
+  usuario    User?    @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+
+  @@index([productoId])
+  @@index([usuarioId])
+  @@map("stock_movements")
 }
 
 /// Orden (Pedido) del cliente
@@ -97,11 +203,15 @@ model Order {
   // Foreign keys
   usuarioId String
   usuario   User        @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  
+  direccionId String?
+  direccion   Address?   @relation(fields: [direccionId], references: [id], onDelete: SetNull)
 
   // Relations
   items     OrderItem[]
 
   @@index([usuarioId])
+  @@index([direccionId])
   @@index([numero])
   @@map("orders")
 }

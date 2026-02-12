@@ -986,6 +986,19 @@ footer {
   background: #ffe5e5;
 }
 
+.carrito-direccion {
+  padding: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #fafbfc;
+}
+
+.direccion-seleccionada {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .carrito-pie {
   border-top: 2px solid #e8e8e8;
   padding: 2rem 1.5rem;

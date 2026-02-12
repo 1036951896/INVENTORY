@@ -119,6 +119,18 @@
       </div>
     </div>
 
+    <div class="carrito-direccion" id="carrito-direccion">
+      <div class="direccion-seleccionada">
+        <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #666;">📍 Dirección de entrega:</p>
+        <div id="direccion-display" style="padding: 0.75rem; background-color: #F5F5F5; border-radius: 4px; font-size: 0.9rem; color: #333; min-height: 2rem;">
+          <span style="color: #999;">Cargando dirección...</span>
+        </div>
+        <button class="btn btn-secundario" onclick="mostrarSelectorDirecciones()" style="width: 100%; margin-top: 0.5rem; font-size: 0.9rem;">
+          🔄 Cambiar dirección
+        </button>
+      </div>
+    </div>
+
     <div class="carrito-pie">
       <div class="carrito-total">
         <span>Total:</span>
@@ -211,6 +223,7 @@
   <script>
     window.BACKEND_URL = 'http://localhost:3000';
   </script>
+  <script src="../js/direcciones.js"></script>
   <script src="../js/app.js"></script>
 </body>
 </html>
