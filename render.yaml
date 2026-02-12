@@ -24,9 +24,9 @@ services:
       - key: JWT_REFRESH_SECRET
         generateValue: true
       - key: CORS_ORIGIN
-        value: https://inventory-frontend.onrender.com
+        value: https://inventory-frontend-a8da.onrender.com
       - key: API_URL
-        value: https://inventory-api.onrender.com
+        value: https://inventory-api-74yl.onrender.com
       - key: SMTP_HOST
         value: smtp.gmail.com
       - key: SMTP_PORT
@@ -69,13 +69,13 @@ services:
     rootDir: frontend
 
     # Build
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev --legacy-peer-deps && npm run build
     startCommand: npm start
 
     # Variables
     envVars:
       - key: VITE_API_URL
-        value: https://inventory-api.onrender.com
+        value: https://inventory-api-74yl.onrender.com
       - key: NODE_ENV
         value: production
 
