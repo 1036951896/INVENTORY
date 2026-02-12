@@ -10,12 +10,14 @@ export class SeedService {
     try {
       console.log('🌱 Iniciando Seed...');
 
-      // Verificar si ya existen datos (a menos que sea force reset)
+      // Verificar si ya existen datos (verificar AMBOS users y products)
       const userCount = await this.prisma.user.count();
-      if (userCount > 0 && !forceReset) {
+      const productCount = await this.prisma.product.count();
+      
+      if ((userCount > 0 || productCount > 0) && !forceReset) {
         return {
-          success: true,
-          message: 'La base de datos ya contiene datos. Seed no se ejecutó. Usa ?force=true para resetear.',
+          success: false,
+          message: `La base de datos ya contiene datos (${userCount} users, ${productCount} products). Seed no se ejecutó. Usa ?force=true para resetear.`,
           status: 'ALREADY_SEEDED',
         };
       }
@@ -24,7 +26,8 @@ export class SeedService {
       if (forceReset) {
         console.log('🧹 Force reset: limpiando base de datos...');
         const productsBeforeDelete = await this.prisma.product.count();
-        console.log(`  📊 Productos antes de eliminar: ${productsBeforeDelete}`);
+        const usersBeforeDelete = await this.prisma.user.count();
+        console.log(`  📊 Antes: ${productsBeforeDelete} productos, ${usersBeforeDelete} usuarios`);
 
         await this.prisma.orderItem.deleteMany({});
         await this.prisma.order.deleteMany({});
@@ -33,12 +36,8 @@ export class SeedService {
         await this.prisma.category.deleteMany({});
 
         const productsAfterDelete = await this.prisma.product.count();
-        console.log(`  📊 Productos después de eliminar: ${productsAfterDelete}`);
-      } else {
-        const existingProducts = await this.prisma.product.count();
-        if (existingProducts > 0) {
-          console.log(`⚠️ La base de datos ya contiene ${existingProducts} productos`);
-        }
+        const usersAfterDelete = await this.prisma.user.count();
+        console.log(`  📊 Después: ${productsAfterDelete} productos, ${usersAfterDelete} usuarios`);
       }
 
       const categoriasSeed = [
@@ -117,18 +116,16 @@ export class SeedService {
         { id: '64', nombre: 'BOLSA BIODEGRADABLE EXTRA RESISTANT', precio: 15000, stock: 50, categoriaId: '5' },
       ];
 
-      console.log('🧹 Limpiando base de datos...');
-      await this.prisma.orderItem.deleteMany({});
-      await this.prisma.order.deleteMany({});
-      await this.prisma.user.deleteMany({});
-      await this.prisma.product.deleteMany({});
-      await this.prisma.category.deleteMany({});
-
       console.log('📦 Creando categorías...');
       for (const categoria of categoriasSeed) {
-        await this.prisma.category.create({
-          data: categoria,
-        });
+        try {
+          await this.prisma.category.create({
+            data: categoria,
+          });
+          console.log(`  ✅ Categoría creada: ${categoria.nombre}`);
+        } catch (err) {
+          console.error(`  ⚠️ Error creando categoría "${categoria.nombre}":`, err.message);
+        }
       }
 
       console.log('🛍️ Creando productos...');
@@ -155,7 +152,7 @@ export class SeedService {
           }
         } catch (err) {
           productsFailed++;
-          console.error(`  ❌ Error al crear producto ${i + 1} (ID: "${producto.id}", Nombre: "${producto.nombre}"):`, err.message);
+          console.error(`  ❌ Error al crear producto ${i + 1} (ID: "${producto.id}"):`, err.message);
         }
       }
 
