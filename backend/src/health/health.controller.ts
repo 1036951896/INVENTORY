@@ -18,6 +18,47 @@ export class HealthController {
     };
   }
 
+  @Get('db-status')
+  async dbStatus() {
+    try {
+      const totalProducts = await this.prisma.product.count();
+      const totalCategories = await this.prisma.category.count();
+      const totalUsers = await this.prisma.user.count();
+      
+      // Obtener todos los productos (solo IDs y nombres)
+      const productsList = await this.prisma.product.findMany({
+        select: {
+          id: true,
+          nombre: true,
+          activo: true,
+          stock: true,
+        },
+        orderBy: { nombre: 'asc' },
+        take: 100,
+      });
+
+      return {
+        ok: true,
+        database: {
+          totalProducts,
+          totalCategories,
+          totalUsers,
+        },
+        products: {
+          count: productsList.length,
+          first5: productsList.slice(0, 5),
+          last5: productsList.slice(-5),
+        },
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error.message,
+      };
+    }
+  }
+
   /**
    * Endpoint para ejecutar el seed (solo una vez)
    * Inicializa la base de datos con datos de prueba
@@ -28,46 +69,5 @@ export class HealthController {
   async seed(@Query('force') force?: string) {
     const forceReset = force === 'true';
     return await this.seedService.executeSeed(forceReset);
-  }
-
-  /**
-   * Endpoint de DEBUG: Muestra información de la base de datos
-   * Útil para diagnosticar problemas con el seed
-   */
-  @Get('debug/status')
-  async debugStatus() {
-    const totalProducts = await this.prisma.product.count();
-    const totalCategories = await this.prisma.category.count();
-    const totalUsers = await this.prisma.user.count();
-    
-    // Obtener lista de todos los productos (solo IDs y nombres)
-    const productsList = await this.prisma.product.findMany({
-      select: {
-        id: true,
-        nombre: true,
-        activo: true,
-        stock: true,
-      },
-      orderBy: { nombre: 'asc' },
-    });
-
-    // Obtener primeros 5 y últimos 5 productos
-    const first5 = productsList.slice(0, 5);
-    const last5 = productsList.slice(-5);
-
-    return {
-      database: {
-        totalProducts,
-        totalCategories,
-        totalUsers,
-      },
-      products: {
-        total: productsList.length,
-        first5,
-        last5,
-        allProductIds: productsList.map(p => p.id),
-      },
-      timestamp: new Date().toISOString(),
-    };
   }
 }
