@@ -14,8 +14,7 @@ COPY tsconfig.json ./
 COPY tsconfig.build.json ./
 
 # Instalar todas las dependencias (incluidas devDependencies para build)
-RUN npm ci --only=production && \
-    npm ci --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
 # Copiar código fuente
 COPY prisma ./prisma
