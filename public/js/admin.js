@@ -42,7 +42,14 @@ async function cargarProductosFromJSON() {
     
     if (response.ok) {
       const data = await response.json();
-      const productos = (data.data || data).map(prod => ({
+      console.log('📦 Respuesta del backend:', data);
+      
+      // Manejar tanto respuesta con {data: [...]} como respuesta directa [...]
+      let productosArray = Array.isArray(data) ? data : (data.data || []);
+      
+      console.log('🔢 Total de productos recibidos:', productosArray.length);
+      
+      const productos = productosArray.map(prod => ({
         id: String(prod.id),
         nombre: prod.nombre,
         categoria: prod.categoria?.nombre || prod.categoriaId || '',
@@ -65,7 +72,7 @@ async function cargarProductosFromJSON() {
     const responseLocal = await fetch('../data/productos-imagenes.json');
     if (responseLocal.ok) {
       const dataLocal = await responseLocal.json();
-      console.log('✅ Productos del JSON cargados');
+      console.log('✅ Productos del JSON cargados:', dataLocal.productos.length);
       return dataLocal.productos.map(prod => ({
         id: String(prod.id),
         nombre: prod.nombre,

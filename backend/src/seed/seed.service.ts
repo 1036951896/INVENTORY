@@ -128,6 +128,7 @@ export class SeedService {
             nombre: producto.nombre,
             precio: producto.precio,
             stock: producto.stock,
+            activo: true,
             categoriaId: producto.categoriaId,
             descripcion: `${producto.nombre} - Producto de calidad`,
           },
