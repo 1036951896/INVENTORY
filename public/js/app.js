@@ -8,6 +8,59 @@ function validarPermisosCliente(permisoRequerido) {
   return usuario.permisos && usuario.permisos[permisoRequerido];
 }
 
+/**
+ * Función fallback para obtener dirección
+ * Si direcciones.js no cargó correctamente, proporciona versión simplificada
+ */
+if (typeof obtenerDireccionSeleccionada === 'undefined') {
+  console.warn('⚠️ obtenerDireccionSeleccionada no está disponible, usando fallback');
+  window.obtenerDireccionSeleccionada = async function() {
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    const direccionId = localStorage.getItem('direccionSeleccionada');
+    
+    // Si hay dirección en localStorage, devolverla
+    if (direccionId) {
+      try {
+        const resp = await fetch(`${window.BACKEND_URL}/api/v1/addresses/${direccionId}`, {
+          headers: {
+            'Authorization': `Bearer ${usuario.access_token}`
+          }
+        });
+        if (resp.ok) {
+          return await resp.json();
+        }
+      } catch (e) {
+        console.error('Error obteniendo dirección:', e);
+      }
+    }
+
+    // Si no hay dirección específica, obtener la principal
+    try {
+      const resp = await fetch(`${window.BACKEND_URL}/api/v1/addresses/principal`, {
+        headers: {
+          'Authorization': `Bearer ${usuario.access_token}`
+        }
+      });
+      if (resp.ok) {
+        return await resp.json();
+      }
+    } catch (e) {
+      console.error('Error obteniendo dirección principal:', e);
+    }
+
+    // Fallback final: retornar dirección mínima
+    return {
+      id: 'default',
+      calle: 'Dirección no especificada',
+      numero: '0',
+      ciudad: 'No especificada',
+      pais: 'Colombia',
+      codigoPostal: '00000',
+      principal: true
+    };
+  };
+}
+
 // ===== MENÚ HAMBURGUESA CATEGORÍAS =====
 document.addEventListener('DOMContentLoaded', () => {
 
