@@ -8,6 +8,20 @@ header {
   top: 0;
   z-index: 100;
   padding: 20px 0;
+  transition: all 0.3s ease;
+}
+
+/* Header comprimido al scrollear */
+header.header-hidden {
+  padding: 8px 0;
+}
+
+header.header-hidden .logo-text {
+  display: none;
+}
+
+header.header-hidden .categorias {
+  display: none;
 }
 
 header .contenedor {

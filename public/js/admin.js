@@ -2314,3 +2314,23 @@ if (document.readyState === 'loading') {
   // El DOM ya está cargado (esto puede pasar si el script se carga después)
   initAdminAccountSection();
 }
+
+// ===== HEADER QUE SE CONTRAE AL SCROLLEAR =====
+(() => {
+  let lastScroll = 0;
+  const header = document.querySelector('header');
+
+  if (header) {
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+
+      if (currentScroll > 100 && currentScroll > lastScroll) {
+        header.classList.add('header-hidden');
+      } else if (currentScroll < 100 || currentScroll < lastScroll) {
+        header.classList.remove('header-hidden');
+      }
+
+      lastScroll = currentScroll <= 0 ? 0 : currentScroll;
+    });
+  }
+})();
