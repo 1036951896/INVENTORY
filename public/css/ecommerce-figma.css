@@ -311,12 +311,16 @@ header .contenedor {
 }
 
 .categorias-lista {
-  display: flex;
+  display: none;
   flex-direction: row;
   gap: 0.5rem;
   justify-content: flex-start;
   flex-wrap: wrap;
   padding: 1rem 0;
+}
+
+.categorias-lista.activo {
+  display: flex;
 }
 
 .categoria {
@@ -1337,7 +1341,7 @@ footer {
 /* ===== MENÚ HAMBURGUESA RESPONSIVO ===== */
 
 .btn-hamburguesa {
-  display: none;
+  display: flex;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: white;
@@ -1368,73 +1372,67 @@ footer {
   transition: transform 0.3s ease;
 }
 
-/* En celular: mostrar hamburguesa y ocultar categorías horizontales */
-@media (max-width: 768px) {
-  .btn-hamburguesa {
-    display: flex;
-  }
+/* Menú desplegable de categorías */
+.categorias .contenedor {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  position: relative;
+}
 
-  .categorias .contenedor {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 1rem;
-  }
+.categorias-lista {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 1rem;
+  width: 300px;
+  flex-direction: column;
+  background: linear-gradient(135deg, #2a4958 0%, #386273 100%);
+  padding: 1rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  gap: 0.8rem;
+  z-index: 1000;
+  animation: slideDown 0.3s ease forwards;
+}
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.categoria {
+  padding: 0.7rem 1rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.categoria:hover {
+  background: rgba(255, 255, 255, 0.1);
+  padding-left: 1.3rem;
+}
+
+.categoria.activo {
+  background: rgba(255, 255, 255, 0.15);
+  border-left: 3px solid #fff;
+  padding-left: 0.7rem;
+}
+
+/* Responsive: en pantallas muy pequeñas, reducir ancho del menú */
+@media (max-width: 600px) {
   .categorias-lista {
-    display: none;
-    position: absolute;
-    top: calc(100% + 10px);
-    left: 1rem;
-    right: 1rem;
+    left: 0.5rem;
+    right: 0.5rem;
     width: auto;
-    flex-direction: column;
-    background: linear-gradient(135deg, #2a4958 0%, #386273 100%);
-    padding: 1rem 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-    gap: 0.8rem;
-    z-index: 1000;
-    animation: slideDown 0.3s ease forwards;
-  }
-
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .categorias-lista.activo {
-    display: flex;
-  }
-
-  .categoria {
-    width: 100%;
-    justify-content: flex-start;
-    padding: 0.7rem 1rem;
-    border-radius: 4px;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-  }
-
-  .categoria:hover {
-    background: rgba(255, 255, 255, 0.1);
-    padding-left: 1.3rem;
-  }
-
-  .categoria.activo {
-    background: rgba(255, 255, 255, 0.15);
-    border-left: 3px solid #fff;
-    padding-left: 0.7rem;
-  }
-
-  .categorias {
-    position: relative;
   }
 }
