@@ -9,7 +9,15 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../public')));
+
+// Servir archivos estáticos desde /public/html (raíz del navegador)
+app.use(express.static(path.join(__dirname, '../public/html')));
+// Servir assets desde /public/assets
+app.use('/assets', express.static(path.join(__dirname, '../public/assets')));
+app.use('/css', express.static(path.join(__dirname, '../public/css')));
+app.use('/js', express.static(path.join(__dirname, '../public/js')));
+app.use('/data', express.static(path.join(__dirname, '../public/data')));
+app.use('/config', express.static(path.join(__dirname, '../public/config')));
 
 // Simular base de datos en memoria
 let usuarios = [];
@@ -269,25 +277,20 @@ app.use((err, req, res, next) => {
 
 // ===== INICIAR SERVIDOR =====
 
-// SPA Routing - Cualquier ruta no reconocida va a index.html
-app.get('*', (req, res) => {
-  // Si no es una API y no es un archivo estático, servir index.html
-  if (!req.path.startsWith('/api/')) {
-    res.sendFile(path.join(__dirname, '../public/html/index.html'));
+// SPA Routing - Cualquier ruta HTML no reconocida que no sea API
+app.use('*', (req, res) => {
+  // Si es una API, retornar error 404 JSON
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'Ruta API no encontrada' });
   }
+  
+  // Para todo lo demás, servir index.html
+  res.sendFile(path.join(__dirname, '../public/html/index.html'));
 });
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`\n🚀 Servidor Inventory ejecutándose en puerto ${PORT}`);
   console.log(`\n📊 E-Commerce: http://localhost:${PORT}`);
   console.log(`🔧 Panel Admin: http://localhost:${PORT}/admin`);
-  console.log(`\n📚 APIs disponibles:`);
-  console.log(`   - GET/POST /api/productos`);
-  console.log(`   - POST /api/usuarios/registro`);
-  console.log(`   - POST /api/usuarios/login`);
-  console.log(`   - GET/POST /api/pedidos`);
-  console.log(`   - GET /api/reportes/ventas`);
-  console.log(`   - GET /api/reportes/productos-vendidos\n`);
+  console.log(`\n📚 APIs disponibles en: /api/v1/*\n`);
 });
-
-module.exports = app;
