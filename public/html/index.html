@@ -249,6 +249,12 @@
       categoriasList.classList.toggle('activo');
     }
 
+    // Cerrar menú de categorías
+    function cerrarMenuCategorias() {
+      const categoriasList = document.getElementById('categorias-lista');
+      categoriasList.classList.remove('activo');
+    }
+
     // Cerrar menú al hacer click afuera
     document.addEventListener('click', function(e) {
       const categoriasList = document.getElementById('categorias-lista');
@@ -257,9 +263,7 @@
       
       // Si no es el botón hamburguesa ni está dentro de categorías, cerrar menú
       if (!btnHamburguesa.contains(e.target) && !categoriasDiv.contains(e.target)) {
-        if (window.innerWidth <= 768) {
-          categoriasList.classList.remove('activo');
-        }
+        cerrarMenuCategorias();
       }
     });
 
@@ -268,9 +272,7 @@
       const categoriasLinks = document.querySelectorAll('.categoria');
       categoriasLinks.forEach(link => {
         link.addEventListener('click', function() {
-          if (window.innerWidth <= 768) {
-            document.getElementById('categorias-lista').classList.remove('activo');
-          }
+          cerrarMenuCategorias();
         });
       });
     });
