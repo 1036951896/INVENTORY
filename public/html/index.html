@@ -7,6 +7,15 @@
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/ecommerce-figma.css">
   <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  
+  <!-- Configurar BACKEND_URL globalmente -->
+  <script>
+    // En producción en Render, usa la variable de ambiente API_URL
+    // En desarrollo local, usa localhost:3000
+    window.BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3000'
+      : 'https://inventory-api-74yl.onrender.com';
+  </script>
 </head>
 <body>
   <!-- ENCABEZADO -->

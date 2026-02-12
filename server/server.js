@@ -269,8 +269,16 @@ app.use((err, req, res, next) => {
 
 // ===== INICIAR SERVIDOR =====
 
-app.listen(PORT, () => {
-  console.log(`\n🚀 Servidor Inventory ejecutándose en http://localhost:${PORT}`);
+// SPA Routing - Cualquier ruta no reconocida va a index.html
+app.get('*', (req, res) => {
+  // Si no es una API y no es un archivo estático, servir index.html
+  if (!req.path.startsWith('/api/')) {
+    res.sendFile(path.join(__dirname, '../public/html/index.html'));
+  }
+});
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`\n🚀 Servidor Inventory ejecutándose en puerto ${PORT}`);
   console.log(`\n📊 E-Commerce: http://localhost:${PORT}`);
   console.log(`🔧 Panel Admin: http://localhost:${PORT}/admin`);
   console.log(`\n📚 APIs disponibles:`);

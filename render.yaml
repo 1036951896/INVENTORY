@@ -60,21 +60,20 @@ services:
     postgresMajorVersion: 15
 
   # ============================================================================
-  # Frontend React
+  # Frontend App (sirve desde /public)
   # ============================================================================
   - type: web
     name: inventory-frontend
     env: node
     repo: https://github.com/1036951896/INVENTORY
-    rootDir: frontend
 
-    # Build
-    buildCommand: cd frontend && npm install --include=dev --legacy-peer-deps && npm run build
-    startCommand: cd frontend && node server.js
+    # Build & Start
+    buildCommand: npm install --legacy-peer-deps
+    startCommand: npm start
 
     # Variables
     envVars:
-      - key: VITE_API_URL
+      - key: API_URL
         value: https://inventory-api-74yl.onrender.com
       - key: NODE_ENV
         value: production
