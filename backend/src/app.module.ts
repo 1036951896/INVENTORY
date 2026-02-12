@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
 import { PrismaModule } from './prisma/prisma.module';
+import { HealthModule } from './health/health.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { ProductsModule } from './modules/products/products.module';
@@ -29,6 +30,7 @@ import { CartModule } from './modules/cart/cart.module';
       },
     }),
     PrismaModule,
+    HealthModule,
     AuthModule,
     UsersModule,
     ProductsModule,
