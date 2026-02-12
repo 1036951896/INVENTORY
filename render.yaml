@@ -63,7 +63,7 @@ services:
   # Frontend App (sirve desde /public)
   # ============================================================================
   - type: web
-    name: inventory-frontend
+    name: inventory-app
     env: node
     repo: https://github.com/1036951896/INVENTORY
 
