@@ -44,18 +44,14 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package*.json ./
 
-# Copiar script de inicialización
-COPY init.js ./init.js
-RUN chmod +x ./init.js
-
 # Generar Prisma Client nuevamente en producción
 RUN npx prisma generate
 
-# Crear usuario no-root pero permitir ejecutar init
+# Crear usuario no-root
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nodejs -u 1001
 
-# Crear directorio de uploads y asignar permisos
+# Crear directorio de uploads
 RUN mkdir -p /app/uploads && \
     chown -R nodejs:nodejs /app
 
@@ -71,5 +67,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
 # Usar dumb-init para manejar signals correctamente
 ENTRYPOINT ["/sbin/dumb-init", "--"]
 
-# Comando de inicio - usa init.js para migraciones + app
-CMD ["node", "init.js"]
+# Comando de inicio
+CMD ["node", "dist/main.js"]
