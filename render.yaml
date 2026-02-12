@@ -8,11 +8,8 @@ services:
     repo: https://github.com/1036951896/INVENTORY
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
-    
-    # Port
     port: 3000
     
-    # Variables de entorno
     envVars:
       - key: NODE_ENV
         value: production
@@ -37,15 +34,14 @@ services:
       - key: SMTP_USER
         value: santis3268@gmail.com
       - key: SMTP_PASSWORD
-        value: (configura en Render UI)
+        value: fnlrizogotanzrza
       - key: EMAIL_FROM
         value: noreply@inventory.com
       - key: ADMIN_EMAIL
         value: santis3268@gmail.com
     
-    # Configuración de build y start
-    buildCommand: npm install --legacy-peer-deps && npm run prisma:generate && npm run build
-    startCommand: npm run start:prod
+    buildCommand: npm install --legacy-peer-deps && npm run build
+    startCommand: node dist/main.js
     
     # Automático redeploy en push
     autoDeploy: true
