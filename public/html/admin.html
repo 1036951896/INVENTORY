@@ -10,9 +10,12 @@
   
   <!-- Configurar BACKEND_URL globalmente -->
   <script>
-    window.BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    console.log('🌍 Hostname actual:', window.location.hostname);
+    const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    window.BACKEND_URL = isDevelopment
       ? 'http://localhost:3000'
       : 'https://inventory-api-74yl.onrender.com';
+    console.log('✅ BACKEND_URL configurado a:', window.BACKEND_URL);
   </script>
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1673,7 +1676,6 @@
   <script src="../js/admin.js"></script>
   <!-- initAdminAccountSection ya se ejecuta automáticamente desde admin.js -->
   <script>
-    window.BACKEND_URL = 'http://localhost:3000';
 
     // ===== SISTEMA DE NOTIFICACIONES =====
     const notificaciones = [];
@@ -1946,9 +1948,6 @@
       }).join('');
     }
 
-  </script>
-  <script>
-    window.BACKEND_URL = 'http://localhost:3000';
   </script>
 </body>
 </html>

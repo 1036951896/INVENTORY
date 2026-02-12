@@ -9,9 +9,12 @@
   <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">  
   <!-- Configurar BACKEND_URL globalmente -->
   <script>
-    window.BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    console.log('🌍 Hostname actual:', window.location.hostname);
+    const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    window.BACKEND_URL = isDevelopment
       ? 'http://localhost:3000'
       : 'https://inventory-api-74yl.onrender.com';
+    console.log('✅ BACKEND_URL configurado a:', window.BACKEND_URL);
   </script>  <style>
     * {
       margin: 0;
@@ -256,10 +259,6 @@
 
     </div>
   </div>
-
-  <script>
-    window.BACKEND_URL = 'http://localhost:3000';
-  </script>
 
   <script>
     document.getElementById('form-login-admin').addEventListener('submit', async function(e) {
