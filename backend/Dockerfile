@@ -44,6 +44,10 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package*.json ./
 
+# Copiar script de inicio
+COPY start.sh ./start.sh
+RUN chmod +x ./start.sh
+
 # Generar Prisma Client nuevamente en producción
 RUN npx prisma generate
 
@@ -68,4 +72,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
 ENTRYPOINT ["/sbin/dumb-init", "--"]
 
 # Comando de inicio
-CMD ["node", "dist/main.js"]
+CMD ["sh", "./start.sh"]
