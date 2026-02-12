@@ -141,8 +141,13 @@ function iniciarSesion(e) {
       }
     })
     .catch(err => {
-      console.error('❌ Error en login:', err);
-      mostrarMensaje(mensajeEl, '✗ ' + err.message, 'error');
+      console.error('Error en login:', err);
+      let message = '✗ ' + err.message;
+      // Si es error de credenciales, sugerir setup
+      if (err.message.toLowerCase().includes('inválid') || err.message.toLowerCase().includes('incorrect')) {
+        message = '✗ Credenciales inválidas<br><a href="setup.html" style="color: #386273; text-decoration: underline; font-weight: 600;">¿Primera vez? Inicializa la BD aquí →</a>';
+      }
+      mostrarMensaje(mensajeEl, message, 'error');
     });
 }
 
@@ -248,7 +253,7 @@ function validarEmail(email) {
 
 // Mostrar mensajes
 function mostrarMensaje(elemento, mensaje, tipo) {
-  elemento.textContent = mensaje;
+  elemento.innerHTML = mensaje;
   elemento.className = `mensaje activo mensaje-${tipo}`;
   
   if (tipo === 'error') {

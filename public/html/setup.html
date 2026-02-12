@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup - Inventory App</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #386273 0%, #B6E1F2 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .setup-container {
+      background: white;
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #386273;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .info {
+      background: #f0f8ff;
+      border-left: 4px solid #386273;
+      padding: 1rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .credentials {
+      background: #fffbf0;
+      border-left: 4px solid #ff9800;
+      padding: 1rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .credentials h3 {
+      color: #ff9800;
+      margin-bottom: 0.5rem;
+    }
+
+    .credential-item {
+      margin: 0.5rem 0;
+      font-family: 'Courier New', monospace;
+      padding: 0.5rem;
+      background: white;
+      border-radius: 4px;
+    }
+
+    .seed-button {
+      background: #386273;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s ease;
+      margin-top: 1.5rem;
+    }
+
+    .seed-button:hover:not(:disabled) {
+      background: #2a4958;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(56, 98, 115, 0.3);
+    }
+
+    .seed-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .status {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: 600;
+      display: none;
+    }
+
+    .status.loading {
+      display: block;
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .status.success {
+      display: block;
+      background: #c8e6c9;
+      color: #2e7d32;
+    }
+
+    .status.error {
+      display: block;
+      background: #ffcdd2;
+      color: #c62828;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(56, 98, 115, 0.3);
+      border-radius: 50%;
+      border-top-color: #386273;
+      animation: spin 0.6s linear infinite;
+      margin-right: 0.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .redirect-link {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .redirect-link a {
+      color: #386273;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .redirect-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="setup-container">
+    <h1>🚀 Configuración Inicial</h1>
+    
+    <div class="info">
+      <strong>⚠️ Esta es la primera vez que accedes a la aplicación.</strong><br>
+      Necesitas inicializar la base de datos presionando el botón abajo. Esto creará:
+      <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+        <li>Categorías de productos</li>
+        <li>Productos de ejemplo</li>
+        <li>Usuarios de prueba</li>
+      </ul>
+    </div>
+
+    <button class="seed-button" id="seedBtn" onclick="ejecutarSeed()">
+      📦 Inicializar Base de Datos
+    </button>
+
+    <div class="status" id="status"></div>
+
+    <div class="credentials" id="credentialsDiv" style="display: none;">
+      <h3>✅ ¡Setup Completado! Usa estas credenciales:</h3>
+      <div class="credential-item">
+        <strong>Admin:</strong> admin@inventory.com / admin123
+      </div>
+      <div class="credential-item">
+        <strong>Cliente:</strong> cliente@inventory.com / cliente123
+      </div>
+    </div>
+
+    <div class="redirect-link" id="redirectDiv" style="display: none;">
+      <a href="index.html">← Volver al inicio</a>
+    </div>
+  </div>
+
+  <script>
+    const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3000'
+      : 'https://inventory-api-74yl.onrender.com';
+
+    console.log('🌍 BACKEND_URL:', BACKEND_URL);
+
+    async function ejecutarSeed() {
+      const btn = document.getElementById('seedBtn');
+      const status = document.getElementById('status');
+      const credentialsDiv = document.getElementById('credentialsDiv');
+      const redirectDiv = document.getElementById('redirectDiv');
+
+      btn.disabled = true;
+      status.className = 'status loading';
+      status.innerHTML = '<span class="spinner"></span>Inicializando base de datos...';
+
+      try {
+        console.log('📤 Enviando seed a:', `${BACKEND_URL}/api/v1/health/seed`);
+        
+        const response = await fetch(`${BACKEND_URL}/api/v1/health/seed`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        console.log('📥 Respuesta del servidor. Status:', response.status);
+
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log('✅ Seed completado:', data);
+
+        status.className = 'status success';
+        status.innerHTML = `✅ ${data.message || '¡Base de datos inicializada correctamente!'}`;
+        
+        credentialsDiv.style.display = 'block';
+        redirectDiv.style.display = 'block';
+        btn.style.display = 'none';
+
+      } catch (error) {
+        console.error('❌ Error en seed:', error);
+        status.className = 'status error';
+        status.innerHTML = `❌ Error: ${error.message}`;
+        btn.disabled = false;
+      }
+    }
+
+    // Verificar si la BD ya está inicializada
+    async function verificarSetup() {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/v1/categories`);
+        if (response.ok) {
+          const categories = await response.json();
+          if (categories.length > 0) {
+            // BD ya está inicializada, redirigir al inicio
+            console.log('✅ BD ya está inicializada');
+            window.location.href = 'index.html';
+          }
+        }
+      } catch (e) {
+        // Ignorar errores, dejar que el usuario intente inicializar
+        console.log('ℹ️ BD no está lista aún');
+      }
+    }
+
+    // Verificar setup al cargar
+    setTimeout(verificarSetup, 500);
+  </script>
+</body>
+</html>
