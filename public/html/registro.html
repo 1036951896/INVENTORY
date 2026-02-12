@@ -10,9 +10,12 @@
   
   <!-- Configurar BACKEND_URL globalmente -->
   <script>
-    window.BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    window.BACKEND_URL = isDevelopment
       ? 'http://localhost:3000'
       : 'https://inventory-api-74yl.onrender.com';
+    console.log('Hostname:', window.location.hostname);
+    console.log('BACKEND_URL configurado:', window.BACKEND_URL);
   </script>
   
   <style>

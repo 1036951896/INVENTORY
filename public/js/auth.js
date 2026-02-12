@@ -149,6 +149,8 @@ function iniciarSesion(e) {
 // Registrar Usuario
 function registrarUsuario(e) {
   e.preventDefault();
+  console.log('Formulario de registro enviado');
+  console.log('Using BACKEND_URL:', BACKEND_URL);
 
   const nombre = document.getElementById('nombre').value.trim();
   const apellido = document.getElementById('apellido').value.trim();
@@ -157,6 +159,9 @@ function registrarUsuario(e) {
   const password = document.getElementById('password-registro').value;
   const confirmPassword = document.getElementById('confirmar-password').value;
   const mensajeEl = document.getElementById('mensaje-registro');
+
+  console.log('Email:', email);
+  console.log('Nombre:', nombre);
 
   // Validaciones
   if (!nombre || !apellido || !email || !telefono || !password || !confirmPassword) {
@@ -179,8 +184,11 @@ function registrarUsuario(e) {
     return;
   }
 
+  const registerUrl = `${BACKEND_URL}/api/v1/users`;
+  console.log('Enviando registro a:', registerUrl);
+
   // Registrar usuario en el backend
-  fetch(`${BACKEND_URL}/api/v1/users`, {
+  fetch(registerUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
