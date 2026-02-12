@@ -23,11 +23,22 @@ export class SeedService {
       // Si es force reset, limpiar todo
       if (forceReset) {
         console.log('🧹 Force reset: limpiando base de datos...');
+        const productsBeforeDelete = await this.prisma.product.count();
+        console.log(`  📊 Productos antes de eliminar: ${productsBeforeDelete}`);
+
         await this.prisma.orderItem.deleteMany({});
         await this.prisma.order.deleteMany({});
         await this.prisma.user.deleteMany({});
         await this.prisma.product.deleteMany({});
         await this.prisma.category.deleteMany({});
+
+        const productsAfterDelete = await this.prisma.product.count();
+        console.log(`  📊 Productos después de eliminar: ${productsAfterDelete}`);
+      } else {
+        const existingProducts = await this.prisma.product.count();
+        if (existingProducts > 0) {
+          console.log(`⚠️ La base de datos ya contiene ${existingProducts} productos`);
+        }
       }
 
       const categoriasSeed = [
@@ -121,19 +132,34 @@ export class SeedService {
       }
 
       console.log('🛍️ Creando productos...');
-      for (const producto of productosJSON) {
-        await this.prisma.product.create({
-          data: {
-            id: producto.id,
-            nombre: producto.nombre,
-            precio: producto.precio,
-            stock: producto.stock,
-            activo: true,
-            categoriaId: producto.categoriaId,
-            descripcion: `${producto.nombre} - Producto de calidad`,
-          },
-        });
+      let productsSucceeded = 0;
+      let productsFailed = 0;
+
+      for (let i = 0; i < productosJSON.length; i++) {
+        const producto = productosJSON[i];
+        try {
+          await this.prisma.product.create({
+            data: {
+              id: producto.id,
+              nombre: producto.nombre,
+              precio: producto.precio,
+              stock: producto.stock,
+              activo: true,
+              categoriaId: producto.categoriaId,
+              descripcion: `${producto.nombre} - Producto de calidad`,
+            },
+          });
+          productsSucceeded++;
+          if ((i + 1) % 10 === 0) {
+            console.log(`  ✅ ${i + 1}/${productosJSON.length} productos creados`);
+          }
+        } catch (err) {
+          productsFailed++;
+          console.error(`  ❌ Error al crear producto ${i + 1} (ID: "${producto.id}", Nombre: "${producto.nombre}"):`, err.message);
+        }
       }
+
+      console.log(`✅ Productos: ${productsSucceeded} exitosos, ${productsFailed} fallidos`);
 
       // Crear usuarios de prueba
       console.log('👤 Creando usuarios...');
@@ -170,7 +196,8 @@ export class SeedService {
         status: 'SEED_COMPLETED',
         data: {
           categoriesCreated: categoriasSeed.length,
-          productsCreated: productosJSON.length,
+          productsCreated: productsSucceeded,
+          productsFailed: productsFailed,
           usersCreated: 2,
           testAccounts: [
             {
