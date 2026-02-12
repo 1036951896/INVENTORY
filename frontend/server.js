@@ -8,14 +8,16 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Servir archivos estáticos
-app.use(express.static('dist'));
+// Servir archivos estáticos desde dist
+const distPath = path.join(__dirname, 'dist');
+app.use(express.static(distPath));
 
 // SPA - cualquier ruta que no sea un archivo estático va a index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(distPath, 'index.html'));
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Frontend corriendo en puerto ${PORT}`);
+  console.log(`Sirviendo arquivos desde: ${distPath}`);
 });
