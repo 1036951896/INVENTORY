@@ -174,7 +174,7 @@ async function actualizarDireccionMostrada() {
     }
   } catch (err) {
     console.error('Error actualizando dirección:', err);
-    direccionDisplay.innerHTML = '<span style="color: #999;">⚠️ Error cargando dirección</span>';
+    direccionDisplay.innerHTML = '<span style="color: #999;">Error cargando dirección</span>';
   }
 }
 

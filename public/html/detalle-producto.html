@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detalle del Producto - Inventory</title>
+  <title>Detalle del Producto - StoreHub</title>
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/ecommerce-figma.css">
   <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">  
@@ -11,7 +11,7 @@
   <script>
     window.BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
       ? 'http://localhost:3000'
-      : 'https://inventory-api-74yl.onrender.com';
+      : 'https://storehub-api-74yl.onrender.com';
   </script>  <style>
     * {
       margin: 0;
@@ -580,8 +580,8 @@
     <div class="contenedor">
       <div class="encabezado-contenedor">
         <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
-          <img src="../assets/logo.svg" alt="Logo Inventory">
-          <span class="logo-text">Inventory</span>
+          <img src="../assets/logo.svg" alt="Logo StoreHub">
+          <span class="logo-text">StoreHub</span>
         </div>
         <div class="barra-busqueda-contenedor">
           <div class="barra-busqueda">
@@ -603,9 +603,19 @@
             <span class="contador-carrito" id="contador">0</span>
           </div>
           <div id="menu-usuario">
-            <button class="btn btn-principal" onclick="window.location.href='login.html'" title="Iniciar sesión">👤</button>
+            <button class="btn btn-principal" onclick="window.location.href='login.html'" title="Iniciar sesión">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="display: inline-block;">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </button>
           </div>
-          <button class="btn-icono" onclick="window.location.href='index.html'" title="Volver al catálogo">⏠</button>
+          <button class="btn-icono" onclick="window.location.href='index.html'" title="Volver al catálogo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="display: inline-block;">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -643,7 +653,7 @@
           </div>
           <div class="detalle-agregar" id="agregar-contenedor">
             <button class="btn btn-principal" style="width: 100%; font-size: 1.1rem; padding: 1rem;" onclick="agregarAlCarritoDetalle()">
-              🛒 Agregar al Carrito
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 8px;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>Agregar al Carrito
             </button>
           </div>
         </div>

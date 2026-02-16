@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Asegurar que el dashboard se muestra por defecto
   document.getElementById('seccion-dashboard').style.display = 'block';
-  document.getElementById('titulo-seccion').textContent = '📊 Dashboard';
+  document.getElementById('titulo-seccion').textContent = 'Dashboard';
   document.querySelectorAll('.menu-lateral-enlace').forEach(e => e.classList.remove('activo'));
   document.querySelector('a[data-seccion="dashboard"]').classList.add('activo');
   // Actualización automática de pedidos y dashboard cada 10 segundos SOLO si hay cambios
@@ -259,15 +259,15 @@ function configurarMenu() {
       
       // Actualizar título
       const titulos = {
-        dashboard: '📊 Dashboard',
-        productos: '📦 Gestión de Productos',
-        categorias: '🏷️ Categorías',
-        pedidos: '🚚 Gestión de Pedidos',
-        usuarios: '👥 Gestión de Usuarios',
-        reportes: '📈 Reportes',
-        notificaciones: '🔔 Notificaciones',
-        ofertas: '🎉 Gestión de Ofertas',
-        configuracion: '⚙️ Configuración'
+        dashboard: 'Dashboard',
+        productos: 'Gestión de Productos',
+        categorias: 'Categorías',
+        pedidos: 'Gestión de Pedidos',
+        usuarios: 'Gestión de Usuarios',
+        reportes: 'Reportes',
+        notificaciones: 'Notificaciones',
+        ofertas: 'Gestión de Ofertas',
+        configuracion: 'Configuración'
       };
       
       document.getElementById('titulo-seccion').textContent = titulos[seccion] || 'Dashboard';
@@ -312,15 +312,15 @@ function actualizarDashboard() {
   // Actualizar más estadísticas si existen en el HTML
   const statEnPreparacion = document.getElementById('stat-en-preparacion');
   if (statEnPreparacion) {
-    statEnPreparacion.innerHTML = `<div class="stat-icono">⚙️</div><div class="stat-valor">${pedidosEnPreparacion}</div><div class="stat-etiqueta">En Preparación</div>`;
+    statEnPreparacion.innerHTML = `<div class="stat-icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m0 5.08l-4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08 0l4.24 4.24M19.78 19.78l-4.24-4.24m0-5.08l4.24-4.24M23 12h-6m-6 0H5M19.78 4.22l-4.24 4.24m-5.08 0l-4.24-4.24"></path></svg></div><div class="stat-valor">${pedidosEnPreparacion}</div><div class="stat-etiqueta">En Preparación</div>`;
   }
   const statEntregados = document.getElementById('stat-entregados');
   if (statEntregados) {
-    statEntregados.innerHTML = `<div class="stat-icono">✅</div><div class="stat-valor">${pedidosEntregados}</div><div class="stat-etiqueta">Entregados</div>`;
+    statEntregados.innerHTML = `<div class="stat-icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><polyline points="20 6 9 17 4 12"></polyline></svg></div><div class="stat-valor">${pedidosEntregados}</div><div class="stat-etiqueta">Entregados</div>`;
   }
   const statSinStock = document.getElementById('stat-sin-stock');
   if (statSinStock) {
-    statSinStock.innerHTML = `<div class="stat-icono">⚠️</div><div class="stat-valor">${productosSinStock}</div><div class="stat-etiqueta">Sin Stock</div>`;
+    statSinStock.innerHTML = `<div class="stat-icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div><div class="stat-valor">${productosSinStock}</div><div class="stat-etiqueta">Sin Stock</div>`;
   }
 
   // Destruir gráficos previos si existen
@@ -1108,7 +1108,7 @@ async function mostrarCategoriasConProductos() {
     }
 
     if (!Array.isArray(productos) || productos.length === 0) {
-      document.getElementById('categorias-lista').innerHTML = '<div class="categoria-vacia">📦 No hay productos para mostrar</div>';
+      document.getElementById('categorias-lista').innerHTML = '<div class="categoria-vacia">No hay productos para mostrar</div>';
       return;
     }
 
@@ -1159,7 +1159,7 @@ async function mostrarCategoriasConProductos() {
     
   } catch (error) {
     console.error('Error cargando categorías:', error);
-    document.getElementById('categorias-lista').innerHTML = '<div class="categoria-vacia">⚠️ Error al cargar las categorías</div>';
+    document.getElementById('categorias-lista').innerHTML = '<div class="categoria-vacia">Error al cargar las categorías</div>';
   }
 }
 
@@ -1290,7 +1290,7 @@ function buscarProductos(termino) {
   );
 
   if (productosFiltrados.length === 0) {
-    document.getElementById('categorias-lista').innerHTML = '<div class="categoria-vacia">📭 No se encontraron productos</div>';
+    document.getElementById('categorias-lista').innerHTML = '<div class="categoria-vacia">No se encontraron productos</div>';
     return;
   }
 

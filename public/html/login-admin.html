@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Administrador - Inventory</title>
+  <title>Login Administrador - StoreHub</title>
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/ecommerce-figma.css">
   <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">  
@@ -13,7 +13,7 @@
     const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     window.BACKEND_URL = isDevelopment
       ? 'http://localhost:3000'
-      : 'https://inventory-api-74yl.onrender.com';
+      : 'https://storehub-api-74yl.onrender.com';
     console.log('✅ BACKEND_URL configurado a:', window.BACKEND_URL);
   </script>  <style>
     * {
@@ -215,9 +215,9 @@
     <div class="auth-card">
       <div class="auth-header">
         <div class="auth-header-logo">
-          <img src="../assets/logo.svg" alt="Inventory Logo">
+          <img src="../assets/logo.svg" alt="StoreHub Logo">
         </div>
-        <h1>Inventory Admin</h1>
+        <h1>StoreHub Admin</h1>
         <p>Panel de Administrador</p>
         <span class="badge-admin">ACCESO RESTRINGIDO</span>
       </div>
@@ -232,7 +232,7 @@
             id="email-admin" 
             name="email" 
             required 
-            placeholder="admin@inventory.com"
+            placeholder="admin@storehub.com"
           >
         </div>
 
@@ -269,7 +269,7 @@
       const mensajeEl = document.getElementById('mensaje-login-admin');
 
       if (!email || !password) {
-        mensajeEl.textContent = '✗ Por favor completa todos los campos';
+        mensajeEl.textContent = 'Por favor completa todos los campos';
         mensajeEl.classList.add('error');
         setTimeout(() => mensajeEl.classList.remove('error'), 4000);
         return;
@@ -284,7 +284,7 @@
         const data = await resp.json();
         if (!resp.ok) {
           let msg = data.message || 'Correo o contraseña incorrectos';
-          mensajeEl.textContent = '✗ ' + msg;
+          mensajeEl.textContent = 'Error: ' + msg;
           mensajeEl.classList.add('error');
           setTimeout(() => mensajeEl.classList.remove('error'), 4000);
           return;
@@ -311,18 +311,18 @@
           };
           localStorage.setItem('admin-token', data.access_token);
           localStorage.setItem('admin-usuario', JSON.stringify(usuarioAdmin));
-          mensajeEl.textContent = '✓ Autenticación exitosa. Redirigiendo...';
+          mensajeEl.textContent = 'Autenticación exitosa. Redirigiendo...';
           mensajeEl.classList.add('exito');
           setTimeout(() => {
             window.location.href = 'admin.html';
           }, 1000);
         } else {
-          mensajeEl.textContent = '✗ No tienes permisos de administrador';
+          mensajeEl.textContent = 'No tienes permisos de administrador';
           mensajeEl.classList.add('error');
           setTimeout(() => mensajeEl.classList.remove('error'), 4000);
         }
       } catch (err) {
-        mensajeEl.textContent = '✗ Error de conexión con el backend';
+        mensajeEl.textContent = 'Error de conexión con el backend';
         mensajeEl.classList.add('error');
         setTimeout(() => mensajeEl.classList.remove('error'), 4000);
       }

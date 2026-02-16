@@ -1,16 +1,61 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
-  <!-- Fondo -->
-  <rect width="200" height="200" fill="#f8f9fa"/>
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#386273;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2a4959;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#45a049;stop-opacity:1" />
+    </linearGradient>
+  </defs>
   
-  <!-- Cuadrado con checkmark -->
-  <g transform="translate(50, 30)">
-    <!-- Cuadrado exterior -->
-    <rect x="10" y="10" width="80" height="80" rx="12" fill="none" stroke="#001f3f" stroke-width="8"/>
+  <!-- Fondo degradado redondeado -->
+  <rect width="200" height="200" rx="28" fill="url(#bgGradient)"/>
+  
+  <!-- Brillo superior sutil -->
+  <ellipse cx="100" cy="50" rx="80" ry="40" fill="#ffffff" opacity="0.08"/>
+  
+  <!-- Contenedor principal para el icono -->
+  <g transform="translate(25, 15)">
+    <!-- Bolsa de compras grande y prominente -->
+    <g>
+      <!-- Sombra interna para profundidad -->
+      <path d="M 30 70 Q 28 68 30 45 Q 32 25 48 20 L 102 20 Q 118 25 120 45 Q 122 68 120 70 C 120 78 113 85 102 85 L 30 85 C 19 85 12 78 12 70 Z" 
+            fill="#1a3a4d" opacity="0.4"/>
+      
+      <!-- Bolsa principal -->
+      <path d="M 32 70 Q 30 68 32 45 Q 34 25 50 20 L 104 20 Q 120 25 122 45 Q 124 68 122 70 C 122 78 115 85 104 85 L 32 85 C 21 85 14 78 14 70 Z" 
+            fill="none" stroke="#ffffff" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+      
+      <!-- Handle izquierdo -->
+      <path d="M 48 20 Q 48 0 65 0" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      
+      <!-- Handle derecho -->
+      <path d="M 86 20 Q 86 0 69 0" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      
+      <!-- Línea decorativa horizontal -->
+      <line x1="30" y1="45" x2="122" y2="45" stroke="#B6E1F2" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+      
+      <!-- Elementos decorativos (representando productos) -->
+      <circle cx="42" cy="60" r="5" fill="#B6E1F2" opacity="0.7"/>
+      <circle cx="68" cy="58" r="5.5" fill="#B6E1F2" opacity="0.7"/>
+      <circle cx="94" cy="62" r="4.5" fill="#B6E1F2" opacity="0.7"/>
+    </g>
     
-    <!-- Checkmark -->
-    <path d="M 30 55 L 45 70 L 75 40" fill="none" stroke="#0d7a9a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Checkmark de compra exitosa (verde) -->
+    <g transform="translate(80, 95)">
+      <circle cx="12" cy="12" r="18" fill="url(#accentGradient)" stroke="#ffffff" stroke-width="2.5"/>
+      <path d="M 2 12 L 10 20 L 22 8" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
   </g>
   
-  <!-- Texto "Inventory" -->
-  <text x="100" y="140" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#001f3f" text-anchor="middle">Inventory</text>
+  <!-- Texto "StoreHub" prominente -->
+  <text x="100" y="162" font-family="'Segoe UI', Arial, sans-serif" font-size="36" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">StoreHub</text>
+  
+  <!-- Línea decorativa bajo el texto -->
+  <line x1="50" y1="172" x2="150" y2="172" stroke="#B6E1F2" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Subtexto pequeño con estilo -->
+  <text x="100" y="191" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="700" fill="#B6E1F2" text-anchor="middle" letter-spacing="1.5">TIENDA · ONLINE</text>
 </svg>

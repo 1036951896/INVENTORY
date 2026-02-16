@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inventory - E-Commerce</title>
+  <title>StoreHub - E-Commerce</title>
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/ecommerce-figma.css">
   <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
@@ -14,7 +14,7 @@
     // En desarrollo local, usa localhost:3000
     window.BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
       ? 'http://localhost:3000'
-      : 'https://inventory-api-74yl.onrender.com';
+      : 'https://storehub-api-74yl.onrender.com';
   </script>
 </head>
 <body>
@@ -24,8 +24,8 @@
       <div class="encabezado-contenedor">
         <!-- LOGO -->
         <div class="logo">
-          <img src="../assets/logo.svg" alt="Logo Inventory" class="logo-img">
-          <span class="logo-text">Inventory</span>
+          <img src="../assets/logo.svg" alt="Logo StoreHub" class="logo-img">
+          <span class="logo-text">StoreHub</span>
         </div>
 
         <!-- BARRA DE BÚSQUEDA MODERNA -->
@@ -139,12 +139,12 @@
 
     <div class="carrito-direccion" id="carrito-direccion">
       <div class="direccion-seleccionada">
-        <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #666;">📍 Dirección de entrega:</p>
+        <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #666;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 8px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Dirección de entrega:</p>
         <div id="direccion-display" style="padding: 0.75rem; background-color: #F5F5F5; border-radius: 4px; font-size: 0.9rem; color: #333; min-height: 2rem;">
           <span style="color: #999;">Cargando dirección...</span>
         </div>
         <button class="btn btn-secundario" onclick="mostrarSelectorDirecciones()" style="width: 100%; margin-top: 0.5rem; font-size: 0.9rem;">
-          🔄 Cambiar dirección
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 8px;"><circle cx="12" cy="5" r="3"></circle><path d="M4 10a8 8 0 0 1 16 0v5a8 8 0 0 1-16 0z"></path></svg>Cambiar dirección
         </button>
       </div>
     </div>
@@ -176,7 +176,7 @@
     <div class="footer-contenido">
       <div class="footer-seccion">
         <h3>Sobre Nosotros</h3>
-        <p>Inventory es tu distribuidora de confianza para productos de hogar y abarrotes de la mejor calidad.</p>
+        <p>StoreHub es tu distribuidora de confianza para productos de hogar y abarrotes de la mejor calidad.</p>
         <div class="redes-sociales">
           <a href="#" title="Facebook">
             <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
@@ -216,24 +216,24 @@
 
       <div class="footer-seccion">
         <h3>Contacto</h3>
-        <p>📍 Carrera 64 b # 40-33</p>
-        <p>📍 Barrio El Porvenir, Primera etapa (Al lado del supermercado Distrimar)</p>
-        <p>📞 +57 315 5508228</p>
-        <p>⏰ Lun - Vie: 8am - 6pm</p>
-        <p><a href="https://wa.me/573155508228" target="_blank" style="color: rgba(255, 255, 255, 0.85); font-weight: 600; text-decoration: none; transition: all 0.3s ease;" onmouseover="this.style.color='#B6E1F2'" onmouseout="this.style.color='rgba(255, 255, 255, 0.85)'">💬 Chatea con nosotros en WhatsApp</a></p>
+        <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 8px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Carrera 64 b # 40-33</p>
+        <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 8px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Barrio El Porvenir, Primera etapa (Al lado del supermercado Distrimar)</p>
+        <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 8px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>+57 315 5508228</p>
+        <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 8px;"><circle cx="12" cy="12" r="1"></circle><path d="M12 1v6m0 6v6"></path><path d="M4.22 4.22l4.24 4.24m0 5.08l-4.24 4.24"></path><path d="M1 12h6m6 0h6"></path></svg>Lun - Vie: 8am - 6pm</p>
+        <p><a href="https://wa.me/573155508228" target="_blank" style="color: rgba(255, 255, 255, 0.85); font-weight: 600; text-decoration: none; transition: all 0.3s ease;" onmouseover="this.style.color='#B6E1F2'" onmouseout="this.style.color='rgba(255, 255, 255, 0.85)'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" style="display: inline-block; margin-right: 8px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="8" cy="10" r="1" fill="currentColor"></circle><circle cx="12" cy="10" r="1" fill="currentColor"></circle><circle cx="16" cy="10" r="1" fill="currentColor"></circle></svg>Chatea con nosotros en WhatsApp</a></p>
       </div>
 
       <div class="footer-seccion">
         <h3>Métodos de Pago</h3>
-        <p>💳 Tarjeta de Crédito/Débito</p>
-        <p>🏦 Transferencia Bancaria</p>
-        <p>💰 Efectivo Contra Entrega</p>
-        <p>📱 Billetera Digital</p>
+        <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 8px;"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>Tarjeta de Crédito/Débito</p>
+        <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 8px;"><rect x="2" y="3" width="20" height="18" rx="2" ry="2"></rect><line x1="2" y1="7" x2="22" y2="7"></line><path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01M6 16h.01M10 16h.01M14 16h.01M18 16h.01"></path></svg>Transferencia Bancaria</p>
+        <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 8px;"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6m0 3v0.01"></path></svg>Efectivo Contra Entrega</p>
+        <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 8px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="20" x2="12" y2="20.01"></line></svg>Billetera Digital</p>
       </div>
     </div>
 
     <div class="footer-separador">
-      <p>&copy; 2026 Inventory. Todos los derechos reservados.</p>
+      <p>&copy; 2026 StoreHub. Todos los derechos reservados.</p>
     </div>
   </footer>
 
@@ -241,7 +241,7 @@
   <script>
     window.BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
       ? 'http://localhost:3000'
-      : 'https://inventory-api-74yl.onrender.com';
+      : 'https://storehub-api-74yl.onrender.com';
 
     // Toggle menú categorías en celular
     function toggleCategorias() {
