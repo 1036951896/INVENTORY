@@ -366,7 +366,7 @@
       "precio": 3100,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-bolsa-papel.jpg"
     },
     {
       "id": "47",
@@ -374,7 +374,7 @@
       "precio": 4200,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-bolsa-papel.jpg"
     },
     {
       "id": "48",
@@ -382,7 +382,7 @@
       "precio": 5300,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-bolsa-papel.jpg"
     },
     {
       "id": "49",
@@ -390,7 +390,7 @@
       "precio": 6300,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-bolsa-papel.jpg"
     },
     {
       "id": "50",
@@ -398,7 +398,7 @@
       "precio": 9000,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://images.unsplash.com/photo-1599599810994-e2900266a888?w=500&h=500&fit=crop&q=80"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-bolsa-papel.jpg"
     },
     {
       "id": "51",
