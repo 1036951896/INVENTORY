@@ -166,7 +166,7 @@
       "precio": 1670,
       "stock": 10,
       "categoria": "Guantes",
-      "imagen": "images/productos/producto-21.webp"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-21.webp"
     },
     {
       "id": "22",
