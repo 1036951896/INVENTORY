@@ -18,10 +18,10 @@ function obtenerCategoria(nombre) {
 
 // Normalizar / validar URL de imagen
 function normalizarImagenUrl(url) {
-  if (!url || typeof url !== 'string') return '/assets/product-placeholder.svg';
+  if (!url || typeof url !== 'string') return (window.BACKEND_URL || 'http://localhost:3000') + '/assets/product-placeholder.svg';
   url = url.trim();
   if (/^\d+x\d+$/.test(url)) {
-    return '/assets/product-placeholder.svg';
+    return (window.BACKEND_URL || 'http://localhost:3000') + '/assets/product-placeholder.svg';
   }
   // Si estamos en desarrollo local (localhost) y la URL apunta a producción (Render),
   // reemplazar con la URL local
@@ -35,7 +35,7 @@ function normalizarImagenUrl(url) {
   if (/^[\w-]+\.(png|jpg|jpeg|svg|webp)$/i.test(url)) {
     return '../assets/' + url;
   }
-  return '/assets/product-placeholder.svg';
+  return (window.BACKEND_URL || 'http://localhost:3000') + '/assets/product-placeholder.svg';
 }
 
 // Cargar productos desde JSON

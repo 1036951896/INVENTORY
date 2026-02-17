@@ -129,7 +129,7 @@ function actualizarCarrito() {
     html += `
       <div class="carrito-item">
         <div class="carrito-item-imagen">
-          <img src="${item.imagen}" alt="${item.nombre}" onerror="this.onerror=null;this.src='/assets/product-placeholder.svg'">
+          <img src="${item.imagen}" alt="${item.nombre}" onerror="this.onerror=null;this.src='${(window.BACKEND_URL || 'http://localhost:3000')}/assets/product-placeholder.svg'">
         </div>
         <div class="carrito-item-info">
           <div class="carrito-item-nombre">${item.nombre}</div>
@@ -335,13 +335,13 @@ function obtenerCategoria(nombre) {
 
 // Normalizar / validar URL de imagen; devuelve placeholder si la URL está mal formada
 function normalizarImagenUrl(url) {
-  if (!url || typeof url !== 'string') return '/assets/product-placeholder.svg';
+  if (!url || typeof url !== 'string') return (window.BACKEND_URL || 'http://localhost:3000') + '/assets/product-placeholder.svg';
 
   url = url.trim();
 
   // Si parece un tamaño suelto como "250x200" sin más context, rechazar
   if (/^\d+x\d+$/.test(url)) {
-    return '/assets/product-placeholder.svg';
+    return (window.BACKEND_URL || 'http://localhost:3000') + '/assets/product-placeholder.svg';
   }
 
   // Si estamos en desarrollo local (localhost) y la URL apunta a producción (Render),
@@ -351,9 +351,14 @@ function normalizarImagenUrl(url) {
     url = url.replace('https://storehub-api-74yl.onrender.com', 'http://localhost:3000');
   }
 
-  // Aceptar data URIs, rutas relativas (./, ../, /) y URLs absolutas (http(s)://)
-  if (url.startsWith('data:') || url.startsWith('./') || url.startsWith('../') || url.startsWith('/') || /^https?:\/\//i.test(url)) {
+  // Aceptar data URIs, rutas relativas (./, ../) y URLs absolutas (http(s)://)
+  if (url.startsWith('data:') || url.startsWith('./') || url.startsWith('../') || /^https?:\/\//i.test(url)) {
     return url;
+  }
+  
+  // Si comienza con /, agregar BACKEND_URL
+  if (url.startsWith('/')) {
+    return (window.BACKEND_URL || 'http://localhost:3000') + url;
   }
 
   // Si llega algo como imagen.svg (sin ruta), prefijar assets
@@ -362,7 +367,7 @@ function normalizarImagenUrl(url) {
   }
 
   // Por defecto, fallback al placeholder
-  return '/assets/product-placeholder.svg';
+  return (window.BACKEND_URL || 'http://localhost:3000') + '/assets/product-placeholder.svg';
 }
 
 // Cargar productos al iniciar
@@ -694,7 +699,7 @@ function cargarProductos(productosMostrar = productos) {
     
     tarjeta.innerHTML = `
       <div class="tarjeta-producto-imagen">
-        <img src="${producto.imagen}" alt="${producto.nombre}" onerror="this.onerror=null;this.src='/assets/product-placeholder.svg'">
+        <img src="${producto.imagen}" alt="${producto.nombre}" onerror="this.onerror=null;this.src='${(window.BACKEND_URL || 'http://localhost:3000')}/assets/product-placeholder.svg'">
       </div>
       <div class="tarjeta-producto-contenido">
         <div class="tarjeta-producto-nombre">${producto.nombre}</div>

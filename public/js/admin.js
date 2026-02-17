@@ -8,7 +8,7 @@ const API_URL = BACKEND_URL + '/api/v1';
 
 // Normaliza la URL de la imagen para rutas relativas o absolutas
 function normalizarImagenUrlAdmin(url) {
-  if (!url) return '/assets/product-placeholder.svg';
+  if (!url) return BACKEND_URL + '/assets/product-placeholder.svg';
   
   // Si es una URL completa que apunta a Render
   if (url.includes('storehub-api-74yl.onrender.com')) {
@@ -21,8 +21,8 @@ function normalizarImagenUrlAdmin(url) {
   // Si es una URL completa, devolverla como está
   if (url.startsWith('http')) return url;
   
-  // Si comienza con /, es una ruta absoluta desde la raíz del servidor
-  if (url.startsWith('/')) return url;
+  // Si comienza con /, es una ruta absoluta desde la raíz - agregar BACKEND_URL
+  if (url.startsWith('/')) return BACKEND_URL + url;
   
   // Si es relativa, agregarle ../ para que se resuelva desde html/
   return '../' + url;
