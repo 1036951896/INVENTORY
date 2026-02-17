@@ -425,8 +425,8 @@ header .contenedor {
     gap: 0.4rem;
   }
 
-  /* Ocultar nombre de usuario en tablet */
-  .usuario-info {
+  /* Ocultar solo el nombre de usuario en tablet, mantener botón logout */
+  .usuario-info > span {
     display: none !important;
   }
 
@@ -521,8 +521,8 @@ header .contenedor {
     margin-left: auto;
   }
 
-  /* Ocultar nombre de usuario en mobile */
-  .usuario-info {
+  /* Ocultar solo el nombre en mobile, mantener botón logout */
+  .usuario-info > span {
     display: none !important;
   }
 
