@@ -43,6 +43,19 @@ async function cargarProductosFromJSON() {
       return [];
     }
     
+    // Primero cargar el JSON local para usar como referencia de imágenes
+    let productosJSON = {};
+    try {
+      const responseJSON = await fetch('../data/productos-imagenes.json');
+      if (responseJSON.ok) {
+        const dataJSON = await responseJSON.json();
+        productosJSON = Object.fromEntries(dataJSON.productos.map(p => [String(p.id), p]));
+        console.log('📋 JSON local cargado con', Object.keys(productosJSON).length, 'productos');
+      }
+    } catch (e) {
+      console.warn('⚠️ No se pudo cargar JSON local de imágenes');
+    }
+    
     const token = localStorage.getItem('admin-token') || '';
     
     // Intentar cargar desde el backend API primero
@@ -66,8 +79,14 @@ async function cargarProductosFromJSON() {
         // Obtener la URL de la imagen: primero 'imagen', luego la primera de 'imagenes'
         let imagenUrl = prod.imagen || (prod.imagenes && prod.imagenes.length > 0 ? prod.imagenes[0].url : null);
         
+        // Si no tiene imagen del backend, buscar en JSON local como fallback
+        if (!imagenUrl && productosJSON[String(prod.id)]) {
+          imagenUrl = productosJSON[String(prod.id)].imagen;
+          console.log(`✅ Imagen de JSON local para "${prod.nombre}" (ID: ${prod.id})`);
+        }
+        
         if (!imagenUrl) {
-          console.warn(`⚠️ Producto "${prod.nombre}" (ID: ${prod.id}) sin imagen`);
+          console.warn(`⚠️ Producto "${prod.nombre}" (ID: ${prod.id}) sin imagen en backend ni en JSON`);
         }
         
         return {
