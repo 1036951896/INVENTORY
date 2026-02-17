@@ -664,14 +664,18 @@ function cargarTablaUsuarios() {
   tbody.innerHTML = '';
 
   usuariosAdmin.forEach(usuario => {
+    // Determinar el tipo de usuario a mostrar
+    const rolDisplay = (usuario.rol === 'ADMIN' || usuario.rol === 'admin') ? 'Admin' : 'Cliente';
+    const colorRol = (usuario.rol === 'ADMIN' || usuario.rol === 'admin') ? '#FFE082' : '#E3F2FD';
+    
     const fila = document.createElement('tr');
     fila.innerHTML = `
       <td><strong>${usuario.nombre}</strong></td>
       <td>${usuario.email}</td>
       <td>${usuario.telefono || 'N/A'}</td>
       <td>
-        <span style="background-color: #E3F2FD; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">
-          ${usuario.tipo || 'Cliente'}
+        <span style="background-color: ${colorRol}; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">
+          ${rolDisplay}
         </span>
       </td>
       <td class="acciones-tabla">
