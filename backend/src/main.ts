@@ -7,9 +7,9 @@ import * as path from 'path';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Servir archivos estáticos desde /public
+  // Servir archivos estáticos desde /public (accesibles en raíz /)
   const publicPath = path.join(__dirname, '..', '..', 'public');
-  app.use('/public', express.static(publicPath));
+  app.use(express.static(publicPath));
 
   // Validación global
   app.useGlobalPipes(
