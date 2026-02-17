@@ -295,25 +295,44 @@
   <script>
     function verificarYMostrarBtnAdmin() {
       try {
+        const btnAdmin = document.getElementById('btn-admin-panel');
+        if (!btnAdmin) return;
+        
+        // Verificar si es usuario CLIENTE
+        const usuarioClienteStr = localStorage.getItem('usuario');
+        if (usuarioClienteStr) {
+          // Es cliente, NUNCA mostrar botón
+          btnAdmin.style.display = 'none';
+          return;
+        }
+        
+        // Verificar si es usuario ADMIN
         const adminUsuarioStr = localStorage.getItem('admin-usuario');
-        if (adminUsuarioStr) {
+        const adminToken = localStorage.getItem('admin-token');
+        
+        if (!adminUsuarioStr || !adminToken) {
+          btnAdmin.style.display = 'none';
+          return;
+        }
+        
+        try {
           const adminUsuario = JSON.parse(adminUsuarioStr);
           if (adminUsuario && (adminUsuario.rol === 'ADMIN' || adminUsuario.rol === 'admin')) {
-            const btnAdmin = document.getElementById('btn-admin-panel');
-            if (btnAdmin) {
-              btnAdmin.style.display = 'flex';
-            }
+            btnAdmin.style.display = 'flex';
+          } else {
+            btnAdmin.style.display = 'none';
           }
+        } catch (e) {
+          btnAdmin.style.display = 'none';
         }
       } catch (e) {
         console.error('Error verificando admin:', e);
       }
     }
     
-    // Ejecutar al cargar la página
-    document.addEventListener('DOMContentLoaded', verificarYMostrarBtnAdmin);
-    // También ejecutar inmediatamente por si el script carga después del DOM
+    // Ejecutar siempre, antes y después de cargar DOM
     verificarYMostrarBtnAdmin();
+    document.addEventListener('DOMContentLoaded', verificarYMostrarBtnAdmin);
   </script>
 </body>
 </html>

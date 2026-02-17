@@ -319,6 +319,10 @@
           }, 1000);
         } else {
           // LOGIN CLIENTE
+          // Limpiar cualquier sesión admin anterior
+          localStorage.removeItem('admin-token');
+          localStorage.removeItem('admin-usuario');
+          
           const usuarioCliente = {
             ...data.user,
             access_token: data.access_token
