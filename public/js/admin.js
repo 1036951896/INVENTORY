@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.warn('⚠️ No hay token de administrador o permisos insuficientes. Redirigiendo a login...');
     localStorage.removeItem('admin-token');
     localStorage.removeItem('admin-usuario');
-    window.location.href = 'login-admin.html';
+    window.location.href = 'login.html';
     return;
   }
   
@@ -1079,7 +1079,7 @@ function cerrarSesionAdmin() {
   if (confirm('¿Deseas cerrar sesión?')) {
     localStorage.removeItem('admin-token');
     localStorage.removeItem('admin-usuario');
-    window.location.href = 'login-admin.html';
+    window.location.href = 'login.html';
   }
 }
 

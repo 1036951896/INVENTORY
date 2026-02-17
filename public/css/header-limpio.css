@@ -425,6 +425,11 @@ header .contenedor {
     gap: 0.4rem;
   }
 
+  /* Ocultar nombre de usuario en tablet */
+  .usuario-info {
+    display: none !important;
+  }
+
   .icono-carrito {
     width: 24px;
     height: 24px;
@@ -514,6 +519,11 @@ header .contenedor {
   .menu-superior {
     gap: 0.2rem;
     margin-left: auto;
+  }
+
+  /* Ocultar nombre de usuario en mobile */
+  .usuario-info {
+    display: none !important;
   }
 
   .icono-carrito {
