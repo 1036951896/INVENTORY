@@ -369,6 +369,7 @@ document.addEventListener('DOMContentLoaded', function() {
     productos = productos.map(p => ({ ...p, imagen: normalizarImagenUrl(p.imagen) }));
     cargarProductos();
     cargarCategoriasDinámicas();  // ← NUEVA LÍNEA: Cargar categorías dinámicamente
+    cargarCategoriasDinámicasDropdown();  // Cargar categorías en dropdown
     verificarUsuarioLogueado();
     verificarAdmin();
     configurarEventos();
@@ -799,6 +800,7 @@ function escucharCambiosProductos() {
         productosFiltrados = [...productos];
         cargarProductos(productos);
         cargarCategoriasDinámicas();  // Actualizar categorías también
+        cargarCategoriasDinámicasDropdown();  // Actualizar categorías en dropdown también
         mostrarNotificacion('✓ Catálogo actualizado con nuevos productos');
       } catch (err) {
         console.error('Error procesando productos-admin desde storage:', err);
@@ -945,5 +947,66 @@ function verificarAdmin() {
     }
   }
 }
+
+// ===== DROPDOWN DE CATEGORÍAS =====
+function toggleCategorias() {
+  const dropdown = document.getElementById('dropdown-categorias');
+  if (dropdown) {
+    dropdown.classList.toggle('activo');
+  }
+}
+
+function cargarCategoriasDinámicasDropdown() {
+  const dropdownLista = document.getElementById('categorias-dropdown-lista');
+  if (!dropdownLista) return;
+  
+  // Extraer categorías únicas de los productos
+  const categoriasUnicas = new Set();
+  productos.forEach(p => {
+    const nombreCategoria = obtenerNombreCategoria(p.categoria);
+    if (nombreCategoria && nombreCategoria.trim()) {
+      categoriasUnicas.add(nombreCategoria.trim());
+    }
+  });
+  
+  // Convertir a array y ordenar
+  const categoriasArray = Array.from(categoriasUnicas).sort();
+  
+  // Crear HTML con "Todas" y las categorías dinámicas
+  let html = `
+    <a href="#" class="categoria-item activo" data-categoria="todas" onclick="filtrarPorCategoria('todas', event); toggleCategorias();">
+      <svg class="icono-categoria-dropdown" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M3 5h2v2H3zm4 0h14v2H7zm0 4h14v2H7zm0 4h14v2H7zm0 4h14v2H7zM3 9h2v2H3zm0 4h2v2H3zm0 4h2v2H3z"/>
+      </svg>
+      <span>Todas</span>
+    </a>
+  `;
+  
+  // Agregar cada categoría única
+  categoriasArray.forEach(categoria => {
+    html += `
+      <a href="#" class="categoria-item" data-categoria="${categoria}" onclick="filtrarPorCategoria('${categoria}', event); toggleCategorias();">
+        <svg class="icono-categoria-dropdown" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 5h2v2H3zm4 0h14v2H7zm0 4h14v2H7zm0 4h14v2H7zm0 4h14v2H7zM3 9h2v2H3zm0 4h2v2H3zm0 4h2v2H3z"/>
+        </svg>
+        <span>${categoria}</span>
+      </a>
+    `;
+  });
+  
+  dropdownLista.innerHTML = html;
+}
+
+// Cerrar dropdown al hacer click fuera
+document.addEventListener('click', (event) => {
+  const dropdown = document.getElementById('dropdown-categorias');
+  const btnHamburguesa = document.getElementById('btn-hamburguesa');
+  
+  if (dropdown && btnHamburguesa) {
+    if (!dropdown.contains(event.target) && !btnHamburguesa.contains(event.target)) {
+      dropdown.classList.remove('activo');
+    }
+  }
+});
 
 // (verificarAdmin se ejecuta desde el flujo principal DOMContentLoaded)

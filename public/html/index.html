@@ -6,6 +6,7 @@
   <title>StoreHub - E-Commerce</title>
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/ecommerce-figma.css">
+  <link rel="stylesheet" href="../css/header-limpio.css">
   <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
   
   <!-- Configurar BACKEND_URL globalmente -->
@@ -38,6 +39,20 @@
               <line x1="3" y1="18" x2="21" y2="18"></line>
             </svg>
           </button>
+
+          <!-- Dropdown de Categorías -->
+          <div class="dropdown-categorias" id="dropdown-categorias" style="display: none;">
+            <div class="dropdown-contenido">
+              <div class="categorias-dropdown-lista" id="categorias-dropdown-lista">
+                <a href="#" class="categoria-item" data-categoria="todas" onclick="filtrarPorCategoria('todas', event)">
+                  <svg class="icono-categoria-dropdown" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 5h2v2H3zm4 0h14v2H7zm0 4h14v2H7zm0 4h14v2H7zm0 4h14v2H7zM3 9h2v2H3zm0 4h2v2H3zm0 4h2v2H3z"/>
+                  </svg>
+                  <span>Todas</span>
+                </a>
+              </div>
+            </div>
+          </div>
 
           <!-- Barra de búsqueda normal (desktop) -->
           <div class="barra-busqueda-contenedor-desktop">

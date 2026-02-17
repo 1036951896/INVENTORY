@@ -10,14 +10,10 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Servir archivos estáticos desde /public/html (raíz del navegador)
+// Servir archivos estáticos desde /public (raíz, con acceso a css, js, assets, etc)
+app.use(express.static(path.join(__dirname, '../public')));
+// Alias para archivos en /html
 app.use(express.static(path.join(__dirname, '../public/html')));
-// Servir assets desde /public/assets
-app.use('/assets', express.static(path.join(__dirname, '../public/assets')));
-app.use('/css', express.static(path.join(__dirname, '../public/css')));
-app.use('/js', express.static(path.join(__dirname, '../public/js')));
-app.use('/data', express.static(path.join(__dirname, '../public/data')));
-app.use('/config', express.static(path.join(__dirname, '../public/config')));
 
 // Simular base de datos en memoria
 let usuarios = [];
