@@ -9,6 +9,14 @@ const API_URL = BACKEND_URL + '/api/v1';
 // Normaliza la URL de la imagen para rutas relativas o absolutas
 function normalizarImagenUrlAdmin(url) {
   if (!url) return '../assets/product-placeholder.svg';
+  
+  // Si estamos en desarrollo local (localhost) y la URL apunta a producción (Render),
+  // reemplazar con la URL local
+  if ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && 
+      url.includes('storehub-api-74yl.onrender.com')) {
+    url = url.replace('https://storehub-api-74yl.onrender.com', 'http://localhost:3000');
+  }
+  
   if (url.startsWith('http')) return url;
   // Si la ruta es relativa, asegúrate de que apunte a la carpeta correcta
   if (url.startsWith('/')) return '..' + url;
