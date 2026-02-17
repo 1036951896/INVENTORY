@@ -52,7 +52,18 @@ export class ProductsService {
     const [products, total] = await Promise.all([
       this.prisma.product.findMany({
         where,
-        include: { categoria: true },
+        include: { 
+          categoria: true,
+          imagenes: {
+            select: {
+              id: true,
+              url: true,
+              principal: true,
+              orden: true
+            },
+            orderBy: { orden: 'asc' }
+          }
+        },
         skip,
         take: limitNum,
         orderBy: { nombre: 'asc' },
