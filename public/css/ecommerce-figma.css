@@ -1207,8 +1207,8 @@ footer {
     padding: 0;
     border-radius: 6px;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    color: white;
     cursor: pointer;
     align-items: center;
     justify-content: center;
@@ -1452,8 +1452,8 @@ footer {
 .btn-hamburguesa {
   display: flex;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  color: white;
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -1467,11 +1467,11 @@ footer {
 }
 
 .btn-hamburguesa:hover {
-  background-color: #386273;
-  border-color: rgba(255, 255, 255, 0.7);
-  color: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  transform: scale(1.08);
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.4);
+  box-shadow: none;
+  transform: scale(1);
 }
 
 .btn-hamburguesa:active {
