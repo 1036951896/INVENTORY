@@ -28,19 +28,29 @@
           <span class="logo-text">StoreHub</span>
         </div>
 
-        <!-- BARRA DE BÚSQUEDA MODERNA -->
-        <div class="barra-busqueda-contenedor">
-          <div class="barra-busqueda">
-            <svg class="icono-buscar-fijo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.35-4.35"></path>
+        <!-- BARRA DE BÚSQUEDA MODERNA + HAMBURGUESA -->
+        <div class="barra-busqueda-grupo">
+          <!-- Botón Hamburguesa (solo visible en celular) -->
+          <button class="btn-hamburguesa" id="btn-hamburguesa" onclick="toggleCategorias()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
             </svg>
-            <input type="text" id="buscar" placeholder="Buscar producto..." class="input-buscar">
-            <button class="btn-limpiar-buscar" onclick="document.getElementById('buscar').value=''; configurarEventos();" style="display:none;">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                <path d="M18 6L6 18M6 6l12 12"/>
+            <span class="hamburguesa-texto">Filtros</span>
+          </button>
+
+          <div class="barra-busqueda-contenedor">
+            <div class="barra-busqueda">
+              <svg class="icono-buscar-fijo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
               </svg>
-            </button>
+              <input type="text" id="buscar" placeholder="Buscar producto..." class="input-buscar">
+              <button class="btn-limpiar-buscar" onclick="document.getElementById('buscar').value=''; configurarEventos();" style="display:none;">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -78,17 +88,9 @@
       </div>
     </div>
 
-    <!-- CATEGORÍAS + BOTÓN HAMBURGUESA -->
+    <!-- CATEGORÍAS -->
     <div class="categorias">
       <div class="contenedor">
-        <!-- Botón Hamburguesa (solo visible en celular) -->
-        <button class="btn-hamburguesa" id="btn-hamburguesa" onclick="toggleCategorias()">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-            <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
-          </svg>
-          <span>Filtros</span>
-        </button>
-
         <!-- Categorías (se ocultan en celular) -->
         <div class="categorias-lista" id="categorias-lista">
           <a href="#" class="categoria activo" data-categoria="todas" onclick="filtrarPorCategoria('todas', event)">
