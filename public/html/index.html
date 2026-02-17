@@ -38,7 +38,8 @@
             <span class="hamburguesa-texto">Filtros</span>
           </button>
 
-          <div class="barra-busqueda-contenedor">
+          <!-- Barra de búsqueda normal (desktop) -->
+          <div class="barra-busqueda-contenedor-desktop">
             <div class="barra-busqueda">
               <svg class="icono-buscar-fijo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="11" cy="11" r="8"></circle>
@@ -52,6 +53,14 @@
               </button>
             </div>
           </div>
+
+          <!-- Botón de lupa compacto (solo móvil) -->
+          <button class="btn-busqueda-movil" id="btn-busqueda-movil" onclick="abrirBuscador()" title="Buscar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </button>
         </div>
 
         <!-- MENU SUPERIOR -->
@@ -342,6 +351,45 @@
     
     // Actualizar cuando localStorage cambie (login/logout en otra pestaña)
     window.addEventListener('storage', mostrarBtnAdminSiValido);
+
+    // Función para abrir el buscador en móvil
+    window.abrirBuscador = function() {
+      const inputBuscar = document.getElementById('buscar');
+      const buscadorMovil = document.getElementById('btn-busqueda-movil');
+      const buscadorDesktop = document.querySelector('.barra-busqueda-contenedor-desktop');
+      
+      if (window.innerWidth < 768) {
+        // Mostrar modal/overlay con búsqueda
+        const modal = document.createElement('div');
+        modal.id = 'modal-busqueda';
+        modal.style.cssText = `
+          position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(0, 0, 0, 0.5); z-index: 999;
+          display: flex; align-items: flex-start; justify-content: center;
+          padding-top: 60px;
+        `;
+        
+        modal.innerHTML = `
+          <div style="width: 90%; max-width: 500px; background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+              <input type="text" id="buscar-modal" placeholder="Buscar producto..." style="flex: 1; padding: 0.75rem; border: 1px solid #B6E1F2; border-radius: 6px; font-size: 0.95rem;">
+              <button onclick="document.getElementById('modal-busqueda').remove()" style="background: none; border: none; cursor: pointer; font-size: 1.2rem; color: #999;">✕</button>
+            </div>
+            <div id="resultados-busqueda" style="max-height: 400px; overflow-y: auto;"></div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        const inputModal = document.getElementById('buscar-modal');
+        inputModal.focus();
+        
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) modal.remove();
+        });
+      } else {
+        inputBuscar.focus();
+      }
+    };
   </script>
 </body>
 </html>

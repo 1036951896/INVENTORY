@@ -7,7 +7,7 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
-  padding: 20px 0;
+  padding: 12px 0;
   transition: all 0.3s ease;
 }
 
@@ -47,7 +47,7 @@ header .contenedor {
 }
 
 .logo-img {
-  height: 40px;
+  height: 36px;
   width: auto;
   flex-shrink: 0;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
@@ -67,7 +67,7 @@ header .contenedor {
   flex: 1;
 }
 
-.barra-busqueda-contenedor {
+.barra-busqueda-contenedor-desktop {
   flex: 1;
   max-width: 450px;
   position: relative;
@@ -83,8 +83,36 @@ header .contenedor {
   transition: all 0.3s ease;
   overflow: hidden;
   padding: 0;
-  height: 44px;
+  height: 40px;
   min-width: 200px;
+}
+
+/* Botón de búsqueda para móvil */
+.btn-busqueda-movil {
+  display: none;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: white;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.btn-busqueda-movil:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+}
+
+.btn-busqueda-movil svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
 }
 
 .barra-busqueda:hover {
@@ -1141,7 +1169,7 @@ footer {
   .encabezado-contenedor {
     gap: 0.6rem;
     flex-wrap: wrap;
-    padding: 0.6rem 0;
+    padding: 0.4rem 0;
   }
 
   .logo {
@@ -1160,18 +1188,17 @@ footer {
     gap: 0.5rem;
   }
 
-  .barra-busqueda-contenedor {
+  .barra-busqueda-contenedor-desktop {
     flex: 1;
     max-width: 100%;
   }
 
-  /* En móvil, la barra de búsqueda se colapsa */
   .barra-busqueda {
     width: 100%;
   }
 
   .input-buscar {
-    padding: 0.8rem 1rem 0.8rem 36px;
+    padding: 0.75rem 0.9rem 0.75rem 36px;
     font-size: 0.9rem;
   }
 
@@ -1187,6 +1214,8 @@ footer {
     justify-content: center;
     white-space: nowrap;
     flex-shrink: 0;
+    width: 40px;
+    height: 40px;
   }
 
   .hamburguesa-texto {
@@ -1196,6 +1225,11 @@ footer {
   .btn-hamburguesa svg {
     width: 20px;
     height: 20px;
+  }
+
+  /* Mostrar botón de lupa */
+  .btn-busqueda-movil {
+    display: flex;
   }
 
   .menu-superior {
@@ -1248,8 +1282,8 @@ footer {
   }
 
   .encabezado-contenedor {
-    padding: 0.4rem 0;
-    gap: 0.4rem;
+    padding: 0.3rem 0;
+    gap: 0.3rem;
   }
 
   .logo {
@@ -1269,9 +1303,15 @@ footer {
     gap: 0.3rem;
   }
 
-  /* En pantallas muy pequeñas, la búsqueda es solo lupa */
-  .barra-busqueda {
-    max-width: 100%;
+  /* En pantallas muy pequeñas, ocultar la barra y mostrar solo la lupa */
+  .barra-busqueda-contenedor-desktop {
+    display: none;
+  }
+
+  .btn-busqueda-movil {
+    display: flex;
+    width: 40px;
+    height: 40px;
   }
 
   .input-buscar {
@@ -1289,15 +1329,14 @@ footer {
     right: 8px;
   }
 
-  /* Ocultar el texto del hamburguesa en pantallas muy pequeñas */
   .hamburguesa-texto {
     display: none;
   }
 
   .btn-hamburguesa {
     padding: 0.6rem;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
   }
 
   .icono-carrito {
@@ -1359,6 +1398,34 @@ footer {
 
   footer {
     padding: 1.5rem 0.5rem 1rem;
+    margin-top: 3rem;
+  }
+
+  .footer-contenido {
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .footer-seccion h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .footer-seccion p,
+  .footer-seccion a {
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .redes-sociales {
+    gap: 0.8rem;
+  }
+
+  .redes-sociales a {
+    width: 36px;
+    height: 36px;
+  }
+}
     margin-top: 3rem;
   }
 
