@@ -1207,7 +1207,7 @@ footer {
     padding: 0;
     border-radius: 6px;
     background: #386273;
-    border: 1px solid #386273;
+    border: none;
     color: white;
     cursor: pointer;
     align-items: center;
@@ -1454,7 +1454,7 @@ footer {
 .btn-hamburguesa {
   display: flex;
   background: #386273;
-  border: 1px solid #386273;
+  border: none;
   color: white;
   cursor: pointer;
   width: 40px;
