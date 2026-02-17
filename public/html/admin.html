@@ -18,6 +18,32 @@
     console.log('✅ BACKEND_URL configurado a:', window.BACKEND_URL);
   </script>
   
+  <!-- Protección: Solo admins pueden acceder -->
+  <script>
+    (function() {
+      try {
+        const adminUsuarioStr = localStorage.getItem('admin-usuario');
+        const adminToken = localStorage.getItem('admin-token');
+        
+        if (!adminUsuarioStr || !adminToken) {
+          console.warn('Acceso denegado: No hay credenciales de administrador');
+          window.location.href = 'login.html';
+          return;
+        }
+        
+        const adminUsuario = JSON.parse(adminUsuarioStr);
+        if (!adminUsuario || (adminUsuario.rol !== 'ADMIN' && adminUsuario.rol !== 'admin')) {
+          console.warn('Acceso denegado: El usuario no es administrador');
+          window.location.href = 'login.html';
+          return;
+        }
+      } catch (e) {
+        console.error('Error validando acceso a admin:', e);
+        window.location.href = 'login.html';
+      }
+    })();
+  </script>
+  
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* ===== ESTILOS NOTIFICACIONES ===== */

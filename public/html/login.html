@@ -210,7 +210,7 @@
           <img src="../assets/logo.svg" alt="StoreHub Logo">
         </div>
         <h1>StoreHub</h1>
-        <p>Ingresa a tu cuenta de cliente</p>
+        <p>Ingresa a tu cuenta</p>
       </div>
 
       <form id="form-login" class="formulario">
@@ -257,6 +257,86 @@
   </div>
 
   <script src="../js/direcciones.js"></script>
-  <script src="../js/auth.js"></script>
+  <script>
+    document.getElementById('form-login').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const mensajeEl = document.getElementById('mensaje-login');
+
+      if (!email || !password) {
+        mensajeEl.textContent = 'Por favor completa todos los campos';
+        mensajeEl.classList.add('error');
+        setTimeout(() => mensajeEl.classList.remove('error'), 4000);
+        return;
+      }
+
+      try {
+        const resp = await fetch(`${window.BACKEND_URL}/api/v1/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await resp.json();
+        
+        if (!resp.ok) {
+          let msg = data.message || 'Correo o contraseña incorrectos';
+          mensajeEl.textContent = 'Error: ' + msg;
+          mensajeEl.classList.add('error');
+          setTimeout(() => mensajeEl.classList.remove('error'), 4000);
+          return;
+        }
+
+        // Verificar el rol y redirigir accordingly
+        if (data.user && (data.user.rol === 'ADMIN' || data.user.rol === 'admin')) {
+          // LOGIN ADMIN
+          const usuarioAdmin = {
+            ...data.user,
+            access_token: data.access_token,
+            permisos: {
+              ver_productos: true,
+              editar_productos: true,
+              eliminar_productos: true,
+              crear_productos: true,
+              ver_pedidos: true,
+              editar_pedidos: true,
+              autorizar_pedidos: true,
+              rechazar_pedidos: true,
+              ver_usuarios: true,
+              ver_categorias: true,
+              editar_categorias: true,
+              ver_reportes: true,
+              ver_configuracion: true
+            }
+          };
+          localStorage.setItem('admin-token', data.access_token);
+          localStorage.setItem('admin-usuario', JSON.stringify(usuarioAdmin));
+          mensajeEl.textContent = 'Autenticación exitosa. Redirigiendo al panel...';
+          mensajeEl.classList.add('exito');
+          setTimeout(() => {
+            window.location.href = 'admin.html';
+          }, 1000);
+        } else {
+          // LOGIN CLIENTE
+          const usuarioCliente = {
+            ...data.user,
+            access_token: data.access_token
+          };
+          localStorage.setItem('token', data.access_token);
+          localStorage.setItem('usuario', JSON.stringify(usuarioCliente));
+          mensajeEl.textContent = 'Autenticación exitosa. Redirigiendo...';
+          mensajeEl.classList.add('exito');
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1000);
+        }
+      } catch (err) {
+        mensajeEl.textContent = 'Error de conexión con el backend';
+        mensajeEl.classList.add('error');
+        setTimeout(() => mensajeEl.classList.remove('error'), 4000);
+      }
+    });
+  </script>
 </body>
 </html>

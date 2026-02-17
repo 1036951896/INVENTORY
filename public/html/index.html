@@ -65,6 +65,17 @@
             </button>
           </div>
 
+          <!-- BOTÓN ADMIN (solo visible para admins) -->
+          <button class="btn-icono" id="btn-admin-panel" onclick="window.location.href='admin.html'" title="Panel de Administrador" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 3h-2.5a2.5 2.5 0 0 0 0 5H16"></path>
+              <path d="M8 3H5.5a2.5 2.5 0 0 0 0 5H8"></path>
+              <path d="M12 11v4"></path>
+              <path d="M8 13h8"></path>
+            </svg>
+          </button>
+
           <!-- SEGUIMIENTO -->
           <a href="seguimiento-pedidos.html" class="btn-icono" title="Ver mis pedidos">
             <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
@@ -279,5 +290,30 @@
   </script>
   <script src="../js/direcciones.js"></script>
   <script src="../js/app.js"></script>
+  
+  <!-- Mostrar botón admin si hay usuario administrador logueado -->
+  <script>
+    function verificarYMostrarBtnAdmin() {
+      try {
+        const adminUsuarioStr = localStorage.getItem('admin-usuario');
+        if (adminUsuarioStr) {
+          const adminUsuario = JSON.parse(adminUsuarioStr);
+          if (adminUsuario && (adminUsuario.rol === 'ADMIN' || adminUsuario.rol === 'admin')) {
+            const btnAdmin = document.getElementById('btn-admin-panel');
+            if (btnAdmin) {
+              btnAdmin.style.display = 'flex';
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Error verificando admin:', e);
+      }
+    }
+    
+    // Ejecutar al cargar la página
+    document.addEventListener('DOMContentLoaded', verificarYMostrarBtnAdmin);
+    // También ejecutar inmediatamente por si el script carga después del DOM
+    verificarYMostrarBtnAdmin();
+  </script>
 </body>
 </html>
