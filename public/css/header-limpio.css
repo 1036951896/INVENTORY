@@ -1,5 +1,26 @@
 /* ===== HEADER LIMPIO - DISEÑO DESDE CERO ===== */
 
+/* DESKTOP - Mostrar barra de búsqueda SIEMPRE */
+.barra-busqueda-grupo {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  flex: 0 1 auto;
+  min-width: 0;
+  position: relative;
+}
+
+.barra-busqueda-contenedor-desktop {
+  display: flex !important;
+  flex: 0 1 600px;
+  max-width: 600px !important;
+}
+
+.barra-busqueda {
+  display: flex !important;
+}
+
 header {
   background: #386273;
   padding: 0.6rem 1rem;
@@ -24,6 +45,7 @@ header .contenedor {
   flex-wrap: nowrap;
   justify-content: center;
   position: relative;
+  padding: 0 120px; /* Espacio para logo y menú absolutamente posicionados */
 }
 
 .encabezado-contenedor > .logo {
@@ -67,12 +89,13 @@ header .contenedor {
 }
 
 /* ===== BARRA DE BÚSQUEDA Y CONTROLES ===== */
+/* Versión correcta - NO expandir, mantener centrado */
 .barra-busqueda-grupo {
   display: flex !important;
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  flex: 1;
+  flex: 0 1 auto;
   min-width: 0;
   position: relative;
 }
@@ -166,22 +189,39 @@ header .contenedor {
   flex-shrink: 0;
 }
 
-/* Rel
+/* Barra de búsqueda contenedor - Tamaño FIJO */
 .barra-busqueda-contenedor-desktop {
-  flex: 1 !important;
-  max-width: 500px;
+  flex: 0 1 600px !important;
+  max-width: 600px !important;
+  width: auto !important;
   position: relative;
   display: flex !important;
+  min-width: 300px;
+  order: auto !important;
 }
 
 .barra-busqueda {
-  display: flex;
+  display: flex !important;
   align-items: center;
   background: #fff;
   border-radius: 6px;
   height: 36px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  width: 100%;
+}
+
+/* Desktop - Media query para sobrescrituras específicas si las necesita */
+@media (min-width: 1025px) {
+  .barra-busqueda-contenedor-desktop {
+    display: flex !important;
+    flex: 0 1 600px !important;
+    max-width: 600px !important;
+  }
+  
+  .barra-busqueda-grupo {
+    flex: 0 1 auto !important;
+  }
 }
 
 .barra-busqueda:focus-within {
