@@ -75,7 +75,7 @@ function cargarProductosOferta(productosOfertas = ofertasFiltradas) {
     tarjeta.innerHTML = `
       <div class="tarjeta-producto-imagen" style="position: relative;">
         <div class="badge-descuento">-${descuentoPorcentaje}%</div>
-        <img src="${producto.imagen}" alt="${producto.nombre}" onerror="this.onerror=null;this.src='../assets/product-placeholder.svg'">
+        <img src="${producto.imagen}" alt="${producto.nombre}" onerror="this.onerror=null;this.src='/assets/product-placeholder.svg'">
       </div>
       <div class="tarjeta-producto-contenido">
         <div class="tarjeta-producto-nombre">${producto.nombre}</div>

@@ -8,7 +8,7 @@ const API_URL = BACKEND_URL + '/api/v1';
 
 // Normaliza la URL de la imagen para rutas relativas o absolutas
 function normalizarImagenUrlAdmin(url) {
-  if (!url) return '../assets/product-placeholder.svg';
+  if (!url) return '/assets/product-placeholder.svg';
   
   // Si es una URL completa que apunta a Render
   if (url.includes('storehub-api-74yl.onrender.com')) {
@@ -62,16 +62,25 @@ async function cargarProductosFromJSON() {
       
       console.log('🔢 Total de productos recibidos:', productosArray.length);
       
-      const productos = productosArray.map(prod => ({
-        id: String(prod.id),
-        nombre: prod.nombre,
-        categoria: prod.categoria?.nombre || prod.categoriaId || '',
-        categoriaId: prod.categoriaId,  // Incluir el ID para editar
-        precio: prod.precio,
-        stock: prod.stock,
-        imagen: normalizarImagenUrlAdmin(prod.imagen || prod.imagenes?.[0]?.url),
-        descripcion: prod.descripcion || prod.nombre
-      }));
+      const productos = productosArray.map(prod => {
+        // Obtener la URL de la imagen: primero 'imagen', luego la primera de 'imagenes'
+        let imagenUrl = prod.imagen || (prod.imagenes && prod.imagenes.length > 0 ? prod.imagenes[0].url : null);
+        
+        if (!imagenUrl) {
+          console.warn(`⚠️ Producto "${prod.nombre}" (ID: ${prod.id}) sin imagen`);
+        }
+        
+        return {
+          id: String(prod.id),
+          nombre: prod.nombre,
+          categoria: prod.categoria?.nombre || prod.categoriaId || '',
+          categoriaId: prod.categoriaId,
+          precio: prod.precio,
+          stock: prod.stock,
+          imagen: normalizarImagenUrlAdmin(imagenUrl),
+          descripcion: prod.descripcion || prod.nombre
+        };
+      });
       console.log('✅ Productos del backend cargados:', productos.length);
       return productos;
     } else if (response.status === 401) {
