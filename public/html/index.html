@@ -65,16 +65,8 @@
             </button>
           </div>
 
-          <!-- BOTÓN ADMIN (solo visible para admins) -->
-          <button class="btn-icono" id="btn-admin-panel" onclick="window.location.href='admin.html'" title="Panel de Administrador" style="display:none;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-              <path d="M16 3h-2.5a2.5 2.5 0 0 0 0 5H16"></path>
-              <path d="M8 3H5.5a2.5 2.5 0 0 0 0 5H8"></path>
-              <path d="M12 11v4"></path>
-              <path d="M8 13h8"></path>
-            </svg>
-          </button>
+          <!-- BOTÓN ADMIN (insertado dinámicamente si es admin) -->
+          <div id="contenedor-btn-admin"></div>
 
           <!-- SEGUIMIENTO -->
           <a href="seguimiento-pedidos.html" class="btn-icono" title="Ver mis pedidos">
@@ -293,18 +285,12 @@
   
   <!-- Mostrar botón admin si hay usuario administrador logueado -->
   <script>
-    function verificarYMostrarBtnAdmin() {
-      const btnAdmin = document.getElementById('btn-admin-panel');
-      if (!btnAdmin) return;
-      
-      // Asegurar que esté oculto por defecto
-      btnAdmin.style.display = 'none';
-      
+    function mostrarBtnAdminSiValido() {
       try {
         // Verificar si es usuario CLIENTE
         const usuarioClienteStr = localStorage.getItem('usuario');
         if (usuarioClienteStr) {
-          // Es cliente, NUNCA mostrar botón
+          // Es cliente, NO crear botón
           return;
         }
         
@@ -320,26 +306,40 @@
         try {
           const adminUsuario = JSON.parse(adminUsuarioStr);
           if (adminUsuario && (adminUsuario.rol === 'ADMIN' || adminUsuario.rol === 'admin')) {
-            btnAdmin.style.display = 'flex';
+            // Es admin válido, crear y mostrar botón
+            const contenedor = document.getElementById('contenedor-btn-admin');
+            if (!contenedor) return;
+            
+            contenedor.innerHTML = `
+              <button class="btn-icono" id="btn-admin-panel" onclick="window.location.href='admin.html'" title="Panel de Administrador">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                  <path d="M16 3h-2.5a2.5 2.5 0 0 0 0 5H16"></path>
+                  <path d="M8 3H5.5a2.5 2.5 0 0 0 0 5H8"></path>
+                  <path d="M12 11v4"></path>
+                  <path d="M8 13h8"></path>
+                </svg>
+              </button>
+            `;
           }
         } catch (e) {
           console.error('Error parseando admin usuario:', e);
         }
       } catch (e) {
-        console.error('Error en verificarYMostrarBtnAdmin:', e);
+        console.error('Error en mostrarBtnAdminSiValido:', e);
       }
     }
     
     // Ejecutar cuando DOM esté listo
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', verificarYMostrarBtnAdmin);
+      document.addEventListener('DOMContentLoaded', mostrarBtnAdminSiValido);
     } else {
       // Si el script se ejecuta después de que DOM esté listo
-      verificarYMostrarBtnAdmin();
+      mostrarBtnAdminSiValido();
     }
     
-    // Actualizar cuando localStorage cambie
-    window.addEventListener('storage', verificarYMostrarBtnAdmin);
+    // Actualizar cuando localStorage cambie (login/logout en otra pestaña)
+    window.addEventListener('storage', mostrarBtnAdminSiValido);
   </script>
 </body>
 </html>
