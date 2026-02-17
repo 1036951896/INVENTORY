@@ -1221,6 +1221,8 @@ footer {
   .btn-hamburguesa svg {
     width: 20px;
     height: 20px;
+    stroke: white;
+    fill: none;
   }
 
   /* Mostrar botón de lupa */
@@ -1482,6 +1484,8 @@ footer {
   width: 20px;
   height: 20px;
   transition: transform 0.3s ease;
+  stroke: white;
+  fill: none;
 }
 
 /* Menú desplegable de categorías */
