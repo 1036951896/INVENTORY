@@ -62,7 +62,7 @@
       "precio": 8000,
       "stock": 10,
       "categoria": "Ripios",
-      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlwfOtrzncIfO6mEloPf6NrUANwVhd6gRgPA&s"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-ripio-sabrosura.jpg"
     },
     {
       "id": "9",
@@ -70,7 +70,7 @@
       "precio": 5500,
       "stock": 10,
       "categoria": "Ripios",
-      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlwfOtrzncIfO6mEloPf6NrUANwVhd6gRgPA&s"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-ripio-sabrosura.jpg"
     },
     {
       "id": "10",
@@ -78,7 +78,7 @@
       "precio": 3500,
       "stock": 10,
       "categoria": "Ripios",
-      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlwfOtrzncIfO6mEloPf6NrUANwVhd6gRgPA&s"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-ripio-sabrosura.jpg"
     },
     {
       "id": "11",
