@@ -1328,6 +1328,7 @@ footer {
   }
 
   .btn-hamburguesa {
+    display: flex;
     padding: 0;
     width: 40px;
     height: 40px;
@@ -1452,7 +1453,7 @@ footer {
 /* ===== MENÚ HAMBURGUESA RESPONSIVO ===== */
 
 .btn-hamburguesa {
-  display: flex;
+  display: none;
   background: #386273;
   border: none;
   color: white;
