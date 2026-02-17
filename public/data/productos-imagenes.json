@@ -134,7 +134,7 @@
       "precio": 1500,
       "stock": 50,
       "categoria": "Empaques",
-      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-vinipel.jpg"
     },
     {
       "id": "18",
@@ -142,7 +142,7 @@
       "precio": 2700,
       "stock": 50,
       "categoria": "Empaques",
-      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-vinipel.jpg"
     },
     {
       "id": "19",
@@ -150,7 +150,7 @@
       "precio": 4700,
       "stock": 50,
       "categoria": "Empaques",
-      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-vinipel.jpg"
     },
     {
       "id": "20",
@@ -158,7 +158,7 @@
       "precio": 8700,
       "stock": 20,
       "categoria": "Empaques",
-      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-vinipel.jpg"
     },
     {
       "id": "21",
@@ -246,7 +246,7 @@
       "precio": 2500,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-vinipel.jpg"
     },
     {
       "id": "32",
@@ -254,7 +254,7 @@
       "precio": 4700,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-vinipel.jpg"
     },
     {
       "id": "33",
@@ -262,7 +262,7 @@
       "precio": 9500,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-vinipel.jpg"
     },
     {
       "id": "34",
@@ -270,7 +270,7 @@
       "precio": 23000,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://http2.mlstatic.com/D_NQ_NP_624243-MCO46369324372_062021-O.webp"
+      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-vinipel.jpg"
     },
     {
       "id": "35",
