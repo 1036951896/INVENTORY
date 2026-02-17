@@ -278,7 +278,95 @@
           >
         </div>
 
-        <div class="grupo-formulario-doble">
+        <!-- SECCIÓN DE DIRECCIÓN -->
+        <div style="border-top: 2px solid #e0e0e0; padding-top: 1.5rem; margin-top: 1rem;">
+          <h3 style="color: #386273; font-size: 1rem; margin-bottom: 1rem; font-weight: 600;">
+            Dirección de Envío
+          </h3>
+
+          <div class="grupo-formulario">
+            <label for="calle">Calle</label>
+            <input 
+              type="text" 
+              id="calle" 
+              name="calle" 
+              required 
+              placeholder="Calle Principal"
+            >
+          </div>
+
+          <div class="grupo-formulario-doble">
+            <div class="grupo-formulario">
+              <label for="numero">Número</label>
+              <input 
+                type="text" 
+                id="numero" 
+                name="numero" 
+                required 
+                placeholder="123"
+              >
+            </div>
+
+            <div class="grupo-formulario">
+              <label for="apartamento">Apartamento (Opcional)</label>
+              <input 
+                type="text" 
+                id="apartamento" 
+                name="apartamento" 
+                placeholder="Apt 4B"
+              >
+            </div>
+          </div>
+
+          <div class="grupo-formulario-doble">
+            <div class="grupo-formulario">
+              <label for="ciudad">Ciudad</label>
+              <input 
+                type="text" 
+                id="ciudad" 
+                name="ciudad" 
+                required 
+                placeholder="Bogotá"
+              >
+            </div>
+
+            <div class="grupo-formulario">
+              <label for="departamento">Departamento/Provincia</label>
+              <input 
+                type="text" 
+                id="departamento" 
+                name="departamento" 
+                required 
+                placeholder="Cundinamarca"
+              >
+            </div>
+          </div>
+
+          <div class="grupo-formulario-doble">
+            <div class="grupo-formulario">
+              <label for="codigoPostal">Código Postal (Opcional)</label>
+              <input 
+                type="text" 
+                id="codigoPostal" 
+                name="codigoPostal" 
+                placeholder="110111"
+              >
+            </div>
+
+            <div class="grupo-formulario">
+              <label for="pais">País</label>
+              <input 
+                type="text" 
+                id="pais" 
+                name="pais" 
+                required 
+                value="Colombia"
+                readonly
+                style="background-color: #f5f5f5; cursor: not-allowed;"
+              >
+            </div>
+          </div>
+        </div>
           <div class="grupo-formulario">
             <label for="password-registro">Contraseña</label>
             <input 

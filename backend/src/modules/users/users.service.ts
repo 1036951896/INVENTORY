@@ -18,12 +18,38 @@ export class UsersService {
 
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
+    // Preparar datos del usuario
+    const userData: any = {
+      nombre: createUserDto.nombre,
+      email: createUserDto.email,
+      password: hashedPassword,
+      rol: createUserDto.rol || 'CLIENTE',
+    };
+
+    if (createUserDto.telefono) {
+      userData.telefono = createUserDto.telefono;
+    }
+
+    // Si se incluye dirección, crearla también
+    if (createUserDto.direccion) {
+      userData.direcciones = {
+        create: [
+          {
+            calle: createUserDto.direccion.calle,
+            numero: createUserDto.direccion.numero,
+            apartamento: createUserDto.direccion.apartamento || null,
+            ciudad: createUserDto.direccion.ciudad,
+            departamento: createUserDto.direccion.departamento,
+            codigoPostal: createUserDto.direccion.codigoPostal || null,
+            pais: createUserDto.direccion.pais || 'Colombia',
+            esPrincipal: createUserDto.direccion.esPrincipal !== false,
+          },
+        ],
+      };
+    }
+
     const user = await this.prisma.user.create({
-      data: {
-        ...createUserDto,
-        password: hashedPassword,
-        rol: createUserDto.rol || 'CLIENTE',
-      },
+      data: userData,
     });
 
     return this.formatUserResponse(user);

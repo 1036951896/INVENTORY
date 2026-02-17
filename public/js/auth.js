@@ -163,6 +163,16 @@ function registrarUsuario(e) {
   const telefono = document.getElementById('telefono').value.trim();
   const password = document.getElementById('password-registro').value;
   const confirmPassword = document.getElementById('confirmar-password').value;
+  
+  // Capturar campos de dirección
+  const calle = document.getElementById('calle').value.trim();
+  const numero = document.getElementById('numero').value.trim();
+  const apartamento = document.getElementById('apartamento').value.trim();
+  const ciudad = document.getElementById('ciudad').value.trim();
+  const departamento = document.getElementById('departamento').value.trim();
+  const codigoPostal = document.getElementById('codigoPostal').value.trim();
+  const pais = document.getElementById('pais').value.trim();
+  
   const mensajeEl = document.getElementById('mensaje-registro');
 
   console.log('Email:', email);
@@ -170,7 +180,12 @@ function registrarUsuario(e) {
 
   // Validaciones
   if (!nombre || !apellido || !email || !telefono || !password || !confirmPassword) {
-    mostrarMensaje(mensajeEl, '✗ Por favor completa todos los campos', 'error');
+    mostrarMensaje(mensajeEl, '✗ Por favor completa todos los campos de perfil', 'error');
+    return;
+  }
+
+  if (!calle || !numero || !ciudad || !departamento || !pais) {
+    mostrarMensaje(mensajeEl, '✗ Por favor completa todos los campos de dirección', 'error');
     return;
   }
 
@@ -202,7 +217,18 @@ function registrarUsuario(e) {
       nombre: nombre + ' ' + apellido,
       email,
       telefono,
-      password
+      password,
+      // Datos de dirección
+      direccion: {
+        calle,
+        numero,
+        apartamento: apartamento || null,
+        ciudad,
+        departamento,
+        codigoPostal: codigoPostal || null,
+        pais,
+        esPrincipal: true
+      }
     })
   })
     .then(async resp => {
