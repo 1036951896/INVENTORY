@@ -46,7 +46,7 @@
       "precio": 5400,
       "stock": 10,
       "categoria": "Snacks",
-      "imagen": "https://mercaenlinea.nyc3.digitaloceanspaces.com/2022/09/WhatsApp-Image-2022-09-29-at-5.07.38-PM.jpeg"
+      "imagen": "../assets/papa_crunch_house_500g_300x300.jpg"
     },
     {
       "id": "7",
