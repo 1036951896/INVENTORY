@@ -6,7 +6,7 @@
       "precio": 22500,
       "stock": 10,
       "categoria": "Snacks",
-      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQP-hHelKU1wBs0C3oweTra7VxjKwbf5Q93oA&s"
+      "imagen": "../assets/papas_fritas_300x300.png"
     },
     {
       "id": "2",
@@ -14,7 +14,7 @@
       "precio": 21600,
       "stock": 10,
       "categoria": "Snacks",
-      "imagen": "https://distriespeciales.com/wp-content/uploads/2020/07/WhatsApp-Image-2023-10-27-at-2.23.29-PM.jpeg"
+      "imagen": "../assets/papa_nacional_2.5_300x300.jpg"
     },
     {
       "id": "3",
