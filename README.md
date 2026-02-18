@@ -6,15 +6,55 @@ Sistema completo de e-commerce que permite a usuarios comprar productos en líne
 
 ---
 
-## 📚 DOCUMENTACIÓN PRINCIPAL
+## 📚 DOCUMENTACIÓN NUEVA (REFACTORIZACIÓN 2026)
+
+### 🎯 Documentos Principales (NUEVOS)
+
+Estos documentos fueron creados en la refactorización de febrero 2026:
+
+1. **[ARQUITECTURA_FUNCIONALIDAD.md](ARQUITECTURA_FUNCIONALIDAD.md)** ← **EMPEZAR AQUÍ**
+   - 📐 Arquitectura completa del sistema
+   - 🔌 Cómo funciona el backend y frontend
+   - 🗄️ Diagrama base de datos
+   - 🔀 Flujos principales (compra, admin)
+   - 📡 API REST endpoints completa (8 módulos)
+   - 🔒 Seguridad y autenticación JWT
+
+2. **[MANUAL_CLIENTE.md](MANUAL_CLIENTE.md)**
+   - 👥 Guía completa para usuarios/clientes
+   - 🛍️ Cómo navegar la tienda
+   - 🛒 Proceso de compra paso a paso
+   - 📦 Seguimiento de órdenes
+   - ❓ 10 Preguntas frecuentes
+   - 🔧 Solución de problemas
+
+3. **[MANUAL_ADMIN.md](MANUAL_ADMIN.md)**
+   - 👨‍💼 Guía completa para administradores
+   - 📊 Dashboard y KPIs
+   - 📦 Gestión de productos
+   - 🛒 Gestión de órdenes
+   - 👥 Gestión de usuarios
+   - 📈 Reportes y análisis
+   - 🔒 Seguridad y mejores prácticas
+
+4. **[REFACTORIZACION_RESUMEN.md](REFACTORIZACION_RESUMEN.md)**
+   - 🔧 Resumen de cambios realizados
+   - 📝 Guía de migración de código
+   - 💻 Ejemplos de cómo usar nuevos servicios
+   - 📊 Métricas de mejora
+   - ✅ Checklist de verificación
+
+---
+
+## 📚 DOCUMENTACIÓN ORIGINAL
 
 ### 🔍 Índice de Referencia Rápida
 
 👉 **[INDICE_DOCUMENTACION.md](INDICE_DOCUMENTACION.md)** - Busca documentación por tema, propósito o rol
 
-### 🎯 Para Empezar
+### 🎯 Para Empezar (Original)
 
-- **[MANUAL_SISTEMA_COMPLETO.md](MANUAL_SISTEMA_COMPLETO.md)** ← **EMPIEZA AQUÍ**
+- **[MANUAL_SISTEMA_COMPLETO.md](MANUAL_SISTEMA_COMPLETO.md)**
   - Guía técnica completa, instalación, módulos, API, BD
 
 ### 📋 Para Evaluación Académica
