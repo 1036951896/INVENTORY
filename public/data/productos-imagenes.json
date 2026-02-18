@@ -22,7 +22,7 @@
       "precio": 15000,
       "stock": 10,
       "categoria": "Snacks",
-      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYwv5Ce0wRKIGHl-1HMqEG3B3unHiLKL27hg&s"
+      "imagen": "../assets/papa_farm_frites_2kg_300x300.jpg"
     },
     {
       "id": "4",
