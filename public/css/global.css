@@ -343,15 +343,14 @@ tbody tr:hover {
 }
 
 .tarjeta-producto-imagen {
-  width: 500px;
-  height: 500px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   background: white;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  margin: 0 auto;
 }
 
 .tarjeta-producto-imagen img {
@@ -527,13 +526,11 @@ tbody tr:hover {
   }
 
   .tarjeta-producto-imagen {
-    width: 300px;
-    height: 300px;
+    aspect-ratio: 1 / 1;
   }
 
   .producto-imagen {
-    width: 300px;
-    height: 300px;
+    aspect-ratio: 1 / 1;
   }
 }
 
@@ -636,12 +633,10 @@ tbody tr:hover {
   }
 
   .tarjeta-producto-imagen {
-    width: 200px;
-    height: 200px;
+    aspect-ratio: 1 / 1;
   }
 
   .producto-imagen {
-    width: 200px;
-    height: 200px;
+    aspect-ratio: 1 / 1;
   }
 }
