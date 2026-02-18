@@ -24,6 +24,7 @@
 ### Definición Simple
 
 **Prisma es un ORM (Object-Relational Mapping)** que:
+
 - ✅ Convierte filas de BD en objetos JavaScript/TypeScript
 - ✅ Maneja automáticamente relaciones entre tablas
 - ✅ Genera queries SQL automaticamente
@@ -31,6 +32,7 @@
 - ✅ Reemplaza SQL sin perder control
 
 ### Alternativas (para comparar)
+
 ```
 ❌ SQL Puro:      SELECT * FROM users WHERE id = '123'; (sin type-safety)
 ❌ Knex/QueryBuilder: db('users').where('id', '123') (mejor pero tedioso)
@@ -47,6 +49,7 @@
 Una **llave foránea** es un campo que referencia el ID de otro registro en otra tabla.
 
 **Ejemplo simple:**
+
 ```
 Tabla USUARIOS          Tabla ÓRDENES
 ┌─────────────────┐    ┌──────────────────┐
@@ -62,18 +65,18 @@ Tabla USUARIOS          Tabla ÓRDENES
 model User {
   id String @id
   nombre String
-  
+
   // Relación (sin llave en BD, solo en Prisma)
   ordenes Order[]      // Un usuario TIENE múltiples órdenes
 }
 
 model Order {
   id String @id
-  
+
   // Llave foránea (esto SÍ existe en la BD como columna)
   usuarioId String
   usuario User @relation(fields: [usuarioId], references: [id])
-  
+
   // Relación (sin llave)
   items OrderItem[]    // Una orden TIENE múltiples items
 }
@@ -127,21 +130,22 @@ CARRITO
 ```prisma
 model User {
   id String @id
-  
+
   // Relación: UN usuario TIENE MUCHAS órdenes
   ordenes Order[]     // Array de órdenes
 }
 
 model Order {
   id String @id
-  
+
   // Llave foránea: referencia a User
-  usuarioId String   
+  usuarioId String
   usuario User @relation(fields: [usuarioId], references: [id])
 }
 ```
 
 **En la BD:**
+
 ```sql
 CREATE TABLE users (
   id VARCHAR PRIMARY KEY,
@@ -180,14 +184,14 @@ model Cart {
 ```prisma
 model Product {
   id String @id
-  
+
   // A través de OrderItem llegamos a Order
   orderItems OrderItem[]
 }
 
 model Order {
   id String @id
-  
+
   // A través de OrderItem llegamos a Product
   items OrderItem[]
 }
@@ -196,7 +200,7 @@ model Order {
 model OrderItem {
   ordenId String
   orden Order @relation(fields: [ordenId], references: [id])
-  
+
   productoId String
   producto Product @relation(fields: [productoId], references: [id])
 }
@@ -218,7 +222,7 @@ async crearOrden(usuarioId: string, items: CrearOrdoranDto) {
       numero: `PED-${Date.now()}`,
       usuarioId: usuarioId,              // ← Llave foránea
       total: items.total,
-      
+
       // Crear items conectados
       items: {
         create: items.items.map(item => ({
@@ -229,7 +233,7 @@ async crearOrden(usuarioId: string, items: CrearOrdoranDto) {
         }))
       }
     },
-    
+
     // Traer relaciones
     include: {
       usuario: true,                      // Traer datos del usuario
@@ -240,19 +244,20 @@ async crearOrden(usuarioId: string, items: CrearOrdoranDto) {
       }
     }
   });
-  
+
   return orden;
 }
 ```
 
 **Resultado:**
+
 ```typescript
 {
   id: "order-123",
   numero: "PED-1708251630000",
   usuarioId: "user-1",              // Llave foránea
   total: 150000,
-  
+
   // Relaciones traidas (no son llaves foráneas, son objetos completos)
   usuario: {
     id: "user-1",
@@ -266,7 +271,7 @@ async crearOrden(usuarioId: string, items: CrearOrdoranDto) {
       productoId: "prod-1",         // Llave foránea
       cantidad: 2,
       precioUnitario: 75000,
-      
+
       // Producto traido
       producto: {
         id: "prod-1",
@@ -290,23 +295,23 @@ const usuario = await this.prisma.user.findUnique({
       include: {
         items: {
           include: {
-            producto: true
-          }
+            producto: true,
+          },
         },
-        direccion: true
-      }
+        direccion: true,
+      },
     },
     direcciones: true,
     carrito: {
       include: {
         items: {
           include: {
-            producto: true
-          }
-        }
-      }
-    }
-  }
+            producto: true,
+          },
+        },
+      },
+    },
+  },
 });
 ```
 
@@ -320,15 +325,15 @@ const producto = await this.prisma.product.create({
     descripcion: "Laptop de 15 pulgadas",
     precio: 2500000,
     stock: 10,
-    
+
     // Conectar a categoría existente (llave foránea)
-    categoriaId: "cat-1"  // ← Llave foránea directa
+    categoriaId: "cat-1", // ← Llave foránea directa
     // O usar:
     // categoria: { connect: { id: "cat-1" } }
   },
   include: {
-    categoria: true      // Traer datos de la categoría
-  }
+    categoria: true, // Traer datos de la categoría
+  },
 });
 ```
 
@@ -337,19 +342,19 @@ const producto = await this.prisma.product.create({
 ```typescript
 const ordenes = await this.prisma.order.findMany({
   where: {
-    usuarioId: "user-1"  // Filtrar por llave foránea
+    usuarioId: "user-1", // Filtrar por llave foránea
   },
   include: {
     items: {
       include: {
         producto: {
           include: {
-            categoria: true
-          }
-        }
-      }
-    }
-  }
+            categoria: true,
+          },
+        },
+      },
+    },
+  },
 });
 ```
 
@@ -364,14 +369,14 @@ const ordenes = await this.prisma.order.findMany({
 await prisma.order.create({
   data: {
     numero: "PED-123",
-    usuarioId: "user-1",           // Llave foránea
+    usuarioId: "user-1", // Llave foránea
     items: {
       create: [
         { productoId: "prod-1", cantidad: 2 },
-        { productoId: "prod-2", cantidad: 1 }
-      ]
-    }
-  }
+        { productoId: "prod-2", cantidad: 1 },
+      ],
+    },
+  },
 });
 ```
 
@@ -383,13 +388,13 @@ await prisma.order.findUnique({
   where: { id: "order-1" },
   include: {
     usuario: true,
-    items: { include: { producto: true } }
-  }
+    items: { include: { producto: true } },
+  },
 });
 
 // Leer solo con llaves foráneas
 await prisma.order.findUnique({
-  where: { id: "order-1" }
+  where: { id: "order-1" },
   // Sin include: trae usuarioId pero no usuario completo
 });
 ```
@@ -401,8 +406,8 @@ await prisma.order.findUnique({
 await prisma.order.update({
   where: { id: "order-1" },
   data: {
-    usuarioId: "user-2"   // ← Nueva llave foránea
-  }
+    usuarioId: "user-2", // ← Nueva llave foránea
+  },
 });
 
 // Agregar items a orden existente
@@ -410,11 +415,9 @@ await prisma.order.update({
   where: { id: "order-1" },
   data: {
     items: {
-      create: [
-        { productoId: "prod-3", cantidad: 1 }
-      ]
-    }
-  }
+      create: [{ productoId: "prod-3", cantidad: 1 }],
+    },
+  },
 });
 ```
 
@@ -423,7 +426,7 @@ await prisma.order.update({
 ```typescript
 // Eliminar orden (ver onDelete policies)
 await prisma.order.delete({
-  where: { id: "order-1" }
+  where: { id: "order-1" },
   // Según onDelete: CASCADE → elimina items automáticamente
   // Según onDelete: RESTRICT → error si tiene items
 });
@@ -442,7 +445,7 @@ model Order {
   id String @id
   usuarioId String
   usuario User @relation(
-    fields: [usuarioId], 
+    fields: [usuarioId],
     references: [id],
     onDelete: Cascade  // ← Si usuario se elimina, orden TAMBIÉN
   )
@@ -528,7 +531,7 @@ OrderItem
 await prisma.user.delete({ where: { id: "user-1" } });
 
 // ❌ Esto falla - no puedes eliminar producto si está en órdenes
-await prisma.product.delete({ where: { id: "prod-1" } }); 
+await prisma.product.delete({ where: { id: "prod-1" } });
 // Error: Foreign key constraint failed
 
 // ✅ Primero elimina órdenes, luego producto
@@ -637,15 +640,15 @@ npm run prisma:migrate:dev
 
 ## Resumen Rápido
 
-| Concepto | Prisma | BD |
-|----------|--------|-----|
-| **Llave Foránea** | `usuarioId String` + `@relation` | Columna FK |
-| **Relación 1:N** | `usuario.ordenes[]` | JOIN en queries |
-| **Include** | Traer objetos relacionados | Hace JOINS |
-| **Select** | Elegir campos específicos | SELECT limitado |
-| **Cascade** | Elimina automáticamente | DELETE con FK |
-| **Restrict** | Impide eliminar | CHECK/FOREIGN KEY |
-| **SetNull** | FK queda NULL | UPDATE a NULL |
+| Concepto          | Prisma                           | BD                |
+| ----------------- | -------------------------------- | ----------------- |
+| **Llave Foránea** | `usuarioId String` + `@relation` | Columna FK        |
+| **Relación 1:N**  | `usuario.ordenes[]`              | JOIN en queries   |
+| **Include**       | Traer objetos relacionados       | Hace JOINS        |
+| **Select**        | Elegir campos específicos        | SELECT limitado   |
+| **Cascade**       | Elimina automáticamente          | DELETE con FK     |
+| **Restrict**      | Impide eliminar                  | CHECK/FOREIGN KEY |
+| **SetNull**       | FK queda NULL                    | UPDATE a NULL     |
 
 ---
 
@@ -673,6 +676,7 @@ npm run prisma:seed
 ## Conclusión
 
 **Prisma simplifica mucho las relaciones:**
+
 - ✅ No escribes SQL complejo
 - ✅ Type-safe (TypeScript)
 - ✅ Automático con `include` y `select`
@@ -684,4 +688,3 @@ npm run prisma:seed
 ---
 
 **¿Preguntas específicas sobre Prisma en tu código? Déjame saber.** 🚀
-
