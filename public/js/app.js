@@ -2,6 +2,26 @@
 // ===== APLICACIÓN E-COMMERCE =====
 // URL base del backend - definida en index.html antes de los scripts
 
+// Función para abrir búsqueda expandible en mobile
+function abrirBuscador() {
+  const buscador = document.querySelector('.barra-busqueda-contenedor-desktop');
+  if (buscador) {
+    buscador.classList.add('activo');
+    const input = document.getElementById('buscar');
+    if (input) {
+      input.focus();
+    }
+  }
+}
+
+// Función para cerrar búsqueda expandible
+function cerrarBuscador() {
+  const buscador = document.querySelector('.barra-busqueda-contenedor-desktop');
+  if (buscador) {
+    buscador.classList.remove('activo');
+  }
+}
+
 // Validar permisos de cliente
 function validarPermisosCliente(permisoRequerido) {
   const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
@@ -388,19 +408,29 @@ document.addEventListener('DOMContentLoaded', function() {
     escucharCambiosProductos();
 
     // Buscador móvil interactivo
-    const buscadorContenedor = document.querySelector('.barra-busqueda-contenedor');
+    const buscadorContenedor = document.querySelector('.barra-busqueda-contenedor-desktop');
     const inputBuscar = document.getElementById('buscar');
     
     if (buscadorContenedor && inputBuscar) {
-      // Click en el buscador para activar modo móvil
+      // Cerrar búsqueda al hacer clic fuera
       document.addEventListener('click', (e) => {
-        if (e.target === inputBuscar) {
-          buscadorContenedor.classList.add('activo');
-          inputBuscar.focus();
-        } else if (!buscadorContenedor.contains(e.target)) {
-          if (inputBuscar.value === '') {
-            buscadorContenedor.classList.remove('activo');
+        const btnBusqueda = document.getElementById('btn-busqueda-movil');
+        
+        // Si está activa y se hace clic fuera
+        if (buscadorContenedor.classList.contains('activo')) {
+          if (!buscadorContenedor.contains(e.target) && !btnBusqueda.contains(e.target)) {
+            // Cerrar si el input está vacío
+            if (inputBuscar.value === '') {
+              cerrarBuscador();
+            }
           }
+        }
+      });
+      
+      // Cerrar al pulsar Escape
+      inputBuscar.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          cerrarBuscador();
         }
       });
     }

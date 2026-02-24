@@ -22,7 +22,7 @@
       "precio": 15000,
       "stock": 10,
       "categoria": "Snacks",
-      "imagen": "../assets/papa_farm_frites_2kg_300x300.jpg"
+      "imagen": "../assets/PAPA_X_2_K_FARM FRITES.jpeg"
     },
     {
       "id": "4",
@@ -30,7 +30,7 @@
       "precio": 15000,
       "stock": 10,
       "categoria": "Snacks",
-      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwD9wBbCPzOfBM7zZP8KJ6Y3qwo9gu38928w&s"
+      "imagen": "../assets/star frites 2k.jpeg"
     },
     {
       "id": "5",
@@ -38,7 +38,7 @@
       "precio": 9700,
       "stock": 10,
       "categoria": "Snacks",
-      "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgqYRcGYCdTdAQAa8qiZ1dSe9Dz7ne7DMow&s"
+      "imagen": "../assets/crunch house 1k.jpeg"
     },
     {
       "id": "6",
@@ -46,7 +46,7 @@
       "precio": 5400,
       "stock": 10,
       "categoria": "Snacks",
-      "imagen": "../assets/papa_crunch_house_500g_300x300.jpg"
+      "imagen": "../assets/crunch house 500gr.jpeg"
     },
     {
       "id": "7",
@@ -54,7 +54,7 @@
       "precio": 9000,
       "stock": 10,
       "categoria": "Ripios",
-      "imagen": "https://images.rappi.com/products/1766787059267_1766787057259_1766787056253.jpg"
+      "imagen": "../assets/Ripio_papa.jpg"
     },
     {
       "id": "8",
@@ -62,7 +62,7 @@
       "precio": 8000,
       "stock": 10,
       "categoria": "Ripios",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-ripio-sabrosura.jpg"
+      "imagen": "../assets/sabrosura_del_campo_1kg.jpeg"
     },
     {
       "id": "9",
@@ -70,7 +70,7 @@
       "precio": 5500,
       "stock": 10,
       "categoria": "Ripios",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-ripio-sabrosura.jpg"
+      "imagen": "../assets/RIPIO_X_500_SABROSURA_DEL_CAMPO.jpeg"
     },
     {
       "id": "10",
@@ -78,7 +78,7 @@
       "precio": 3500,
       "stock": 10,
       "categoria": "Ripios",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-ripio-sabrosura.jpg"
+      "imagen": "../assets/RIPIO_X_250_SABROSURA_DEL_CAMPO.jpeg"
     },
     {
       "id": "11",
@@ -86,7 +86,7 @@
       "precio": 8700,
       "stock": 10,
       "categoria": "Maíz",
-      "imagen": "https://berpaadmin.com.co/backend/admin/backend/web/archivosDelCliente/items/images/4735-CARNES-FRIAS-CONGELADOS-Y-APANADOS-ALIMENTOS-APANADOS-Y-PRECOCIDOS-MAIZ-SAN-MIGUEL--GOURMET--TIERNO-XKL-473520230717173901.jpg"
+      "imagen": "../assets/MAIZ_SAN_MIGUEL_X_1_K.jpeg"
     },
     {
       "id": "12",
@@ -94,7 +94,7 @@
       "precio": 4700,
       "stock": 10,
       "categoria": "Maíz",
-      "imagen": "https://berpaadmin.com.co/backend/admin/backend/web/archivosDelCliente/items/images/4735-CARNES-FRIAS-CONGELADOS-Y-APANADOS-ALIMENTOS-APANADOS-Y-PRECOCIDOS-MAIZ-SAN-MIGUEL--GOURMET--TIERNO-XKL-473520230717173901.jpg"
+      "imagen": "../assets/MAIZ_SAN_MIGUEL_X_500_gr.jpeg"
     },
     {
       "id": "13",
@@ -102,7 +102,7 @@
       "precio": 80000,
       "stock": 5,
       "categoria": "Maíz",
-      "imagen": "https://images.rappi.com/products/3e3ddde4-e86b-4faf-90db-71dc9b2ac98e.png"
+      "imagen": "../assets/MAIZ_A_GRANEL_SAN_MIGUEL_10_K.jpeg"
     },
     {
       "id": "14",
@@ -110,7 +110,7 @@
       "precio": 4700,
       "stock": 10,
       "categoria": "Maíz",
-      "imagen": "https://images.rappi.com/products/720806456789_lojvwhazwyuk_619792293508_yabpjywvineesc_7707933144148_1.jpg"
+      "imagen": "../assets/MIX_VERDURAS_SAN_MIGUEL_X_500_GR.jpeg"
     },
     {
       "id": "15",
@@ -118,7 +118,7 @@
       "precio": 6900,
       "stock": 10,
       "categoria": "Tubérculos",
-      "imagen": "https://delagranja.co/wp-content/uploads/2024/01/croquetas-de-yuca.png"
+      "imagen": "../assets/YUCA_ALRICO_X_1_500gr.jpeg"
     },
     {
       "id": "16",
@@ -126,7 +126,7 @@
       "precio": 3800,
       "stock": 10,
       "categoria": "Tubérculos",
-      "imagen": "https://delagranja.co/wp-content/uploads/2024/01/croquetas-de-yuca.png"
+      "imagen": "../assets/YUCA_ALRICO_X_500gr.jpeg"
     },
     {
       "id": "17",

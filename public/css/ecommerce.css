@@ -275,50 +275,107 @@ header .contenedor {
   }
 }
 
+/* ===== SECCIÓN DE CATEGORÍAS - Debajo del header ===== */
+.categorias-seccion {
+  background: transparent;
+  padding: 0.5rem 0;
+  border-bottom: none;
+  position: relative;
+}
+
 /* ===== CATEGORÍAS ===== */
 .categorias {
-  background: linear-gradient(90deg, var(--azul-claro) 0%, rgba(182, 225, 242, 0.7) 100%);
-  padding: 1.2rem 0;
-  border-top: 1px solid rgba(56, 98, 115, 0.1);
+  background: transparent;
+  padding: 0;
+  border-top: none;
+  border-bottom: none;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gradientes decorativos en los extremos para indicar scroll */
+.categorias::before,
+.categorias::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.categorias::before {
+  left: 0;
+  background: transparent;
+}
+
+.categorias::after {
+  right: 0;
+  background: transparent;
 }
 
 .categorias-lista {
   display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  flex-wrap: wrap;
+  gap: 0.8rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 2rem;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  align-items: center;
+}
+
+/* Ocultar scrollbar en Firefox */
+.categorias-lista::-webkit-scrollbar {
+  display: none;
+}
+
+.contenedor-filtros {
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .categoria {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  color: var(--azul-oscuro);
-  font-weight: 600;
-  font-size: 0.95rem;
-  padding: 0.7rem 1.4rem;
-  border-radius: 25px;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-  background-color: rgba(255, 255, 255, 0.5);
+  gap: 0.4rem;
+  color: #567;
+  font-weight: 500;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.25s ease;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  box-shadow: none;
 }
 
 .icono-categoria {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
+  color: inherit;
 }
 
 .categoria:hover {
-  background-color: var(--blanco);
-  transform: translateY(-2px);
+  background-color: #f0f6fa;
+  border-color: #386273;
+  color: #386273;
+  transform: translateY(-2px) scale(1.05);
   box-shadow: 0 4px 12px rgba(56, 98, 115, 0.15);
 }
 
 .categoria.activo {
-  background-color: var(--blanco);
-  color: var(--azul-oscuro);
-  border-color: var(--azul-oscuro);
-  box-shadow: 0 4px 12px rgba(56, 98, 115, 0.2);
-  font-weight: 700;
+  background: linear-gradient(135deg, #386273 0%, #2a4a5a 100%);
+  color: #fff;
+  border-color: #386273;
+  box-shadow: 0 2px 8px rgba(56, 98, 115, 0.15);
+  font-weight: 600;
 }
 
 /* ===== BANNER PROMOCIONAL ===== */
