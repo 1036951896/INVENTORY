@@ -23,6 +23,35 @@ function alert2(message, type = 'info') {
   const icon = iconos[type] || iconos.info;
   const color = colores[type] || colores.info;
 
+  // Agregar estilos de animación si no existen
+  if (!document.getElementById('alert2-styles')) {
+    const estilo = document.createElement('style');
+    estilo.id = 'alert2-styles';
+    estilo.textContent = `
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(100px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      @keyframes slideOutRight {
+        from {
+          opacity: 1;
+          transform: translateX(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateX(100px);
+        }
+      }
+    `;
+    document.head.appendChild(estilo);
+  }
+
   const contenedor = document.createElement('div');
   contenedor.style.cssText = `
     position: fixed;
@@ -32,19 +61,19 @@ function alert2(message, type = 'info') {
     color: white;
     padding: 1rem 1.5rem;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    z-index: 10001;
-    animation: slideIn 0.3s ease;
-    max-width: 300px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    z-index: 99999;
+    animation: slideInRight 0.4s ease-out;
+    max-width: 320px;
     font-size: 0.95rem;
     line-height: 1.4;
+    font-weight: 500;
   `;
   contenedor.textContent = icon + ' ' + message;
   document.body.appendChild(contenedor);
 
   setTimeout(() => {
-    contenedor.style.opacity = '0';
-    contenedor.style.transition = 'opacity 0.3s ease';
+    contenedor.style.animation = 'slideOutRight 0.3s ease-in forwards';
     setTimeout(() => contenedor.remove(), 300);
   }, 4000);
 }
