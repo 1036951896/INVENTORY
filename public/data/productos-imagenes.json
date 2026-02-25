@@ -478,7 +478,7 @@
       "precio": 9600,
       "stock": 10,
       "categoria": "Snacks",
-      "imagen": "../assets/patacon_ovalado.jpeg"
+      "imagen": "../assets/patacon_ovalado_1000gr.jpeg"
     },
     {
       "id": "61",
@@ -486,7 +486,15 @@
       "precio": 9600,
       "stock": 10,
       "categoria": "Snacks",
-      "imagen": "../assets/patacon_mediano.jpeg"
+      "imagen": "../assets/patacon_redondo_1000gr.jpeg"
+    },
+    {
+      "id": "65",
+      "nombre": "PATACON REDONDO X 100 GR",
+      "precio": 1500,
+      "stock": 50,
+      "categoria": "Snacks",
+      "imagen": "../assets/patacon_redondo_100gr.jpeg"
     },
     {
       "id": "62",
