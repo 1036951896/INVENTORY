@@ -246,7 +246,7 @@
       "precio": 2500,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-vinipel.jpg"
+      "imagen": "../assets/aluminio_7mts.jpeg"
     },
     {
       "id": "32",
@@ -286,7 +286,7 @@
       "precio": 3500,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-bolsa-metalizada.jpg"
+      "imagen": "../assets/bolsa_metalizada_7x10.jpeg"
     },
     {
       "id": "37",
@@ -294,7 +294,7 @@
       "precio": 3900,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-bolsa-metalizada.jpg"
+      "imagen": "../assets/bolsa_metalizada_8x10.jpeg"
     },
     {
       "id": "38",
@@ -326,7 +326,7 @@
       "precio": 9000,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-porta.jpg"
+      "imagen": "../assets/PORTA_PERRO_CARTON.jpeg"
     },
     {
       "id": "42",
@@ -334,7 +334,7 @@
       "precio": 3600,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-servilleta.jpg"
+      "imagen": "../assets/SERVILLETA_NUBE.jpeg"
     },
     {
       "id": "43",
@@ -342,7 +342,7 @@
       "precio": 2500,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-servilleta-mia.jpg"
+      "imagen": "../assets/SERVILLETA_MIA_X200.jpeg"
     },
     {
       "id": "44",
@@ -350,7 +350,7 @@
       "precio": 7600,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-toalla-mano.jpg"
+      "imagen": "../assets/TOALLA_MANOS_X150.jpeg"
     },
     {
       "id": "45",
