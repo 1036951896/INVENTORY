@@ -262,7 +262,7 @@
       "precio": 9500,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-vinipel.jpg"
+      "imagen": "../assets/aluminio_40mts.jpeg"
     },
     {
       "id": "34",
@@ -270,7 +270,7 @@
       "precio": 23000,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-vinipel.jpg"
+      "imagen": "../assets/aluminio_100mts.jpeg"
     },
     {
       "id": "35",
@@ -278,7 +278,7 @@
       "precio": 1900,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-bolsa-metalizada.jpg"
+      "imagen": "../assets/bolsa_metalizada_6x6.jpeg"
     },
     {
       "id": "36",
@@ -310,7 +310,7 @@
       "precio": 6900,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-bolsa-metalizada.jpg"
+      "imagen": "../assets/BOLSA_METALIZADA_10X14.jpeg"
     },
     {
       "id": "40",
@@ -318,7 +318,7 @@
       "precio": 9000,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-porta.jpg"
+      "imagen": "../assets/PORTA_HAMBURGUESA_CARTON.jpeg"
     },
     {
       "id": "41",
@@ -358,7 +358,7 @@
       "precio": 5720,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-toalla-cocina.jpg"
+      "imagen": "../assets/TOALLA_COCINA_X120.jpeg"
     },
     {
       "id": "46",
@@ -366,7 +366,7 @@
       "precio": 3100,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-bolsa-papel.jpg"
+      "imagen": "../assets/bolsa_papel_#1.jpeg"
     },
     {
       "id": "47",
@@ -374,7 +374,7 @@
       "precio": 4200,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-bolsa-papel.jpg"
+      "imagen": "../assets/bolsa_papel#2.jpeg"
     },
     {
       "id": "48",
@@ -382,7 +382,7 @@
       "precio": 5300,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-bolsa-papel.jpg"
+      "imagen": "../assets/bolsa_papel_#3.jpeg"
     },
     {
       "id": "49",
@@ -390,7 +390,7 @@
       "precio": 6300,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-bolsa-papel.jpg"
+      "imagen": "../assets/bolsa_papel_#4.jpeg"
     },
     {
       "id": "50",
@@ -398,7 +398,7 @@
       "precio": 9000,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-bolsa-papel.jpg"
+      "imagen": "../assets/bolsa_papel_#6.jpeg"
     },
     {
       "id": "51",
@@ -422,7 +422,7 @@
       "precio": 7800,
       "stock": 10,
       "categoria": "Condimentos",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-sachet-miel.jpg"
+      "imagen": "../assets/sachet_miel.jpeg"
     },
     {
       "id": "54",
@@ -430,7 +430,7 @@
       "precio": 11400,
       "stock": 10,
       "categoria": "Condimentos",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-sachet-rosada.jpg"
+      "imagen": "../assets/sachet_salsa_rosada_9gr.jpeg"
     },
     {
       "id": "55",
@@ -438,7 +438,7 @@
       "precio": 25300,
       "stock": 10,
       "categoria": "Condimentos",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-salsa-tomate.png"
+      "imagen": "../assets/salsa_tomate_x4kg.jpeg"
     },
     {
       "id": "56",
@@ -446,7 +446,7 @@
       "precio": 34000,
       "stock": 10,
       "categoria": "Condimentos",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-mayonesa.jpg"
+      "imagen": "../assets/mayonesa_4kg.jpeg"
     },
     {
       "id": "57",
@@ -454,7 +454,7 @@
       "precio": 12300,
       "stock": 10,
       "categoria": "Carnes",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-carne-hamburg.webp"
+      "imagen": "../assets/CARNE_HAMBURGUESA_9GRX10.jpeg"
     },
     {
       "id": "58",
@@ -462,7 +462,7 @@
       "precio": 9600,
       "stock": 10,
       "categoria": "Snacks",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-patacon-coctelero.jpg"
+      "imagen": "../assets/patacon_coctelero.jpeg"
     },
     {
       "id": "59",
@@ -470,7 +470,7 @@
       "precio": 9600,
       "stock": 10,
       "categoria": "Snacks",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-patacon-mediano.jpg"
+      "imagen": "../assets/patacon_mediano.jpeg"
     },
     {
       "id": "60",
@@ -478,7 +478,7 @@
       "precio": 9600,
       "stock": 10,
       "categoria": "Snacks",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-patacon-ovalado.jpg"
+      "imagen": "../assets/patacon_ovalado.jpeg"
     },
     {
       "id": "61",
