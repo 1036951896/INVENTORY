@@ -325,7 +325,17 @@
           
           const usuarioCliente = {
             ...data.user,
-            access_token: data.access_token
+            access_token: data.access_token,
+            permisos: {
+              ver_carrito: true,
+              agregar_carrito: true,
+              crear_pedidos: true,
+              ver_pedidos: true,
+              ver_direcciones: true,
+              agregar_direcciones: true,
+              editar_direcciones: true,
+              eliminar_direcciones: true
+            }
           };
           localStorage.setItem('token', data.access_token);
           localStorage.setItem('usuario', JSON.stringify(usuarioCliente));

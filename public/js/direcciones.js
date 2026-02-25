@@ -514,6 +514,52 @@ async function mostrarSelectorDirecciones(callback = null) {
       const estilos = document.createElement('style');
       estilos.id = 'estilos-selector-direcciones';
       estilos.textContent = `
+        .modal-overlay {
+          display: flex;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+        }
+
+        .modal-contenido {
+          background: white;
+          border-radius: 8px;
+          padding: 2rem;
+          max-width: 600px;
+          width: 90%;
+          max-height: 90vh;
+          overflow-y: auto;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1.5rem;
+          border-bottom: 1px solid #E0E0E0;
+          padding-bottom: 1rem;
+        }
+
+        .modal-header h2 {
+          margin: 0;
+          font-size: 1.5rem;
+        }
+
+        .btn-cerrar {
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          cursor: pointer;
+          color: #666;
+        }
+
         .direcciones-lista {
           margin: 1.5rem 0;
           max-height: 400px;
@@ -575,6 +621,41 @@ async function mostrarSelectorDirecciones(callback = null) {
           font-size: 0.8rem;
           font-weight: 600;
           margin-top: 0.5rem;
+        }
+
+        .modal-acciones {
+          display: flex;
+          gap: 1rem;
+          justify-content: flex-end;
+          margin-top: 1.5rem;
+          padding-top: 1rem;
+          border-top: 1px solid #E0E0E0;
+        }
+
+        .btn {
+          padding: 0.75rem 1.5rem;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 1rem;
+        }
+
+        .btn-principal {
+          background-color: #007bff;
+          color: white;
+        }
+
+        .btn-principal:hover {
+          background-color: #0056b3;
+        }
+
+        .btn-secundario {
+          background-color: #E0E0E0;
+          color: #333;
+        }
+
+        .btn-secundario:hover {
+          background-color: #D0D0D0;
         }
       `;
       document.head.appendChild(estilos);

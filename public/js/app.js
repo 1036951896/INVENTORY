@@ -73,8 +73,18 @@ function cerrarBuscador() {
 
 // Validar permisos de cliente
 function validarPermisosCliente(permisoRequerido) {
-  const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-  return usuario.permisos && usuario.permisos[permisoRequerido];
+  try {
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    const tienePermiso = usuario && usuario.permisos && usuario.permisos[permisoRequerido];
+    
+    console.log(`🔐 Validando permiso '${permisoRequerido}':`, tienePermiso ? '✅ SÍ' : '❌ NO');
+    console.log('👤 Usuario actual:', usuario ? usuario.nombre || usuario.email : 'No logueado');
+    
+    return tienePermiso;
+  } catch (err) {
+    console.error('❌ Error validando permisos:', err);
+    return false;
+  }
 }
 
 /**
@@ -893,9 +903,20 @@ function verDetalle(id) {
 
 // Agregar al carrito
 function agregarAlCarrito(id) {
+  // Verificar que usuario esté logueado
+  const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+  
+  if (!usuario.access_token) {
+    console.warn('⚠️ Usuario no autenticado - redirigiendo a login');
+    alert2('Debes iniciar sesión para agregar productos al carrito', 'warning');
+    window.location.href = 'login.html';
+    return;
+  }
+  
   // Validar permisos de cliente
   if (!validarPermisosCliente('ver_carrito')) {
-    mostrarNotificacion('❌ Debes iniciar sesión para agregar productos al carrito');
+    console.warn('⚠️ Usuario sin permisos - redirigiendo a login');
+    alert2('Debes iniciar sesión para agregar productos al carrito', 'warning');
     window.location.href = 'login.html';
     return;
   }
@@ -930,7 +951,7 @@ function agregarAlCarrito(id) {
   actualizarCarrito();
   
   // Mostrar mensaje
-  mostrarNotificacion(`✓ ${producto.nombre} agregado al carrito`);
+  alert2(`✓ ${producto.nombre} agregado al carrito`, 'success');
 }
 
 // Mostrar notificación
