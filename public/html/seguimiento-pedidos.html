@@ -7,93 +7,155 @@
   <link rel="stylesheet" href="../css/global.css">
   <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
   <style>
+    body {
+      background: var(--fondo-pagina);
+    }
+
     .seguimiento-contenedor {
       max-width: 900px;
       margin: 0 auto;
-      padding: 2rem;
+      padding: 1.5rem;
     }
 
     .seguimiento-header {
-      margin-bottom: 2rem;
+      margin-bottom: 1.8rem;
       text-align: center;
     }
 
     .seguimiento-header h1 {
       color: var(--azul-oscuro);
-      margin-bottom: 0.5rem;
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
     }
 
+    .seguimiento-header p {
+      color: var(--gris-oscuro);
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    /* Búsqueda compactada */
     .filtro-seguimiento {
-      background: #f5f5f5;
-      padding: 1.5rem;
-      border-radius: 8px;
-      margin-bottom: 2rem;
+      background: var(--blanco);
+      padding: 1.2rem 1.4rem;
+      border-radius: 12px;
+      margin-bottom: 1.8rem;
       display: flex;
-      gap: 1rem;
+      gap: 0.8rem;
       flex-wrap: wrap;
+      border: 1px solid var(--borde);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
 
     .filtro-seguimiento input {
       flex: 1;
-      min-width: 200px;
-      padding: 0.75rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 1rem;
+      min-width: 220px;
+      padding: 0.9rem 1rem;
+      border: 1px solid var(--borde);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--azul-oscuro);
+      background: var(--gris-claro);
+      transition: all 0.2s ease;
     }
 
-    .filtro-seguimiento button {
-      padding: 0.75rem 1.5rem;
+    .filtro-seguimiento input:focus {
+      outline: none;
+      border-color: var(--azul-oscuro);
+      background: var(--blanco);
+      box-shadow: 0 2px 8px rgba(56, 98, 115, 0.1);
+    }
+
+    .filtro-seguimiento input::placeholder {
+      color: #999;
+    }
+
+    .filtro-seguimiento .btn {
+      padding: 0.9rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .filtro-seguimiento .btn-principal {
       background: var(--azul-oscuro);
       color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1rem;
     }
 
-    .filtro-seguimiento button:hover {
-      background: var(--azul);
+    .filtro-seguimiento .btn-principal:hover {
+      background: #2d4f64;
+      transform: translateY(-1px);
     }
 
+    .filtro-seguimiento .btn-secundario {
+      background: var(--gris-claro);
+      color: var(--azul-oscuro);
+      border: 1px solid var(--borde);
+    }
+
+    .filtro-seguimiento .btn-secundario:hover {
+      background: #e8ecf1;
+    }
+
+    /* Lista de pedidos */
     .pedidos-lista-seguimiento {
       display: grid;
-      gap: 1.5rem;
+      gap: 1.2rem;
     }
 
+    /* Card de pedido */
     .pedido-seguimiento {
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 8px;
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 12px;
       padding: 1.5rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: all 0.2s ease;
+    }
+
+    .pedido-seguimiento:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-1px);
     }
 
     .pedido-seguimiento-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
       padding-bottom: 1rem;
-      border-bottom: 2px solid #f0f0f0;
+      border-bottom: 1px solid var(--borde);
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
     .pedido-radicado {
-      font-weight: bold;
+      font-weight: 800;
       color: var(--azul-oscuro);
-      font-size: 1.2rem;
+      font-size: 1.4rem;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 1.5px;
     }
 
     .estado-badge {
       padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      font-weight: bold;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      white-space: nowrap;
     }
 
     .estado-badge.pendiente {
-      background: #fff3cd;
-      color: #856404;
+      background: #fffbea;
+      color: #b8860b;
+      border: 1px solid #f39c12;
     }
 
     .estado-badge.procesando {
@@ -111,142 +173,265 @@
       color: #0f5132;
     }
 
+    /* Detalles compactados */
     .pedido-detalles-seguimiento {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
     }
 
     .detalle-item {
-      background: #f9f9f9;
-      padding: 1rem;
-      border-radius: 4px;
+      background: var(--gris-claro);
+      padding: 0.9rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--borde);
     }
 
     .detalle-label {
-      font-size: 0.85rem;
-      color: #666;
-      margin-bottom: 0.25rem;
+      font-size: 0.8rem;
+      color: var(--gris-oscuro);
+      margin-bottom: 0.2rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
     }
 
     .detalle-valor {
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--azul-oscuro);
-      font-weight: bold;
+      font-weight: 600;
     }
 
-    .timeline-seguimiento {
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 2px solid #f0f0f0;
-    }
-
-    .timeline-title {
-      font-size: 0.9rem;
-      color: #666;
-      margin-bottom: 1rem;
-      font-weight: bold;
-    }
-
-    .timeline-items {
-      display: flex;
-      gap: 1rem;
-      overflow-x: auto;
-      padding: 0.5rem 0;
-    }
-
-    .timeline-item {
-      min-width: 120px;
-      text-align: center;
-    }
-
-    .timeline-dot {
-      width: 12px;
-      height: 12px;
-      background: #ddd;
-      border-radius: 50%;
-      margin: 0 auto 0.5rem;
-      display: block;
-    }
-
-    .timeline-item.activo .timeline-dot {
-      background: var(--exito);
-      width: 18px;
-      height: 18px;
-      margin: -3px auto 0.5rem;
-    }
-
-    .timeline-label {
-      font-size: 0.8rem;
-      color: #666;
-    }
-
-    .timeline-item.activo .timeline-label {
+    .detalle-valor.precio {
       color: var(--exito);
-      font-weight: bold;
+      font-weight: 800;
     }
 
+    /* Tracking steps horizontal */
+    .tracking-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin: 1.5rem 0;
+      gap: 0.5rem;
+      padding: 1rem 0;
+    }
+
+    .tracking-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+
+    .tracking-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      width: calc(100% - 16px);
+      height: 2px;
+      background: var(--borde);
+      z-index: 0;
+    }
+
+    .tracking-step.completed:not(:last-child)::after {
+      background: var(--exito);
+    }
+
+    .step-indicator {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--borde);
+      background: var(--blanco);
+      margin: 0 auto 0.6rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      position: relative;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--gris-oscuro);
+    }
+
+    .step-indicator.completed {
+      background: var(--exito);
+      border-color: var(--exito);
+      color: white;
+    }
+
+    .step-indicator.active {
+      border-color: var(--azul-oscuro);
+      background: var(--azul-claro);
+      transform: scale(1.08);
+      box-shadow: 0 2px 8px rgba(56, 98, 115, 0.2);
+    }
+
+    .step-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gris-oscuro);
+      letter-spacing: 0.6px;
+      transition: color 0.3s ease;
+    }
+
+    .step-label.completed {
+      color: var(--exito);
+    }
+
+    .step-label.active {
+      color: var(--azul-oscuro);
+      font-weight: 700;
+    }
+
+    /* Productos en card */
     .pedido-items {
       margin-top: 1rem;
-      background: #f9f9f9;
-      padding: 1rem;
-      border-radius: 4px;
+      padding-top: 1rem;
+      border-top: 1px solid var(--borde);
     }
 
     .items-title {
       font-size: 0.9rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
       color: var(--azul-oscuro);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
     }
 
     .item-lista {
       display: grid;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
 
     .item-fila {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-size: 0.9rem;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid #e0e0e0;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--borde);
     }
 
     .item-fila:last-child {
       border-bottom: none;
     }
 
+    .item-nombre {
+      flex: 1;
+      color: var(--azul-oscuro);
+      font-weight: 500;
+    }
+
+    .item-cantidad {
+      color: var(--gris-oscuro);
+      font-size: 0.85rem;
+      margin: 0 1rem;
+    }
+
+    .item-precio {
+      color: var(--exito);
+      font-weight: 600;
+      min-width: 80px;
+      text-align: right;
+    }
+
+    /* Estados vacíos */
     .vacio-seguimiento {
       text-align: center;
-      padding: 2rem;
-      color: #999;
+      padding: 2rem 1.5rem;
+      color: var(--gris-oscuro);
+      background: var(--gris-claro);
+      border-radius: 12px;
+      border: 1px solid var(--borde);
     }
 
     .no-autenticado {
-      background: #f8d7da;
-      color: #721c24;
+      background: #fffbea;
+      color: #b8860b;
       padding: 1.5rem;
-      border-radius: 4px;
-      margin-bottom: 2rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
       text-align: center;
+      border: 1px solid #f39c12;
     }
 
     .btn-ir-login {
       background: var(--azul-oscuro);
       color: white;
-      padding: 0.75rem 1.5rem;
+      padding: 0.9rem 1.5rem;
       border: none;
-      border-radius: 4px;
+      border-radius: 8px;
       cursor: pointer;
       text-decoration: none;
       display: inline-block;
       margin-top: 1rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
     }
 
     .btn-ir-login:hover {
-      background: var(--azul);
+      background: #2d4f64;
+      transform: translateY(-1px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .seguimiento-contenedor {
+        padding: 1rem;
+      }
+
+      .filtro-seguimiento {
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+
+      .filtro-seguimiento input,
+      .filtro-seguimiento .btn {
+        width: 100%;
+      }
+
+      .pedido-seguimiento-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .pedido-detalles-seguimiento {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .seguimiento-header h1 {
+        font-size: 1.4rem;
+      }
+
+      .pedido-radicado {
+        font-size: 1.1rem;
+      }
+
+      .pedido-detalles-seguimiento {
+        grid-template-columns: 1fr;
+      }
+
+      .tracking-container {
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+
+      .tracking-step:not(:last-child)::after {
+        position: static;
+        width: 2px;
+        height: 16px;
+        margin: -8px 0;
+      }
     }
   </style>
 </head>
@@ -259,9 +444,9 @@
 
     <div class="filtro-seguimiento">
       <input type="text" id="buscar-radicado" placeholder="Buscar por número de radicado (ej: PED-123456)">
-      <button onclick="buscarPedido()">Buscar</button>
-      <button onclick="cargarMisPedidos()" style="background: #666;">Mostrar Todos</button>
-      <button onclick="cerrarSesionCliente()" style="background: #c33;">Cerrar Sesión</button>
+      <button class="btn btn-principal" onclick="buscarPedido()">Buscar</button>
+      <button class="btn btn-secundario" onclick="cargarMisPedidos()">Mostrar Todos</button>
+      <button class="btn btn-secundario" onclick="cerrarSesionCliente()" style="background: #E74C3C; color: white; border: none;">Cerrar Sesión</button>
     </div>
 
     <div id="contenedor-seguimiento">

@@ -1,4 +1,5 @@
 # 📐 StoreHub Design System v2.0
+
 ## Sistema de Diseño Visual para E-Commerce de Hogar Masivo
 
 ---
@@ -6,29 +7,30 @@
 ## 🎨 PALETA DE COLORES
 
 ### Colores Primarios
+
 ```css
---azul-oscuro: #386273     /* Color principal, headers, títulos */
---azul-claro: #B6E1F2      /* Backgrounds claros, highlights */
---blanco: #FFFFFF          /* Fondo principal, cards */
+--azul-oscuro: #386273 /* Color principal, headers, títulos */
+  --azul-claro: #b6e1f2 /* Backgrounds claros, highlights */ --blanco: #ffffff
+  /* Fondo principal, cards */;
 ```
 
 ### Colores Secundarios & Estados
-```css
---exito: #27AE60           /* Confirmaciones, precios, CTAs positivas */
---error: #E74C3C           /* Errores, advertencias críticas */
---warning: #F39C12         /* Alertas, información importante */
---info: #3498DB            /* Información general */
 
-/* Color cálido para warnings (reemplaza el amarillo fluorescente) */
---warning-caldo: #fffbea   /* Fondo de avisos suave */
+```css
+--exito: #27ae60 /* Confirmaciones, precios, CTAs positivas */ --error: #e74c3c
+  /* Errores, advertencias críticas */ --warning: #f39c12
+  /* Alertas, información importante */ --info: #3498db
+  /* Información general */
+  /* Color cálido para warnings (reemplaza el amarillo fluorescente) */
+  --warning-caldo: #fffbea /* Fondo de avisos suave */;
 ```
 
 ### Colores Neutrales
+
 ```css
---gris-claro: #F5F5F5      /* Backgrounds secundarios */
---gris-oscuro: #666666     /* Texto secundario */
---borde: #E8ECF1           /* Bordes sutiles */
---fondo-pagina: #f4f6f8    /* Fondo de página */
+--gris-claro: #f5f5f5 /* Backgrounds secundarios */ --gris-oscuro: #666666
+  /* Texto secundario */ --borde: #e8ecf1 /* Bordes sutiles */
+  --fondo-pagina: #f4f6f8 /* Fondo de página */;
 ```
 
 ---
@@ -36,22 +38,25 @@
 ## 📝 TIPOGRAFÍA
 
 ### Familia de Fuente
+
 ```css
---fuente-principal: 'Inter', 'Poppins', 'Roboto', sans-serif;
+--fuente-principal: "Inter", "Poppins", "Roboto", sans-serif;
 ```
 
 ### Pesos & Espaciado
-```css
-font-weight: 400;  /* Normal (body text) */
-font-weight: 500;  /* Medium (labels, small headers) */
-font-weight: 600;  /* Semibold (subheaders) */
-font-weight: 800;  /* Bold (números, ofertas) */
 
-letter-spacing: 0.8px;   /* Labels pequeños */
-letter-spacing: 1.5px;   /* Números importantes */
+```css
+font-weight: 400; /* Normal (body text) */
+font-weight: 500; /* Medium (labels, small headers) */
+font-weight: 600; /* Semibold (subheaders) */
+font-weight: 800; /* Bold (números, ofertas) */
+
+letter-spacing: 0.8px; /* Labels pequeños */
+letter-spacing: 1.5px; /* Números importantes */
 ```
 
 ### Tamaños Jerárquicos
+
 ```css
 /* Títulos */
 h1, .titulo-principal: 1.8rem (28.8px) - font-weight: 600
@@ -73,6 +78,7 @@ h3, .titulo-seccion: 1.4rem (22.4px)
 ## 📦 ESPACIADO (PADDING & MARGIN)
 
 ### Sistema de Spacing Compactado
+
 ```css
 /* NO usar valores inflados como 2.5rem, 3rem, etc */
 0.3rem  (4.8px)   /* Micro espacios */
@@ -87,35 +93,41 @@ h3, .titulo-seccion: 1.4rem (22.4px)
 ```
 
 ### Aplicaciones Comunes
+
 ```css
-/* Headers */ 
+/* Headers */
 .header {
-  padding: 1rem 1.2rem;  /* NO 1.5rem */
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  padding: 1rem 1.2rem; /* NO 1.5rem */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 /* Cards / Productos */
 .card {
-  padding: 0.9rem 1rem;   /* Compactado */
-  gap: 0.8rem;            /* Separación contenido */
+  padding: 0.9rem 1rem; /* Compactado */
+  gap: 0.8rem; /* Separación contenido */
   margin-bottom: 1rem;
 }
 
 /* Modales / Paneles */
 .modal-contenedor {
-  padding: 2rem 2.2rem;   /* Principal + lateral = respirable */
+  padding: 2rem 2.2rem; /* Principal + lateral = respirable */
   border-radius: 16px;
 }
 
 /* Botones */
 .btn {
   padding: 0.9rem 1.5rem;
-  gap: 0.5rem;            /* Ícono + texto */
+  gap: 0.5rem; /* Ícono + texto */
 }
 
 /* Separadores */
-.seccion-titulo { margin-bottom: 1.5rem; }
-.item-separador { border-bottom: 1px solid #E8ECF1; padding: 0.6rem 0; }
+.seccion-titulo {
+  margin-bottom: 1.5rem;
+}
+.item-separador {
+  border-bottom: 1px solid #e8ecf1;
+  padding: 0.6rem 0;
+}
 ```
 
 ---
@@ -123,6 +135,7 @@ h3, .titulo-seccion: 1.4rem (22.4px)
 ## 🎭 SOMBRAS & EFECTOS
 
 ### Sistema de Sombras Sutil
+
 ```css
 /* Hover leve (cards interactivas) */
 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -140,11 +153,12 @@ box-shadow: -12px 0 60px rgba(0, 0, 0, 0.15);
 ```
 
 ### Bordes & Separadores
+
 ```css
-border: 1px solid #E8ECF1;    /* Bordes sutiles */
-border-radius: 8px;            /* Cards, inputs */
-border-radius: 12px;           /* Modales, grandes áreas */
-border-radius: 16px;           /* Contenedores principales */
+border: 1px solid #e8ecf1; /* Bordes sutiles */
+border-radius: 8px; /* Cards, inputs */
+border-radius: 12px; /* Modales, grandes áreas */
+border-radius: 16px; /* Contenedores principales */
 ```
 
 ---
@@ -152,18 +166,20 @@ border-radius: 16px;           /* Contenedores principales */
 ## 🎬 ANIMACIONES & TRANSICIONES
 
 ### Duración Estándar
+
 ```css
-transition: all 0.3s ease;     /* Cambios normales */
-transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);  /* Entrada suave */
-animation: slideIn 0.3s ease;  /* Aparecer elementos */
+transition: all 0.3s ease; /* Cambios normales */
+transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); /* Entrada suave */
+animation: slideIn 0.3s ease; /* Aparecer elementos */
 animation: bounce 2s infinite; /* Atención suave */
 ```
 
 ### Propiedades Animadas
+
 ```css
-transform: translateY(-2px);   /* Hover elevation */
-opacity: 0 → 1;                /* Fade in/out */
-transform: scaleX/Y(1.05);     /* Zoom sutil en hover */
+transform: translateY(-2px); /* Hover elevation */
+opacity: 0 → 1; /* Fade in/out */
+transform: scaleX/Y(1.05); /* Zoom sutil en hover */
 ```
 
 ---
@@ -171,9 +187,10 @@ transform: scaleX/Y(1.05);     /* Zoom sutil en hover */
 ## 📐 COMPONENTES & MEDIDAS
 
 ### Productos / Cards
+
 ```css
 .producto-imagen {
-  width: 70px;               /* Compactado, NO 90px */
+  width: 70px; /* Compactado, NO 90px */
   height: 70px;
   border-radius: 6px;
   object-fit: cover;
@@ -188,35 +205,40 @@ transform: scaleX/Y(1.05);     /* Zoom sutil en hover */
 
 .producto-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 ```
 
 ### Carrito Sidebar
+
 ```css
 .carrito-panel {
-  width: 500px;              /* Escritorio */
-  max-width: 95vw;           /* Mobile */
+  width: 500px; /* Escritorio */
+  max-width: 95vw; /* Mobile */
   position: fixed;
-  right: -500px;             /* Cerrado */
+  right: -500px; /* Cerrado */
   top: 0;
   height: 100vh;
-  z-index: 9999;             /* Por debajo de modales (10000) */
+  z-index: 9999; /* Por debajo de modales (10000) */
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .carrito-panel.activo {
-  right: 0;                  /* Abierto */
+  right: 0; /* Abierto */
 }
 ```
 
 ### Modales & Overlays
+
 ```css
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.5);  /* Transparencia */
-  z-index: 10000;                   /* Por encima de carrito (9999) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Transparencia */
+  z-index: 10000; /* Por encima de carrito (9999) */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -230,11 +252,12 @@ transform: scaleX/Y(1.05);     /* Zoom sutil en hover */
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 ```
 
 ### Botones
+
 ```css
 .btn {
   padding: 0.9rem 1.5rem;
@@ -258,16 +281,16 @@ transform: scaleX/Y(1.05);     /* Zoom sutil en hover */
 .btn-principal:hover {
   background: #0056b3;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
 }
 
 .btn-secundario {
-  background: #E8ECF1;
+  background: #e8ecf1;
   color: #386273;
 }
 
 .btn-secundario:hover {
-  background: #D8DCE1;
+  background: #d8dce1;
 }
 ```
 
@@ -316,10 +339,17 @@ animation: slideOutRight 0.3s ease-in;   /* Salida */
 
 /* Mobile */
 @media (max-width: 600px) {
-  padding: -15%;  /* Reduce más */
-  .carrito-panel { width: 100%; }
-  .modal-contenido { width: 95%; padding: 1.5rem 1.2rem; }
-  .btn { padding: 0.85rem 1rem; }
+  padding: -15%; /* Reduce más */
+  .carrito-panel {
+    width: 100%;
+  }
+  .modal-contenido {
+    width: 95%;
+    padding: 1.5rem 1.2rem;
+  }
+  .btn {
+    padding: 0.85rem 1rem;
+  }
   gap: -20%;
 }
 ```
@@ -329,6 +359,7 @@ animation: slideOutRight 0.3s ease-in;   /* Salida */
 ## ✅ PRINCIPIOS CLAVE
 
 ### 1️⃣ **NO INFLAR VISUALMENTE**
+
 ```css
 ❌ EVITAR: padding: 2.5rem, 3rem, 3.5rem, 4rem
 ❌ EVITAR: margin: 2rem o superior
@@ -338,6 +369,7 @@ animation: slideOutRight 0.3s ease-in;   /* Salida */
 ```
 
 ### 2️⃣ **MANTENER JERARQUÍA VISUAL**
+
 ```css
 ✅ Títulos principales: más grandes, peso 600
 ✅ Subtítulos: medianos, peso normal
@@ -345,12 +377,14 @@ animation: slideOutRight 0.3s ease-in;   /* Salida */
 ```
 
 ### 3️⃣ **SOMBRAS SUTILES**
+
 ```css
 ✅ Sombras max: 0 4px 16px rgba(0,0,0,0.1)
 ❌ EVITAR: 0 12px 40px o superior = INFLACIÓN
 ```
 
 ### 4️⃣ **Z-INDEX HIERARCHY**
+
 ```
 99999 ← Notificaciones (alert2)
 10000 ← Modales, overlays
@@ -361,6 +395,7 @@ animation: slideOutRight 0.3s ease-in;   /* Salida */
 ```
 
 ### 5️⃣ **ESPACIADO RESPONSABLE**
+
 ```css
 ✅ Respiración visual sin exceso
 ✅ Contenedor padding: 2rem máximo
@@ -376,21 +411,21 @@ animation: slideOutRight 0.3s ease-in;   /* Salida */
 :root {
   /* Colores principales */
   --azul-oscuro: #386273;
-  --azul-claro: #B6E1F2;
-  --blanco: #FFFFFF;
-  --gris-claro: #F5F5F5;
+  --azul-claro: #b6e1f2;
+  --blanco: #ffffff;
+  --gris-claro: #f5f5f5;
   --gris-oscuro: #666666;
-  --exito: #27AE60;
-  --error: #E74C3C;
-  --warning: #F39C12;
+  --exito: #27ae60;
+  --error: #e74c3c;
+  --warning: #f39c12;
   --warning-caldo: #fffbea;
-  --info: #3498DB;
-  --borde: #E8ECF1;
+  --info: #3498db;
+  --borde: #e8ecf1;
   --fondo-pagina: #f4f6f8;
-  
+
   /* Tipografía */
-  --fuente-principal: 'Inter', 'Poppins', 'Roboto', sans-serif;
-  
+  --fuente-principal: "Inter", "Poppins", "Roboto", sans-serif;
+
   /* Z-index */
   --z-notificacion: 99999;
   --z-modal: 10000;

@@ -225,6 +225,87 @@
       margin-bottom: 0;
     }
 
+    /* Tracking Steps Component */
+    .tracking-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin: 1.8rem 0;
+      gap: 0.5rem;
+      padding: 1.5rem 0;
+    }
+
+    .tracking-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+
+    .tracking-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      width: calc(100% - 16px);
+      height: 2px;
+      background: #E8ECF1;
+      z-index: 0;
+    }
+
+    .tracking-step.completed:not(:last-child)::after {
+      background: #27AE60;
+    }
+
+    .step-indicator {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid #E8ECF1;
+      background: var(--blanco);
+      margin: 0 auto 0.6rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      position: relative;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .step-indicator.completed {
+      background: #27AE60;
+      border-color: #27AE60;
+      color: white;
+    }
+
+    .step-indicator.active {
+      border-color: #386273;
+      background: #B6E1F2;
+      transform: scale(1.08);
+      box-shadow: 0 2px 8px rgba(56, 98, 115, 0.2);
+    }
+
+    .step-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #666666;
+      letter-spacing: 0.8px;
+      transition: color 0.3s ease;
+    }
+
+    .step-label.completed {
+      color: #27AE60;
+    }
+
+    .step-label.active {
+      color: #386273;
+      font-weight: 700;
+    }
+
     @media (max-width: 480px) {
       .confirmacion-contenedor {
         padding: 1.5rem 1.2rem;
@@ -247,6 +328,18 @@
         width: 100%;
         padding: 0.9rem 1rem;
       }
+
+      .tracking-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .tracking-step:not(:last-child)::after {
+        position: static;
+        width: 2px;
+        height: 20px;
+        margin: -10px 0;
+      }
     }
   </style>
 </head>
@@ -261,6 +354,26 @@
       <div class="radicado-box">
         <div class="radicado-label">Número de Radicado</div>
         <div class="radicado-numero" id="numeroRadicado">RAD-0000000-000</div>
+      </div>
+
+      <!-- Tracking Steps -->
+      <div class="tracking-container">
+        <div class="tracking-step completed">
+          <div class="step-indicator completed">✓</div>
+          <span class="step-label completed">Recibido</span>
+        </div>
+        <div class="tracking-step active">
+          <div class="step-indicator active">2</div>
+          <span class="step-label active">Confirmado</span>
+        </div>
+        <div class="tracking-step">
+          <div class="step-indicator">3</div>
+          <span class="step-label">Enviado</span>
+        </div>
+        <div class="tracking-step">
+          <div class="step-indicator">4</div>
+          <span class="step-label">Entregado</span>
+        </div>
       </div>
 
       <div class="estado-espera">
