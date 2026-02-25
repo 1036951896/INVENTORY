@@ -190,7 +190,7 @@
       "precio": 9700,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-parafinada.png"
+      "imagen": "../assets/lam_parafinada_15x15_regular_libra.jpeg"
     },
     {
       "id": "25",
@@ -198,7 +198,7 @@
       "precio": 7800,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-parafinada.png"
+      "imagen": "../assets/lam_parafinada_15x15_ecologica_libra.jpeg"
     },
     {
       "id": "26",
@@ -238,7 +238,7 @@
       "precio": 2800,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-rollo-parafinado.png"
+      "imagen": "../assets/rollo_parafinado_x10mts.jpeg"
     },
     {
       "id": "31",
@@ -254,7 +254,7 @@
       "precio": 4700,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "https://storehub-api-74yl.onrender.com/images/productos/producto-vinipel.jpg"
+      "imagen": "../assets/aluminio_16mts.jpeg"
     },
     {
       "id": "33",
