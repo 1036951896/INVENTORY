@@ -34,9 +34,15 @@
     }
 
     .confirmacion-icono {
-      font-size: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin-bottom: 1rem;
       animation: pulse 2s infinite;
+    }
+
+    .confirmacion-icono svg {
+      color: var(--exito);
     }
 
     .confirmacion-titulo {
@@ -116,7 +122,12 @@
 </head>
 <body>
   <div class="confirmacion-contenedor">
-    <div class="confirmacion-icono">✓</div>
+    <div class="confirmacion-icono">
+      <svg viewBox="0 0 24 24" fill="#27AE60" width="64" height="64">
+        <circle cx="12" cy="12" r="11" fill="none" stroke="#27AE60" stroke-width="2"></circle>
+        <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div>
     
     <h1 class="confirmacion-titulo">¡Pedido Confirmado!</h1>
     <p>Tu pedido ha sido registrado exitosamente</p>

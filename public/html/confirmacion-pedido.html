@@ -49,6 +49,12 @@
       font-size: 3rem;
       margin-bottom: 1rem;
       animation: bounce 2s infinite;
+      color: var(--azul-oscuro);
+    }
+
+    .estado-icono svg {
+      stroke: currentColor;
+      color: var(--azul-oscuro);
     }
 
     @keyframes bounce {
@@ -347,7 +353,11 @@
   <div class="confirmacion-contenedor">
     <!-- ESTADO PENDIENTE -->
     <div id="estadoPendiente">
-      <div class="estado-icono">📬</div>
+      <div class="estado-icono">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="56" height="56">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </div>
       <h1 class="estado-titulo">¡Pedido Recibido!</h1>
       <p class="estado-subtitulo">Tu pedido ha sido registrado y está siendo procesado</p>
 
@@ -359,7 +369,11 @@
       <!-- Tracking Steps -->
       <div class="tracking-container">
         <div class="tracking-step completed">
-          <div class="step-indicator completed">✓</div>
+          <div class="step-indicator completed">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+            </svg>
+          </div>
           <span class="step-label completed">Recibido</span>
         </div>
         <div class="tracking-step active">
@@ -426,7 +440,11 @@
       </div>
 
       <div class="estado-confirmacion activo">
-        <h4>Pedido Confirmado ✓</h4>
+        <h4>Pedido Confirmado
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="display: inline-block; margin-left: 0.5rem; vertical-align: middle;">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+          </svg>
+        </h4>
         <p>Tu pedido ha sido confirmado por el administrador. Pronto recibirás información del envío.</p>
       </div>
 
