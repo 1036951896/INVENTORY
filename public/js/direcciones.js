@@ -267,7 +267,7 @@ function mostrarModalDireccion(direccion = null) {
         background: rgba(0, 0, 0, 0.5);
         align-items: center;
         justify-content: center;
-        z-index: 1000;
+        z-index: 10000;
       }
 
       .modal-contenido {
@@ -524,7 +524,7 @@ async function mostrarSelectorDirecciones(callback = null) {
           background: rgba(0, 0, 0, 0.5);
           align-items: center;
           justify-content: center;
-          z-index: 1000;
+          z-index: 10000;
         }
 
         .modal-contenido {
