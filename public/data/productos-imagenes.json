@@ -366,7 +366,7 @@
       "precio": 3100,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "../assets/bolsa_papel_#1.jpeg"
+      "imagen": "../assets/bolsa_papel_1.jpeg"
     },
     {
       "id": "47",
@@ -374,7 +374,7 @@
       "precio": 4200,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "../assets/bolsa_papel_#2.jpeg"
+      "imagen": "../assets/bolsa_papel2.jpeg"
     },
     {
       "id": "48",
@@ -382,7 +382,7 @@
       "precio": 5300,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "../assets/bolsa_papel_#3.jpeg"
+      "imagen": "../assets/bolsa_papel_3.jpeg"
     },
     {
       "id": "49",
@@ -390,7 +390,7 @@
       "precio": 6300,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "../assets/bolsa_papel_#4.jpeg"
+      "imagen": "../assets/bolsa_papel_4.jpeg"
     },
     {
       "id": "50",
@@ -398,7 +398,7 @@
       "precio": 9000,
       "stock": 10,
       "categoria": "Empaques",
-      "imagen": "../assets/bolsa_papel_#6.jpeg"
+      "imagen": "../assets/bolsa_papel_6.jpeg"
     },
     {
       "id": "51",
