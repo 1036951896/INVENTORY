@@ -193,7 +193,7 @@ function actualizarCantidadDetalle(cantidad) {
 
 function agregarAlCarritoDetalle() {
   if (productoActual.stock === 0) {
-    alert('Este producto no está disponible');
+    alert2('Este producto no está disponible', 'error');
     return;
   }
   

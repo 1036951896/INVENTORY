@@ -46,7 +46,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --fuente-principal: 'Poppins', 'Roboto', 'Inter', sans-serif;
+  --fuente-principal: 'Inter', 'Poppins', 'Roboto', sans-serif;
   /* Mapeo de variables antiguas para compatibilidad */
   --azul-claro: #B6E1F2;
   --azul-oscuro: #386273;
@@ -96,7 +96,7 @@
 
 body {
   font-family: var(--fuente-principal);
-  background-color: var(--background);
+  background-color: #f4f6f8;
   color: var(--foreground);
   line-height: 1.6;
   font-size: var(--font-size);

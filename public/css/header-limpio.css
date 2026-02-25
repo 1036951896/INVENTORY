@@ -22,12 +22,18 @@
 }
 
 header {
-  background: #386273;
-  padding: 0.6rem 1rem;
+  background: linear-gradient(135deg, #386273, #2f5665);
+  padding: 1rem 2rem;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.35s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+header.header-scroll {
+  padding: 0.5rem 2rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 header .contenedor {
@@ -36,26 +42,23 @@ header .contenedor {
   padding: 0;
 }
 
-/* Container principal - TODO en una línea */
+/* Container principal - Layout limpio tipo Shopify */
 .encabezado-contenedor {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  justify-content: space-between;
+  gap: 2rem;
   width: 100%;
-  flex-wrap: nowrap;
-  justify-content: center;
-  position: relative;
-  padding: 0 120px; /* Espacio para logo y menú absolutamente posicionados */
 }
 
 .encabezado-contenedor > .logo {
-  position: absolute;
-  left: 1rem;
+  position: relative;
+  left: auto;
 }
 
 .encabezado-contenedor > .menu-superior {
-  position: absolute;
-  right: 1rem;
+  position: relative;
+  right: auto;
 }
 
 /* ===== LOGO ===== */
@@ -76,16 +79,26 @@ header .contenedor {
 }
 
 .logo-img {
-  height: 32px;
+  height: 36px;
   width: auto;
   flex-shrink: 0;
+  transition: all 0.35s ease;
+}
+
+header.header-scroll .logo-img {
+  height: 28px;
 }
 
 .logo-text {
   color: #fff;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: -0.3px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.35s ease;
+}
+
+header.header-scroll .logo-text {
+  font-size: 0.95rem;
 }
 
 /* ===== BARRA DE BÚSQUEDA Y CONTROLES ===== */
@@ -227,12 +240,23 @@ header .contenedor {
 .barra-busqueda {
   display: flex !important;
   align-items: center;
-  background: #fff;
-  border-radius: 6px;
-  height: 36px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border-radius: 4px;
+  height: 42px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: none;
   overflow: hidden;
   width: 100%;
+  transition: all 0.3s ease;
+}
+
+.barra-busqueda:focus-within {
+  border-color: #386273;
+  box-shadow: 0 0 0 3px rgba(56, 98, 115, 0.15);
+}
+
+header.header-scroll .barra-busqueda {
+  height: 38px;
 }
 
 /* Desktop - Media query para sobrescrituras específicas si las necesita */
@@ -419,7 +443,7 @@ header .contenedor {
 .menu-superior {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 1.2rem;
   flex-shrink: 0;
   flex: 0 0 auto;
 }
@@ -433,8 +457,10 @@ header .contenedor {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   flex-shrink: 0;
+  padding: 6px;
+  border-radius: 4px;
 }
 
 .icono-carrito svg {
@@ -446,24 +472,19 @@ header .contenedor {
 }
 
 .icono-carrito:hover {
-  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .contador-carrito {
   position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #B6E1F2;
-  color: #386273;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
+  top: -6px;
+  right: -6px;
+  background: #d64545;
+  color: white;
   font-size: 0.7rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  padding: 2px 6px;
+  border-radius: 50px;
+  font-weight: 600;
 }
 
 .btn-icono {
@@ -476,9 +497,10 @@ header .contenedor {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   flex-shrink: 0;
-  padding: 0;
+  padding: 6px;
+  border-radius: 4px;
 }
 
 .btn-icono svg {
@@ -488,7 +510,7 @@ header .contenedor {
 }
 
 .btn-icono:hover {
-  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 /* ===== BREAKPOINTS ===== */

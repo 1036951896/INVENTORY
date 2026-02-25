@@ -1,6 +1,55 @@
 
+// ===== FUNCIÓN ALERT2 - NOTIFICACIÓN MEJORADA =====
+/**
+ * Alert mejorado para StoreHub
+ * @param {string} message - Mensaje a mostrar
+ * @param {string} type - 'success', 'error', 'warning', 'info' (por defecto)
+ */
+function alert2(message, type = 'info') {
+  const iconos = {
+    success: '✅',
+    error: '❌',
+    warning: '⚠️',
+    info: 'ℹ️'
+  };
+
+  const colores = {
+    success: '#27AE60',
+    error: '#E74C3C',
+    warning: '#F39C12',
+    info: '#3498DB'
+  };
+
+  const icon = iconos[type] || iconos.info;
+  const color = colores[type] || colores.info;
+
+  const contenedor = document.createElement('div');
+  contenedor.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: ${color};
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 10001;
+    animation: slideIn 0.3s ease;
+    max-width: 300px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  `;
+  contenedor.textContent = icon + ' ' + message;
+  document.body.appendChild(contenedor);
+
+  setTimeout(() => {
+    contenedor.style.opacity = '0';
+    contenedor.style.transition = 'opacity 0.3s ease';
+    setTimeout(() => contenedor.remove(), 300);
+  }, 4000);
+}
+
 // ===== APLICACIÓN E-COMMERCE =====
-// URL base del backend - definida en index.html antes de los scripts
 
 // Función para abrir búsqueda expandible en mobile
 function abrirBuscador() {
@@ -120,10 +169,10 @@ function actualizarCarrito() {
   const carritoContenido = document.getElementById('carrito-contenido');
   const totalCarrito = document.getElementById('total-carrito');
   const contador = document.getElementById('contador');
-  const btnFinalizar = document.getElementById('finalizar-pedido');
+  const btnConfirmar = document.getElementById('confirmar-pedido');
 
   // Si los elementos no existen aún, salir
-  if (!carritoContenido || !totalCarrito || !contador || !btnFinalizar) {
+  if (!carritoContenido || !totalCarrito || !contador || !btnConfirmar) {
     return;
   }
 
@@ -135,7 +184,7 @@ function actualizarCarrito() {
   if (carrito.length === 0) {
     carritoContenido.innerHTML = '<div class="carrito-vacio"><p>Tu carrito está vacío</p></div>';
     totalCarrito.textContent = '$0.00';
-    btnFinalizar.disabled = true;
+    btnConfirmar.disabled = true;
     return;
   }
 
@@ -167,35 +216,19 @@ function actualizarCarrito() {
 
   carritoContenido.innerHTML = html;
   totalCarrito.textContent = '$' + total.toLocaleString('es-CO');
-  btnFinalizar.disabled = false;
+  btnConfirmar.disabled = false;
   
-  // Actualizar dirección mostrada
-  actualizarDireccionMostrada();
+  // Esta función ya no es necesaria pues la dirección no se muestra en carrito
+  // actualizarDireccionMostrada();
 }
 
 /**
- * Actualizar dirección mostrada en el carrito
+ * Actualizar dirección mostrada en el carrito - DEPRECATED
+ * Esta función ya no se usa pues la dirección se selecciona en un modal aparte
  */
 async function actualizarDireccionMostrada() {
-  const direccionDisplay = document.getElementById('direccion-display');
-  if (!direccionDisplay) return;
-
-  try {
-    const direccion = await obtenerDireccionSeleccionada();
-    
-    if (direccion) {
-      direccionDisplay.innerHTML = `
-        <strong>${direccion.calle} ${direccion.numero}${direccion.apartamento ? ', ' + direccion.apartamento : ''}</strong><br>
-        <span style="color: #666;">${direccion.ciudad}, ${direccion.departamento}</span>
-        ${direccion.codigoPostal ? `<br><span style="color: #999; font-size: 0.85rem;">${direccion.codigoPostal}</span>` : ''}
-      `;
-    } else {
-      direccionDisplay.innerHTML = '<span style="color: #999;">❌ Sin dirección de entrega. Por favor selecciona una.</span>';
-    }
-  } catch (err) {
-    console.error('Error actualizando dirección:', err);
-    direccionDisplay.innerHTML = '<span style="color: #999;">Error cargando dirección</span>';
-  }
+  // Mantener para compatibilidad pero no hacer nada
+  return;
 }
 
 function modificarCantidad(id, cambio) {
@@ -436,31 +469,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Inicializar carrito y eventos relacionados
-    const btnFinalizar = document.getElementById('finalizar-pedido');
-    if (btnFinalizar) {
-      btnFinalizar.addEventListener('click', async function() {
-        btnFinalizar.disabled = true;
-        btnFinalizar.textContent = 'Procesando...';
-
+    const btnConfirmar = document.getElementById('confirmar-pedido');
+    if (btnConfirmar) {
+      btnConfirmar.addEventListener('click', async function() {
         const usuario = JSON.parse(localStorage.getItem('usuario'));
+        
         if (!usuario) {
-          btnFinalizar.disabled = false;
-          btnFinalizar.textContent = 'Finalizar Pedido';
           window.location.href = 'login.html';
           return;
         }
 
         // Validar permisos para crear pedidos
         if (!validarPermisosCliente('crear_pedidos')) {
-          btnFinalizar.disabled = false;
-          btnFinalizar.textContent = 'Finalizar Pedido';
-          mostrarNotificacion('❌ No tienes permisos para crear pedidos');
+          alert2('No tienes permisos para crear pedidos', 'error');
           return;
         }
 
-        // Validar que el token existe
         if (!usuario.access_token) {
-          alert('❌ Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
+          alert2('Tu sesión ha expirado. Por favor inicia sesión nuevamente.', 'error');
           localStorage.removeItem('usuario');
           window.location.href = 'login.html';
           return;
@@ -468,105 +494,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
         if (carrito.length === 0) {
-          btnFinalizar.disabled = false;
-          btnFinalizar.textContent = 'Finalizar Pedido';
           return;
         }
 
-        const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-
-        // Transformar carrito al formato que espera el backend
-        const items = carrito.map(item => ({
-          productoId: String(item.id),
-          cantidad: item.cantidad,
-          precioUnitario: item.precio
-        }));
-
-        // Enviar pedido al backend
-        try {
-          console.log('📤 Obteniendo dirección seleccionada...');
-          
-          // Obtener dirección seleccionada (o principal si no hay selección)
-          const direccion = await obtenerDireccionSeleccionada();
-
-          if (!direccion) {
-            console.warn('⚠️ No hay dirección disponible, mostrando selector...');
-            mostrarSelectorDirecciones();
-            return;
-          }
-
-          console.log('✅ Dirección obtenida:', direccion);
-
-          console.log('📤 Enviando orden al backend...');
-          console.log('URL:', `${window.BACKEND_URL}/api/v1/orders`);
-          console.log('Token presente:', !!usuario.access_token);
-          console.log('Items:', items);
-          console.log('Dirección ID:', direccion.id);
-          
-          const resp = await fetch(`${window.BACKEND_URL}/api/v1/orders`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${usuario.access_token}`
-            },
-            body: JSON.stringify({
-              items: items,
-              direccionId: direccion.id
-            })
-          });
-
-          console.log('📥 Respuesta del servidor:');
-          console.log('Status:', resp.status, resp.statusText);
-          console.log('Headers:', Array.from(resp.headers.entries()));
-
-          let data;
-          try {
-            data = await resp.json();
-          } catch (e) {
-            data = {};
-          }
-
-          if (!resp.ok) {
-            console.error('❌ Error en la respuesta:');
-            console.error('Status:', resp.status);
-            console.error('Data:', data);
-            
-            let msg = 'No se pude registrar el pedido';
-            if (resp.status === 401) {
-              msg = data.message || 'No autorizado. Inicia sesión nuevamente.';
-            } else if (resp.status === 404) {
-              msg = `Endpoint no encontrado: ${window.BACKEND_URL}/api/v1/orders`;
-              console.error('Verifica que el backend esté ejecutándose y la ruta sea correcta');
-            } else if (resp.status === 400) {
-              msg = data.message || 'Datos inválidos.';
-            } else if (resp.status === 500) {
-              msg = 'Error interno del servidor. Intenta más tarde.';
-            } else if (data.message) {
-              msg = data.message;
-            }
-            throw new Error(msg);
-          }
-          const pedidoCreado = data;
-
-          localStorage.removeItem('carrito');
-
-          // Preparar mensaje para WhatsApp
-          const itemsTexto = carrito.map(item => `• ${item.nombre} x${item.cantidad}`).join('%0A');
-          const totalFormato = total.toLocaleString('es-CO');
-          const mensaje = `Nuevo Pedido 🛒%0A%0ARadicado: ${pedidoCreado.id}%0ACliente: ${usuario.nombre}%0ATelefono: ${usuario.telefono || 'No proporcionado'}%0A%0A*ITEMS:*%0A${itemsTexto}%0A%0A*Total:* $${totalFormato}%0A%0APor favor autorizar o rechazar`;
-          const numeroAdmin = '573116579677';
-          const urlWhatsApp = `https://wa.me/${numeroAdmin}?text=${mensaje}`;
-
-          setTimeout(() => {
-            localStorage.setItem('urlWhatsAppPendiente', urlWhatsApp);
-            window.location.href = 'confirmacion-pedido.html?pedido=' + pedidoCreado.id;
-          }, 500);
-        } catch (err) {
-          console.error('💥 Error al enviar el pedido:', err);
-          btnFinalizar.disabled = false;
-          btnFinalizar.textContent = 'Finalizar Pedido';
-          mostrarNotificacion('✗ ' + err.message);
-        }
+        // Mostrar selector de dirección
+        mostrarSelectorDirecciones(() => {
+          // Callback cuando se confirma la dirección
+          procederAlPedido();
+        });
       });
     }
 
@@ -577,6 +512,99 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('direccionSeleccionada', () => {
       actualizarDireccionMostrada();
     });
+
+// ===== FLUJO DE PEDIDO =====
+/**
+ * Proceder al envío del pedido después de confirmar dirección
+ */
+async function procederAlPedido() {
+  try {
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    if (!usuario || !usuario.access_token) {
+      alert2('Necesitas estar logueado para continuar', 'error');
+      window.location.href = 'login.html';
+      return;
+    }
+
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    if (carrito.length === 0) {
+      alert2('Tu carrito está vacío', 'warning');
+      return;
+    }
+
+    const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+    const items = carrito.map(item => ({
+      productoId: String(item.id),
+      cantidad: item.cantidad,
+      precioUnitario: item.precio
+    }));
+
+    // Obtener dirección seleccionada
+    const direccion = await obtenerDireccionSeleccionada();
+    if (!direccion) {
+      alert2('Por favor selecciona una dirección de entrega', 'error');
+      return;
+    }
+
+    console.log('📤 Enviando orden al backend...');
+
+    const resp = await fetch(`${window.BACKEND_URL}/api/v1/orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${usuario.access_token}`
+      },
+      body: JSON.stringify({
+        items: items,
+        direccionId: direccion.id
+      })
+    });
+
+    let data;
+    try {
+      data = await resp.json();
+    } catch (e) {
+      data = {};
+    }
+
+    if (!resp.ok) {
+      let msg = 'No se pudo registrar el pedido';
+      if (resp.status === 401) {
+        msg = data.message || 'No autorizado. Inicia sesión nuevamente.';
+      } else if (resp.status === 404) {
+        msg = `Endpoint no encontrado: ${window.BACKEND_URL}/api/v1/orders`;
+      } else if (resp.status === 400) {
+        msg = data.message || 'Datos inválidos.';
+      } else if (resp.status === 500) {
+        msg = 'Error interno del servidor. Intenta más tarde.';
+      } else if (data.message) {
+        msg = data.message;
+      }
+      throw new Error(msg);
+    }
+
+    const pedidoCreado = data;
+    localStorage.removeItem('carrito');
+
+    // Preparar mensaje para WhatsApp
+    const itemsTexto = carrito.map(item => `• ${item.nombre} x${item.cantidad}`).join('%0A');
+    const totalFormato = total.toLocaleString('es-CO');
+    const mensaje = `Nuevo Pedido 🛒%0A%0ARadicado: ${pedidoCreado.id}%0ACliente: ${usuario.nombre}%0ATelefono: ${usuario.telefono || 'No proporcionado'}%0A%0A*ITEMS:*%0A${itemsTexto}%0A%0A*Total:* $${totalFormato}%0A%0APor favor autorizar o rechazar`;
+    const numeroAdmin = '573116579677';
+    const urlWhatsApp = `https://wa.me/${numeroAdmin}?text=${mensaje}`;
+
+    localStorage.setItem('urlWhatsAppPendiente', urlWhatsApp);
+    
+    // Redirigir a página de confirmación
+    setTimeout(() => {
+      window.location.href = 'confirmacion-pedido.html?pedido=' + pedidoCreado.id;
+    }, 500);
+
+  } catch (err) {
+    console.error('💥 Error al proceder con el pedido:', err);
+    alert2(err.message, 'error');
+  }
+}
 
 // --- GESTIÓN DE EVENTOS DEL CARRITO ---
 function bindCartEvents() {

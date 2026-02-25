@@ -438,7 +438,7 @@ async function guardarDireccion(event) {
 async function mostrarSelectorDirecciones(callback = null) {
   const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
   if (!usuarioGuardado || !usuarioGuardado.access_token) {
-    alert('Por favor inicia sesión primero');
+    alert2('Por favor inicia sesión primero', 'error');
     return;
   }
 
@@ -446,7 +446,7 @@ async function mostrarSelectorDirecciones(callback = null) {
     const direcciones = await obtenerDirecciones();
 
     if (!direcciones || direcciones.length === 0) {
-      alert('No tienes direcciones registradas. Por favor agrega una dirección de entrega.');
+      alert2('No tienes direcciones registradas. Por favor agrega una dirección de entrega.', 'warning');
       mostrarModalDireccion();
       return;
     }
@@ -488,8 +488,8 @@ async function mostrarSelectorDirecciones(callback = null) {
             <button class="btn btn-secundario" onclick="mostrarModalDireccion(); cerrarSelectorDirecciones();">
               ➕ Agregar Nueva Dirección
             </button>
-            <button class="btn btn-principal" onclick="confirmarDireccion()">
-              ✓ Continuar con esta dirección
+            <button class="btn btn-principal" onclick="confirmarDireccion(window._callbackPedido || null)">
+              ✓ Finalizar Pedido
             </button>
           </div>
         </div>
@@ -500,6 +500,11 @@ async function mostrarSelectorDirecciones(callback = null) {
     let modalAnterior = document.getElementById('modal-selector-direcciones');
     if (modalAnterior) {
       modalAnterior.remove();
+    }
+
+    // Guardar el callback en una variable global temporal para que el botón pueda accederlo
+    if (typeof callback === 'function') {
+      window._callbackPedido = callback;
     }
 
     document.body.insertAdjacentHTML('beforeend', modalHTML);
@@ -608,11 +613,11 @@ function seleccionarDireccion(direccionId) {
 /**
  * Confirmar dirección seleccionada
  */
-function confirmarDireccion() {
+function confirmarDireccion(callback = null) {
   const direccionSeleccionada = document.querySelector('input[name="direccion"]:checked')?.value;
   
   if (!direccionSeleccionada) {
-    alert('Por favor selecciona una dirección');
+    alert2('Por favor selecciona una dirección', 'warning');
     return;
   }
 
@@ -622,6 +627,11 @@ function confirmarDireccion() {
   
   // Disparar evento para que app.js se entere
   window.dispatchEvent(new Event('direccionSeleccionada'));
+  
+  // Ejecutar callback si fue proporcionado
+  if (typeof callback === 'function') {
+    setTimeout(() => callback(), 300); // Esperar a que se cierre el modal
+  }
 }
 
 /**

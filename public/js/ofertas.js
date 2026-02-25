@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (!usuario.access_token) {
-          alert('❌ Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
+          alert2('Tu sesión ha expirado. Por favor inicia sesión nuevamente.', 'error');
           localStorage.removeItem('usuario');
           window.location.href = 'login.html';
           return;
