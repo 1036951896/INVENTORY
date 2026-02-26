@@ -707,6 +707,17 @@ main > section:first-child {
   margin-bottom: 0.4rem;
   font-size: 0.95rem;
   line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 480px) {
+  .tarjeta-producto-nombre {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
 }
 
 .tarjeta-producto-categoria {
@@ -791,6 +802,14 @@ main > section:first-child {
   opacity: 0.6;
 }
 
+@media (max-width: 480px) {
+  .tarjeta-producto-btn-principal {
+    padding: 10px;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+}
+
 .tarjeta-producto-link-detalle {
   font-size: 13px;
   color: #777;
@@ -804,6 +823,12 @@ main > section:first-child {
 .tarjeta-producto-link-detalle:hover {
   color: #386273;
   font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .tarjeta-producto-link-detalle {
+    font-size: 12px;
+  }
 }
 
 .tarjeta-producto-botones .btn-principal {
