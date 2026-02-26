@@ -1,37 +1,37 @@
-<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 450 140" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <style>
-      .storehub-text { font-family: 'Arial', sans-serif; font-weight: 700; }
-      .storehub-main { font-size: 80px; letter-spacing: 2px; fill: none; stroke: #000; stroke-width: 2; stroke-linejoin: round; }
-      .storehub-sub { font-size: 30px; letter-spacing: 3px; fill: none; stroke: #000; stroke-width: 1.5; stroke-linejoin: round; }
+      .storehub-text { font-family: 'Arial', sans-serif; font-weight: 700; fill: white; }
+      .storehub-main { font-size: 60px; letter-spacing: 1px; }
+      .storehub-sub { font-size: 20px; letter-spacing: 2px; }
     </style>
   </defs>
 
-  <!-- Checkmark verde en círculo (posicionado encima de la H) -->
+  <!-- Checkmark verde en círculo (posicionado entre la E y la H) -->
   <g>
     <!-- Fondo del círculo verde -->
-    <circle cx="420" cy="45" r="35" fill="#27AE60" />
+    <circle cx="235" cy="32" r="25" fill="#27AE60" />
     
     <!-- Borde negro del círculo -->
-    <circle cx="420" cy="45" r="35" fill="none" stroke="#000" stroke-width="3" />
+    <circle cx="235" cy="32" r="25" fill="none" stroke="#000" stroke-width="2" />
     
     <!-- Checkmark blanco -->
     <polyline 
-      points="400,50 415,65 440,35" 
+      points="220,37 230,47 250,27" 
       fill="none" 
       stroke="white" 
-      stroke-width="5" 
+      stroke-width="3.5" 
       stroke-linecap="round" 
       stroke-linejoin="round"
     />
   </g>
 
   <!-- Texto principal "StoreHub" -->
-  <text x="50" y="120" class="storehub-text storehub-main">StoreHub</text>
+  <text x="10" y="75" class="storehub-text storehub-main">StoreHub</text>
 
   <!-- Línea divisoria -->
-  <line x1="50" y1="150" x2="480" y2="150" stroke="#000" stroke-width="2.5" />
+  <line x1="10" y1="85" x2="340" y2="85" stroke="#000" stroke-width="2" />
 
   <!-- Subtexto "TIENDA • ONLINE" -->
-  <text x="50" y="195" class="storehub-text storehub-sub">TIENDA • ONLINE</text>
+  <text x="10" y="120" class="storehub-text storehub-sub">TIENDA • ONLINE</text>
 </svg>
