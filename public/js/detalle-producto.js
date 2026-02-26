@@ -106,24 +106,50 @@ function cargarDetalleProducto() {
   document.getElementById('nombre-producto').textContent = productoActual.nombre;
   document.getElementById('descripcion-producto').textContent = 
     productoActual.descripcion || 'Producto de excelente calidad. Ideal para tus necesidades del hogar y abarrotes.';
-  document.getElementById('precio-producto').textContent = '$' + productoActual.precio.toLocaleString('es-CO');
-  document.getElementById('categoria-producto').textContent = productoActual.categoria.toUpperCase();
+  
+  // PRECIO Y DESCUENTO (con psicología)
+  const precioActual = productoActual.precio;
+  const precioOriginal = Math.round(precioActual * 1.1); // Simular 10% descuento
+  const descuento = Math.round(((precioOriginal - precioActual) / precioOriginal) * 100);
+  
+  // Mostrar precio original tachado
+  const precioOriginalEl = document.getElementById('precio-original');
+  precioOriginalEl.textContent = '$' + precioOriginal.toLocaleString('es-CO');
+  
+  // Mostrar precio actual
+  document.getElementById('precio-producto').textContent = '$' + precioActual.toLocaleString('es-CO');
+  
+  // Mostrar badge de descuento
+  const descuentoBadge = document.getElementById('descuento-badge');
+  descuentoBadge.textContent = `-${descuento}%`;
+  
+  // Cuota (psicología: pago en cuotas)
+  const cuotasInfo = document.getElementById('cuota-info');
+  const cuotaMensual = Math.round(precioActual / 3);
+  cuotasInfo.textContent = `En 3x de $${cuotaMensual.toLocaleString('es-CO')} sin interés`;
+  
+  // ETIQUETA DE URGENCIA/VENTAS
+  const soldBadge = document.getElementById('sold-badge');
+  const ventasAleatorias = Math.floor(Math.random() * 30) + 10; // 10-40 vendidos
+  soldBadge.innerHTML = `🔥 ${ventasAleatorias} vendidos esta semana`;
+  
+  // IMAGEN
   document.getElementById('imagen-producto').src = productoActual.imagen;
   
-  // Actualizar stock
+  // STOCK CON PSICOLOGÍA
   const stockEl = document.getElementById('stock-producto');
   if (productoActual.stock === 0) {
-    stockEl.textContent = '⛔ Sin stock disponible';
+    stockEl.textContent = '❌ Sin stock disponible';
     stockEl.className = 'detalle-stock-disponible sin';
     document.getElementById('cantidad-detalle').max = 0;
-    document.getElementById('agregar-contenedor').classList.add('deshabilitado');
-    document.querySelector('.detalle-agregar button').disabled = true;
+    document.querySelector('.btn-comprar-ahora').disabled = true;
+    document.querySelector('.btn-agregar-carrito').disabled = true;
   } else if (productoActual.stock < 5) {
-    stockEl.textContent = `⚠️ Solo ${productoActual.stock} unidad(es) disponible(s)`;
+    stockEl.textContent = `⚠️ Solo ${productoActual.stock} disponible(s) - ¡Apúrate!`;
     stockEl.className = 'detalle-stock-disponible bajo';
     document.getElementById('cantidad-detalle').max = productoActual.stock;
   } else {
-    stockEl.textContent = `✓ ${productoActual.stock} unidades disponibles`;
+    stockEl.textContent = `🟢 En stock — ${productoActual.stock} disponibles`;
     stockEl.className = 'detalle-stock-disponible';
     document.getElementById('cantidad-detalle').max = productoActual.stock;
   }
@@ -270,4 +296,12 @@ function cerrarSesion() {
 
 function irAProducto(id) {
   window.location.href = 'detalle-producto.html?id=' + id;
+}
+
+function irAlCarrito() {
+  // Simular clic en el botón de carrito
+  const btnCarrito = document.getElementById('btn-carrito');
+  if (btnCarrito) {
+    btnCarrito.click();
+  }
 }
