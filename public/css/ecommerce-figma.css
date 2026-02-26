@@ -596,23 +596,42 @@ main > section:first-child {
   width: 100%;
 }
 
+/* Mobile: 2 columnas */
+@media (max-width: 768px) {
+  .productos-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 2rem auto;
+  }
+}
+
+/* Tablet: 3 columnas */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .productos-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
 /* Estilos para tarjetas de productos del JavaScript - TECH MINIMALISTA PREMIUM */
 .tarjeta-producto {
   background: white;
-  border-radius: 18px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
   cursor: pointer;
   border: none;
+  display: flex;
+  flex-direction: column;
   display: flex;
   flex-direction: column;
   position: relative;
 }
 
 .tarjeta-producto:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
 }
 
 .tarjeta-producto-imagen {
@@ -676,6 +695,12 @@ main > section:first-child {
   flex-direction: column;
 }
 
+@media (max-width: 480px) {
+  .tarjeta-producto-contenido {
+    padding: 12px;
+  }
+}
+
 .tarjeta-producto-nombre {
   font-weight: 600;
   color: #1c1f23;
@@ -685,43 +710,100 @@ main > section:first-child {
 }
 
 .tarjeta-producto-categoria {
-  font-size: 0.8rem;
-  color: #8a8f98;
-  margin-bottom: 0.6rem;
+  display: none;
 }
 
 .tarjeta-producto-precio {
-  font-size: 1.45rem;
+  font-size: 22px;
   font-weight: 700;
-  color: #1f9d55;
-  margin-bottom: 0.6rem;
+  color: #27AE60;
+  margin: 0 0 8px 0;
 }
 
-.tarjeta-producto-stock {
-  font-size: 0.75rem;
-  color: #6c757d;
-  margin-bottom: 1rem;
+.tarjeta-producto-precio-oferta {
+  margin-bottom: 8px;
 }
 
-.tarjeta-producto-stock.agotado {
-  color: #e74c3c;
+.tarjeta-producto-precio-oferta .precio-original {
+  display: block;
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 4px;
 }
 
-.tarjeta-producto-botones {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
+.tarjeta-producto-precio-oferta .precio-final {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  color: #E74C3C;
+  margin-bottom: 4px;
+}
+
+.tarjeta-producto-precio-oferta .oferta-badge {
+  display: inline-block;
+  background: #E74C3C;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.tarjeta-producto-disponibilidad {
+  font-size: 13px;
+  margin: 0 0 12px 0;
+  font-weight: 500;
+}
+
+.tarjeta-producto-disponibilidad.disponible {
+  color: #27AE60;
+}
+
+.tarjeta-producto-disponibilidad.agotado {
+  color: #E74C3C;
+}
+
+.tarjeta-producto-btn-principal {
+  width: 100%;
+  background: #386273;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
   margin-top: auto;
 }
 
-.tarjeta-producto-botones .btn {
-  flex: 1;
-  padding: 0.85rem;
-  border-radius: 10px;
-  font-weight: 600;
+.tarjeta-producto-btn-principal:hover:not(:disabled) {
+  background: #2d4f64;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(56, 98, 115, 0.2);
+}
+
+.tarjeta-producto-btn-principal:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.tarjeta-producto-link-detalle {
+  font-size: 13px;
+  color: #777;
+  text-decoration: none;
+  text-align: center;
+  display: block;
+  transition: all 0.2s ease;
   cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
+}
+
+.tarjeta-producto-link-detalle:hover {
+  color: #386273;
+  font-weight: 600;
 }
 
 .tarjeta-producto-botones .btn-principal {

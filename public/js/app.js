@@ -794,25 +794,28 @@ function cargarProductos(productosMostrar = productos) {
       precioHTML = `<div class="tarjeta-producto-precio">$${producto.precio.toLocaleString('es-CO')}</div>`;
     }
     
+    // Generar badge de disponibilidad
+    const badgeDisponible = producto.stock > 0 ? '🟢 Disponible' : '❌ Agotado';
+    const stockClass = producto.stock > 0 ? 'disponible' : 'agotado';
+    
     tarjeta.innerHTML = `
       <div class="tarjeta-producto-imagen">
         <img src="${producto.imagen}" alt="${producto.nombre}" onerror="this.onerror=null;this.src='${(window.BACKEND_URL || 'http://localhost:3000')}/assets/product-placeholder.svg'">
       </div>
       <div class="tarjeta-producto-contenido">
-        <div class="tarjeta-producto-nombre">${producto.nombre}</div>
-        <div class="tarjeta-producto-categoria">${nombreCategoria}</div>
+        <h3 class="tarjeta-producto-nombre">${producto.nombre}</h3>
+        
         ${precioHTML}
-        <div class="tarjeta-producto-stock">
-          Stock: <strong>${producto.stock}</strong>
-        </div>
-        <div class="tarjeta-producto-botones">
-          <button class="btn btn-principal" onclick="agregarAlCarrito('${producto.id}')">
-            Agregar al carrito
-          </button>
-          <button class="btn btn-secundario" onclick="verDetalle('${producto.id}')">
-            Ver más
-          </button>
-        </div>
+        
+        <p class="tarjeta-producto-disponibilidad ${stockClass}">${badgeDisponible}</p>
+        
+        <button class="tarjeta-producto-btn-principal" onclick="agregarAlCarrito('${producto.id}')" ${producto.stock === 0 ? 'disabled' : ''}>
+          🛒 Agregar al carrito
+        </button>
+        
+        <a href="javascript:verDetalle('${producto.id}')" class="tarjeta-producto-link-detalle">
+          Ver detalles →
+        </a>
       </div>
     `;
     grid.appendChild(tarjeta);
