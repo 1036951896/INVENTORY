@@ -4,46 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seguimiento de Pedidos - StoreHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/header-limpio.css">
   <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <!-- Configurar BACKEND_URL -->
+  <script>
+    window.BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3000'
+      : 'https://storehub-api-74yl.onrender.com';
+  </script>
   <style>
     body {
       background: var(--fondo-pagina);
     }
 
-    .seguimiento-contenedor {
-      max-width: 900px;
+    /* Contenedor principal alineado */
+    main {
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 1.5rem;
-      background: var(--fondo-pagina);
+      padding: 2rem 1.5rem;
     }
 
-    .seguimiento-header {
-      margin-bottom: 1.8rem;
-      text-align: center;
-    }
-
-    .seguimiento-header h1 {
+    h1, h2 {
       color: var(--azul-oscuro);
-      font-size: 1.8rem;
       font-weight: 600;
-      margin-bottom: 0.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.8rem;
-    }
-
-    .seguimiento-header h1 svg {
-      stroke: currentColor;
-      color: var(--azul-oscuro);
-      flex-shrink: 0;
-    }
-
-    .seguimiento-header p {
-      color: var(--gris-oscuro);
-      font-size: 0.95rem;
-      line-height: 1.4;
     }
 
     /* Búsqueda container */
@@ -51,7 +36,7 @@
       background: var(--blanco);
       padding: 1.2rem 1.4rem;
       border-radius: 12px;
-      margin-bottom: 1.8rem;
+      margin-bottom: 2rem;
       display: flex;
       gap: 0.8rem;
       flex-wrap: wrap;
@@ -111,6 +96,49 @@
 
     .filtro-seguimiento .btn-secundario:hover {
       background: #e8ecf1;
+    }
+
+    .filtro-seguimiento .btn-secundario.btn-logout {
+      background: #ffe4e4;
+      color: #c44545;
+      border-color: #e74c3c;
+    }
+
+    .filtro-seguimiento .btn-secundario.btn-logout:hover {
+      background: #ffd4d4;
+    }
+
+    /* Contenedor seguimiento */
+    .seguimiento-contenedor {
+      background: transparent;
+    }
+
+    /* Sección de encabezado */
+    .seguimiento-header {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--borde);
+    }
+
+    .seguimiento-header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .seguimiento-header h1 svg {
+      stroke: currentColor;
+      color: var(--azul-oscuro);
+      flex-shrink: 0;
+    }
+
+    .seguimiento-header p {
+      color: var(--gris-oscuro);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin: 0;
     }
       background: #2d4f64;
       transform: translateY(-1px);
@@ -428,6 +456,19 @@
       border: 1px solid var(--borde);
     }
 
+    .vacio-seguimiento p {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--azul-oscuro);
+      font-weight: 500;
+    }
+
+    .vacio-seguimiento small {
+      display: block;
+      margin-top: 0.5rem;
+      color: var(--gris-oscuro);
+    }
+
     .no-autenticado {
       background: #fffbea;
       color: #b8860b;
@@ -459,8 +500,8 @@
 
     /* Responsive */
     @media (max-width: 768px) {
-      .seguimiento-contenedor {
-        padding: 1rem;
+      main {
+        padding: 1.5rem 1rem;
       }
 
       .filtro-seguimiento {
@@ -481,9 +522,17 @@
       .pedido-detalles-seguimiento {
         grid-template-columns: repeat(2, 1fr);
       }
+
+      .seguimiento-header h1 {
+        font-size: 1.6rem;
+      }
     }
 
     @media (max-width: 600px) {
+      main {
+        padding: 1rem;
+      }
+
       .seguimiento-header h1 {
         font-size: 1.4rem;
       }
@@ -507,11 +556,55 @@
         height: 16px;
         margin: -8px 0;
       }
+
+      .filtro-seguimiento {
+        padding: 1rem;
+      }
+
+      .filtro-seguimiento .btn {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
-<body style="background-color: var(--fondo-pagina);">
-  <div class="seguimiento-contenedor">
+<body>
+  <!-- ENCABEZADO -->
+  <header>
+    <div class="contenedor">
+      <div class="encabezado-contenedor">
+        <!-- LOGO -->
+        <div class="logo">
+          <img src="../assets/logo.svg" alt="Logo StoreHub" class="logo-img">
+          <span class="logo-text">StoreHub</span>
+        </div>
+
+        <!-- MENU SUPERIOR -->
+        <div class="menu-superior">
+          <!-- LINK A ÍNDEX -->
+          <a href="index.html" class="btn-icono" title="Volver al catálogo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+              <polyline points="3 9 9 3 15 9"></polyline>
+              <path d="M9 3v8a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3"></path>
+            </svg>
+          </a>
+
+          <!-- USUARIO -->
+          <div id="menu-usuario">
+            <button class="btn-icono" onclick="window.location.href='login.html'" title="Iniciar sesión">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main>
+    <div class="seguimiento-contenedor">
     <div class="seguimiento-header">
       <h1>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28" style="display: inline-block; margin-right: 0.8rem; vertical-align: middle;">
@@ -529,13 +622,18 @@
       <input type="text" id="buscar-radicado" placeholder="Buscar por número de radicado (ej: PED-123456)">
       <button class="btn btn-principal" onclick="buscarPedido()">Buscar</button>
       <button class="btn btn-secundario" onclick="cargarMisPedidos()">Mostrar Todos</button>
-      <button class="btn btn-secundario" onclick="cerrarSesionCliente()" style="background: #E74C3C; color: white; border: none;">Cerrar Sesión</button>
+      <button class="btn btn-secundario btn-logout" onclick="cerrarSesionCliente()">Cerrar Sesión</button>
     </div>
 
     <div id="contenedor-seguimiento">
       <!-- Se llenará con JavaScript -->
     </div>
   </div>
+
+    </div>
+    <!-- Fin seguimiento-contenedor -->
+  </main>
+  <!-- Fin main -->
 
   <script>
     const BACKEND_URL = window.BACKEND_URL || 'http://localhost:3000';
