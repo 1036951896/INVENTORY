@@ -79,14 +79,14 @@ header .contenedor {
 }
 
 .logo-img {
-  height: 36px;
+  height: 50px;
   width: auto;
   flex-shrink: 0;
   transition: all 0.35s ease;
 }
 
 header.header-scroll .logo-img {
-  height: 28px;
+  height: 40px;
 }
 
 .logo-text {
