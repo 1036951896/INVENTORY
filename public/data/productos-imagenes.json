@@ -4,7 +4,7 @@
       "id": "1",
       "nombre": "PAPA CAFÉ X 2.5 FARM FRITES",
       "precio": 22500,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Snacks",
       "imagen": "../assets/papa_cafe_2.5kg_new.jpeg"
     },
@@ -12,7 +12,7 @@
       "id": "2",
       "nombre": "PAPA NACIONAL X 2.5",
       "precio": 21600,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Snacks",
       "imagen": "../assets/papa_nacional_2.5_new.jpeg"
     },
@@ -20,7 +20,7 @@
       "id": "3",
       "nombre": "PAPA X 2 K FARM FRITES",
       "precio": 15000,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Snacks",
       "imagen": "../assets/PAPA_X_2_K_FARM FRITES.jpeg"
     },
@@ -28,7 +28,7 @@
       "id": "4",
       "nombre": "PAPA X 2 K STAR FRITES",
       "precio": 15000,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Snacks",
       "imagen": "../assets/star frites 2k.jpeg"
     },
@@ -36,7 +36,7 @@
       "id": "5",
       "nombre": "PAPA X 1 K CRUNCH HOUSE",
       "precio": 9700,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Snacks",
       "imagen": "../assets/crunch house 1k.jpeg"
     },
@@ -44,7 +44,7 @@
       "id": "6",
       "nombre": "PAPA X 500 CRUNCH HOUSE",
       "precio": 5400,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Snacks",
       "imagen": "../assets/papa_crunch_500gr_new.jpeg"
     },
@@ -52,7 +52,7 @@
       "id": "7",
       "nombre": "RIPIO SAN MIGUEL X 1 K",
       "precio": 9000,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Ripios",
       "imagen": "../assets/Ripio_papa.jpg"
     },
@@ -60,7 +60,7 @@
       "id": "8",
       "nombre": "RIPIO X 1 K SABROSURA DEL CAMPO",
       "precio": 8000,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Ripios",
       "imagen": "../assets/sabrosura_del_campo_1kg.jpeg"
     },
@@ -68,7 +68,7 @@
       "id": "9",
       "nombre": "RIPIO X 500 SABROSURA DEL CAMPO",
       "precio": 5500,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Ripios",
       "imagen": "../assets/RIPIO_X_500_SABROSURA_DEL_CAMPO.jpeg"
     },
@@ -76,7 +76,7 @@
       "id": "10",
       "nombre": "RIPIO X 250 SABROSURA DEL CAMPO",
       "precio": 3500,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Ripios",
       "imagen": "../assets/RIPIO_X_250_SABROSURA_DEL_CAMPO.jpeg"
     },
@@ -84,7 +84,7 @@
       "id": "11",
       "nombre": "MAIZ SAN MIGUEL X 1 K",
       "precio": 8700,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Maíz",
       "imagen": "../assets/MAIZ_SAN_MIGUEL_X_1_K.jpeg"
     },
@@ -92,7 +92,7 @@
       "id": "12",
       "nombre": "MAIZ SAN MIGUEL X 500 GR",
       "precio": 4700,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Maíz",
       "imagen": "../assets/MAIZ_SAN_MIGUEL_X_500_gr.jpeg"
     },
@@ -100,7 +100,7 @@
       "id": "13",
       "nombre": "MAIZ A GRANEL SAN MIGUEL X 10 K",
       "precio": 80000,
-      "stock": 5,
+      "stock": 35,
       "categoria": "Maíz",
       "imagen": "../assets/MAIZ_A_GRANEL_SAN_MIGUEL_10_K.jpeg"
     },
@@ -108,7 +108,7 @@
       "id": "14",
       "nombre": "MIX VERDURAS SAN MIGUEL X 500 GR",
       "precio": 4700,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Maíz",
       "imagen": "../assets/MIX_VERDURAS_SAN_MIGUEL_X_500_GR.jpeg"
     },
@@ -116,7 +116,7 @@
       "id": "15",
       "nombre": "YUCA ALRICO X 1 K",
       "precio": 6900,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Tubérculos",
       "imagen": "../assets/YUCA_ALRICO_X_1k.jpeg"
     },
@@ -124,7 +124,7 @@
       "id": "16",
       "nombre": "YUCA ALRICO X 500 GR",
       "precio": 3800,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Tubérculos",
       "imagen": "../assets/YUCA_ALRICO_X_500gr.jpeg"
     },
@@ -132,7 +132,7 @@
       "id": "17",
       "nombre": "VINIPEL 20 MTS",
       "precio": 1500,
-      "stock": 50,
+      "stock": 80,
       "categoria": "Empaques",
       "imagen": "../assets/vinipel_20ts.jpeg"
     },
@@ -140,7 +140,7 @@
       "id": "18",
       "nombre": "VINILPEX X50 MTS",
       "precio": 2700,
-      "stock": 50,
+      "stock": 80,
       "categoria": "Empaques",
       "imagen": "../assets/vinipel_50mts.jpeg"
     },
@@ -148,7 +148,7 @@
       "id": "19",
       "nombre": "VINILPEX X100 MTS",
       "precio": 4700,
-      "stock": 50,
+      "stock": 80,
       "categoria": "Empaques",
       "imagen": "../assets/vinipel_100mts.jpeg"
     },
@@ -156,7 +156,7 @@
       "id": "20",
       "nombre": "VINILPEX X 300 MTS LARGO",
       "precio": 8700,
-      "stock": 20,
+      "stock": 50,
       "categoria": "Empaques",
       "imagen": "../assets/vinipel_300mts.jpeg"
     },
@@ -164,7 +164,7 @@
       "id": "21",
       "nombre": "GUANTES PLASTICOS TRANSPARENTE HAUSE",
       "precio": 1670,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Guantes",
       "imagen": "../assets/guantes_transparente_Hause.jpeg"
     },
@@ -172,7 +172,7 @@
       "id": "22",
       "nombre": "GUANTES NITRILO NEGRO T M HAUSE",
       "precio": 21600,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Guantes",
       "imagen": "../assets/guantes_nitrilo_negro_tm.jpeg"
     },
@@ -180,7 +180,7 @@
       "id": "23",
       "nombre": "GUANTES NITRILO NEGRO T L HAUSE",
       "precio": 21600,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Guantes",
       "imagen": "../assets/guantes_nitrilo_negro_tl.jpeg"
     },
@@ -188,7 +188,7 @@
       "id": "24",
       "nombre": "LAM PARAFINADA 15X15 REGULAR LIBRA",
       "precio": 9700,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/lam_parafinada_15x15_regular_libra.jpeg"
     },
@@ -196,7 +196,7 @@
       "id": "25",
       "nombre": "LAM PARAFINADA 15X15 ECOLOGICA LIBRA",
       "precio": 7800,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/lam_parafinada_15x15_ecologica_libra.jpeg"
     },
@@ -204,7 +204,7 @@
       "id": "26",
       "nombre": "LAM PARAFINADA 15X15 COLOR REGULAR",
       "precio": 9700,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/LAM_PARAFINADA_30X30_COLOR_REGULAR.jpeg"
     },
@@ -212,7 +212,7 @@
       "id": "27",
       "nombre": "LAM PARAFINADA 30X30 COLOR REGULAR",
       "precio": 9700,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/LAM_PARAFINADA_30X30_COLOR_REGULAR.jpeg"
     },
@@ -220,7 +220,7 @@
       "id": "28",
       "nombre": "LAM PARAFINADA 30X30 ECOLOGICA",
       "precio": 7800,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/papel_parafinado_ecologico_30x30.jpeg"
     },
@@ -228,7 +228,7 @@
       "id": "29",
       "nombre": "ROLLO PARAFINADO X 50 MTS",
       "precio": 17400,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/rollo_parafinado_x10mts.jpeg"
     },
@@ -236,7 +236,7 @@
       "id": "30",
       "nombre": "ROLLO PARAFINADO X 10 MTS",
       "precio": 2800,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/rollo_parafinado_x10mts.jpeg"
     },
@@ -244,7 +244,7 @@
       "id": "31",
       "nombre": "ALUMINIO 7 MTS",
       "precio": 2500,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/aluminio_7mts.jpeg"
     },
@@ -252,7 +252,7 @@
       "id": "32",
       "nombre": "ALUMINIO 16 MTS",
       "precio": 4700,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/aluminio_16mts.jpeg"
     },
@@ -260,7 +260,7 @@
       "id": "33",
       "nombre": "ALUMINIO 40 MTS",
       "precio": 9500,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/aluminio_40mts.jpeg"
     },
@@ -268,7 +268,7 @@
       "id": "34",
       "nombre": "ALUMINIO 100 MTS",
       "precio": 23000,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/aluminio_100mts.jpeg"
     },
@@ -276,7 +276,7 @@
       "id": "35",
       "nombre": "BOLSA METALIZADA 6X6 ABTA",
       "precio": 1900,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/bolsa_metalizada_6x6.jpeg"
     },
@@ -284,7 +284,7 @@
       "id": "36",
       "nombre": "BOLSA METALIZADA 7X10",
       "precio": 3500,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/bolsa_metalizada_7x10.jpeg"
     },
@@ -292,7 +292,7 @@
       "id": "37",
       "nombre": "BOLSA METALIZADA 8X10",
       "precio": 3900,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/bolsa_metalizada_8x10.jpeg"
     },
@@ -300,7 +300,7 @@
       "id": "38",
       "nombre": "BOLSA METALIZADA 8X12",
       "precio": 4800,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/bolsa_metalizada_8x10.jpeg"
     },
@@ -308,7 +308,7 @@
       "id": "39",
       "nombre": "BOLSA METALIZADA 10X14",
       "precio": 6900,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/BOLSA_METALIZADA_10X14.jpeg"
     },
@@ -316,7 +316,7 @@
       "id": "40",
       "nombre": "PORTA HAMBURGUESA CARTON",
       "precio": 9000,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/PORTA_HAMBURGUESA_CARTON.jpeg"
     },
@@ -324,7 +324,7 @@
       "id": "41",
       "nombre": "PORTA PERRO CARTON",
       "precio": 9000,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/PORTA_PERRO_CARTON.jpeg"
     },
@@ -332,7 +332,7 @@
       "id": "42",
       "nombre": "SERVILLETA NUBE X 300",
       "precio": 3600,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/SERVILLETA_NUBE.jpeg"
     },
@@ -340,7 +340,7 @@
       "id": "43",
       "nombre": "SERVILLETA MIA 1 A 1 X 200",
       "precio": 2500,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/SERVILLETA_MIA_X200.jpeg"
     },
@@ -348,7 +348,7 @@
       "id": "44",
       "nombre": "TOHALLA MANO X 150",
       "precio": 7600,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/TOALLA_MANOS_X150.jpeg"
     },
@@ -356,7 +356,7 @@
       "id": "45",
       "nombre": "TOHALLA COCINA X 120",
       "precio": 5720,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/TOALLA_COCINA_X120.jpeg"
     },
@@ -364,7 +364,7 @@
       "id": "46",
       "nombre": "BOLSA PAPEL # 1",
       "precio": 3100,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/bolsa_papel_1.jpeg"
     },
@@ -372,7 +372,7 @@
       "id": "47",
       "nombre": "BOLSA PAPEL # 2",
       "precio": 4200,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/bolsa_papel2.jpeg"
     },
@@ -380,7 +380,7 @@
       "id": "48",
       "nombre": "BOLSA PAPEL # 3",
       "precio": 5300,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/bolsa_papel_3.jpeg"
     },
@@ -388,7 +388,7 @@
       "id": "49",
       "nombre": "BOLSA PAPEL # 4",
       "precio": 6300,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/bolsa_papel_4.jpeg"
     },
@@ -396,7 +396,7 @@
       "id": "50",
       "nombre": "BOLSA PAPEL # 6",
       "precio": 9000,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/bolsa_papel_6.jpeg"
     },
@@ -404,7 +404,7 @@
       "id": "51",
       "nombre": "SACHET TOMATE 9GR X 102",
       "precio": 7800,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Condimentos",
       "imagen": "../assets/sachet_salsa_rosada_9gr.jpeg"
     },
@@ -412,7 +412,7 @@
       "id": "52",
       "nombre": "SACHET TOMATE 6 GR X 204",
       "precio": 11400,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Condimentos",
       "imagen": "../assets/sachet_salsa_tomate.jpeg"
     },
@@ -420,7 +420,7 @@
       "id": "53",
       "nombre": "SACHET MIEL 9GR X 102",
       "precio": 7800,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Condimentos",
       "imagen": "../assets/sachet_miel.jpeg"
     },
@@ -428,7 +428,7 @@
       "id": "54",
       "nombre": "SACHET ROSADA 9GR X 102",
       "precio": 11400,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Condimentos",
       "imagen": "../assets/sachet_salsa_rosada_9gr.jpeg"
     },
@@ -436,7 +436,7 @@
       "id": "55",
       "nombre": "SALSA TOMATE X 4 K",
       "precio": 25300,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Condimentos",
       "imagen": "../assets/salsa_tomate_x4kg.jpeg"
     },
@@ -444,7 +444,7 @@
       "id": "56",
       "nombre": "MAYONESA X 4 K",
       "precio": 34000,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Condimentos",
       "imagen": "../assets/mayonesa_4kg.jpeg"
     },
@@ -452,7 +452,7 @@
       "id": "57",
       "nombre": "CARNE DE HAMBURG 9GR X 10",
       "precio": 12300,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Carnes",
       "imagen": "../assets/CARNE_HAMBURGUESA_9GRX10.jpeg"
     },
@@ -460,7 +460,7 @@
       "id": "58",
       "nombre": "PATACON COCTELERO X 1000 GR",
       "precio": 9600,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Snacks",
       "imagen": "../assets/patacon_coctelero.jpeg"
     },
@@ -468,7 +468,7 @@
       "id": "59",
       "nombre": "PATACON MEDIANO X 1000 GR",
       "precio": 9600,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Snacks",
       "imagen": "../assets/patacon_mediano_1000gr.jpeg"
     },
@@ -476,7 +476,7 @@
       "id": "60",
       "nombre": "PATACON OVALADO X 1000 GR",
       "precio": 9600,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Snacks",
       "imagen": "../assets/patacon_ovalado_1000gr.jpeg"
     },
@@ -484,7 +484,7 @@
       "id": "61",
       "nombre": "PATACON REDONDO X 1000 GR",
       "precio": 9600,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Snacks",
       "imagen": "../assets/patacon_redondo_1000gr.jpeg"
     },
@@ -492,7 +492,7 @@
       "id": "65",
       "nombre": "PATACON REDONDO X 100 GR",
       "precio": 1500,
-      "stock": 50,
+      "stock": 80,
       "categoria": "Snacks",
       "imagen": "../assets/patacon_redondo_100gr.jpeg"
     },
@@ -500,7 +500,7 @@
       "id": "62",
       "nombre": "BOLSA T 20 LEC BIO-SOSTENIBLE",
       "precio": 2800,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/bolsa_t20_lec.jpeg"
     },
@@ -508,7 +508,7 @@
       "id": "63",
       "nombre": "BOLSA T-25 LEC R.U BIO-SOSTENIBLE",
       "precio": 3600,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/bolsa_t25_lec.jpeg"
     },
@@ -516,7 +516,7 @@
       "id": "64",
       "nombre": "BOLSA T-30 LEC ECONOMICA R.U BIO-SOSTENIBLE",
       "precio": 5700,
-      "stock": 10,
+      "stock": 40,
       "categoria": "Empaques",
       "imagen": "../assets/bolsa_t30_lec.jpeg"
     }
