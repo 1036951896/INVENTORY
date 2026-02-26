@@ -10,17 +10,17 @@
   <!-- Checkmark verde en círculo (posicionado entre la E y la H) -->
   <g>
     <!-- Fondo del círculo verde -->
-    <circle cx="165" cy="25" r="25" fill="#27AE60" />
+    <circle cx="165" cy="18" r="25" fill="#27AE60" />
     
     <!-- Borde negro del círculo -->
-    <circle cx="165" cy="25" r="25" fill="none" stroke="#000" stroke-width="2" />
+    <circle cx="165" cy="18" r="25" fill="none" stroke="#000" stroke-width="2" />
     
     <!-- Checkmark blanco -->
     <polyline 
-      points="150,30 160,40 180,20" 
+      points="150,23 160,33 180,13" 
       fill="none" 
       stroke="white" 
-      stroke-width="3.5" 
+      stroke-width="4.5" 
       stroke-linecap="round" 
       stroke-linejoin="round"
     />
