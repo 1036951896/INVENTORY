@@ -15,6 +15,7 @@
       max-width: 900px;
       margin: 0 auto;
       padding: 1.5rem;
+      background: var(--fondo-pagina);
     }
 
     .seguimiento-header {
@@ -45,7 +46,7 @@
       line-height: 1.4;
     }
 
-    /* Búsqueda compactada */
+    /* Búsqueda container */
     .filtro-seguimiento {
       background: var(--blanco);
       padding: 1.2rem 1.4rem;
@@ -111,6 +112,19 @@
     .filtro-seguimiento .btn-secundario:hover {
       background: #e8ecf1;
     }
+      background: #2d4f64;
+      transform: translateY(-1px);
+    }
+
+    .filtro-seguimiento .btn-secundario {
+      background: var(--gris-claro);
+      color: var(--azul-oscuro);
+      border: 1px solid var(--borde);
+    }
+
+    .filtro-seguimiento .btn-secundario:hover {
+      background: #e8ecf1;
+    }
 
     /* Lista de pedidos */
     .pedidos-lista-seguimiento {
@@ -153,34 +167,41 @@
     }
 
     .estado-badge {
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
       font-size: 0.8rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.80px;
       white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid;
     }
 
     .estado-badge.pendiente {
       background: #fffbea;
       color: #b8860b;
-      border: 1px solid #f39c12;
+      border-color: #f39c12;
     }
 
     .estado-badge.procesando {
       background: #d1ecf1;
       color: #0c5460;
+      border-color: #0c5460;
     }
 
     .estado-badge.enviado {
       background: #cfe2ff;
       color: #084298;
+      border-color: #084298;
     }
 
     .estado-badge.entregado {
       background: #d1e7dd;
       color: #0f5132;
+      border-color: #0f5132;
     }
 
     /* Detalles compactados */
@@ -330,6 +351,41 @@
       gap: 0.6rem;
     }
 
+    .producto-lista-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--borde);
+    }
+
+    .producto-lista-item:last-child {
+      border-bottom: none;
+    }
+
+    .producto-info {
+      flex: 1;
+    }
+
+    .producto-nombre {
+      font-weight: 600;
+      margin: 0 0 0.2rem;
+      color: var(--azul-oscuro);
+      font-size: 0.95rem;
+    }
+
+    .producto-cantidad {
+      font-size: 0.85rem;
+      color: var(--gris-oscuro);
+    }
+
+    .producto-lista-item .precio {
+      color: var(--exito);
+      font-weight: 600;
+      min-width: 80px;
+      text-align: right;
+    }
+
     .item-fila {
       display: flex;
       justify-content: space-between;
@@ -454,7 +510,7 @@
     }
   </style>
 </head>
-<body style="background-color: #f5f5f5;">
+<body style="background-color: var(--fondo-pagina);">
   <div class="seguimiento-contenedor">
     <div class="seguimiento-header">
       <h1>
@@ -593,7 +649,7 @@
     function generarTarjetaSeguimiento(pedido) {
       const estadoClass = obtenerClaseEstado(pedido.estado);
       const estadoTexto = obtenerTextoEstado(pedido.estado);
-      const timeline = generarTimeline(pedido.estado);
+      const trackingSteps = generarTrackingSteps(pedido.estado);
 
       const fecha = new Date(pedido.createdAt);
       const fechaFormato = fecha.toLocaleDateString('es-CO');
@@ -601,9 +657,12 @@
 
       const total = pedido.total || 0;
       const itemsHtml = (pedido.items || []).map(item => `
-        <div class="item-fila">
-          <span>${item.producto?.nombre || 'Producto'}</span>
-          <span>${item.cantidad} × $${(item.precioUnitario || 0).toLocaleString('es-CO')}</span>
+        <div class="producto-lista-item">
+          <div class="producto-info" style="flex: 1;">
+            <h4 class="producto-nombre">${item.producto?.nombre || 'Producto'}</h4>
+            <span class="producto-cantidad">${item.cantidad} x $${(item.precioUnitario || 0).toLocaleString('es-CO')}</span>
+          </div>
+          <span class="precio">${(item.cantidad * (item.precioUnitario || 0)).toLocaleString('es-CO', {style: 'currency', currency: 'COP'})}</span>
         </div>
       `).join('');
 
@@ -616,7 +675,7 @@
 
           <div class="pedido-detalles-seguimiento">
             <div class="detalle-item">
-              <div class="detalle-label">📅 Fecha del Pedido</div>
+              <div class="detalle-label">Fecha del Pedido</div>
               <div class="detalle-valor">${fechaFormato} ${horaFormato}</div>
             </div>
             <div class="detalle-item">
@@ -629,13 +688,17 @@
             </div>
             <div class="detalle-item">
               <div class="detalle-label">Total</div>
-              <div class="detalle-valor">$${total.toLocaleString('es-CO')}</div>
+              <div class="detalle-valor precio">$${total.toLocaleString('es-CO')}</div>
             </div>
+          </div>
+
+          <div class="tracking-container">
+            ${trackingSteps}
           </div>
 
           <div class="pedido-items">
             <div class="items-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 0.5rem; vertical-align: middle;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                 <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
                 <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                 <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
@@ -645,13 +708,6 @@
             </div>
             <div class="item-lista">
               ${itemsHtml}
-            </div>
-          </div>
-
-          <div class="timeline-seguimiento">
-            <div class="timeline-title">🚚 Estado del Envío</div>
-            <div class="timeline-items">
-              ${timeline}
             </div>
           </div>
         </div>
@@ -676,6 +732,37 @@
         case 'ENTREGADO': return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16\" style="display: inline-block; margin-right: 8px;\"><polyline points=\"20 6 9 17 4 12\"></polyline></svg>Entregado';
         default: return estado;
       }
+    }
+
+    function generarTrackingSteps(estadoActual) {
+      const estados = ['PENDIENTE', 'EN_PREPARACION', 'ENVIADO', 'ENTREGADO'];
+      const etiquetas = ['Recibido', 'Confirmado', 'Enviado', 'Entregado'];
+      const indiceActual = estados.indexOf(estadoActual);
+
+      return etiquetas.map((label, index) => {
+        let claseIndicador = '';
+        let claseLabel = '';
+        let contenidoIndicador = '';
+
+        if (index < indiceActual) {
+          claseIndicador = 'completed';
+          claseLabel = 'completed';
+          contenidoIndicador = '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg>';
+        } else if (index === indiceActual) {
+          claseIndicador = 'active';
+          claseLabel = 'active';
+          contenidoIndicador = (index + 1);
+        } else {
+          contenidoIndicador = (index + 1);
+        }
+
+        return `
+          <div class="tracking-step ${index < indiceActual ? 'completed' : (index === indiceActual ? 'active' : '')}">
+            <div class="step-indicator ${claseIndicador}">${contenidoIndicador}</div>
+            <span class="step-label ${claseLabel}">${label}</span>
+          </div>
+        `;
+      }).join('');
     }
 
     function generarTimeline(estadoActual) {
