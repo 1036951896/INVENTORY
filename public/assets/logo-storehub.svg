@@ -1,28 +1,28 @@
-<svg viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg">
   <!-- Definición de estilos -->
   <defs>
     <style>
-      .storehub-text { font-family: 'Inter', sans-serif; font-weight: 700; fill: #386273; }
-      .storehub-main { font-size: 36px; letter-spacing: -0.5px; }
-      .storehub-sub { font-size: 12px; letter-spacing: 1.5px; font-weight: 600; fill: #666666; }
+      .storehub-text { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 700; fill: white; }
+      .storehub-main { font-size: 32px; letter-spacing: -0.8px; }
+      .storehub-sub { font-size: 9px; letter-spacing: 1.2px; font-weight: 600; fill: rgba(255,255,255,0.85); }
     </style>
   </defs>
 
   <!-- Checkmark verde en círculo -->
   <g>
     <!-- Fondo del círculo -->
-    <circle cx="170" cy="50" r="35" fill="#27AE60" opacity="0.95" />
+    <circle cx="40" cy="50" r="28" fill="#27AE60" opacity="0.95" />
     
     <!-- Borde del círculo -->
-    <circle cx="170" cy="50" r="35" fill="none" stroke="#1a6d3b" stroke-width="3" />
+    <circle cx="40" cy="50" r="28" fill="none" stroke="white" stroke-width="2.5" />
     
     <!-- Checkmark blanco -->
     <g>
       <polyline 
-        points="155,50 165,60 185,40" 
+        points="30,50 38,58 50,42" 
         fill="none" 
         stroke="white" 
-        stroke-width="4" 
+        stroke-width="3.5" 
         stroke-linecap="round" 
         stroke-linejoin="round"
       />
@@ -30,15 +30,12 @@
   </g>
 
   <!-- Texto principal "StoreHub" -->
-  <text x="120" y="140" text-anchor="middle" class="storehub-text storehub-main">
+  <text x="155" y="58" text-anchor="start" class="storehub-text storehub-main">
     StoreHub
   </text>
 
-  <!-- Línea divisoria -->
-  <line x1="60" y1="155" x2="180" y2="155" stroke="#386273" stroke-width="2" />
-
   <!-- Subtexto "TIENDA • ONLINE" -->
-  <text x="120" y="180" text-anchor="middle" class="storehub-text storehub-sub">
+  <text x="155" y="75" text-anchor="start" class="storehub-text storehub-sub">
     TIENDA • ONLINE
   </text>
 </svg>
