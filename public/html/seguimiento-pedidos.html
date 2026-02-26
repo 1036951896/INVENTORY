@@ -16,52 +16,52 @@
   </script>
   <style>
     body {
-      background: var(--fondo-pagina);
+      background: #f5f7fa;
     }
 
     /* Contenedor principal alineado */
     main {
-      max-width: 1200px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 2rem 1.5rem;
     }
 
-    h1, h2 {
-      color: var(--azul-oscuro);
+    h1, h2, h3 {
+      color: #1a1a1a;
       font-weight: 600;
     }
 
-    /* Búsqueda container */
+    /* ===== BÚSQUEDA CONTAINER ===== */
     .filtro-seguimiento {
-      background: var(--blanco);
+      background: white;
       padding: 1.2rem 1.4rem;
       border-radius: 12px;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
       display: flex;
       gap: 0.8rem;
       flex-wrap: wrap;
-      border: 1px solid var(--borde);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border: 1px solid #e0e4e8;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     .filtro-seguimiento input {
       flex: 1;
       min-width: 220px;
       padding: 0.9rem 1rem;
-      border: 1px solid var(--borde);
+      border: 1px solid #e0e4e8;
       border-radius: 8px;
       font-size: 0.95rem;
       font-family: inherit;
-      color: var(--azul-oscuro);
-      background: var(--gris-claro);
+      color: #1a1a1a;
+      background: #f8f9fa;
       transition: all 0.2s ease;
     }
 
     .filtro-seguimiento input:focus {
       outline: none;
-      border-color: var(--azul-oscuro);
-      background: var(--blanco);
-      box-shadow: 0 2px 8px rgba(56, 98, 115, 0.1);
+      border-color: #3483fa;
+      background: white;
+      box-shadow: 0 2px 8px rgba(52, 131, 250, 0.1);
     }
 
     .filtro-seguimiento input::placeholder {
@@ -79,19 +79,20 @@
     }
 
     .filtro-seguimiento .btn-principal {
-      background: var(--azul-oscuro);
+      background: #3483fa;
       color: white;
     }
 
     .filtro-seguimiento .btn-principal:hover {
-      background: #2d4f64;
+      background: #0055cc;
       transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(52, 131, 250, 0.3);
     }
 
     .filtro-seguimiento .btn-secundario {
-      background: var(--gris-claro);
-      color: var(--azul-oscuro);
-      border: 1px solid var(--borde);
+      background: #f0f2f5;
+      color: #1a1a1a;
+      border: 1px solid #e0e4e8;
     }
 
     .filtro-seguimiento .btn-secundario:hover {
@@ -108,397 +109,325 @@
       background: #ffd4d4;
     }
 
-    /* Contenedor seguimiento */
-    .seguimiento-contenedor {
-      background: transparent;
-    }
-
-    /* Sección de encabezado */
-    .seguimiento-header {
-      margin-bottom: 1.5rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--borde);
-    }
-
-    .seguimiento-header h1 {
-      font-size: 2rem;
-      margin-bottom: 0.4rem;
+    /* ===== STATUS CARD EMOCIONAL ===== */
+    .status-card {
       display: flex;
+      gap: 15px;
       align-items: center;
-      gap: 0.8rem;
-    }
-
-    .seguimiento-header h1 svg {
-      stroke: currentColor;
-      color: var(--azul-oscuro);
-      flex-shrink: 0;
-    }
-
-    .seguimiento-header p {
-      color: var(--gris-oscuro);
-      font-size: 0.95rem;
-      line-height: 1.5;
-      margin: 0;
-    }
-      background: #2d4f64;
-      transform: translateY(-1px);
-    }
-
-    .filtro-seguimiento .btn-secundario {
-      background: var(--gris-claro);
-      color: var(--azul-oscuro);
-      border: 1px solid var(--borde);
-    }
-
-    .filtro-seguimiento .btn-secundario:hover {
-      background: #e8ecf1;
-    }
-
-    /* Lista de pedidos */
-    .pedidos-lista-seguimiento {
-      display: grid;
-      gap: 1.2rem;
-    }
-
-    /* Card de pedido */
-    .pedido-seguimiento {
-      background: var(--blanco);
-      border: 1px solid var(--borde);
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      transition: all 0.2s ease;
-    }
-
-    .pedido-seguimiento:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transform: translateY(-1px);
-    }
-
-    .pedido-seguimiento-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--borde);
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .pedido-radicado {
-      font-weight: 800;
-      color: var(--azul-oscuro);
-      font-size: 1.4rem;
-      font-family: 'Courier New', monospace;
-      letter-spacing: 1.5px;
-    }
-
-    .estado-badge {
-      padding: 0.4rem 1rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.80px;
-      white-space: nowrap;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      border: 1px solid;
-    }
-
-    .estado-badge.pendiente {
-      background: #fffbea;
-      color: #b8860b;
-      border-color: #f39c12;
-    }
-
-    .estado-badge.procesando {
-      background: #d1ecf1;
-      color: #0c5460;
-      border-color: #0c5460;
-    }
-
-    .estado-badge.enviado {
-      background: #cfe2ff;
-      color: #084298;
-      border-color: #084298;
-    }
-
-    .estado-badge.entregado {
-      background: #d1e7dd;
-      color: #0f5132;
-      border-color: #0f5132;
-    }
-
-    /* Detalles compactados */
-    .pedido-detalles-seguimiento {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 0.8rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .detalle-item {
-      background: var(--gris-claro);
-      padding: 0.9rem 1rem;
-      border-radius: 8px;
-      border: 1px solid var(--borde);
-    }
-
-    .detalle-label {
-      font-size: 0.8rem;
-      color: var(--gris-oscuro);
-      margin-bottom: 0.2rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-    }
-
-    .detalle-valor {
-      font-size: 0.95rem;
-      color: var(--azul-oscuro);
-      font-weight: 600;
-    }
-
-    .detalle-valor.precio {
-      color: var(--exito);
-      font-weight: 800;
-    }
-
-    /* Tracking steps horizontal */
-    .tracking-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin: 1.5rem 0;
-      gap: 0.5rem;
-      padding: 1rem 0;
-    }
-
-    .tracking-step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex: 1;
-      text-align: center;
+      background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+      padding: 25px;
+      border-radius: 16px;
+      margin-bottom: 30px;
+      border: 2px solid #3483fa;
+      box-shadow: 0 8px 24px rgba(52, 131, 250, 0.15);
       position: relative;
+      overflow: hidden;
     }
 
-    .tracking-step:not(:last-child)::after {
+    .status-card::before {
       content: '';
       position: absolute;
-      top: 16px;
-      left: 50%;
-      width: calc(100% - 16px);
-      height: 2px;
-      background: var(--borde);
-      z-index: 0;
-    }
-
-    .tracking-step.completed:not(:last-child)::after {
-      background: var(--exito);
-    }
-
-    .step-indicator {
-      width: 32px;
-      height: 32px;
+      top: -50%;
+      right: -50%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(52, 131, 250, 0.1) 0%, transparent 70%);
       border-radius: 50%;
-      border: 2px solid var(--borde);
-      background: var(--blanco);
-      margin: 0 auto 0.6rem;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1;
+    }
+
+    .status-card-content {
+      flex: 1;
       position: relative;
-      font-weight: 600;
-      font-size: 0.85rem;
-      color: var(--gris-oscuro);
+      z-index: 1;
     }
 
-    .step-indicator.completed {
-      background: var(--exito);
-      border-color: var(--exito);
-      color: white;
+    .status-icon {
+      font-size: 48px;
+      min-width: 48px;
+      text-align: center;
+      animation: bounce 2s infinite;
+      position: relative;
+      z-index: 1;
     }
 
-    .step-indicator.active {
-      border-color: var(--azul-oscuro);
-      background: var(--azul-claro);
-      transform: scale(1.08);
-      box-shadow: 0 2px 8px rgba(56, 98, 115, 0.2);
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
-    .step-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--gris-oscuro);
-      letter-spacing: 0.6px;
-      transition: color 0.3s ease;
+    .status-card h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      color: #1a1a1a;
     }
 
-    .step-label.completed {
-      color: var(--exito);
-    }
-
-    .step-label.active {
-      color: var(--azul-oscuro);
-      font-weight: 700;
-    }
-
-    /* Productos en card */
-    .pedido-items {
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--borde);
-    }
-
-    .items-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 0.8rem;
-      color: var(--azul-oscuro);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .items-title svg {
-      stroke: currentColor;
-      color: var(--azul-oscuro);
-      flex-shrink: 0;
-    }
-
-    .item-lista {
-      display: grid;
-      gap: 0.6rem;
-    }
-
-    .producto-lista-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.8rem 0;
-      border-bottom: 1px solid var(--borde);
-    }
-
-    .producto-lista-item:last-child {
-      border-bottom: none;
-    }
-
-    .producto-info {
-      flex: 1;
-    }
-
-    .producto-nombre {
-      font-weight: 600;
-      margin: 0 0 0.2rem;
-      color: var(--azul-oscuro);
-      font-size: 0.95rem;
-    }
-
-    .producto-cantidad {
-      font-size: 0.85rem;
-      color: var(--gris-oscuro);
-    }
-
-    .producto-lista-item .precio {
-      color: var(--exito);
-      font-weight: 600;
-      min-width: 80px;
-      text-align: right;
-    }
-
-    .item-fila {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.9rem;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid var(--borde);
-    }
-
-    .item-fila:last-child {
-      border-bottom: none;
-    }
-
-    .item-nombre {
-      flex: 1;
-      color: var(--azul-oscuro);
+    .status-card p {
+      margin: 4px 0 0;
+      font-size: 14px;
+      color: #555;
       font-weight: 500;
     }
 
-    .item-cantidad {
-      color: var(--gris-oscuro);
-      font-size: 0.85rem;
-      margin: 0 1rem;
+    /* ===== TIMELINE VERTICAL ===== */
+    .timeline {
+      position: relative;
+      margin: 30px 0;
+      padding-left: 35px;
+      border-left: 3px solid #e0e4e8;
     }
 
-    .item-precio {
-      color: var(--exito);
+    .timeline-item {
+      position: relative;
+      margin-bottom: 28px;
+      animation: slideIn 0.6s ease-out forwards;
+      opacity: 0;
+    }
+
+    .timeline-item:nth-child(1) { animation-delay: 0s; }
+    .timeline-item:nth-child(2) { animation-delay: 0.1s; }
+    .timeline-item:nth-child(3) { animation-delay: 0.2s; }
+    .timeline-item:nth-child(4) { animation-delay: 0.3s; }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .timeline-item .dot {
+      width: 14px;
+      height: 14px;
+      background: #ccc;
+      border-radius: 50%;
+      position: absolute;
+      left: -41px;
+      top: 5px;
+      border: 3px solid white;
+      box-shadow: 0 0 0 2px #e0e4e8;
+    }
+
+    .timeline-item.completed .dot {
+      background: #00a650;
+      box-shadow: 0 0 0 2px white, 0 0 0 4px #00a650;
+    }
+
+    .timeline-item.active .dot {
+      background: #3483fa;
+      box-shadow: 0 0 0 2px white, 0 0 0 4px #3483fa;
+      width: 18px;
+      height: 18px;
+      left: -44px;
+      top: 3px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 2px white, 0 0 0 4px #3483fa; }
+      50% { box-shadow: 0 0 0 2px white, 0 0 0 8px rgba(52, 131, 250, 0.5); }
+    }
+
+    .timeline-item h4 {
+      margin: 0 0 4px;
+      font-size: 16px;
       font-weight: 600;
-      min-width: 80px;
+      color: #1a1a1a;
+    }
+
+    .timeline-item span {
+      display: block;
+      font-size: 13px;
+      color: #999;
+      font-weight: 500;
+    }
+
+    .timeline-item.completed h4 {
+      color: #00a650;
+    }
+
+    /* ===== SUMMARY CARD ===== */
+    .summary-card,
+    .products-card,
+    .support-card {
+      background: white;
+      padding: 24px;
+      border-radius: 14px;
+      margin-bottom: 24px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+      border: 1px solid #e0e4e8;
+      transition: all 0.3s ease;
+    }
+
+    .summary-card:hover,
+    .products-card:hover,
+    .support-card:hover {
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border-color: #3483fa;
+    }
+
+    .summary-card h3,
+    .products-card h3,
+    .support-card h3 {
+      margin: 0 0 16px;
+      font-size: 18px;
+      color: #1a1a1a;
+    }
+
+    .summary-card p {
+      margin: 12px 0;
+      font-size: 14px;
+      color: #555;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .summary-card strong {
+      color: #1a1a1a;
+      font-weight: 600;
+    }
+
+    /* ===== PRODUCTS CARD ===== */
+    .product-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid #e0e4e8;
+    }
+
+    .product-row:last-child {
+      border-bottom: none;
+    }
+
+    .product-image {
+      width: 70px;
+      height: 70px;
+      border-radius: 12px;
+      background: #f8f9fa;
+      flex-shrink: 0;
+      border: 1px solid #e0e4e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .product-details {
+      flex: 1;
+    }
+
+    .product-name {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .product-quantity {
+      display: block;
+      font-size: 13px;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    .product-price {
+      font-size: 16px;
+      font-weight: 700;
+      color: #00a650;
       text-align: right;
     }
 
-    /* Estados vacíos */
+    /* ===== SUPPORT CARD ===== */
+    .support-card {
+      background: linear-gradient(135deg, #f5f7fa 0%, #f0f2f5 100%);
+      text-align: center;
+    }
+
+    .support-card p {
+      justify-content: center;
+      font-size: 15px;
+      color: #555;
+      margin: 0 0 16px;
+    }
+
+    .support-card button {
+      background: #3483fa;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .support-card button:hover {
+      background: #0055cc;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(52, 131, 250, 0.3);
+    }
+
+    /* ===== ESTADO VACÍO ===== */
     .vacio-seguimiento {
       text-align: center;
-      padding: 2rem 1.5rem;
-      color: var(--gris-oscuro);
-      background: var(--gris-claro);
-      border-radius: 12px;
-      border: 1px solid var(--borde);
+      padding: 3rem 1.5rem;
+      color: #999;
+      background: white;
+      border-radius: 14px;
+      border: 2px dashed #e0e4e8;
     }
 
     .vacio-seguimiento p {
       margin: 0;
-      font-size: 1.1rem;
-      color: var(--azul-oscuro);
-      font-weight: 500;
+      font-size: 1.2rem;
+      color: #1a1a1a;
+      font-weight: 600;
     }
 
     .vacio-seguimiento small {
       display: block;
       margin-top: 0.5rem;
-      color: var(--gris-oscuro);
+      color: #999;
     }
 
+    /* ===== NO AUTENTICADO ===== */
     .no-autenticado {
       background: #fffbea;
       color: #b8860b;
-      padding: 1.5rem;
-      border-radius: 12px;
-      margin-bottom: 1.5rem;
+      padding: 2rem;
+      border-radius: 14px;
+      margin-bottom: 2rem;
       text-align: center;
-      border: 1px solid #f39c12;
+      border: 2px solid #f39c12;
+      box-shadow: 0 6px 20px rgba(243, 156, 18, 0.1);
     }
 
     .btn-ir-login {
-      background: var(--azul-oscuro);
+      background: #3483fa;
       color: white;
-      padding: 0.9rem 1.5rem;
+      padding: 12px 28px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       text-decoration: none;
       display: inline-block;
       margin-top: 1rem;
-      font-weight: 500;
+      font-weight: 600;
       transition: all 0.2s ease;
     }
 
     .btn-ir-login:hover {
-      background: #2d4f64;
-      transform: translateY(-1px);
+      background: #0055cc;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(52, 131, 250, 0.3);
     }
 
-    /* Responsive */
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       main {
         padding: 1.5rem 1rem;
@@ -514,17 +443,39 @@
         width: 100%;
       }
 
-      .pedido-seguimiento-header {
+      .status-card {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .status-icon {
+        font-size: 40px;
+      }
+
+      .timeline {
+        padding-left: 25px;
+      }
+
+      .timeline-item .dot {
+        left: -33px;
+      }
+
+      .timeline-item.active .dot {
+        left: -36px;
+      }
+
+      .product-row {
         flex-direction: column;
         align-items: flex-start;
       }
 
-      .pedido-detalles-seguimiento {
-        grid-template-columns: repeat(2, 1fr);
+      .product-price {
+        text-align: left;
       }
 
-      .seguimiento-header h1 {
-        font-size: 1.6rem;
+      .summary-card p {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
 
@@ -533,40 +484,46 @@
         padding: 1rem;
       }
 
-      .seguimiento-header h1 {
-        font-size: 1.4rem;
+      .status-card {
+        padding: 18px;
       }
 
-      .pedido-radicado {
-        font-size: 1.1rem;
+      .status-card h2 {
+        font-size: 20px;
       }
 
-      .pedido-detalles-seguimiento {
-        grid-template-columns: 1fr;
+      .status-card p {
+        font-size: 13px;
       }
 
-      .tracking-container {
-        flex-direction: column;
-        gap: 0.8rem;
+      .status-icon {
+        font-size: 36px;
       }
 
-      .tracking-step:not(:last-child)::after {
-        position: static;
-        width: 2px;
-        height: 16px;
-        margin: -8px 0;
+      .timeline-item {
+        margin-bottom: 24px;
       }
 
-      .filtro-seguimiento {
-        padding: 1rem;
+      .summary-card,
+      .products-card,
+      .support-card {
+        padding: 16px;
       }
 
-      .filtro-seguimiento .btn {
-        padding: 0.8rem 1rem;
-        font-size: 0.9rem;
+      .product-image {
+        width: 60px;
+        height: 60px;
+        font-size: 28px;
+      }
+
+      .product-name {
+        font-size: 14px;
+      }
+
+      .product-price {
+        font-size: 14px;
       }
     }
-  </style>
 </head>
 <body>
   <!-- ENCABEZADO -->
@@ -604,17 +561,9 @@
   <!-- CONTENIDO PRINCIPAL -->
   <main>
     <div class="seguimiento-contenedor">
-    <div class="seguimiento-header">
-      <h1>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28" style="display: inline-block; margin-right: 0.8rem; vertical-align: middle;">
-          <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
-          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-          <line x1="12" y1="22.08" x2="12" y2="12"></line>
-        </svg>
-        Seguimiento de Pedidos
-      </h1>
-      <p>Consulta el estado de tus pedidos en tiempo real</p>
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h1 style="font-size: 2.2rem; margin: 0 0 0.5rem;">📦 Seguimiento de Pedidos</h1>
+      <p style="color: #666; font-size: 15px; margin: 0;">Consulta el estado de tus pedidos en tiempo real</p>
     </div>
 
     <div class="filtro-seguimiento">
@@ -733,8 +682,8 @@
       if (pedidos.length === 0) {
         contenedor.innerHTML = `
           <div class="vacio-seguimiento">
-            <p>📭 No tienes pedidos aún</p>
-            <small>Haz tu primer compra y podrás seguir aquí</small>
+            <p>📭 Aún no tienes pedidos</p>
+            <small>Realiza tu primera compra y síguelo aquí en tiempo real</small>
           </div>
         `;
         return;
@@ -745,73 +694,151 @@
 
     function generarTarjetaSeguimiento(pedido) {
       const estadoClass = obtenerClaseEstado(pedido.estado);
-      const estadoTexto = obtenerTextoEstado(pedido.estado);
-      const trackingSteps = generarTrackingSteps(pedido.estado);
-
+      const estadoTexto = obtenerTextoEstadoSimple(pedido.estado);
+      const estadoEmoji = obtenerEmojiEstado(pedido.estado);
+      const fechaEntrega = calcularFechaEntrega(pedido.estado, new Date(pedido.createdAt));
+      
       const fecha = new Date(pedido.createdAt);
-      const fechaFormato = fecha.toLocaleDateString('es-CO');
-      const horaFormato = fecha.toLocaleTimeString('es-CO');
-
+      const fechaFormato = fecha.toLocaleDateString('es-CO', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+      
       const total = pedido.total || 0;
-      const itemsHtml = (pedido.items || []).map(item => `
-        <div class="producto-lista-item">
-          <div class="producto-info" style="flex: 1;">
-            <h4 class="producto-nombre">${item.producto?.nombre || 'Producto'}</h4>
-            <span class="producto-cantidad">${item.cantidad} x $${(item.precioUnitario || 0).toLocaleString('es-CO')}</span>
+      
+      // Timeline items
+      const timelineHtml = generarTimeline(pedido.estado);
+      
+      // Productos
+      const itemsHtml = (pedido.items || []).map(item => {
+        const emoji = obtenerEmojiProducto(item.producto?.nombre || 'Producto');
+        return `
+        <div class="product-row">
+          <div class="product-image">${emoji}</div>
+          <div class="product-details">
+            <h3 class="product-name">${item.producto?.nombre || 'Producto'}</h3>
+            <span class="product-quantity">${item.cantidad}x $${(item.precioUnitario || 0).toLocaleString('es-CO')}</span>
           </div>
-          <span class="precio">${(item.cantidad * (item.precioUnitario || 0)).toLocaleString('es-CO', {style: 'currency', currency: 'COP'})}</span>
+          <div class="product-price">$${(item.cantidad * (item.precioUnitario || 0)).toLocaleString('es-CO')}</div>
         </div>
-      `).join('');
+        `;
+      }).join('');
 
       return `
-        <div class="pedido-seguimiento">
-          <div class="pedido-seguimiento-header">
-            <div class="pedido-radicado">${pedido.numero}</div>
-            <span class="estado-badge ${estadoClass}">${estadoTexto}</span>
-          </div>
-
-          <div class="pedido-detalles-seguimiento">
-            <div class="detalle-item">
-              <div class="detalle-label">Fecha del Pedido</div>
-              <div class="detalle-valor">${fechaFormato} ${horaFormato}</div>
-            </div>
-            <div class="detalle-item">
-              <div class="detalle-label">Cliente</div>
-              <div class="detalle-valor">${pedido.usuario?.nombre || 'Desconocido'}</div>
-            </div>
-            <div class="detalle-item">
-              <div class="detalle-label">Teléfono</div>
-              <div class="detalle-valor">${pedido.usuario?.telefono || 'N/A'}</div>
-            </div>
-            <div class="detalle-item">
-              <div class="detalle-label">Total</div>
-              <div class="detalle-valor precio">$${total.toLocaleString('es-CO')}</div>
+        <div>
+          <!-- STATUS CARD EMOCIONAL -->
+          <div class="status-card">
+            <div class="status-icon">${estadoEmoji}</div>
+            <div class="status-card-content">
+              <h2>${estadoTexto}</h2>
+              <p>Entrega estimada: ${fechaEntrega}</p>
             </div>
           </div>
 
-          <div class="tracking-container">
-            ${trackingSteps}
+          <!-- TIMELINE VERTICAL -->
+          <div class="timeline">
+            ${timelineHtml}
           </div>
 
-          <div class="pedido-items">
-            <div class="items-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-              </svg>
-              Productos (${pedido.items?.length || 0} artículos)
-            </div>
-            <div class="item-lista">
-              ${itemsHtml}
-            </div>
+          <!-- SUMMARY CARD -->
+          <div class="summary-card">
+            <h3>📋 Resumen del Pedido</h3>
+            <p><strong>Número:</strong> ${pedido.numero}</p>
+            <p><strong>Realizado:</strong> ${fechaFormato}</p>
+            <p><strong>Cliente:</strong> ${pedido.usuario?.nombre || 'Desconocido'}</p>
+            <p><strong>Teléfono:</strong> ${pedido.usuario?.telefono || 'N/A'}</p>
+            <p style="border-top: 1px solid #e0e4e8; padding-top: 12px; margin-top: 12px;"><strong style="color: #00a650; font-size: 18px;">Total:</strong> <span style="color: #00a650; font-size: 18px;">$${total.toLocaleString('es-CO')}</span></p>
+          </div>
+
+          <!-- PRODUCTS CARD -->
+          <div class="products-card">
+            <h3>📦 Productos (${pedido.items?.length || 0} artículos)</h3>
+            ${itemsHtml}
+          </div>
+
+          <!-- SUPPORT CARD -->
+          <div class="support-card">
+            <p>¿Necesitas ayuda con tu pedido?</p>
+            <button onclick="alert('Soporte por WhatsApp: +57 3001234567')">💬 Contactar por WhatsApp</button>
           </div>
         </div>
       `;
     }
 
+    function obtenerEmojiEstado(estado) {
+      switch(estado) {
+        case 'PENDIENTE': return '⏳';
+        case 'EN_PREPARACION': return '📦';
+        case 'ENVIADO': return '🚚';
+        case 'ENTREGADO': return '✅';
+        default: return '📋';
+      }
+    }
+
+    function obtenerTextoEstadoSimple(estado) {
+      switch(estado) {
+        case 'PENDIENTE': return 'Tu pedido está confirmado';
+        case 'EN_PREPARACION': return 'Estamos preparando tu pedido';
+        case 'ENVIADO': return 'Tu pedido está en camino';
+        case 'ENTREGADO': return '¡Pedido entregado!';
+        default: return 'Procesando tu pedido';
+      }
+    }
+
+    function obtenerEmojiProducto(nombre) {
+      nombre = nombre.toLowerCase();
+      if (nombre.includes('papa') || nombre.includes('snack')) return '🥔';
+      if (nombre.includes('agua') || nombre.includes('bebida') || nombre.includes('vini')) return '🥤';
+      if (nombre.includes('aceite') || nombre.includes('manteca')) return '🫒';
+      if (nombre.includes('azúcar') || nombre.includes('sal')) return '🍬';
+      if (nombre.includes('arroz') || nombre.includes('pasta')) return '🍚';
+      if (nombre.includes('pan') || nombre.includes('harina')) return '🍞';
+      if (nombre.includes('leche') || nombre.includes('queso') || nombre.includes('lácteo')) return '🥛';
+      if (nombre.includes('limpieza') || nombre.includes('detergente')) return '🧹';
+      if (nombre.includes('papel') || nombre.includes('toalla') || nombre.includes('servilleta')) return '🧻';
+      if (nombre.includes('guante') || nombre.includes('bolsa')) return '🛍️';
+      return '📦';
+    }
+
+    function calcularFechaEntrega(estado, fechaPedido) {
+      if (estado === 'ENTREGADO') return '✨ Ya entregado';
+      
+      const hoy = new Date();
+      const mañana = new Date(hoy);
+      mañana.setDate(mañana.getDate() + 1);
+      
+      const mañanaTexto = mañana.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'short' });
+      
+      if (estado === 'ENVIADO') return `Mañana ${mañanaTexto} antes de las 6:00 p.m.`;
+      if (estado === 'EN_PREPARACION') return `${mañanaTexto} o pasado mañana`;
+      return `${mañanaTexto} (estimado)`;
+    }
+
+    function generarTimeline(estadoActual) {
+      const estados = ['PENDIENTE', 'EN_PREPARACION', 'ENVIADO', 'ENTREGADO'];
+      const etiquetas = ['Pedido Recibido', 'Pago Confirmado', 'Enviado', 'Entregado'];
+      const indiceActual = estados.indexOf(estadoActual);
+
+      return etiquetas.map((label, index) => {
+        let clase = '';
+        if (index < indiceActual) {
+          clase = 'completed';
+        } else if (index === indiceActual) {
+          clase = 'active';
+        }
+
+        const ahora = new Date();
+        const tiempo = ahora.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+
+        return `
+          <div class="timeline-item ${clase}">
+            <div class="dot"></div>
+            <h4>${label}</h4>
+            ${clase === 'completed' ? `<span>${ahora.toLocaleDateString('es-CO')} · ${tiempo}</span>` : (clase === 'active' ? `<span>En proceso</span>` : '')}
+          </div>
+        `;
+      }).join('');
+    }
+
     function obtenerClaseEstado(estado) {
+      // Función auxiliar, ya no se usa en nueva estructura
       switch(estado) {
         case 'PENDIENTE': return 'pendiente';
         case 'EN_PREPARACION': return 'procesando';
@@ -819,62 +846,6 @@
         case 'ENTREGADO': return 'entregado';
         default: return 'pendiente';
       }
-    }
-
-    function obtenerTextoEstado(estado) {
-      switch(estado) {
-        case 'PENDIENTE': return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 8px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>Pendiente';
-        case 'EN_PREPARACION': return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 8px;"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m0 5.08l-4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08 0l4.24 4.24M19.78 19.78l-4.24-4.24m0-5.08l4.24-4.24M23 12h-6m-6 0H5M19.78 4.22l-4.24 4.24m-5.08 0l-4.24-4.24"></path></svg>En Preparaci\u00f3n';
-        case 'ENVIADO': return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 8px;\"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zm-9-2H3m8 0h8m-4-13h1a1 1 0 0 1 1 1v5a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1h1\"></path></svg>Enviado';
-        case 'ENTREGADO': return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16\" style="display: inline-block; margin-right: 8px;\"><polyline points=\"20 6 9 17 4 12\"></polyline></svg>Entregado';
-        default: return estado;
-      }
-    }
-
-    function generarTrackingSteps(estadoActual) {
-      const estados = ['PENDIENTE', 'EN_PREPARACION', 'ENVIADO', 'ENTREGADO'];
-      const etiquetas = ['Recibido', 'Confirmado', 'Enviado', 'Entregado'];
-      const indiceActual = estados.indexOf(estadoActual);
-
-      return etiquetas.map((label, index) => {
-        let claseIndicador = '';
-        let claseLabel = '';
-        let contenidoIndicador = '';
-
-        if (index < indiceActual) {
-          claseIndicador = 'completed';
-          claseLabel = 'completed';
-          contenidoIndicador = '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg>';
-        } else if (index === indiceActual) {
-          claseIndicador = 'active';
-          claseLabel = 'active';
-          contenidoIndicador = (index + 1);
-        } else {
-          contenidoIndicador = (index + 1);
-        }
-
-        return `
-          <div class="tracking-step ${index < indiceActual ? 'completed' : (index === indiceActual ? 'active' : '')}">
-            <div class="step-indicator ${claseIndicador}">${contenidoIndicador}</div>
-            <span class="step-label ${claseLabel}">${label}</span>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function generarTimeline(estadoActual) {
-      const estados = ['PENDIENTE', 'EN_PREPARACION', 'ENVIADO', 'ENTREGADO'];
-      const etiquetas = ['Registrado', 'Preparando', 'Enviado', 'Entregado'];
-
-      return estados.map((estado, index) => {
-        const esActivo = estados.indexOf(estadoActual) >= index;
-        return `
-          <div class="timeline-item ${esActivo ? 'activo' : ''}">
-            <span class="timeline-dot"></span>
-            <div class="timeline-label">${etiquetas[index]}</div>
-          </div>
-        `;
-      }).join('');
     }
 
     function cerrarSesionCliente() {
