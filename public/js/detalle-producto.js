@@ -89,6 +89,11 @@ document.addEventListener('DOMContentLoaded', async function() {
   // Verificar usuario
   verificarUsuarioLogueado();
   
+  // Funciones del header
+  mostrarBtnAdminSiValido();
+  cargarCategoriasDropdown();
+  configurarEventos();
+  
   // Configurar eventos del carrito
   document.getElementById('btn-carrito').addEventListener('click', function() {
     document.getElementById('carrito-panel').classList.toggle('activo');
@@ -304,4 +309,170 @@ function irAlCarrito() {
   if (btnCarrito) {
     btnCarrito.click();
   }
+}
+
+// ===== FUNCIONES PARA HEADER =====
+
+// Toggle menú categorías
+function toggleCategorias() {
+  const dropdownCategorias = document.getElementById('dropdown-categorias');
+  if (dropdownCategorias) {
+    if (dropdownCategorias.style.display === 'none' || !dropdownCategorias.style.display) {
+      dropdownCategorias.style.display = 'block';
+    } else {
+      dropdownCategorias.style.display = 'none';
+    }
+  }
+}
+
+// Cerrar menú de categorías
+function cerrarMenuCategorias() {
+  const dropdownCategorias = document.getElementById('dropdown-categorias');
+  if (dropdownCategorias) {
+    dropdownCategorias.style.display = 'none';
+  }
+}
+
+// Cerrar menú al hacer click afuera
+document.addEventListener('click', function(e) {
+  const dropdownCategorias = document.getElementById('dropdown-categorias');
+  const btnHamburguesa = document.getElementById('btn-hamburguesa');
+  
+  if (dropdownCategorias && btnHamburguesa && !btnHamburguesa.contains(e.target) && !dropdownCategorias.contains(e.target)) {
+    cerrarMenuCategorias();
+  }
+});
+
+// Cargar categorías en el dropdown
+function cargarCategoriasDropdown() {
+  const dropdownList = document.getElementById('categorias-dropdown-lista');
+  if (!dropdownList) return;
+
+  // Obtener todas las categorías únicas de products
+  const categorias = new Set();
+  productosDetalle.forEach(prod => {
+    const categoria = obtenerCategoria(prod.nombre);
+    if (categoria) categorias.add(categoria);
+  });
+
+  // Limpiar e insertar opción "Todas"
+  dropdownList.innerHTML = `
+    <a href="index.html" class="categoria-item" data-categoria="todas">
+      <svg class="icono-categoria-dropdown" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M3 5h2v2H3zm4 0h14v2H7zm0 4h14v2H7zm0 4h14v2H7zm0 4h14v2H7zM3 9h2v2H3zm0 4h2v2H3zm0 4h2v2H3z"/>
+      </svg>
+      <span>Catálogo</span>
+    </a>
+  `;
+
+  // Agregar categorías dinámicas
+  categorias.forEach(cat => {
+    const link = document.createElement('a');
+    link.href = '#';
+    link.className = 'categoria-item';
+    link.dataset.categoria = cat;
+    link.innerHTML = `
+      <svg class="icono-categoria-dropdown" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+      </svg>
+      <span>${cat.charAt(0).toUpperCase() + cat.slice(1)}</span>
+    `;
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      cerrarMenuCategorias();
+      if (cat === 'todas') {
+        window.location.href = 'index.html';
+      }
+    });
+    dropdownList.appendChild(link);
+  });
+}
+
+// Función para abrir el buscador en móvil
+window.abrirBuscador = function() {
+  const inputBuscar = document.getElementById('buscar');
+  
+  if (window.innerWidth < 768) {
+    const modal = document.createElement('div');
+    modal.id = 'modal-busqueda';
+    modal.style.cssText = `
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5); z-index: 999;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 60px;
+    `;
+    
+    modal.innerHTML = `
+      <div style="width: 90%; max-width: 500px; background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+          <input type="text" id="buscar-modal" placeholder="Buscar producto..." style="flex: 1; padding: 0.75rem; border: 1px solid #B6E1F2; border-radius: 6px; font-size: 0.95rem;">
+          <button onclick="document.getElementById('modal-busqueda').remove()" style="background: none; border: none; cursor: pointer; font-size: 1.2rem; color: #999;">✕</button>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    const inputModal = document.getElementById('buscar-modal');
+    inputModal.focus();
+    
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.remove();
+    });
+  } else {
+    inputBuscar.focus();
+  }
+};
+
+// Mostrar botón admin si es válido
+function mostrarBtnAdminSiValido() {
+  try {
+    const usuarioClienteStr = localStorage.getItem('usuario');
+    if (usuarioClienteStr) {
+      return;
+    }
+    
+    const adminUsuarioStr = localStorage.getItem('admin-usuario');
+    const adminToken = localStorage.getItem('admin-token');
+    
+    if (!adminUsuarioStr || !adminToken) {
+      return;
+    }
+    
+    try {
+      const adminUsuario = JSON.parse(adminUsuarioStr);
+      if (adminUsuario && (adminUsuario.rol === 'ADMIN' || adminUsuario.rol === 'admin')) {
+        const contenedor = document.getElementById('contenedor-btn-admin');
+        if (!contenedor) return;
+        
+        contenedor.innerHTML = `
+          <button class="btn-icono" onclick="window.location.href='admin.html'" title="Panel de Administrador">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 3h-2.5a2.5 2.5 0 0 0 0 5H16"></path>
+              <path d="M8 3H5.5a2.5 2.5 0 0 0 0 5H8"></path>
+              <path d="M12 11v4"></path>
+              <path d="M8 13h8"></path>
+            </svg>
+          </button>
+        `;
+      }
+    } catch (e) {
+      console.error('Error parseando admin usuario:', e);
+    }
+  } catch (e) {
+    console.error('Error en mostrarBtnAdminSiValido:', e);
+  }
+}
+
+// Configurar eventos del buscador
+function configurarEventos() {
+  const inputBuscar = document.getElementById('buscar');
+  if (!inputBuscar) return;
+
+  inputBuscar.addEventListener('input', function() {
+    const limpiar = document.querySelector('.btn-limpiar-buscar');
+    if (limpiar) {
+      limpiar.style.display = this.value ? 'block' : 'none';
+    }
+  });
 }

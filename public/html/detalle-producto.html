@@ -734,21 +734,64 @@
   <header>
     <div class="contenedor">
       <div class="encabezado-contenedor">
-        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
-          <img src="../assets/logo-storehub.svg" alt="Logo StoreHub">
-          <span class="logo-text">StoreHub</span>
+        <!-- LOGO -->
+        <div class="logo">
+          <img src="../assets/logo-storehub.svg" alt="Logo StoreHub" class="logo-img">
         </div>
-        <div class="barra-busqueda-contenedor">
-          <div class="barra-busqueda">
-            <svg class="icono-buscar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+        <!-- BARRA DE BÚSQUEDA MODERNA + HAMBURGUESA -->
+        <div class="barra-busqueda-grupo">
+          <!-- Botón Hamburguesa (solo visible en celular) -->
+          <button class="btn-hamburguesa" id="btn-hamburguesa" onclick="toggleCategorias()" title="Filtros">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="20" height="20" stroke-linecap="round">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+
+          <!-- Dropdown de Categorías -->
+          <div class="dropdown-categorias" id="dropdown-categorias" style="display: none;">
+            <div class="dropdown-contenido">
+              <div class="categorias-dropdown-lista" id="categorias-dropdown-lista">
+                <a href="index.html" class="categoria-item" data-categoria="todas">
+                  <svg class="icono-categoria-dropdown" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 5h2v2H3zm4 0h14v2H7zm0 4h14v2H7zm0 4h14v2H7zm0 4h14v2H7zM3 9h2v2H3zm0 4h2v2H3zm0 4h2v2H3z"/>
+                  </svg>
+                  <span>Catálogo</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barra de búsqueda normal (desktop) -->
+          <div class="barra-busqueda-contenedor-desktop">
+            <div class="barra-busqueda">
+              <svg class="icono-buscar-fijo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+              <input type="text" id="buscar" placeholder="Buscar producto..." class="input-buscar">
+              <button class="btn-limpiar-buscar" onclick="document.getElementById('buscar').value=''; configurarEventos();" style="display:none;">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Botón de lupa compacto (solo móvil) -->
+          <button class="btn-busqueda-movil" id="btn-busqueda-movil" onclick="abrirBuscador()" title="Buscar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="11" cy="11" r="8"></circle>
               <path d="m21 21-4.35-4.35"></path>
             </svg>
-            <input type="text" id="buscar" placeholder="Buscar producto..." class="input-buscar">
-            <button class="btn-limpiar-buscar" onclick="document.getElementById('buscar').value='';" style="display:none;">✕</button>
-          </div>
+          </button>
         </div>
+
+        <!-- MENU SUPERIOR -->
         <div class="menu-superior">
+          <!-- CARRITO -->
           <div class="icono-carrito" id="btn-carrito" title="Mi carrito">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="9" cy="21" r="1"></circle>
@@ -757,20 +800,25 @@
             </svg>
             <span class="contador-carrito" id="contador">0</span>
           </div>
+
+          <!-- USUARIO -->
           <div id="menu-usuario">
-            <button class="btn btn-principal" onclick="window.location.href='login.html'" title="Iniciar sesión">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="display: inline-block;">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
+            <button class="btn-icono" onclick="window.location.href='login.html'" title="Iniciar sesión">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
               </svg>
             </button>
           </div>
-          <button class="btn-icono" onclick="window.location.href='index.html'" title="Volver al catálogo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="display: inline-block;">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+
+          <!-- BOTÓN ADMIN (insertado dinámicamente si es admin) -->
+          <div id="contenedor-btn-admin"></div>
+
+          <!-- SEGUIMIENTO -->
+          <a href="seguimiento-pedidos.html" class="btn-icono" title="Ver mis pedidos">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5s-5 2.24-5 5v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6-2c1.66 0 3 1.34 3 3v2h-6V9c0-1.66 1.34-3 3-3zm6 16H6V10h12v12zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
             </svg>
-          </button>
+          </a>
         </div>
       </div>
     </div>
