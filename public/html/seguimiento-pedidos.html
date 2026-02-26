@@ -524,8 +524,149 @@
         font-size: 14px;
       }
     }
+
+    /* ===== STICKY HEADER BAR (NIVEL DIOS) ===== */
+    .sticky-status-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-bottom: 2px solid #e0e4e8;
+      padding: 12px 20px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      transform: translateY(-100%);
+      transition: transform 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .sticky-status-bar.visible {
+      transform: translateY(0);
+    }
+
+    .sticky-status-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .sticky-status-icon {
+      font-size: 24px;
+      min-width: 24px;
+    }
+
+    .sticky-status-text h3 {
+      margin: 0;
+      font-size: 14px;
+      color: #1a1a1a;
+      font-weight: 600;
+    }
+
+    .sticky-status-text p {
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: #999;
+    }
+
+    .sticky-status-right {
+      font-size: 12px;
+      color: #3483fa;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* ===== PEOPLE INDICATOR (NIVEL DIOS) ===== */
+    .people-indicator {
+      background: linear-gradient(135deg, #fff8e1 0%, #fffbea 100%);
+      border-left: 4px solid #ffc107;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .people-avatars {
+      display: flex;
+      gap: -8px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3483fa, #0055cc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      border: 2px solid white;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    .avatar:nth-child(2) { animation-delay: 0.2s; }
+    .avatar:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .people-text {
+      flex: 1;
+    }
+
+    .people-text p {
+      margin: 0;
+      font-size: 14px;
+      color: #f57c00;
+      font-weight: 600;
+    }
+
+    .people-text small {
+      display: block;
+      color: #999;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    /* ===== CONFETTI (NIVEL DIOS) ===== */
+    .confetti {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      pointer-events: none;
+      z-index: 9999;
+    }
+  </style>
 </head>
 <body>
+  <!-- STICKY STATUS BAR (NIVEL DIOS) 🔥 -->
+  <div class="sticky-status-bar" id="sticky-status-bar">
+    <div class="sticky-status-left">
+      <div class="sticky-status-icon" id="sticky-icon">📦</div>
+      <div class="sticky-status-text">
+        <h3 id="sticky-title">Tu pedido</h3>
+        <p id="sticky-subtitle">Desliza para ver detalles</p>
+      </div>
+    </div>
+    <div class="sticky-status-right" id="sticky-time">Mañana</div>
+  </div>
+
   <!-- ENCABEZADO -->
   <header>
     <div class="contenedor">
@@ -585,14 +726,136 @@
 
   <script>
     const BACKEND_URL = window.BACKEND_URL || 'http://localhost:3000';
+    let estadoPedidoActual = null;
 
     document.addEventListener('DOMContentLoaded', function() {
       verificarAutenticacionCliente();
       cargarMisPedidos();
       
+      // Control del sticky header
+      window.addEventListener('scroll', manejarStickyHeader);
+      
       // Actualizar cada 10 segundos
       setInterval(cargarMisPedidos, 10000);
     });
+
+    // ===== STICKY HEADER CONTROL (NIVEL DIOS) =====
+    function manejarStickyHeader() {
+      const statusCard = document.getElementById('status-card-main');
+      const stickyBar = document.getElementById('sticky-status-bar');
+      
+      if (!statusCard || !stickyBar) return;
+      
+      const rect = statusCard.getBoundingClientRect();
+      
+      if (rect.top < -50) {
+        stickyBar.classList.add('visible');
+      } else {
+        stickyBar.classList.remove('visible');
+      }
+    }
+
+    // ===== ACTUALIZAR STICKY HEADER =====
+    function actualizarStickyHeader(estado, emoji, textoCorto, fechaEntrega) {
+      const stickyIcon = document.getElementById('sticky-icon');
+      const stickyTitle = document.getElementById('sticky-title');
+      const stickySubtitle = document.getElementById('sticky-subtitle');
+      const stickyTime = document.getElementById('sticky-time');
+      
+      if (stickyIcon) stickyIcon.textContent = emoji;
+      if (stickyTitle) stickyTitle.textContent = textoCorto;
+      if (stickySubtitle) stickySubtitle.textContent = estado === 'ENTREGADO' ? '✅ Completo' : 'Desliza para ver detalles';
+      if (stickyTime) stickyTime.textContent = fechaEntrega;
+    }
+
+    // ===== CONFETTI EXPLOSIÓN (NIVEL DIOS) =====
+    function dispararConfetti() {
+      const colores = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA502', '#FF1493'];
+      
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti-piece';
+        
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight - window.innerHeight;
+        const tamano = Math.random() * 8 + 4;
+        const duracion = Math.random() * 2 + 2;
+        const rotacion = Math.random() * 360;
+        
+        confetti.style.cssText = `
+          left: ${x}px;
+          top: ${y}px;
+          width: ${tamano}px;
+          height: ${tamano}px;
+          background: ${colores[Math.floor(Math.random() * colores.length)]};
+          border-radius: 50%;
+          animation: caerConfetti ${duracion}s linear forwards;
+          opacity: 1;
+        `;
+        
+        document.body.appendChild(confetti);
+        
+        setTimeout(() => confetti.remove(), duracion * 1000);
+      }
+      
+      // Agregar estilos de animación dinámico
+      if (!document.getElementById('confetti-styles')) {
+        const style = document.createElement('style');
+        style.id = 'confetti-styles';
+        style.innerHTML = `
+          @keyframes caerConfetti {
+            to {
+              transform: translateY(${window.innerHeight + 100}px) rotate(720deg);
+              opacity: 0;
+            }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+
+    // ===== MOSTRAR CONFETTI CON MENSAJE =====
+    function mostrarEntregaCompleta() {
+      dispararConfetti();
+      
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        animation: fadeIn 0.3s ease;
+      `;
+      
+      modal.innerHTML = `
+        <div style="background: white; padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+          <div style="font-size: 60px; margin-bottom: 20px;">🎉</div>
+          <h2 style="margin: 0 0 10px; font-size: 24px; color: #1a1a1a;">¡Pedido Entregado!</h2>
+          <p style="margin: 0 0 20px; color: #666; font-size: 15px;">Gracias por tu compra en StoreHub</p>
+          <p style="margin: 0 0 20px; color: #999; font-size: 13px;">Te esperamos pronto 💚</p>
+          <button onclick="this.parentElement.parentElement.remove()" style="background: #3483fa; color: white; border: none; padding: 12px 28px; border-radius: 10px; cursor: pointer; font-weight: 600;">Volver al inicio</button>
+        </div>
+      `;
+      
+      const style = document.createElement('style');
+      style.innerHTML = `
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `;
+      document.head.appendChild(style);
+      
+      document.body.appendChild(modal);
+      
+      setTimeout(() => modal.remove(), 5000);
+    }
 
     function verificarAutenticacionCliente() {
       const usuarioStr = localStorage.getItem('usuario');
@@ -636,7 +899,19 @@
         }
 
         const pedidos = await resp.json();
-        mostrarPedidos(Array.isArray(pedidos) ? pedidos : (Array.isArray(pedidos.data) ? pedidos.data : []));
+        const pedidosArray = Array.isArray(pedidos) ? pedidos : (Array.isArray(pedidos.data) ? pedidos.data : []);
+        
+        // Detectar cambio de estado (NIVEL DIOS) 🎊
+        if (pedidosArray.length > 0) {
+          const nuevoEstado = pedidosArray[0].estado;
+          
+          if (estadoPedidoActual && estadoPedidoActual !== nuevoEstado) {
+            // Estado cambió! Mostrar animación
+            mostrarCambioEstado(estadoPedidoActual, nuevoEstado);
+          }
+        }
+        
+        mostrarPedidos(pedidosArray);
       } catch (err) {
         console.error('Error cargando pedidos:', err);
         document.getElementById('contenedor-seguimiento').innerHTML = `
@@ -645,6 +920,70 @@
           </div>
         `;
       }
+    }
+
+    // ===== MOSTRAR CAMBIO DE ESTADO =====
+    function mostrarCambioEstado(estadoAnterior, nuevoEstado) {
+      const estados = {
+        'PENDIENTE': { emoji: '⏳', texto: 'Pedido confirmado' },
+        'EN_PREPARACION': { emoji: '📦', texto: 'Preparando tu pedido' },
+        'ENVIADO': { emoji: '🚚', texto: 'Tu pedido está en camino' },
+        'ENTREGADO': { emoji: '✅', texto: '¡Pedido entregado!' }
+      };
+      
+      const info = estados[nuevoEstado] || { emoji: '📋', texto: 'Actualización' };
+      
+      // Notificación toast animada
+      const toast = document.createElement('div');
+      toast.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: white;
+        padding: 16px 24px;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        z-index: 9998;
+        animation: slideUpToast 0.4s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border-left: 4px solid #3483fa;
+      `;
+      
+      toast.innerHTML = `
+        <div style="font-size: 28px;">${info.emoji}</div>
+        <div>
+          <div style="font-weight: 600; color: #1a1a1a; font-size: 14px;">${info.texto}</div>
+          <div style="font-size: 12px; color: #999;">Tu orden ha sido actualizada</div>
+        </div>
+      `;
+      
+      document.body.appendChild(toast);
+      
+      // Agregar animación si no existe
+      if (!document.getElementById('toast-animation')) {
+        const style = document.createElement('style');
+        style.id = 'toast-animation';
+        style.innerHTML = `
+          @keyframes slideUpToast {
+            from {
+              transform: translateY(100px);
+              opacity: 0;
+            }
+            to {
+              transform: translateY(0);
+              opacity: 1;
+            }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+      
+      setTimeout(() => {
+        toast.style.animation = 'slideUpToast 0.4s ease reverse';
+        setTimeout(() => toast.remove(), 400);
+      }, 4000);
     }
 
     function buscarPedido() {
@@ -689,7 +1028,34 @@
         return;
       }
 
+      // Renderizar primer pedido (más reciente)
+      const pedidoPrincipal = pedidos[0];
+      estadoPedidoActual = pedidoPrincipal.estado;
+      
       contenedor.innerHTML = pedidos.map(pedido => generarTarjetaSeguimiento(pedido)).join('');
+      
+      // Actualizar sticky header
+      const emoji = obtenerEmojiEstado(pedidoPrincipal.estado);
+      const textoCorto = obtenerTextoCorto(pedidoPrincipal.estado);
+      const fechaEntrega = calcularFechaEntrega(pedidoPrincipal.estado, new Date(pedidoPrincipal.createdAt));
+      
+      actualizarStickyHeader(pedidoPrincipal.estado, emoji, textoCorto, fechaEntrega);
+      
+      // Si está entregado, mostrar confetti (pero solo la primera vez)
+      if (pedidoPrincipal.estado === 'ENTREGADO' && !sessionStorage.getItem('entrega-celebrada')) {
+        sessionStorage.setItem('entrega-celebrada', 'true');
+        setTimeout(mostrarEntregaCompleta, 500);
+      }
+    }
+
+    function obtenerTextoCorto(estado) {
+      switch(estado) {
+        case 'PENDIENTE': return 'Confirmado';
+        case 'EN_PREPARACION': return 'Preparando';
+        case 'ENVIADO': return 'En camino';
+        case 'ENTREGADO': return '¡Entregado!';
+        default: return 'Procesando';
+      }
     }
 
     function generarTarjetaSeguimiento(pedido) {
@@ -723,8 +1089,23 @@
 
       return `
         <div>
+          <!-- PEOPLE INDICATOR (NIVEL DIOS) -->
+          ${estadoActual === 'EN_PREPARACION' ? `
+            <div class="people-indicator">
+              <div class="people-avatars">
+                <div class="avatar">👤</div>
+                <div class="avatar">👤</div>
+                <div class="avatar">👤</div>
+              </div>
+              <div class="people-text">
+                <p>👀 3 personas preparando tu pedido</p>
+                <small>Trabajando en tu orden ahora mismo</small>
+              </div>
+            </div>
+          ` : ''}
+
           <!-- STATUS CARD EMOCIONAL -->
-          <div class="status-card">
+          <div class="status-card" id="status-card-main">
             <div class="status-icon">${estadoEmoji}</div>
             <div class="status-card-content">
               <h2>${estadoTexto}</h2>
