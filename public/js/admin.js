@@ -2425,48 +2425,8 @@ let chartInventario = null;
 let chartTopSellers = null;
 let chartSinRotacion = null;
 
-async function mostrarReporte(tipo) {
-  // Actualizar botones de pestaña
-  const botones = document.querySelectorAll('.tab-btn');
-  botones.forEach(btn => {
-    btn.classList.remove('activo');
-    if ((tipo === 'inventario' && btn.textContent.includes('Stock')) ||
-        (tipo === 'top-sellers' && btn.textContent.includes('Vendidos')) ||
-        (tipo === 'sin-rotacion' && btn.textContent.includes('Rotación'))) {
-      btn.classList.add('activo');
-    }
-  });
-
-  // Ocultar todos los reportes
-  document.getElementById('reporte-inventario').style.display = 'none';
-  document.getElementById('reporte-top-sellers').style.display = 'none';
-  document.getElementById('reporte-sin-rotacion').style.display = 'none';
-
-  // Mostrar reporte seleccionado
-  if (tipo === 'inventario') {
-    document.getElementById('reporte-inventario').style.display = 'block';
-    await generarReporteInventario();
-  } else if (tipo === 'top-sellers') {
-    document.getElementById('reporte-top-sellers').style.display = 'block';
-    await generarReporteTopSellers();
-  } else if (tipo === 'sin-rotacion') {
-    document.getElementById('reporte-sin-rotacion').style.display = 'block';
-    await generarReporteSinRotacion();
-  }
-}
-
 async function actualizarReporte() {
-  // Determinar cuál reporte está activo
-  if (document.getElementById('reporte-inventario').style.display !== 'none') {
-    await generarReporteInventario();
-  } else if (document.getElementById('reporte-top-sellers').style.display !== 'none') {
-    await generarReporteTopSellers();
-  } else if (document.getElementById('reporte-sin-rotacion').style.display !== 'none') {
-    await generarReporteSinRotacion();
-  }
-}
-
-async function generarReporteInventario() {
+  console.log('🔄 Actualizando reportes...');
   try {
     const token = localStorage.getItem('admin-token');
     if (!token) {
@@ -2474,69 +2434,45 @@ async function generarReporteInventario() {
       return;
     }
 
-    // Cargar productos
-    const prodRes = await fetch(API_URL + '/products', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    let productos = await prodRes.json();
-    // Manejar respuesta del backend (puede ser array directo o con propiedad 'data')
-    productos = Array.isArray(productos) ? productos : (Array.isArray(productos.data) ? productos.data : []);
+    // Cargar productos y órdenes
+    const [prodRes, ordRes] = await Promise.all([
+      fetch(API_URL + '/products', { headers: { 'Authorization': `Bearer ${token}` } }),
+      fetch(API_URL + '/orders', { headers: { 'Authorization': `Bearer ${token}` } })
+    ]);
 
-    // Separar productos por estado de stock
+    let productos = await prodRes.json();
+    let ordenes = await ordRes.json();
+
+    // Normalizar arrays
+    productos = Array.isArray(productos) ? productos : (Array.isArray(productos.data) ? productos.data : []);
+    ordenes = Array.isArray(ordenes) ? ordenes : (Array.isArray(ordenes.data) ? ordenes.data : []);
+
+    // ===== ANÁLISIS DE INVENTARIO =====
     const bajoStock = productos.filter(p => p.stock > 0 && p.stock < 5);
     const agotados = productos.filter(p => p.stock === 0);
     const criticos = productos.filter(p => p.stock > 0 && p.stock < 3);
+    const normal = productos.filter(p => p.stock >= 5);
 
-    // Actualizar estadísticas
-    document.getElementById('stat-bajo-stock').textContent = bajoStock.length;
-    document.getElementById('stat-agotados').textContent = agotados.length;
-    document.getElementById('stat-critico').textContent = criticos.length;
+    // Actualizar KPIs
+    document.getElementById('kpi-total-productos').textContent = productos.length;
+    document.getElementById('kpi-bajo-stock').textContent = bajoStock.length;
+    document.getElementById('kpi-agotados').textContent = agotados.length;
+    const porcentajeCriticos = productos.length > 0 ? Math.round((criticos.length / productos.length) * 100) : 0;
+    document.getElementById('kpi-criticos').textContent = porcentajeCriticos + '%';
 
-    // Llenar tabla de inventario
-    const todosBajoStock = [...bajoStock, ...agotados].sort((a, b) => a.stock - b.stock);
-    
-    const html = todosBajoStock.map(prod => `
-      <tr>
-        <td>${prod.nombre}</td>
-        <td>${prod.categoria || 'Sin categoría'}</td>
-        <td><strong>${prod.stock}</strong></td>
-        <td>
-          <span style="
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-            background: ${prod.stock === 0 ? '#ffccbc' : prod.stock < 3 ? '#ffe0b2' : '#fff3cd'};
-            color: ${prod.stock === 0 ? '#bf360c' : prod.stock < 3 ? '#e65100' : '#856404'};
-          ">
-            ${prod.stock === 0 ? 'AGOTADO' : prod.stock < 3 ? 'CRÍTICO' : 'BAJO STOCK'}
-          </span>
-        </td>
-        <td>
-          <button class="btn btn-pequeno" onclick="editarProducto('${prod.id}')">Editar</button>
-        </td>
-      </tr>
-    `).join('');
+    // ===== GRÁFICO 1: DISTRIBUCIÓN DE STOCK =====
+    const ctxDistribucion = document.getElementById('chart-distribucion-stock').getContext('2d');
+    if (window.chartDistribicionStock) window.chartDistribicionStock.destroy();
 
-    document.getElementById('tabla-inventario-body').innerHTML = html || '<tr><td colspan="5" style="text-align:center;">Sin productos con bajo stock</td></tr>';
-
-    // Gráfico de distribución
-    const ctx = document.getElementById('chart-inventario-dist').getContext('2d');
-    
-    if (chartInventario) chartInventario.destroy();
-    
-    chartInventario = new Chart(ctx, {
+    const coloresDistribucion = ['#d1fae5', '#fef3c7', '#fee2e2'];
+    window.chartDistribicionStock = new Chart(ctxDistribucion, {
       type: 'doughnut',
       data: {
-        labels: ['Stock Normal', 'Bajo Stock', 'Agotado'],
+        labels: ['Stock Normal', 'Bajo Stock', 'Agotados'],
         datasets: [{
-          data: [
-            productos.filter(p => p.stock >= 5).length,
-            bajoStock.length,
-            agotados.length
-          ],
-          backgroundColor: ['#c8e6c9', '#ffe0b2', '#ffccbc'],
-          borderColor: ['#2e7d32', '#e65100', '#bf360c'],
+          data: [normal.length, bajoStock.length, agotados.length],
+          backgroundColor: coloresDistribucion,
+          borderColor: ['#065f46', '#92400e', '#991b1b'],
           borderWidth: 2
         }]
       },
@@ -2544,60 +2480,152 @@ async function generarReporteInventario() {
         responsive: true,
         maintainAspectRatio: true,
         plugins: {
-          legend: { position: 'bottom' }
-        }
+          legend: {
+            position: 'bottom',
+            labels: { padding: 15, font: { size: 12 } }
+          }
+        },
+        cutout: '60%'
       }
     });
 
-  } catch (error) {
-    console.error('Error generando reporte inventario:', error);
-    document.getElementById('tabla-inventario-body').innerHTML = '<tr><td colspan="5" style="text-align:center; color: red;">Error cargando datos</td></tr>';
-  }
-}
-
-async function generarReporteTopSellers() {
-  try {
-    const token = localStorage.getItem('admin-token');
-    if (!token) {
-      console.error('No hay token válido');
-      return;
-    }
-
-    // Cargar órdenes y productos
-    const ordRes = await fetch(API_URL + '/orders', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    const ordenes = await ordRes.json();
-
-    const prodRes = await fetch(API_URL + '/products', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    const productos = await prodRes.json();
-
-    // Calcular ventas por producto
+    // ===== GRÁFICO 2: TOP PRODUCTOS POR VENTAS =====
     const ventasPorProducto = {};
-
     ordenes.forEach(orden => {
-      if (orden.estado === 'completada' || orden.estado === 'entregada') {
-        // Procesar items de la orden
+      if (orden.estado === 'completada' || orden.estado === 'entregada' || orden.estado === 'delivered') {
         if (orden.items && Array.isArray(orden.items)) {
           orden.items.forEach(item => {
-            if (!ventasPorProducto[item.product_id]) {
-              ventasPorProducto[item.product_id] = { cantidad: 0, ingresos: 0 };
+            const prodId = item.product_id || item.productId;
+            if (!ventasPorProducto[prodId]) {
+              ventasPorProducto[prodId] = { cantidad: 0, ingresos: 0 };
             }
-            ventasPorProducto[item.product_id].cantidad += item.quantity_sold || item.cantidad || 1;
-            ventasPorProducto[item.product_id].ingresos += (item.precio || 0) * (item.quantity_sold || item.cantidad || 1);
+            ventasPorProducto[prodId].cantidad += item.quantity_sold || item.cantidad || 1;
+            ventasPorProducto[prodId].ingresos += (item.precio || item.price || 0) * (item.quantity_sold || item.cantidad || 1);
           });
         }
       }
     });
 
-    // Crear array y ordenar por cantidad vendida
-    const topVentas = Object.entries(ventasPorProducto)
+    const topProductos = Object.entries(ventasPorProducto)
       .map(([prodId, data]) => {
-        const prod = productos.find(p => p.id == prodId);
+        const prod = productos.find(p => String(p.id) === String(prodId));
         return {
           id: prodId,
+          nombre: prod ? prod.nombre : 'Producto desconocido',
+          cantidad: data.cantidad,
+          ingresos: data.ingresos
+        };
+      })
+      .sort((a, b) => b.cantidad - a.cantidad)
+      .slice(0, 8);
+
+    const ctxTop = document.getElementById('chart-top-ventas').getContext('2d');
+    if (window.chartTopVentas) window.chartTopVentas.destroy();
+
+    window.chartTopVentas = new Chart(ctxTop, {
+      type: 'bar',
+      data: {
+        labels: topProductos.map(p => p.nombre.substring(0, 15)),
+        datasets: [{
+          label: 'Unidades Vendidas',
+          data: topProductos.map(p => p.cantidad),
+          backgroundColor: '#2f5f6b',
+          borderRadius: 4,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          x: { beginAtZero: true, ticks: { stepSize: 1 } }
+        }
+      }
+    });
+
+    // ===== TABLA: PRODUCTOS CON BAJO STOCK =====
+    const todosBajoStock = [...bajoStock, ...agotados].sort((a, b) => a.stock - b.stock);
+    document.getElementById('contador-bajo-stock').textContent = todosBajoStock.length;
+
+    const htmlTabla = todosBajoStock.map(prod => {
+      let estadoBadge = '';
+      let estadoClass = '';
+
+      if (prod.stock === 0) {
+        estadoBadge = 'AGOTADO';
+        estadoClass = 'badge-agotado';
+      } else if (prod.stock < 3) {
+        estadoBadge = 'CRÍTICO';
+        estadoClass = 'badge-bajo';
+      } else {
+        estadoBadge = 'BAJO STOCK';
+        estadoClass = 'badge-bajo';
+      }
+
+      return `
+        <tr>
+          <td><strong>${prod.nombre}</strong></td>
+          <td>${prod.categoria || 'Sin categoría'}</td>
+          <td><strong>${prod.stock}</strong></td>
+          <td><span class="badge-estado ${estadoClass}">${estadoBadge}</span></td>
+          <td><button class="btn-tabla-reportes" onclick="editarProducto('${prod.id}')">Editar</button></td>
+        </tr>
+      `;
+    }).join('');
+
+    document.getElementById('tabla-bajo-stock-body').innerHTML = htmlTabla || '<tr><td colspan="5" style="text-align:center; padding: 20px; color: #999;">Todos los productos tienen stock normal</td></tr>';
+
+    // ===== RESUMEN ANALÍTICO: Nivel universitario =====
+    generarResumenAnalisis(productos, bajoStock, agotados, criticos, normal);
+
+  } catch (error) {
+    console.error('Error actualizando reportes:', error);
+    document.getElementById('tabla-bajo-stock-body').innerHTML = '<tr><td colspan="5" style="text-align:center; color: #e74c3c;">Error cargando datos</td></tr>';
+  }
+}
+
+function generarResumenAnalisis(productos, bajoStock, agotados, criticos, normal) {
+  let resumen = '';
+  const totalProductos = productos.length;
+  const pctBajoStock = totalProductos > 0 ? Math.round((bajoStock.length / totalProductos) * 100) : 0;
+  const pctAgotados = totalProductos > 0 ? Math.round((agotados.length / totalProductos) * 100) : 0;
+  const pctCriticos = totalProductos > 0 ? Math.round((criticos.length / totalProductos) * 100) : 0;
+
+  if (agotados.length === 0 && criticos.length === 0) {
+    resumen = `
+      <strong style="color: #065f46;">✓ Inventario Óptimo</strong><br>
+      No existen productos en estado crítico. El inventario se encuentra en condiciones óptimas.
+      ${bajoStock.length > 0 ? ` Se requiere reposición de ${bajoStock.length} producto(s) con bajo stock en el corto plazo.` : ' No se requiere reposición inmediata.'}
+    `;
+  } else if (pctCriticos <= 5) {
+    resumen = `
+      <strong style="color: #92400e;">⚠ Inventario con Moderada Urgencia</strong><br>
+      Se identificaron ${criticos.length} producto(s) en estado crítico (${pctCriticos}% del total).
+      Se recomienda realizar reposición inmediata de estos artículos.
+      ${bajoStock.length > 0 ? ` Adicionalmente, ${bajoStock.length} producto(s) requieren reposición urgente.` : ''}
+    `;
+  } else {
+    resumen = `
+      <strong style="color: #991b1b;">🔴 Inventario Crítico</strong><br>
+      El ${pctCriticos}% del inventario se encuentra en estado crítico (${criticos.length} producto(s)).
+      Se requiere acción inmediata de reposición.
+      ${agotados.length > 0 ? ` Hay ${agotados.length} producto(s) completamente agotados que afectan la disponibilidad.` : ''}
+    `;
+  }
+
+  document.getElementById('texto-resumen-analisis').innerHTML = resumen;
+}
+
+// Inicializar reportes al cargar
+async function mostrarReporte(tipo) {
+  // Mantener compatibilidad con código anterior
+  console.log('📊 Mostrando reporte:', tipo);
+  await actualizarReporte();
+}
           nombre: prod?.nombre || 'Producto Desconocido',
           categoria: prod?.categoria || 'N/A',
           cantidad: data.cantidad,

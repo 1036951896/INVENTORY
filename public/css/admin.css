@@ -2617,3 +2617,336 @@ body {
     padding: 1rem 1.25rem;
   }
 }
+
+/* ===== MÓDULO DE REPORTES: ACADÉMICO-PROFESIONAL ===== */
+
+.reportes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.reportes-toolbar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.reportes-toolbar select {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #333;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.reportes-toolbar select:hover {
+  border-color: #2f5f6b;
+}
+
+.reportes-toolbar select:focus {
+  outline: none;
+  border-color: #2f5f6b;
+  box-shadow: 0 0 0 3px rgba(47, 95, 107, 0.1);
+}
+
+.btn-actualizar {
+  padding: 0.75rem 1.25rem;
+  background: #2f5f6b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-actualizar:hover {
+  background: #1e3a43;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(47, 95, 107, 0.2);
+}
+
+.btn-actualizar:active {
+  transform: translateY(0);
+}
+
+/* KPIs: Compactos con jerarquía visual */
+.reportes-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.kpi-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.kpi-card:hover {
+  border-color: #2f5f6b;
+  box-shadow: 0 4px 12px rgba(47, 95, 107, 0.1);
+}
+
+.kpi-card h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: #2f5f6b;
+}
+
+.kpi-card p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Gráficos: Dos equilibrados lado a lado */
+.reportes-graficos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.grafico-bloque {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.grafico-bloque h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2f5f6b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.grafico-bloque canvas {
+  max-height: 250px;
+}
+
+/* Sección de tabla profesional */
+.reportes-seccion {
+  margin-bottom: 2.5rem;
+}
+
+.seccion-titulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.seccion-titulo h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2f5f6b;
+}
+
+.contador-tabla {
+  background: #2f5f6b;
+  color: white;
+  padding: 0.35rem 0.75rem;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Tabla profesional */
+.tabla-reportes {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.tabla-reportes thead {
+  background: #f8fafc;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.tabla-reportes thead th {
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tabla-reportes tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.2s ease;
+}
+
+.tabla-reportes tbody tr:hover {
+  background: #f9fafb;
+}
+
+.tabla-reportes tbody td {
+  padding: 1rem;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.tabla-reportes tbody td:nth-child(4) {
+  text-align: center;
+}
+
+.tabla-reportes tbody td:nth-child(5) {
+  text-align: center;
+}
+
+/* Badges de estado */
+.badge-estado {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.badge-normal {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge-bajo {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-agotado {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Botones en tabla */
+.btn-tabla-reportes {
+  padding: 0.35rem 0.75rem;
+  background: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-tabla-reportes:hover {
+  background: #e0e0e0;
+  border-color: #2f5f6b;
+  color: #2f5f6b;
+}
+
+/* Resumen analítico: Nivel universitario */
+.resumen-analisis {
+  background: #f8fafc;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.resumen-analisis h3 {
+  margin: 0 0 1rem 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2f5f6b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.resumen-analisis p {
+  margin: 0;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+/* RESPONSIVO: Tablet */
+@media (max-width: 1024px) {
+  .reportes-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .reportes-graficos {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .reportes-toolbar {
+    width: 100%;
+  }
+
+  .reportes-toolbar select {
+    flex: 1;
+  }
+}
+
+/* RESPONSIVO: Mobile */
+@media (max-width: 768px) {
+  .reportes-kpis {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .kpi-card {
+    padding: 1rem;
+  }
+
+  .kpi-card h2 {
+    font-size: 22px;
+  }
+
+  .kpi-card p {
+    font-size: 12px;
+  }
+
+  .tabla-reportes thead th,
+  .tabla-reportes tbody td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .seccion-titulo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .reportes-toolbar {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .reportes-toolbar select,
+  .btn-actualizar {
+    width: 100%;
+  }
+}

@@ -813,52 +813,63 @@
 
         <!-- REPORTES -->
         <section id="seccion-reportes" class="seccion-contenido" style="display: none;">
-          <h2>Reportes de Inventario</h2>
-          
-          <!-- Botones de selección de tipo de reporte -->
-          <div class="reportes-tabs">
-            <button class="tab-btn activo" onclick="mostrarReporte('inventario')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 4px;"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>Inventario Bajo Stock</button>
-            <button class="tab-btn" onclick="mostrarReporte('top-sellers')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 4px;"><path d="M6 9l6-6 6 6m-11 5h10a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2zm0 0V7a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path></svg>Productos Más Vendidos</button>
-            <button class="tab-btn" onclick="mostrarReporte('sin-rotacion')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="display: inline-block; margin-right: 4px;"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>Sin Rotación</button>
+          <!-- HEADER: Académico profesional -->
+          <div class="reportes-header">
+            <div>
+              <h1 style="margin: 0 0 0.5rem 0; font-size: 28px; color: #2f5f6b;">Reportes y Análisis del Sistema</h1>
+              <p style="margin: 0; color: #64748b; font-size: 14px; font-weight: 400;">Análisis estadístico de inventario y desempeño operacional</p>
+            </div>
+            <div class="reportes-toolbar">
+              <select id="filtro-periodo" onchange="actualizarReporte()">
+                <option value="7">Últimos 7 días</option>
+                <option value="30" selected>Últimos 30 días</option>
+                <option value="90">Últimos 90 días</option>
+              </select>
+              <button class="btn-actualizar" onclick="actualizarReporte()">🔄 Actualizar</button>
+            </div>
           </div>
 
-          <!-- Filtros superiores -->
-          <div class="reportes-filtros">
-            <label>Rango de Fechas:</label>
-            <select id="filtro-periodo">
-              <option value="7">Últimos 7 días</option>
-              <option value="30" selected>Últimos 30 días</option>
-              <option value="90">Últimos 90 días</option>
-            </select>
-            <button class="btn btn-principal" onclick="actualizarReporte()">Actualizar</button>
+          <!-- KPIs GENERALES: Compactos y con jerarquía visual -->
+          <div class="reportes-kpis">
+            <div class="kpi-card">
+              <h2 id="kpi-total-productos">0</h2>
+              <p>Productos Totales</p>
+            </div>
+            <div class="kpi-card">
+              <h2 id="kpi-bajo-stock">0</h2>
+              <p>Bajo Stock</p>
+            </div>
+            <div class="kpi-card">
+              <h2 id="kpi-agotados">0</h2>
+              <p>Productos Agotados</p>
+            </div>
+            <div class="kpi-card">
+              <h2 id="kpi-criticos">0%</h2>
+              <p>Críticos (%)</p>
+            </div>
           </div>
 
-          <!-- REPORTE 1: INVENTARIO BAJO STOCK -->
-          <div id="reporte-inventario" class="reporte-contenedor">
-            <div class="reporte-header">
-              <h3>Productos con Bajo Stock</h3>
-              <p class="reporte-desc">Productos con menos de 5 unidades en stock</p>
+          <!-- GRÁFICOS: Dos equilibrados lado a lado -->
+          <div class="reportes-graficos">
+            <div class="grafico-bloque">
+              <h3>Distribución del Stock</h3>
+              <canvas id="chart-distribucion-stock" width="4" height="3"></canvas>
+            </div>
+            <div class="grafico-bloque">
+              <h3>Top Productos por Ventas</h3>
+              <canvas id="chart-top-ventas" width="4" height="3"></canvas>
+            </div>
+          </div>
+
+          <!-- TABLA PROFESIONAL: Productos con bajo stock -->
+          <div class="reportes-seccion">
+            <div class="seccion-titulo">
+              <h3>Productos que Requieren Atención</h3>
+              <span class="contador-tabla" id="contador-bajo-stock">0</span>
             </div>
 
-            <div class="reporte-stats">
-              <div class="stat-card">
-                <div class="stat-numero" id="stat-bajo-stock">0</div>
-                <div class="stat-label">Bajo Stock (<5)</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-numero" id="stat-agotados">0</div>
-                <div class="stat-label">Agotados (=0)</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-numero" id="stat-critico">0</div>
-                <div class="stat-label">Stock Crítico</div>
-              </div>
-            </div>
-
-            <canvas id="chart-inventario-dist" width="4" height="2"></canvas>
-
-            <div class="tabla-contenedor">
-              <table class="admin-tabla">
+            <div class="tabla-contenedor" style="border-radius: 8px; overflow: hidden;">
+              <table class="tabla-reportes">
                 <thead>
                   <tr>
                     <th>Producto</th>
@@ -868,214 +879,20 @@
                     <th>Acción</th>
                   </tr>
                 </thead>
-                <tbody id="tabla-inventario-body">
-                  <tr><td colspan="5" style="text-align:center; padding: 20px;">Cargando...</td></tr>
+                <tbody id="tabla-bajo-stock-body">
+                  <tr><td colspan="5" style="text-align:center; padding: 20px; color: #999;">Cargando datos...</td></tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <!-- REPORTE 2: TOP SELLERS -->
-          <div id="reporte-top-sellers" class="reporte-contenedor" style="display: none;">
-            <div class="reporte-header">
-              <h3>Productos Más Vendidos</h3>
-              <p class="reporte-desc">Top 10 productos por volumen de ventas</p>
-            </div>
-
-            <div class="reporte-stats">
-              <div class="stat-card">
-                <div class="stat-numero" id="stat-total-vendido">0</div>
-                <div class="stat-label">Unidades Vendidas</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-numero" id="stat-ingresos-totales">$0</div>
-                <div class="stat-label">Ingresos Totales</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-numero" id="stat-tickets-total">0</div>
-                <div class="stat-label">Órdenes Completadas</div>
-              </div>
-            </div>
-
-            <canvas id="chart-top-sellers" width="4" height="2"></canvas>
-
-            <div class="tabla-contenedor">
-              <table class="admin-tabla">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Producto</th>
-                    <th>Categoría</th>
-                    <th>Unidades Vendidas</th>
-                    <th>Ingresos</th>
-                    <th>% del Total</th>
-                  </tr>
-                </thead>
-                <tbody id="tabla-top-sellers-body">
-                  <tr><td colspan="6" style="text-align:center; padding: 20px;">Cargando...</td></tr>
-                </tbody>
-              </table>
-            </div>
+          <!-- RESUMEN ANALÍTICO: Nivel universitario -->
+          <div class="resumen-analisis">
+            <h3>📊 Resumen del Análisis</h3>
+            <p id="texto-resumen-analisis" style="color: #475569; line-height: 1.6;">
+              Analizando datos del inventario...
+            </p>
           </div>
-
-          <!-- REPORTE 3: SIN ROTACIÓN -->
-          <div id="reporte-sin-rotacion" class="reporte-contenedor" style="display: none;">
-            <div class="reporte-header">
-              <h3>Productos Sin Rotación</h3>
-              <p class="reporte-desc">Productos que no se han vendido o tienen ventas mínimas</p>
-            </div>
-
-            <div class="reporte-stats">
-              <div class="stat-card">
-                <div class="stat-numero" id="stat-sin-venta">0</div>
-                <div class="stat-label">Sin Ventas</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-numero" id="stat-stock-muerto">0</div>
-                <div class="stat-label">Stock Muerto (>20 u)</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-numero" id="stat-rotacion-minima">0</div>
-                <div class="stat-label">Rotación Mínima (<5 u)</div>
-              </div>
-            </div>
-
-            <canvas id="chart-sin-rotacion" width="4" height="2"></canvas>
-
-            <div class="tabla-contenedor">
-              <table class="admin-tabla">
-                <thead>
-                  <tr>
-                    <th>Producto</th>
-                    <th>Categoría</th>
-                    <th>Stock Actual</th>
-                    <th>Ventas Totales</th>
-                    <th>Problema</th>
-                    <th>Acción</th>
-                  </tr>
-                </thead>
-                <tbody id="tabla-sin-rotacion-body">
-                  <tr><td colspan="6" style="text-align:center; padding: 20px;">Cargando...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- ESTILOS PARA REPORTES -->
-          <style>
-            .reportes-tabs {
-              display: flex;
-              gap: 10px;
-              margin-bottom: 25px;
-              border-bottom: 2px solid #f0f0f0;
-              flex-wrap: wrap;
-            }
-
-            .tab-btn {
-              background: white;
-              border: none;
-              border-bottom: 3px solid transparent;
-              padding: 12px 20px;
-              cursor: pointer;
-              font-size: 14px;
-              transition: all 0.3s;
-              color: #666;
-            }
-
-            .tab-btn:hover {
-              color: #386273;
-              border-bottom-color: #B6E1F2;
-            }
-
-            .tab-btn.activo {
-              color: #386273;
-              border-bottom-color: #386273;
-              font-weight: bold;
-            }
-
-            .reportes-filtros {
-              display: flex;
-              gap: 15px;
-              align-items: center;
-              margin-bottom: 25px;
-              padding: 15px;
-              background: #f9f9f9;
-              border-radius: 8px;
-              flex-wrap: wrap;
-            }
-
-            .reportes-filtros label {
-              font-weight: bold;
-              color: #386273;
-            }
-
-            .reportes-filtros select {
-              padding: 8px 12px;
-              border: 1px solid #B6E1F2;
-              border-radius: 4px;
-              font-size: 13px;
-            }
-
-            .reporte-contenedor {
-              animation: fadeIn 0.3s ease-in;
-            }
-
-            @keyframes fadeIn {
-              from { opacity: 0; }
-              to { opacity: 1; }
-            }
-
-            .reporte-header {
-              margin-bottom: 20px;
-              border-bottom: 2px solid #B6E1F2;
-              padding-bottom: 15px;
-            }
-
-            .reporte-header h3 {
-              margin: 0 0 5px 0;
-              color: #386273;
-            }
-
-            .reporte-desc {
-              margin: 0;
-              color: #999;
-              font-size: 13px;
-            }
-
-            .reporte-stats {
-              display: grid;
-              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-              gap: 15px;
-              margin-bottom: 25px;
-            }
-
-            .stat-card {
-              background: linear-gradient(135deg, #386273 0%, #5a8fa3 100%);
-              padding: 20px;
-              border-radius: 8px;
-              color: white;
-              text-align: center;
-              box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            }
-
-            .stat-numero {
-              font-size: 32px;
-              font-weight: bold;
-              margin-bottom: 5px;
-            }
-
-            .stat-label {
-              font-size: 12px;
-              opacity: 0.9;
-            }
-
-            #chart-inventario-dist,
-            #chart-top-sellers,
-            #chart-sin-rotacion {
-              max-height: 300px;
-              margin-bottom: 30px;
-            }
-          </style>
         </section>
 
         <!-- NOTIFICACIONES -->
