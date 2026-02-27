@@ -336,7 +336,7 @@ function configurarMenu() {
         // Actualizar tablas al cambiar de sección
         if (seccion === 'pedidos') cargarTablaPedidos();
         if (seccion === 'usuarios') cargarTablaUsuarios();
-        if (seccion === 'categorias') mostrarCategoriasConProductos();
+        if (seccion === 'categorias') cargarGridCategorias();
         if (seccion === 'notificaciones') actualizarTablaNotificaciones('todas');
         if (seccion === 'reportes') generarReporteInventario();
         if (seccion === 'ofertas') cargarTablaOfertas();
@@ -2810,4 +2810,163 @@ if (document.readyState === 'loading') {
       lastScroll = currentScroll <= 0 ? 0 : currentScroll;
     });
   }
+
+  // ===== FUNCIONES PARA CATEGORÍAS (NUEVA ARQUITECTURA) =====
+
+  window.cargarGridCategorias = function() {
+    const grid = document.getElementById('categorias-grid');
+    if (!grid) return;
+
+    // Agrupar productos por categoría
+    const categoriaMap = {};
+    
+    productosAdmin.forEach(producto => {
+      const catId = producto.categoriaId || 'sin-categoria';
+      const catNombre = producto.categoria || 'Sin categoría';
+      
+      if (!categoriaMap[catId]) {
+        categoriaMap[catId] = {
+          id: catId,
+          nombre: catNombre,
+          productos: [],
+          totalStock: 0,
+          totalValor: 0
+        };
+      }
+      
+      categoriaMap[catId].productos.push(producto);
+      categoriaMap[catId].totalStock += parseInt(producto.stock) || 0;
+      categoriaMap[catId].totalValor += (parseFloat(producto.precio) || 0) * (parseInt(producto.stock) || 0);
+    });
+
+    // Generar HTML de cards
+    grid.innerHTML = Object.values(categoriaMap)
+      .sort((a, b) => b.productos.length - a.productos.length)
+      .map(cat => {
+        const iconEmoji = ['🧂', '🥔', '🥩', '🧈', '🍅', '🥕', '🌽', '🥬', '🍚', '🥛', '🧀', '🍞', '🥓', '🍳', '🥚'][
+          Object.values(categoriaMap).indexOf(cat) % 15
+        ];
+
+        return `
+          <div class="categoria-card" onclick="abrirModalCategoriaProductos('${cat.id}', '${cat.nombre}')">
+            <div class="categoria-card-header">
+              <div class="categoria-card-icon">${iconEmoji}</div>
+              <div class="categoria-card-titulo">${cat.nombre}</div>
+            </div>
+            <div class="categoria-card-body">
+              <div class="categoria-card-stats">
+                <div class="categoria-card-stat">
+                  <span class="categoria-card-stat-numero">${cat.productos.length}</span>
+                  <span class="categoria-card-stat-label">Productos</span>
+                </div>
+                <div class="categoria-card-stat">
+                  <span class="categoria-card-stat-numero">${cat.totalStock}</span>
+                  <span class="categoria-card-stat-label">Stock</span>
+                </div>
+              </div>
+              <div style="font-size: 12px; color: #999;">
+                Valor: <strong style="color: var(--azul-oscuro);">$${(cat.totalValor / 1000).toFixed(1)}k</strong>
+              </div>
+              <div class="categoria-card-footer">
+                <button class="categoria-card-btn">Ver Productos →</button>
+              </div>
+            </div>
+          </div>
+        `;
+      })
+      .join('');
+
+    actualizarMetricasCategorias();
+  };
+
+  window.abrirModalCategoriaProductos = function(categoriaId, categoriaNombre) {
+    const modal = document.getElementById('modal-categoria-productos');
+    const titulo = document.getElementById('modal-cat-titulo');
+    const subtitle = document.getElementById('modal-cat-subtitle');
+    const tbody = document.getElementById('tabla-productos-categoria');
+
+    if (!modal) return;
+
+    // Filtrar productos de la categoría
+    const productosCategoria = productosAdmin.filter(p => (p.categoriaId || 'sin-categoria') === categoriaId);
+    
+    titulo.textContent = `Productos de ${categoriaNombre}`;
+    subtitle.textContent = `${productosCategoria.length} producto${productosCategoria.length !== 1 ? 's' : ''} en esta categoría`;
+
+    // Generar tabla
+    tbody.innerHTML = productosCategoria
+      .map(producto => {
+        const imagenNormalizada = normalizarImagenUrlAdmin(producto.imagen);
+        const badge = producto.stock <= 10 ? 'bajo' : producto.stock <= 30 ? 'medio' : 'alto';
+        const badgeTexto = badge === 'bajo' ? 'Bajo Stock' : badge === 'medio' ? 'Stock Medio' : 'En Stock';
+
+        return `
+          <tr>
+            <td style="text-align: center;">
+              <img src="${imagenNormalizada}" alt="${producto.nombre}" 
+                   style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #f0f0f0;">
+            </td>
+            <td>
+              <div style="font-weight: 600; color: #333;">${producto.nombre}</div>
+              <small style="color: #999;">${producto.categoriaId ? 'ID: ' + producto.categoriaId : 'Sin ID'}</small>
+            </td>
+            <td style="font-weight: 600; color: var(--azul-oscuro);">$${parseFloat(producto.precio).toFixed(2)}</td>
+            <td>
+              <strong>${producto.stock}</strong> unidades
+            </td>
+            <td>
+              <span class="badge ${badge === 'bajo' ? 'bajo' : badge === 'medio' ? 'medio' : 'alto'}" 
+                    style="padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 600;">
+                ${badgeTexto}
+              </span>
+            </td>
+            <td>
+              <button class="btn-accion" onclick="editarProducto('${producto.id}')" title="Editar" 
+                      style="padding: 4px 8px; font-size: 12px;">✏️</button>
+              <button class="btn-accion" onclick="eliminarProducto('${producto.id}')" title="Eliminar"
+                      style="padding: 4px 8px; font-size: 12px; color: #f44336;">🗑️</button>
+            </td>
+          </tr>
+        `;
+      })
+      .join('');
+
+    modal.style.display = 'flex';
+    modal.classList.add('activo');
+  };
+
+  window.cerrarModalCategoriaProductos = function() {
+    const modal = document.getElementById('modal-categoria-productos');
+    if (modal) {
+      modal.style.display = 'none';
+      modal.classList.remove('activo');
+    }
+  };
+
+  window.abrirModalCategoria = function() {
+    // Por ahora simplemente abre el modal de producto
+    // En el futuro se puede crear un modal específico para categorías
+    alert('Función de crear categoría - próximamente');
+  };
+
+  window.actualizarMetricasCategorias = function() {
+    let totalProductos = 0;
+    let totalStock = 0;
+    let totalValor = 0;
+    const categoriasUnicas = new Set();
+
+    productosAdmin.forEach(p => {
+      totalProductos++;
+      totalStock += parseInt(p.stock) || 0;
+      totalValor += (parseFloat(p.precio) || 0) * (parseInt(p.stock) || 0);
+      categoriasUnicas.add(p.categoriaId || 'sin-categoria');
+    });
+
+    document.getElementById('kpi-cat-total-productos').textContent = totalProductos;
+    document.getElementById('kpi-cat-stock-total').textContent = totalStock.toLocaleString();
+    document.getElementById('kpi-cat-valor').textContent = '$' + (totalValor / 1000000).toFixed(1) + 'M';
+    document.getElementById('kpi-cat-categorias').textContent = categoriasUnicas.size;
+  };
+
+  } // Cierre del evento DOMContentLoaded original
 })();
