@@ -921,20 +921,25 @@ function exportarProductos() {
   a.click();
 }
 
-// Cargar tabla de pedidos
+// Cargar tabla de pedidos (rediseñado)
 function cargarTablaPedidos() {
-  const tbody = document.getElementById('tabla-pedidos-body');
-  if (!tbody) return;
+  const lista = document.getElementById('pedidos-lista');
+  const vacio = document.getElementById('pedidos-vacio');
+  if (!lista) return;
   
   if (!Array.isArray(pedidosAdmin) || pedidosAdmin.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="8" class="sin-datos">No hay pedidos aún</td></tr>';
+    lista.innerHTML = '';
+    vacio.style.display = 'block';
+    actualizarKpisPedidos();
     return;
   }
+
+  vacio.style.display = 'none';
 
   // Ordenar pedidos por más nuevos primero
   const pedidosOrdenados = [...pedidosAdmin].sort((a, b) => new Date(b.createdAt || b.fecha) - new Date(a.createdAt || a.fecha));
   
-  tbody.innerHTML = pedidosOrdenados.map(pedido => {
+  lista.innerHTML = pedidosOrdenados.map(pedido => {
     const nombreCliente = pedido.usuario?.nombre || pedido.cliente || 'Desconocido';
     const telefonoCliente = pedido.usuario?.telefono || pedido.telefono || '';
     const numeroRadicado = pedido.numero || pedido.id || 'S/N';
@@ -948,48 +953,132 @@ function cargarTablaPedidos() {
                         estado === 'EN_PREPARACION' ? 'badge-preparacion' :
                         estado === 'ENVIADO' ? 'badge-enviado' :
                         estado === 'ENTREGADO' ? 'badge-entregado' : 'badge-default';
-    
+
+    const telefonoLimpio = (telefonoCliente || '').replace(/\D/g, '');
+
     return `
-      <tr class="fila-pedido">
-        <td><strong>#${numeroRadicado}</strong></td>
-        <td>${nombreCliente}</td>
-        <td>${telefonoCliente || 'N/A'}</td>
-        <td><span class="badge-items">${cantidadItems} items</span></td>
-        <td><strong>$${totalPedido}</strong></td>
-        <td><span class="badge ${badgeEstado}">${estado}</span></td>
-        <td>${fechaPedido}${pedido.entregaEn ? `<br><small style="color: #666;">Entregado: ${new Date(pedido.entregaEn).toLocaleDateString('es-CO')}</small>` : ''}</td>
-        <td class="acciones-tabla">
-          <div class="accion-item">
-            <button class="btn-ver" onclick="abrirDetallePedido('${pedido.id}')" title="Ver detalles">👁️ Ver</button>
+      <div class="pedido-row" data-id="${pedido.id}">
+        <!-- BLOQUE IZQUIERDO: ID + CLIENTE + TELÉFONO -->
+        <div class="pedido-info-left">
+          <div class="pedido-id">#${numeroRadicado}</div>
+          <div class="pedido-cliente">${nombreCliente}</div>
+          <div class="pedido-telefono">${telefonoCliente || 'N/A'}</div>
+        </div>
+        
+        <!-- BLOQUE CENTRAL: ITEMS + TOTAL -->
+        <div class="pedido-info-center">
+          <div class="pedido-items">${cantidadItems} items</div>
+          <div class="pedido-total">$${totalPedido}</div>
+        </div>
+        
+        <!-- BLOQUE DERECHO: ESTADO + FECHA + ACCIONES -->
+        <div class="pedido-info-right">
+          <div class="pedido-header-top">
+            <span class="badge ${badgeEstado}">${estado}</span>
+            <span class="pedido-fecha">${fechaPedido}</span>
           </div>
-          <div class="accion-item">
-            ${!estaConfirmado ? `<button class="btn-confirmar-mini" onclick="confirmarPedido('${pedido.id}')" title="Confirmar">✓ Confirmar</button>` : `<span class="estado-confirmado">✓ Confirmado</span>`}
+          <div class="pedido-acciones">
+            <button class="btn-ver-pedido" onclick="abrirDetallePedido('${pedido.id}')" title="Ver detalles">Ver</button>
+            <div class="menu-dropdown" style="position: relative;">
+              <button class="btn-menu-pedido" onclick="toggleMenuPedido(event, '${pedido.id}')">⋮</button>
+              <div class="dropdown-menu" id="menu-${pedido.id}" style="display: none;">
+                ${!estaConfirmado ? `<button class="dropdown-item" onclick="confirmarPedido('${pedido.id}')">✓ Confirmar</button>` : ''}
+                ${estado !== 'ENTREGADO' && estado !== 'CANCELADO' && (estado === 'EN_PREPARACION' || estado === 'ENVIADO') ? `<button class="dropdown-item" onclick="marcarComoEntregado('${pedido.id}')">📦 Entregado</button>` : ''}
+                <a href="https://wa.me/${telefonoLimpio}" target="_blank" class="dropdown-item">💬 WhatsApp</a>
+              </div>
+            </div>
           </div>
-          <div class="accion-item">
-            ${estado !== 'ENTREGADO' && estado !== 'CANCELADO' && (estado === 'EN_PREPARACION' || estado === 'ENVIADO') ? `<button class="btn-entregado" onclick="marcarComoEntregado('${pedido.id}')" title="Marcar como Entregado">📦 Entregado</button>` : ''}
-          </div>
-          <div class="accion-item">
-            <a href="https://wa.me/${(telefonoCliente || '').replace(/\D/g, '')}" target="_blank" class="btn-whatsapp" title="WhatsApp">💬 Contactar</a>
-          </div>
-        </td>
-      </tr>
+        </div>
+      </div>
     `;
   }).join('');
 
+  actualizarKpisPedidos();
+  
   // Agregar evento al campo de búsqueda
   const filtro = document.getElementById('filtro-pedidos');
   if (filtro) {
-    filtro.addEventListener('keyup', filtrarPedidos);
+    filtro.addEventListener('keyup', buscarPedidos);
   }
 }
 
-function filtrarPedidos() {
-  const filtro = document.getElementById('filtro-pedidos').value.toLowerCase();
-  const filas = document.querySelectorAll('.fila-pedido');
+// Toggle para menú dropdown de pedidos
+function toggleMenuPedido(event, pedidoId) {
+  event.stopPropagation();
+  const menu = document.getElementById(`menu-${pedidoId}`);
+  if (menu) {
+    const isVisible = menu.style.display === 'block';
+    // Cerrar todos los menús
+    document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display = 'none');
+    // Abrir este menú si estaba cerrado
+    if (!isVisible) {
+      menu.style.display = 'block';
+    }
+  }
+}
+
+// Cerrar menus al hacer click fuera
+document.addEventListener('click', function() {
+  document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display = 'none');
+});
+
+// Función para actualizar KPIs de pedidos
+function actualizarKpisPedidos() {
+  if (!Array.isArray(pedidosAdmin)) return;
+  
+  const totalPedidos = pedidosAdmin.length;
+  const hoy = new Date().toLocaleDateString('es-CO');
+  const pedidosHoy = pedidosAdmin.filter(p => {
+    const fechaP = (p.createdAt ? new Date(p.createdAt) : new Date()).toLocaleDateString('es-CO');
+    return fechaP === hoy;
+  });
+  
+  const ingresosHoy = pedidosHoy.reduce((sum, p) => sum + (p.total || 0), 0);
+  const pendientes = pedidosAdmin.filter(p => p.estado === 'PENDIENTE').length;
+  
+  const elKpiTotal = document.getElementById('kpi-pedidos-total');
+  const elKpiHoy = document.getElementById('kpi-pedidos-hoy');
+  const elKpiIngresos = document.getElementById('kpi-ingresos-hoy');
+  const elKpiPendientes = document.getElementById('kpi-pendientes');
+  
+  if (elKpiTotal) elKpiTotal.textContent = totalPedidos;
+  if (elKpiHoy) elKpiHoy.textContent = pedidosHoy.length;
+  if (elKpiIngresos) elKpiIngresos.textContent = '$' + ingresosHoy.toLocaleString('es-CO', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+  if (elKpiPendientes) elKpiPendientes.textContent = pendientes;
+}
+
+// Buscar pedidos
+function buscarPedidos() {
+  const filtro = document.getElementById('filtro-pedidos')?.value.toLowerCase() || '';
+  const filas = document.querySelectorAll('.pedido-row');
   
   filas.forEach(fila => {
-    const texto = fila.textContent.toLowerCase();
-    fila.style.display = texto.includes(filtro) ? '' : 'none';
+    const id = fila.querySelector('.pedido-id')?.textContent.toLowerCase() || '';
+    const cliente = fila.querySelector('.pedido-cliente')?.textContent.toLowerCase() || '';
+    const telefono = fila.querySelector('.pedido-telefono')?.textContent.toLowerCase() || '';
+    
+    if (id.includes(filtro) || cliente.includes(filtro) || telefono.includes(filtro)) {
+      fila.style.display = '';
+    } else {
+      fila.style.display = 'none';
+    }
+  });
+}
+
+// Filtrar por estado
+function filtrarPedidosPorEstado() {
+  const filtroEstado = document.getElementById('filtro-estado-pedidos')?.value || '';
+  const filas = document.querySelectorAll('.pedido-row');
+  
+  filas.forEach(fila => {
+    const badge = fila.querySelector('.badge');
+    const estado = badge?.textContent.trim() || '';
+    
+    if (!filtroEstado || estado === filtroEstado) {
+      fila.style.display = '';
+    } else {
+      fila.style.display = 'none';
+    }
   });
 }
 

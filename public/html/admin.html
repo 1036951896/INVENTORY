@@ -546,31 +546,61 @@
 
         <!-- PEDIDOS -->
         <section id="seccion-pedidos" class="seccion-contenido" style="display: none;">
-          <div class="tabla-contenedor">
-            <div class="tabla-encabezado">
-              <h2>Gestión de Pedidos</h2>
-              <div class="tabla-acciones">
-                <input type="text" id="filtro-pedidos" placeholder="🔍 Buscar radicado, cliente..." class="campo-busqueda">
-              </div>
+          
+          <!-- HEADER CON TÍTULO -->
+          <div class="pedidos-top">
+            <div>
+              <h1>Gestión de Pedidos</h1>
+              <p>Seguimiento y control de pedidos en tiempo real</p>
             </div>
-            <div id="pedidosLista" style="overflow-x: auto;">
-              <table class="admin-tabla pedidos-tabla">
-                <thead>
-                  <tr>
-                    <th>Radicado</th>
-                    <th>Cliente</th>
-                    <th>Teléfono</th>
-                    <th>Items</th>
-                    <th>Total</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody id="tabla-pedidos-body">
-                  <tr><td colspan="8" class="sin-datos">Cargando pedidos...</td></tr>
-                </tbody>
-              </table>
+          </div>
+
+          <!-- KPIs RESUMEN -->
+          <div class="pedidos-kpi-line">
+            <div class="kpi-compact">
+              <span class="kpi-valor" id="kpi-pedidos-total">0</span>
+              <span class="kpi-label">Total Pedidos</span>
+            </div>
+            <div class="kpi-divider"></div>
+            <div class="kpi-compact">
+              <span class="kpi-valor" id="kpi-pedidos-hoy">0</span>
+              <span class="kpi-label">Hoy</span>
+            </div>
+            <div class="kpi-divider"></div>
+            <div class="kpi-compact">
+              <span class="kpi-valor" id="kpi-ingresos-hoy">$0</span>
+              <span class="kpi-label">Ingresos Hoy</span>
+            </div>
+            <div class="kpi-divider"></div>
+            <div class="kpi-compact">
+              <span class="kpi-valor" id="kpi-pendientes">0</span>
+              <span class="kpi-label">Pendientes</span>
+            </div>
+          </div>
+
+          <!-- FILTROS Y BÚSQUEDA -->
+          <div class="pedidos-controles">
+            <div class="control-busqueda">
+              <input type="text" id="filtro-pedidos" placeholder="🔍 Buscar radicado, cliente..." class="input-search-pedidos">
+            </div>
+            <div class="control-filtros">
+              <select id="filtro-estado-pedidos" class="select-filter-pedidos" onchange="filtrarPedidosPorEstado()">
+                <option value="">Todos los estados</option>
+                <option value="PENDIENTE">Pendientes</option>
+                <option value="EN_PREPARACION">En Preparación</option>
+                <option value="ENVIADO">Enviados</option>
+                <option value="ENTREGADO">Entregados</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- TABLA MODERNA DE PEDIDOS -->
+          <div class="pedidos-contenedor">
+            <div id="pedidos-lista" class="pedidos-lista">
+              <!-- Se genera dinámicamente con JavaScript -->
+            </div>
+            <div id="pedidos-vacio" class="sin-pedidos" style="display: none;">
+              <p>📭 No hay pedidos que mostrar</p>
             </div>
           </div>
 
@@ -698,293 +728,6 @@
             </div>
           </div>
         </div>
-
-
-            .categorias-contenedor {
-              display: grid;
-              grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-              gap: 20px;
-            }
-
-            .categoria-grupo {
-              animation: fadeIn 0.4s ease-in-out;
-              background: white;
-              border-radius: 12px;
-              overflow: hidden;
-              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-              transition: all 0.3s;
-            }
-
-            .categoria-grupo:hover {
-              box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-              transform: translateY(-4px);
-            }
-
-            .categoria-header {
-              background: linear-gradient(135deg, #386273 0%, #5a8fa3 100%);
-              color: white;
-              padding: 16px;
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-            }
-
-            .categoria-titulo {
-              display: flex;
-              align-items: center;
-              gap: 10px;
-              font-size: 16px;
-              font-weight: bold;
-            }
-
-            .categoria-titulo-icono {
-              font-size: 24px;
-            }
-
-            .categoria-badge {
-              background: rgba(255, 255, 255, 0.3);
-              padding: 4px 12px;
-              border-radius: 12px;
-              font-size: 12px;
-              font-weight: bold;
-            }
-
-            .categoria-stats {
-              display: grid;
-              grid-template-columns: repeat(3, 1fr);
-              gap: 10px;
-              padding: 12px;
-              background: #f9f9f9;
-              border-bottom: 1px solid #eee;
-              text-align: center;
-            }
-
-            .categoria-stat-item {
-              font-size: 12px;
-            }
-
-            .categoria-stat-numero {
-              font-size: 18px;
-              font-weight: bold;
-              color: #386273;
-              display: block;
-            }
-
-            .categoria-stat-label {
-              color: #999;
-              font-size: 10px;
-            }
-
-            .categoria-productos {
-              padding: 16px;
-              max-height: 500px;
-              overflow-y: auto;
-            }
-
-            .categoria-producto {
-              display: flex;
-              gap: 12px;
-              margin-bottom: 12px;
-              padding: 12px;
-              background: #f9f9f9;
-              border-radius: 8px;
-              border-left: 4px solid #B6E1F2;
-              transition: all 0.2s;
-            }
-
-            .categoria-producto:hover {
-              background: #f0f7fa;
-              border-left-color: #386273;
-            }
-
-            .categoria-producto-imagen {
-              width: 60px;
-              height: 60px;
-              border-radius: 6px;
-              object-fit: contain;
-              background: white;
-              border: 1px solid #eee;
-            }
-
-            .categoria-producto-info {
-              flex: 1;
-              font-size: 13px;
-            }
-
-            .categoria-producto-nombre {
-              font-weight: bold;
-              color: #333;
-              margin-bottom: 4px;
-            }
-
-            .categoria-producto-precio {
-              color: #386273;
-              font-weight: bold;
-              margin-bottom: 4px;
-            }
-
-            .categoria-producto-stock {
-              display: inline-block;
-              padding: 2px 8px;
-              border-radius: 4px;
-              font-size: 11px;
-              background: #e8f5e9;
-              color: #2e7d32;
-              font-weight: bold;
-            }
-
-            .categoria-producto-stock.bajo {
-              background: #fff3cd;
-              color: #856404;
-            }
-
-            .categoria-producto-stock.agotado {
-              background: #ffccbc;
-              color: #bf360c;
-            }
-
-            @keyframes fadeIn {
-              from {
-                opacity: 0;
-                transform: translateY(10px);
-              }
-              to {
-                opacity: 1;
-                transform: translateY(0);
-              }
-            }
-
-            #categorias-lista::-webkit-scrollbar {
-              width: 6px;
-            }
-
-            #categorias-lista::-webkit-scrollbar-track {
-              background: #f1f1f1;
-              border-radius: 10px;
-            }
-
-            #categorias-lista::-webkit-scrollbar-thumb {
-              background: #B6E1F2;
-              border-radius: 10px;
-            }
-
-            #categorias-lista::-webkit-scrollbar-thumb:hover {
-              background: #386273;
-            }
-
-            .categoria-vacia {
-              grid-column: 1 / -1;
-              padding: 40px;
-              text-align: center;
-              color: #999;
-              background: #f9f9f9;
-              border-radius: 8px;
-            }
-
-            .categorias-controles {
-              display: flex;
-              gap: 15px;
-              margin-bottom: 25px;
-              flex-wrap: wrap;
-              align-items: center;
-            }
-
-            .control-busqueda {
-              flex: 1;
-              min-width: 250px;
-              position: relative;
-              display: flex;
-              align-items: center;
-            }
-
-            .icono-buscar {
-              position: absolute;
-              left: 12px;
-              font-size: 16px;
-              pointer-events: none;
-            }
-
-            #input-buscar-productos {
-              width: 100%;
-              padding: 10px 12px 10px 40px;
-              border: 2px solid #B6E1F2;
-              border-radius: 8px;
-              font-size: 13px;
-              transition: all 0.3s;
-            }
-
-            #input-buscar-productos:focus {
-              outline: none;
-              border-color: #386273;
-              box-shadow: 0 0 8px rgba(56, 98, 115, 0.2);
-            }
-
-            .controles-acciones {
-              display: flex;
-              gap: 10px;
-              flex-wrap: wrap;
-              align-items: center;
-            }
-
-            .select-control {
-              padding: 10px 12px;
-              border: 2px solid #B6E1F2;
-              border-radius: 8px;
-              font-size: 13px;
-              cursor: pointer;
-              transition: all 0.3s;
-              background: white;
-              color: #666;
-            }
-
-            .select-control:hover {
-              border-color: #386273;
-              color: #386273;
-            }
-
-            .select-control:focus {
-              outline: none;
-              border-color: #386273;
-              box-shadow: 0 0 8px rgba(56, 98, 115, 0.2);
-            }
-
-            .btn-secundario {
-              background: white;
-              color: #386273;
-              border: 2px solid #B6E1F2;
-              padding: 10px 16px;
-              border-radius: 8px;
-              cursor: pointer;
-              font-size: 13px;
-              font-weight: 600;
-              transition: all 0.3s;
-            }
-
-            .btn-secundario:hover {
-              background: #f0f7fa;
-              border-color: #386273;
-              box-shadow: 0 2px 8px rgba(56, 98, 115, 0.1);
-            }
-
-            .btn-secundario:active {
-              transform: translateY(1px);
-            }
-
-            @media (max-width: 768px) {
-              .categorias-controles {
-                flex-direction: column;
-              }
-
-              .control-busqueda {
-                width: 100%;
-              }
-
-              .controles-acciones {
-                width: 100%;
-              }
-            }
-          </style>
-        </section>
 
         <!-- REPORTES -->
         <section id="seccion-reportes" class="seccion-contenido" style="display: none;">
@@ -2043,3 +1786,4 @@
   </script>
 </body>
 </html>
+
