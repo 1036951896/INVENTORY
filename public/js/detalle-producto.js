@@ -288,7 +288,11 @@ function verificarUsuarioLogueado() {
     menuUsuario.innerHTML = `
       <div class="usuario-info">
         <span>${usuario.nombre}</span>
-        <button class="btn btn-secundario" onclick="cerrarSesion()" style="padding: 0.5rem 1rem;">Salir</button>
+        <a href="javascript:cerrarSesion()" class="btn-home-icon" title="Volver al inicio">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+          </svg>
+        </a>
       </div>
     `;
   }

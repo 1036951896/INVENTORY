@@ -557,12 +557,78 @@
         right: -100%;
       }
     }
+
+    /* BOTÓN RETROCESO */
+    .btn-retroceso {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: transparent;
+      color: #386273;
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      margin-right: 1rem;
+    }
+
+    .btn-retroceso:hover {
+      background: rgba(56, 98, 115, 0.08);
+      color: #2a4a5a;
+    }
+
+    .btn-retroceso:active {
+      transform: scale(0.95);
+    }
+
+    .btn-retroceso svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* ICONO HOME PARA USUARIO LOGUEADO */
+    .btn-home-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: transparent;
+      color: #386273;
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .btn-home-icon:hover {
+      background: rgba(56, 98, 115, 0.08);
+      color: #2a4a5a;
+    }
+
+    .btn-home-icon:active {
+      transform: scale(0.95);
+    }
+
+    .btn-home-icon svg {
+      width: 24px;
+      height: 24px;
+    }
   </style>
 </head>
 <body>
   <header>
     <div class="contenedor">
       <div class="encabezado-contenedor">
+        <!-- BOTÓN RETROCESO -->
+        <a href="index.html" class="btn-retroceso" title="Volver al catálogo">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+          </svg>
+        </a>
+
         <!-- LOGO -->
         <div class="logo">
           <img src="../assets/logo-storehub.svg" alt="Logo StoreHub" class="logo-img">
