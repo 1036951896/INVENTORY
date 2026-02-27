@@ -396,19 +396,76 @@ function actualizarDashboard() {
     }
     if (oldCanvasVentas) {
       setTimeout(() => {
+        const productosData = productosAdmin.slice(0, 5);
+        const ventasData = productosData.map(() => Math.floor(Math.random() * 100));
+        const maxVentas = Math.max(...ventasData);
+        
+        // Colores: el top 1 en color fuerte, otros en versión clara
+        const colors = ventasData.map(venta => 
+          venta === maxVentas ? '#2f5f6b' : '#B6E1F2'
+        );
+        
         window.chartVentas = new Chart(oldCanvasVentas, {
           type: 'bar',
           data: {
-            labels: productosAdmin.slice(0, 5).map(p => p.nombre),
+            labels: productosData.map(p => p.nombre.length > 15 ? p.nombre.substring(0, 15) + '...' : p.nombre),
             datasets: [{
-              label: 'Ventas (en unidades)',
-              data: productosAdmin.slice(0, 5).map(() => Math.floor(Math.random() * 100)),
-              backgroundColor: '#B6E1F2',
+              label: 'Ventas (unidades)',
+              data: ventasData,
+              backgroundColor: colors,
               borderColor: '#386273',
-              borderWidth: 2
+              borderWidth: 1.5,
+              borderRadius: 8,
+              hoverBackgroundColor: '#2f5f6b'
             }]
           },
-          options: { responsive: true, scales: { y: { beginAtZero: true } } }
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: { display: true, position: 'top' },
+              tooltip: {
+                backgroundColor: 'rgba(0,0,0,0.7)',
+                padding: 12,
+                titleFont: { size: 13 },
+                bodyFont: { size: 12 }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { 
+                  display: true, 
+                  drawBorder: false,
+                  color: 'rgba(0,0,0,0.05)'
+                },
+                ticks: { font: { size: 11 } }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { 
+                  maxRotation: 0,
+                  minRotation: 0,
+                  font: { size: 11 }
+                }
+              }
+            }
+          },
+          plugins: [{
+            id: 'barLabels',
+            afterDatasetsDraw(chart) {
+              const { ctx, data, chartArea: { height, top } } = chart;
+              ctx.fillStyle = '#333';
+              ctx.font = 'bold 12px Poppins';
+              ctx.textAlign = 'center';
+              
+              chart.getDatasetMeta(0).data.forEach((point, index) => {
+                const { x, y } = point.getProps(['x', 'y'], true);
+                const value = data.datasets[0].data[index];
+                ctx.fillText(value, x, y - 8);
+              });
+            }
+          }]
         });
       }, 0);
     }
@@ -419,18 +476,79 @@ function actualizarDashboard() {
     }
     if (oldCanvasInventario) {
       setTimeout(() => {
+        const productosData = productosAdmin.slice(0, 4);
+        const stockData = productosData.map(p => p.stock || 0);
+        const totalStock = stockData.reduce((a, b) => a + b, 0);
+        
+        // Colores por estado de stock
+        const coloresStock = productosData.map(p => {
+          if (!p.stock || p.stock === 0) return '#F44336'; // Crítico (Rojo)
+          if (p.stock < 10) return '#FFC107'; // Bajo (Amarillo)
+          if (p.stock < 30) return '#FF9800'; // Normal (Naranja)
+          return '#4CAF50'; // Saludable (Verde)
+        });
+        
         window.chartInventario = new Chart(oldCanvasInventario, {
           type: 'doughnut',
           data: {
-            labels: productosAdmin.slice(0, 4).map(p => p.nombre),
+            labels: productosData.map(p => p.nombre.length > 12 ? p.nombre.substring(0, 12) + '...' : p.nombre),
             datasets: [{
-              data: productosAdmin.slice(0, 4).map(p => p.stock),
-              backgroundColor: ['#B6E1F2', '#386273', '#7CB9E8', '#4A9FCE'],
+              data: stockData,
+              backgroundColor: coloresStock,
               borderColor: '#FFF',
-              borderWidth: 2
+              borderWidth: 3,
+              hoverOffset: 8
             }]
           },
-          options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: { 
+                position: 'bottom',
+                labels: { font: { size: 11 }, padding: 15 }
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const value = context.parsed;
+                    const percentage = ((value / totalStock) * 100).toFixed(1);
+                    return `${value} unidades (${percentage}%)`;
+                  }
+                },
+                backgroundColor: 'rgba(0,0,0,0.7)',
+                padding: 12,
+                titleFont: { size: 12 },
+                bodyFont: { size: 11 }
+              }
+            }
+          },
+          plugins: [{
+            id: 'textCenter',
+            beforeDatasetsDraw(chart) {
+              const { width, height } = chart;
+              const { ctx } = chart;
+              ctx.restore();
+              
+              const fontSize = (height / 200).toFixed(2);
+              ctx.font = `bold ${fontSize}em Poppins`;
+              ctx.textBaseline = 'middle';
+              ctx.fillStyle = '#2f5f6b';
+              
+              const text = `${totalStock}`;
+              const textX = Math.round((width - ctx.measureText(text).width) / 2);
+              const textY = height / 2;
+              
+              ctx.fillText(text, textX, textY);
+              
+              ctx.font = `${(fontSize * 0.6).toFixed(2)}em Poppins`;
+              ctx.fillStyle = '#999';
+              const subtext = 'Total Productos';
+              const subtextX = Math.round((width - ctx.measureText(subtext).width) / 2);
+              ctx.fillText(subtext, subtextX, textY + parseFloat(fontSize) * 10);
+              ctx.save();
+            }
+          }]
         });
       }, 0);
     }
