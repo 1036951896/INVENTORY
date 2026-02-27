@@ -1090,6 +1090,116 @@ body {
   }
 }
 
+/* ===== IMAGEN UPLOAD COMPONENT ===== */
+
+.imagen-upload-grupo {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.imagen-upload-tabs {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 13px;
+  color: #6b7280;
+  transition: all 0.2s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.tab-btn:hover {
+  background: white;
+  color: #2f5f6b;
+}
+
+.tab-btn.activo {
+  background: white;
+  color: #2f5f6b;
+  border-bottom-color: #2f5f6b;
+}
+
+.tab-contenido {
+  padding: 16px;
+  display: none;
+}
+
+.tab-contenido.activo {
+  display: block;
+}
+
+.tab-contenido input[type="file"],
+.tab-contenido input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+
+.tab-contenido input[type="file"]:focus,
+.tab-contenido input[type="text"]:focus {
+  outline: none;
+  border-color: #2f5f6b;
+  box-shadow: 0 0 0 3px rgba(47, 95, 107, 0.1);
+}
+
+.tab-contenido small {
+  display: block;
+  color: #9ca3af;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.btn-sm {
+  padding: 8px 16px !important;
+  font-size: 13px !important;
+  width: 100%;
+}
+
+.imagen-preview {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+}
+
+.imagen-preview img {
+  max-width: 100%;
+  max-height: 150px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.btn-limpiar-img {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-limpiar-img:hover {
+  background: #fecaca;
+}
+
 /* ===== SECCIÓN PRODUCTOS PREMIUM ===== */
 
 .productos-section {

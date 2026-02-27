@@ -1754,8 +1754,34 @@
           </div>
 
           <div class="grupo-formulario">
-            <label for="prod-imagen">URL de Imagen</label>
-            <input type="text" id="prod-imagen" placeholder="https://...">
+            <label>Imagen del Producto</label>
+            <div class="imagen-upload-grupo">
+              <div class="imagen-upload-tabs">
+                <button type="button" class="tab-btn activo" onclick="cambiarTabImagen('local')">📁 Archivo Local</button>
+                <button type="button" class="tab-btn" onclick="cambiarTabImagen('url')">🔗 Desde URL</button>
+              </div>
+              
+              <!-- Pestaña de archivo local -->
+              <div id="tab-imagen-local" class="tab-contenido activo">
+                <input type="file" id="prod-imagen-archivo" accept="image/*">
+                <small>Formatos: JPG, PNG, WebP (Máx 5MB)</small>
+                <div id="imagen-preview-local" class="imagen-preview" style="display: none;">
+                  <img id="preview-img-local" src="" alt="Preview">
+                  <button type="button" class="btn-limpiar-img" onclick="limpiarImagenLocal()">Cambiar</button>
+                </div>
+              </div>
+              
+              <!-- Pestaña de URL -->
+              <div id="tab-imagen-url" class="tab-contenido" style="display: none;">
+                <input type="text" id="prod-imagen-url" placeholder="https://...">
+                <button type="button" class="btn-secundario btn-sm" onclick="descargarImagenDesdeURL()">Descargar Imagen</button>
+                <small>La imagen se descargará y guardará automáticamente</small>
+                <div id="imagen-preview-url" class="imagen-preview" style="display: none;">
+                  <img id="preview-img-url" src="" alt="Preview">
+                  <button type="button" class="btn-limpiar-img" onclick="limpiarImagenURL()">Cambiar</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

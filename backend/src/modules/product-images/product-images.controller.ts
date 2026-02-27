@@ -7,6 +7,7 @@ import {
   Body,
   Param,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
 import { ProductImagesService } from './product-images.service';
 import { CreateProductImageDto, UpdateProductImageDto } from './dto/product-image.dto';
@@ -17,6 +18,16 @@ import { Roles } from '../auth/decorators/roles.decorator';
 @Controller('product-images')
 export class ProductImagesController {
   constructor(private readonly productImagesService: ProductImagesService) {}
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  @Post('download')
+  async descargarImagen(@Body() dto: { url: string }) {
+    if (!dto.url) {
+      throw new BadRequestException('URL is required');
+    }
+    return this.productImagesService.descargarYGuardarImagen(dto.url);
+  }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')

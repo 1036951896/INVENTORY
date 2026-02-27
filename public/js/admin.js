@@ -24,6 +24,12 @@ const API_URL = BACKEND_URL + '/api/v1';
 function normalizarImagenUrlAdmin(url) {
   if (!url) return BACKEND_URL + '/assets/product-placeholder.svg';
   
+  // Si ya tiene ruta relativa correcta (../assets/), devolverla tal cual
+  if (url.startsWith('../assets/')) return url;
+  
+  // Si comienza con assets/, agregar ../
+  if (url.startsWith('assets/')) return '../' + url;
+  
   // Si es una URL completa que apunta a Render
   if (url.includes('storehub-api-74yl.onrender.com')) {
     // En desarrollo (http), no usar Render, usar localhost
@@ -38,7 +44,7 @@ function normalizarImagenUrlAdmin(url) {
   // Si comienza con /, es una ruta absoluta desde la raíz - agregar BACKEND_URL
   if (url.startsWith('/')) return BACKEND_URL + url;
   
-  // Si es relativa, agregarle ../ para que se resuelva desde html/
+  // Fallback: si es una ruta relativa sin ../, agregarle ../
   return '../' + url;
 }
 
@@ -1055,7 +1061,22 @@ function editarProducto(id) {
   document.getElementById('prod-categoria').value = categoriaId;
   document.getElementById('prod-precio').value = producto.precio;
   document.getElementById('prod-stock').value = producto.stock;
-  document.getElementById('prod-imagen').value = producto.imagen || '';
+  // Si existe imagen, cargarla como preview; si no, limpiar campos
+  if (producto.imagen) {
+    imagenProductoSeleccionada = producto.imagen;
+    imagenProductoNombre = producto.imagen.split('/').pop();
+    // Mostrar como preview con la ruta normalizada
+    const imagenNormalizada = normalizarImagenUrlAdmin(producto.imagen);
+    document.getElementById('preview-img-local').src = imagenNormalizada;
+    document.getElementById('imagen-preview-local').style.display = 'flex';
+    // Cambiar al tab local para mostrar la imagen existente
+    cambiarTabImagen('local');
+  } else {
+    imagenProductoSeleccionada = null;
+    imagenProductoNombre = null;
+    limpiarImagenLocal();
+    limpiarImagenURL();
+  }
   document.getElementById('prod-descripcion').value = producto.descripcion || '';
   document.getElementById('form-producto').setAttribute('data-id', idString);
 
@@ -1144,6 +1165,140 @@ async function cargarCategoriasAdmin() {
 }
 
 // Guardar producto
+// Variables globales para almacenar imagen del producto
+let imagenProductoSeleccionada = null;
+let imagenProductoNombre = null;
+
+// Cambiar entre pestaña de imagen local y URL
+function cambiarTabImagen(tab) {
+  // Ocultar todas las pestañas
+  document.getElementById('tab-imagen-local').classList.remove('activo');
+  document.getElementById('tab-imagen-url').classList.remove('activo');
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('activo'));
+  
+  // Mostrar pestaña seleccionada
+  if (tab === 'local') {
+    document.getElementById('tab-imagen-local').classList.add('activo');
+    document.querySelectorAll('.tab-btn')[0].classList.add('activo');
+  } else {
+    document.getElementById('tab-imagen-url').classList.add('activo');
+    document.querySelectorAll('.tab-btn')[1].classList.add('activo');
+  }
+}
+
+// Manejar upload de archivo local
+document.addEventListener('DOMContentLoaded', function() {
+  const inputArchivo = document.getElementById('prod-imagen-archivo');
+  if (inputArchivo) {
+    inputArchivo.addEventListener('change', function(e) {
+      const archivo = e.target.files[0];
+      if (!archivo) return;
+      
+      // Validar tamaño (5MB máximo)
+      if (archivo.size > 5 * 1024 * 1024) {
+        alert('El archivo es demasiado grande. Máximo 5MB.');
+        e.target.value = '';
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        imagenProductoSeleccionada = event.target.result; // Base64
+        imagenProductoNombre = archivo.name;
+        
+        // Mostrar preview
+        const preview = document.getElementById('imagen-preview-local');
+        const img = document.getElementById('preview-img-local');
+        img.src = imagenProductoSeleccionada;
+        preview.style.display = 'block';
+        
+        console.log('✓ Imagen cargada:', imagenProductoNombre);
+      };
+      reader.readAsDataURL(archivo);
+    });
+  }
+});
+
+// Limpiar imagen local
+function limpiarImagenLocal() {
+  const inputArchivo = document.getElementById('prod-imagen-archivo');
+  inputArchivo.value = '';
+  document.getElementById('imagen-preview-local').style.display = 'none';
+  imagenProductoSeleccionada = null;
+  imagenProductoNombre = null;
+}
+
+// Descargar imagen desde URL
+async function descargarImagenDesdeURL() {
+  const urlImagen = document.getElementById('prod-imagen-url').value.trim();
+  
+  if (!urlImagen) {
+    alert('Por favor ingresa una URL de imagen');
+    return;
+  }
+  
+  try {
+    // Mostrar estado de carga
+    const btnDescargar = event.target;
+    const textoOriginal = btnDescargar.textContent;
+    btnDescargar.textContent = '⏳ Descargando...';
+    btnDescargar.disabled = true;
+    
+    // Enviar URL al backend para descargar y guardar
+    const response = await fetch(`${BACKEND_URL}/api/v1/product-images/download`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + (localStorage.getItem('admin-token') || '')
+      },
+      body: JSON.stringify({ url: urlImagen })
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      imagenProductoSeleccionada = data.ruta; // Ruta relativa guardada
+      imagenProductoNombre = data.nombre;
+      
+      // Mostrar preview usando la ruta relativa
+      const preview = document.getElementById('imagen-preview-url');
+      const img = document.getElementById('preview-img-url');
+      img.src = data.ruta; // Usar la ruta relativa devuelta por el backend
+      preview.style.display = 'flex';
+      
+      mostrarMensajeAdmin('✓ Imagen descargada y guardada correctamente', 'exito');
+      console.log('✓ Imagen guardada:', data.nombre);
+    } else {
+      const error = await response.json();
+      alert('❌ Error al descargar imagen: ' + (error.message || 'Error desconocido'));
+    }
+  } catch (error) {
+    console.error('Error descargando imagen:', error);
+    // Si falla el endpoint, usar URL directamente
+    console.log('💡 Usando URL directamente (endpoint no disponible)');
+    imagenProductoSeleccionada = urlImagen;
+    imagenProductoNombre = urlImagen.split('/').pop();
+    
+    const preview = document.getElementById('imagen-preview-url');
+    const img = document.getElementById('preview-img-url');
+    img.src = urlImagen;
+    preview.style.display = 'block';
+  } finally {
+    const btnDescargar = document.querySelector('.btn-sm');
+    if (btnDescargar) {
+      btnDescargar.textContent = 'Descargar Imagen';
+      btnDescargar.disabled = false;
+    }
+  }
+}
+
+// Limpiar imagen URL
+function limpiarImagenURL() {
+  document.getElementById('prod-imagen-url').value = '';
+  document.getElementById('imagen-preview-url').style.display = 'none';
+  imagenProductoSeleccionada = null;
+  imagenProductoNombre = null;
+}
+
 function guardarProducto() {
   // Validar permisos de administrador
   if (!validarPermisosAdmin('crear_productos')) {
@@ -1155,7 +1310,8 @@ function guardarProducto() {
   const categoriaId = document.getElementById('prod-categoria').value;
   const precio = parseFloat(document.getElementById('prod-precio').value);
   const stock = parseInt(document.getElementById('prod-stock').value);
-  const imagen = document.getElementById('prod-imagen').value.trim();
+  // Usar la imagen seleccionada desde los tabs (local file o URL descargada)
+  const imagen = imagenProductoSeleccionada || null;
   const descripcion = document.getElementById('prod-descripcion').value.trim();
   const form = document.getElementById('form-producto');
   const productoId = form.getAttribute('data-id');
@@ -1201,6 +1357,11 @@ function guardarProducto() {
       if (resp.ok) {
         const action = productoId ? 'actualizado' : 'creado';
         mostrarMensajeAdmin(`✓ Producto ${action} correctamente`, 'exito');
+        // Limpiar imagen seleccionada y resetear tabs
+        imagenProductoSeleccionada = null;
+        imagenProductoNombre = null;
+        limpiarImagenLocal();
+        limpiarImagenURL();
         cerrarModalProducto();
         cargarDatosAdmin();
       } else {
