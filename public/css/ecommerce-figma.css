@@ -59,6 +59,34 @@ header .contenedor {
   font-weight: 700;
 }
 
+/* Botón home para páginas informativas */
+.btn-home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.btn-home:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.08);
+}
+
+.btn-home svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+}
+
 /* Barra de búsqueda */
 .barra-busqueda-grupo {
   display: flex;
@@ -319,17 +347,17 @@ header .contenedor {
   transform: scale(1.1);
 }
 
-/* ===== CATEGORÍAS ===== */
+/* ===== CATEGORÍAS (Antiguo - Deshabilitado por header-limpio.css) ===== */
 .categorias {
-  background: #386273;
-  padding: 1.2rem 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: transparent;
+  padding: 0;
+  border-bottom: none;
+  box-shadow: none;
   display: none !important;
 }
 
 .categorias .contenedor {
-  padding: 0 2rem;
+  padding: 0;
 }
 
 .categorias-lista {
@@ -338,7 +366,7 @@ header .contenedor {
   gap: 0.5rem;
   justify-content: flex-start;
   flex-wrap: wrap;
-  padding: 1rem 0;
+  padding: 0;
 }
 
 .categorias-lista.activo {
@@ -356,8 +384,9 @@ header .contenedor {
   border-radius: 25px;
   transition: all 0.3s ease;
   border: 2px solid transparent;
-  background-color: #fff;
+  background-color: transparent;
   cursor: pointer;
+  box-shadow: none;
 }
 
 .icono-categoria {
@@ -368,18 +397,18 @@ header .contenedor {
 }
 
 .categoria:hover {
-  background-color: #f0f0f0;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  color: white;
+  background-color: transparent;
+  transform: none;
+  box-shadow: none;
+  color: #386273;
 }
 
 .categoria.activo {
-  background-color: #fff;
+  background-color: transparent;
   color: #386273;
-  border-color: #386273;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  font-weight: 700;
+  border-color: transparent;
+  box-shadow: none;
+  font-weight: 600;
 }
 
 /* ===== HERO PREMIUM CORPORATIVO ===== */
@@ -388,11 +417,22 @@ header .contenedor {
   margin: 3rem auto;
   padding: 4rem;
   border-radius: 18px;
-  background: linear-gradient(135deg, #2f5665 0%, #386273 50%, #4f7f93 100%);
+  background: linear-gradient(135deg, #2f5f6b 0%, #2b5661 40%, #244a53 100%);
   position: relative;
   overflow: hidden;
   color: white;
   animation: fadeInUp 0.8s ease-out;
+}
+
+.hero-premium::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+  z-index: 1;
 }
 
 /* Grid de contenido */
@@ -448,17 +488,19 @@ header .contenedor {
   animation: slideInLeft 0.6s ease-out;
 }
 
-/* Jerarquía tipográfica fuerte */
+/* Jerarquía tipográfica fuerte - ELEVADA */
 .hero-texto h1 {
-  font-size: 2.4rem;
-  font-weight: 600;
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
   margin-bottom: 1rem;
   animation: slideInLeft 0.7s ease-out 0.1s both;
+  line-height: 1.1;
 }
 
 .hero-texto p {
-  font-size: 1.05rem;
-  opacity: 0.95;
+  font-size: 1.1rem;
+  opacity: 0.92;
   max-width: 500px;
   margin-bottom: 2rem;
   line-height: 1.6;
@@ -466,11 +508,11 @@ header .contenedor {
 }
 
 .hero-texto p strong {
-  font-weight: 600;
-  color: #fff;
+  font-weight: 700;
+  color: #ffffff;
 }
 
-/* Botón con personalidad premium */
+/* Botón con personalidad premium - ELEVADO */
 .btn-hero-premium {
   display: inline-flex;
   align-items: center;
@@ -478,25 +520,42 @@ header .contenedor {
   background: white;
   color: #2f5665;
   border: none;
-  padding: 0.95rem 2.2rem;
+  padding: 1rem 2.5rem;
   font-weight: 600;
   font-size: 1rem;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   text-decoration: none;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
   animation: slideInLeft 0.9s ease-out 0.3s both;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-hero-premium::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 .btn-hero-premium:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
   background: #f5f5f5;
 }
 
+.btn-hero-premium:hover::after {
+  opacity: 1;
+}
+
 .btn-hero-premium:active {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 .btn-hero-premium svg {
@@ -1041,14 +1100,14 @@ footer {
 }
 
 .footer-seccion p {
-  color: #b0bec5;
+  color: #e0e0e0;
   line-height: 1.6;
   margin-bottom: 0.7rem;
   font-size: 0.9rem;
 }
 
 .footer-seccion a {
-  color: #b0bec5;
+  color: #e0e0e0;
   display: block;
   margin-bottom: 0.7rem;
   font-size: 0.9rem;
@@ -1063,11 +1122,11 @@ footer {
 
 /* Iconos SVG minimalistas */
 .footer-icon {
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   stroke-width: 1.4;
   margin-right: 8px;
-  color: #90a4ae;
+  color: #b3e5fc;
   vertical-align: middle;
   display: inline-block;
   transition: color 0.25s ease;
@@ -1099,8 +1158,8 @@ footer {
 }
 
 .redes-sociales a svg {
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   fill: currentColor;
   stroke: currentColor;
 }
@@ -1118,7 +1177,7 @@ footer {
   gap: 10px;
   margin-bottom: 0.7rem;
   font-size: 0.9rem;
-  color: #b0bec5;
+  color: #e0e0e0;
 }
 
 .footer-separador {
@@ -1127,7 +1186,7 @@ footer {
   padding: 1.8rem 0;
   text-align: center;
   font-size: 0.85rem;
-  color: #78909c;
+  color: #b0bec5;
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;

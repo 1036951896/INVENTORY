@@ -22,18 +22,23 @@
 }
 
 header {
-  background: linear-gradient(135deg, #386273, #2f5665);
-  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #2f5f6b, #274e59);
+  padding: 0.75rem 2rem;
   position: sticky;
   top: 0;
-  z-index: 100;
-  transition: all 0.35s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 30px rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 header.header-scroll {
-  padding: 0.5rem 2rem;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  padding: 0.6rem 2rem;
+  box-shadow: 
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    0 12px 40px rgba(0, 0, 0, 0.2);
 }
 
 header .contenedor {
@@ -42,13 +47,14 @@ header .contenedor {
   padding: 0;
 }
 
-/* Container principal - Layout limpio tipo Shopify */
+/* Container principal - Estructura 3 zonas: Logo | Búsqueda | Acciones */
 .encabezado-contenedor {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 2.5rem;
   width: 100%;
+  height: 70px;
 }
 
 .encabezado-contenedor > .logo {
@@ -61,44 +67,52 @@ header .contenedor {
   right: auto;
 }
 
-/* ===== LOGO ===== */
+/* ===== LOGO Y SUBTÍTULO DE SISTEMA ===== */
 .logo {
   display: flex;
-  align-items: center;
-  gap: 0.3rem;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.2rem;
   white-space: nowrap;
   flex-shrink: 0;
   flex: 0 0 auto;
   padding: 0;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .logo:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .logo-img {
-  height: 70px;
+  height: 48px;
   width: auto;
   flex-shrink: 0;
-  transition: all 0.35s ease;
+  transition: all 0.3s ease;
 }
 
 header.header-scroll .logo-img {
-  height: 55px;
+  height: 40px;
 }
 
-.logo-text {
-  color: #fff;
-  font-size: 1.1rem;
+.subtitulo-sistema {
+  font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.5px;
-  transition: all 0.35s ease;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+  transition: color 0.3s ease;
 }
 
-header.header-scroll .logo-text {
-  font-size: 0.95rem;
+header.header-scroll .subtitulo-sistema {
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.logo:hover .subtitulo-sistema {
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* ===== BARRA DE BÚSQUEDA Y CONTROLES ===== */
@@ -116,29 +130,40 @@ header.header-scroll .logo-text {
 /* Hamburguesa - Oculta en desktop, visible en mobile */
 .btn-hamburguesa {
   display: none !important;
-  width: 32px;
-  height: 32px;
-  background: #386273;
+  width: 36px;
+  height: 36px;
+  background: none;
   border: none;
   color: white;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 12px;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   padding: 0;
-  transition: all 0.3s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-hamburguesa svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   stroke: white;
   fill: none;
+  stroke-width: 2;
+  transition: stroke 0.25s ease;
 }
 
 .btn-hamburguesa:hover {
-  background-color: #2a4a5a;
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.btn-hamburguesa:hover svg {
+  stroke-width: 2.3;
+}
+
+.btn-hamburguesa:active {
+  transform: translateY(0);
 }
 
 /* ===== DROPDOWN DE CATEGORÍAS - SOLO MOBILE ===== */
@@ -228,9 +253,11 @@ header.header-scroll .logo-text {
 }
 
 .barra-busqueda-contenedor-desktop.activo .barra-busqueda {
-  height: 44px;
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  height: 48px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
 }
 
 .barra-busqueda-contenedor-desktop.activo .input-buscar {
@@ -240,23 +267,27 @@ header.header-scroll .logo-text {
 .barra-busqueda {
   display: flex !important;
   align-items: center;
-  background: #ffffff;
-  border-radius: 4px;
-  height: 42px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: none;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 14px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   width: 100%;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .barra-busqueda:focus-within {
-  border-color: #386273;
-  box-shadow: 0 0 0 3px rgba(56, 98, 115, 0.15);
+  background: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15);
 }
 
 header.header-scroll .barra-busqueda {
-  height: 38px;
+  height: 40px;
+  border-radius: 12px;
 }
 
 /* Desktop - Media query para sobrescrituras específicas si las necesita */
@@ -272,33 +303,36 @@ header.header-scroll .barra-busqueda {
   }
 }
 
-.barra-busqueda:focus-within {
-  box-shadow: 0 4px 12px rgba(56, 98, 115, 0.15);
-}
-
 .icono-buscar-fijo {
   position: absolute;
-  left: 10px;
+  left: 14px;
   width: 18px;
   height: 18px;
-  stroke: #666;
+  stroke: rgba(255, 255, 255, 0.6);
   fill: none;
   flex-shrink: 0;
   z-index: 2;
+  transition: stroke 0.3s ease;
+}
+
+.barra-busqueda:focus-within .icono-buscar-fijo {
+  stroke: rgba(255, 255, 255, 0.8);
 }
 
 .input-buscar {
   flex: 1;
-  padding: 0.5rem 0.8rem 0.5rem 40px;
+  padding: 0.6rem 1rem 0.6rem 40px;
   border: none;
   background: transparent;
-  color: #386273;
-  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.95rem;
+  font-weight: 500;
   outline: none;
+  font-family: inherit;
 }
 
 .input-buscar::placeholder {
-  color: #999;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .btn-limpiar-buscar {
@@ -324,35 +358,47 @@ header.header-scroll .barra-busqueda {
 /* Lupa para móvil - Oculta en desktop */
 .btn-busqueda-movil {
   display: none !important;
-  width: 32px;
-  height: 32px;
-  background: transparent;
+  width: 36px;
+  height: 36px;
+  background: none;
   border: none;
   color: white;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 12px;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   padding: 0;
-  transition: all 0.3s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-busqueda-movil svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   stroke: white;
   fill: none;
   stroke-width: 2;
+  transition: stroke 0.25s ease;
 }
 
-/* CATEGORÍAS - Debajo del header en desktop */
+.btn-busqueda-movil:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.btn-busqueda-movil:hover svg {
+  stroke-width: 2.3;
+}
+
+.btn-busqueda-movil:active {
+  transform: translateY(0);
+}
 @media (min-width: 769px) {
   .categorias-seccion {
     display: block !important;
-    background: linear-gradient(90deg, #ffffff 0%, #f5f7fa 50%, #ffffff 100%);
-    padding: 1rem 0;
-    border-bottom: 1px solid #e8e8e8;
+    background: #f5f6f8;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   }
   
   .categorias {
@@ -403,15 +449,16 @@ header.header-scroll .barra-busqueda {
     border: 1px solid #ddd !important;
     background-color: #fff !important;
     color: #567 !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    box-shadow: none !important;
+    border-radius: 6px;
   }
   
   .categoria:hover {
-    transform: translateY(-1px);
-    background-color: #f8f8f8 !important;
-    border-color: #bbb !important;
+    transform: none;
+    background-color: #f0f0f0 !important;
+    border-color: #aaa !important;
     color: #333 !important;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+    box-shadow: none !important;
   }
   
   .categoria.activo {
@@ -436,31 +483,37 @@ header.header-scroll .barra-busqueda {
 }
 
 .btn-busqueda-movil:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
 }
 
 /* ===== MENÚ SUPERIOR (CARRITO, USUARIO, ADMIN, SEGUIMIENTO) ===== */
 .menu-superior {
   display: flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: 0.8rem;
   flex-shrink: 0;
   flex: 0 0 auto;
 }
 
+.menu-superior > div,
+.menu-superior > a {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .icono-carrito {
   position: relative;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.25s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
-  padding: 6px;
-  border-radius: 4px;
+  padding: 0;
+  border-radius: 12px;
 }
 
 .icono-carrito svg {
@@ -469,27 +522,41 @@ header.header-scroll .barra-busqueda {
   stroke: white;
   fill: none;
   stroke-width: 2;
+  transition: stroke 0.25s ease;
 }
 
 .icono-carrito:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.icono-carrito:hover svg {
+  stroke-width: 2.3;
 }
 
 .contador-carrito {
   position: absolute;
-  top: -6px;
-  right: -6px;
-  background: #d64545;
+  top: 2px;
+  right: 2px;
+  background: #ff4d4d;
   color: white;
-  font-size: 0.7rem;
-  padding: 2px 6px;
+  font-size: 10px;
+  padding: 3px 7px;
   border-radius: 50px;
-  font-weight: 600;
+  font-weight: 700;
+  min-width: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(255, 77, 77, 0.4);
+  transition: all 0.25s ease;
+}
+
+.icono-carrito:hover .contador-carrito {
+  transform: scale(1.1);
 }
 
 .btn-icono {
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   background: none;
   border: none;
   color: white;
@@ -497,20 +564,26 @@ header.header-scroll .barra-busqueda {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.25s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
-  padding: 6px;
-  border-radius: 4px;
+  padding: 0;
+  border-radius: 12px;
 }
 
 .btn-icono svg {
   width: 22px;
   height: 22px;
   fill: white;
+  transition: fill 0.25s ease;
 }
 
 .btn-icono:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.btn-icono:active {
+  transform: translateY(0);
 }
 
 /* ===== BREAKPOINTS ===== */
@@ -518,26 +591,30 @@ header.header-scroll .barra-busqueda {
 /* TABLET (768px) */
 @media (max-width: 768px) {
   header {
-    padding: 0.5rem 0.8rem;
+    padding: 0.6rem 1rem;
   }
 
   .encabezado-contenedor {
-    gap: 0.5rem;
+    gap: 1rem;
+    height: 60px;
   }
 
-  .logo-text {
+  .logo {
+    gap: 0rem;
+  }
+
+  .subtitulo-sistema {
     display: none;
   }
 
   .logo-img {
-    height: 28px;
+    height: 32px;
   }
 
   .btn-hamburguesa {
     display: flex !important;
   }
   
-  /* OCULTAR SECCIÓN DE CATEGORÍAS EN TABLET */
   .categorias-seccion {
     display: none !important;
   }
@@ -550,7 +627,6 @@ header.header-scroll .barra-busqueda {
     display: none !important;
   }
   
-  /* MOSTRAR DROPDOWN EN TABLET */
   .dropdown-categorias {
     display: none !important;
   }
@@ -565,74 +641,80 @@ header.header-scroll .barra-busqueda {
 
   .btn-busqueda-movil {
     display: flex !important;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+
+  .barra-busqueda-contenedor-desktop.activo {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    width: calc(100% - 16px);
+    max-width: none;
+    flex: 1;
+    z-index: 999;
   }
 
   .menu-superior {
     gap: 0.4rem;
   }
 
-  /* Ocultar solo el nombre de usuario en tablet, mantener botón logout */
   .usuario-info > span {
     display: none !important;
   }
 
   .icono-carrito {
-    width: 24px;
-    height: 24px;
+    width: 36px;
+    height: 36px;
   }
 
   .icono-carrito svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
   }
 
   .contador-carrito {
-    width: 18px;
-    height: 18px;
-    font-size: 0.6rem;
-    top: -6px;
-    right: -6px;
+    font-size: 9px;
+    padding: 2px 5px;
   }
 
   .btn-icono {
-    width: 24px;
-    height: 24px;
+    width: 36px;
+    height: 36px;
   }
 
   .btn-icono svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
   }
 }
 
 /* MÓVIL (480px) */
 @media (max-width: 480px) {
   header {
-    padding: 0.4rem 0.5rem;
+    padding: 0.5rem 0.7rem;
   }
 
   .encabezado-contenedor {
-    gap: 0.3rem;
-    flex-wrap: nowrap;
-    width: 100%;
+    gap: 0.6rem;
+    height: 56px;
   }
 
   .logo {
-    gap: 0.2rem;
     min-width: 32px;
+    gap: 0rem;
   }
 
-  .logo-img {
-    height: 24px;
-  }
-
-  .logo-text {
+  .subtitulo-sistema {
     display: none;
   }
 
-  /* OCULTAR SECCIÓN DE CATEGORÍAS EN MOBILE */
+  .logo-img {
+    height: 28px;
+  }
+
   .categorias-seccion {
     display: none !important;
   }
@@ -643,50 +725,49 @@ header.header-scroll .barra-busqueda {
 
   .btn-busqueda-movil {
     display: flex !important;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
   }
 
   .btn-busqueda-movil svg {
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
   }
 
   .menu-superior {
-    gap: 0.2rem;
+    gap: 0.3rem;
     margin-left: auto;
   }
 
-  /* Ocultar solo el nombre en mobile, mantener botón logout */
   .usuario-info > span {
     display: none !important;
   }
 
   .icono-carrito {
-    width: 22px;
-    height: 22px;
+    width: 32px;
+    height: 32px;
   }
 
   .icono-carrito svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
   }
 
   .contador-carrito {
-    width: 16px;
-    height: 16px;
-    font-size: 0.5rem;
-    top: -5px;
-    right: -5px;
+    font-size: 8px;
+    padding: 2px 4px;
+    top: 2px;
+    right: 2px;
   }
 
   .btn-icono {
-    width: 22px;
-    height: 22px;
+    width: 32px;
+    height: 32px;
   }
 
   .btn-icono svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
   }
 }
