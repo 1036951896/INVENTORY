@@ -1,4 +1,11 @@
+/* ===== IMPORTAR FUENTE MODERNA ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
 /* ===== PANEL ADMINISTRADOR - ESTILOS ===== */
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
 
 .admin-contenedor {
   display: flex;
@@ -59,6 +66,8 @@
   background-color: rgba(182, 225, 242, 0.1);
   color: var(--azul-claro);
   border-left-color: var(--azul-claro);
+  padding-left: 1.8rem;
+  transition: padding-left 0.3s ease;
 }
 
 .menu-lateral-enlace:hover .menu-lateral-icono svg {
@@ -168,37 +177,129 @@
 }
 
 /* ===== DASHBOARD ===== */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.dashboard-subtitle {
+  color: #888;
+  font-size: 14px;
+  margin: 0;
+  font-weight: 400;
+}
+
+.dashboard-date {
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  background: rgba(182, 225, 242, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
 .dashboard-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.8rem;
   margin-bottom: 3rem;
+  margin-top: 2rem;
 }
 
 .stat-tarjeta {
-  background-color: var(--blanco);
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafb 100%);
   padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid var(--azul-oscuro);
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+  border-left: 5px solid var(--azul-oscuro);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
+.stat-tarjeta:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
+  border-left-color: var(--azul-claro);
+}
+
+.stat-tarjeta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(182, 225, 242, 0.05) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.stat-tarjeta:hover::before {
+  opacity: 1;
+}
+
+/* Colores estratégicos por tarjeta */
+.stat-tarjeta:nth-child(1) { border-left-color: #4CAF50; }
+.stat-tarjeta:nth-child(1) .stat-icono { color: #4CAF50; }
+
+.stat-tarjeta:nth-child(2) { border-left-color: #2196F3; }
+.stat-tarjeta:nth-child(2) .stat-icono { color: #2196F3; }
+
+.stat-tarjeta:nth-child(3) { border-left-color: #FF9800; }
+.stat-tarjeta:nth-child(3) .stat-icono { color: #FF9800; }
+
+.stat-tarjeta:nth-child(4) { border-left-color: #9C27B0; }
+.stat-tarjeta:nth-child(4) .stat-icono { color: #9C27B0; }
+
+.stat-tarjeta:nth-child(5) { border-left-color: #00BCD4; }
+.stat-tarjeta:nth-child(5) .stat-icono { color: #00BCD4; }
+
+.stat-tarjeta:nth-child(6) { border-left-color: #E91E63; }
+.stat-tarjeta:nth-child(6) .stat-icono { color: #E91E63; }
+
+.stat-tarjeta:nth-child(7) { border-left-color: #F44336; }
+.stat-tarjeta:nth-child(7) .stat-icono { color: #F44336; }
+
 .stat-icono {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: var(--azul-claro);
+  width: 50px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  font-size: 1.8rem;
+}
+
+.stat-tarjeta:hover .stat-icono {
+  transform: scale(1.15);
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .stat-valor {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 700;
   color: var(--azul-oscuro);
   margin-bottom: 0.5rem;
+  letter-spacing: -0.3px;
 }
 
 .stat-etiqueta {
-  color: var(--gris-oscuro);
+  color: #888;
   font-size: 0.9rem;
+  font-weight: 500;
 }
 
 /* ===== GRÁFICOS ===== */
@@ -210,14 +311,23 @@
 }
 
 .grafico-card {
-  background-color: var(--blanco);
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafb 100%);
   padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.grafico-card:hover {
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
 }
 
 .grafico-card h3 {
   margin-bottom: 1.5rem;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--azul-oscuro);
   border-bottom: 2px solid var(--azul-claro);
   padding-bottom: 1rem;
 }

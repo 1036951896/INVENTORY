@@ -1,6 +1,20 @@
 // Lock para evitar ejecuciones concurrentes de actualizarDashboard
 let dashboardUpdating = false;
 
+// ===== ACTUALIZAR FECHA DEL DASHBOARD =====
+function actualizarFechaDashboard() {
+  const dateElement = document.getElementById('dashboard-date');
+  if (!dateElement) return;
+  
+  const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+  const fecha = new Date().toLocaleDateString('es-ES', opciones);
+  const fechaCapitalizada = fecha.charAt(0).toUpperCase() + fecha.slice(1);
+  dateElement.textContent = fechaCapitalizada;
+}
+
+// Actualizar fecha al cargar
+document.addEventListener('DOMContentLoaded', actualizarFechaDashboard);
+
 // ===== PANEL ADMINISTRADOR =====
 // URL base del backend
 const BACKEND_URL = window.BACKEND_URL || 'http://localhost:3000';
