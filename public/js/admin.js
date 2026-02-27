@@ -3202,6 +3202,234 @@ if (document.readyState === 'loading') {
   initAdminAccountSection();
 }
 
+// ===== MÓDULO DE NOTIFICACIONES: Centro profesional de alertas =====
+
+// Datos de notificaciones
+let notificacionesData = [
+  {
+    id: 'notif_1',
+    tipo: 'ALERTA_STOCK',
+    titulo: 'Bajo stock detectado',
+    descripcion: 'El producto "Arroz 1kg" tiene solo 3 unidades disponibles',
+    prioridad: 'advertencia',
+    timestamp: Date.now() - 7200000,
+    leida: false
+  },
+  {
+    id: 'notif_2',
+    tipo: 'PRODUCTO_AGOTADO',
+    titulo: 'Producto agotado',
+    descripcion: 'El producto "Aceite de Oliva Extra" se encuentra agotado',
+    prioridad: 'critica',
+    timestamp: Date.now() - 3600000,
+    leida: false
+  },
+  {
+    id: 'notif_3',
+    tipo: 'NUEVO_PEDIDO',
+    titulo: 'Nuevo pedido recibido',
+    descripcion: 'Se ha registrado un nuevo pedido #ORD-2026-0127',
+    prioridad: 'info',
+    timestamp: Date.now() - 1800000,
+    leida: true
+  }
+];
+
+// Variables globales
+let notificacionesActuales = [];
+let filtroActualNotif = 'todas';
+
+// Actualizar tabla de notificaciones
+async function actualizarTablaNotificaciones(filtro = 'todas') {
+  filtroActualNotif = filtro;
+  filtrarNotificacionesModerno(filtro);
+}
+
+// Filtrar notificaciones
+function filtrarNotificacionesModerno(filtro) {
+  // Actualizar botones activos
+  document.querySelectorAll('.notif-tab').forEach(btn => {
+    btn.classList.remove('activo');
+  });
+  
+  // Encontrar y activar el botón correcto
+  const botones = document.querySelectorAll('.notif-tab');
+  const filtroMap = {
+    'todas': 0,
+    'NUEVO_PEDIDO': 1,
+    'PRODUCTO_AGOTADO': 2,
+    'ALERTA_STOCK': 3,
+    'INFO': 4
+  };
+  
+  if (filtroMap[filtro] !== undefined) {
+    botones[filtroMap[filtro]].classList.add('activo');
+  }
+
+  // Filtrar datos
+  if (filtro === 'todas') {
+    notificacionesActuales = notificacionesData;
+  } else {
+    notificacionesActuales = notificacionesData.filter(n => n.tipo === filtro);
+  }
+
+  // Mostrar/ocultar lista vacía
+  const listaVacia = document.getElementById('notif-lista-vacia');
+  const lista = document.getElementById('notif-lista');
+
+  if (notificacionesActuales.length === 0) {
+    listaVacia.style.display = 'block';
+    lista.innerHTML = '';
+  } else {
+    listaVacia.style.display = 'none';
+    lista.innerHTML = notificacionesActuales
+      .map(notif => generarTarjetaNotificacion(notif))
+      .join('');
+  }
+
+  // Actualizar contadores
+  actualizarContadoresNotif();
+  generarResumenSistema();
+}
+
+// Generar HTML de tarjeta
+function generarTarjetaNotificacion(notif) {
+  const fecha = new Date(notif.timestamp);
+  const ahora = new Date();
+  let textoTiempo = '';
+
+  const diffMs = ahora - fecha;
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHoras = Math.floor(diffMs / 3600000);
+  const diffDias = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 1) textoTiempo = 'Ahora mismo';
+  else if (diffMins < 60) textoTiempo = `Hace ${diffMins} min`;
+  else if (diffHoras < 24) textoTiempo = `Hace ${diffHoras} h`;
+  else textoTiempo = `Hace ${diffDias} días`;
+
+  const iconos = {
+    'ALERTA_STOCK': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3.05h16.94a2 2 0 0 0 1.71-3.05L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+    'PRODUCTO_AGOTADO': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+    'NUEVO_PEDIDO': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>',
+    'INFO': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>'
+  };
+
+  return `
+    <div class="notif-tarjeta ${notif.prioridad} ${notif.leida ? '' : 'no-leida'}">
+      <div class="notif-icono">${iconos[notif.tipo] || '⚠'}</div>
+      <div class="notif-contenido">
+        <div class="notif-titulo">${notif.titulo}</div>
+        <div class="notif-descripcion">${notif.descripcion}</div>
+        <div class="notif-footer">
+          <span class="notif-hora">${textoTiempo}</span>
+          <span class="notif-estado-badge">${notif.leida ? 'Leída' : 'No leída'}</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Actualizar contadores
+function actualizarContadoresNotif() {
+  const contadores = {
+    'todas': notificacionesData.length,
+    'NUEVO_PEDIDO': notificacionesData.filter(n => n.tipo === 'NUEVO_PEDIDO').length,
+    'PRODUCTO_AGOTADO': notificacionesData.filter(n => n.tipo === 'PRODUCTO_AGOTADO').length,
+    'ALERTA_STOCK': notificacionesData.filter(n => n.tipo === 'ALERTA_STOCK').length,
+    'INFO': notificacionesData.filter(n => n.tipo === 'INFO').length
+  };
+
+  document.getElementById('contador-todas').textContent = contadores['todas'];
+  document.getElementById('contador-pedidos').textContent = contadores['NUEVO_PEDIDO'];
+  document.getElementById('contador-agotados').textContent = contadores['PRODUCTO_AGOTADO'];
+  document.getElementById('contador-stock').textContent = contadores['ALERTA_STOCK'];
+  document.getElementById('contador-info').textContent = contadores['INFO'];
+
+  // KPIs
+  const alertasCriticas = notificacionesData.filter(n => n.prioridad === 'critica').length;
+  document.getElementById('notif-alertas-activas').textContent = alertasCriticas;
+
+  const ultimaNotif = notificacionesData.length > 0 
+    ? new Date(notificacionesData[0].timestamp).toLocaleString('es-CO', { month: 'short', day: 'numeric' })
+    : '—';
+  document.getElementById('notif-ultima').textContent = ultimaNotif;
+
+  // Estado del sistema
+  let estadoSistema = 'Estable';
+  if (alertasCriticas > 0) estadoSistema = 'Alerta';
+  else if (alertasCriticas === 0 && notificacionesData.length > 0) estadoSistema = 'Bueno';
+  document.getElementById('notif-estado-sistema').textContent = estadoSistema;
+}
+
+// Generar resumen del sistema
+function generarResumenSistema() {
+  const alertasCriticas = notificacionesData.filter(n => n.prioridad === 'critica').length;
+  const alertasAdvertencia = notificacionesData.filter(n => n.prioridad === 'advertencia').length;
+  const totalAlertas = alertasCriticas + alertasAdvertencia;
+
+  let resumen = '';
+
+  if (alertasCriticas === 0 && alertasAdvertencia === 0) {
+    resumen = `
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #065f46;">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <strong style="color: #065f46;">Sistema en Condiciones Óptimas</strong>
+      </div>
+      <p style="margin: 0;">No existen alertas críticas en el inventario. Todos los productos se encuentran en niveles normales. El sistema funciona correctamente.</p>
+    `;
+  } else if (alertasCriticas === 0 && alertasAdvertencia > 0) {
+    resumen = `
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #92400e;">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3.05h16.94a2 2 0 0 0 1.71-3.05L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        <strong style="color: #92400e;">Atención Requerida</strong>
+      </div>
+      <p style="margin: 0;">Se han detectado ${alertasAdvertencia} alerta(s) de stock bajo. Se recomienda revisar los productos con inventario limitado para realizar reposición oportuna.</p>
+    `;
+  } else {
+    resumen = `
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #991b1b;">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+        <strong style="color: #991b1b;">Alertas Críticas Activas</strong>
+      </div>
+      <p style="margin: 0;">Se han detectado ${alertasCriticas} alerta(s) crítica(s) en el sistema. Se requiere acción inmediata en los productos con stock crítico.</p>
+    `;
+  }
+
+  document.getElementById('notif-resumen-texto').innerHTML = resumen;
+}
+
+// Marcar todas como leídas
+function marcarTodasLeidas() {
+  notificacionesData.forEach(notif => notif.leida = true);
+  filtrarNotificacionesModerno(filtroActualNotif);
+  alert('Todas las notificaciones han sido marcadas como leídas');
+}
+
+// Limpiar historial
+function limpiarHistorial() {
+  if (!confirm('¿Estás seguro de que deseas eliminar todo el historial de notificaciones?')) {
+    return;
+  }
+  notificacionesData = [];
+  notificacionesActuales = [];
+  document.getElementById('notif-lista').innerHTML = '';
+  document.getElementById('notif-lista-vacia').style.display = 'block';
+  actualizarContadoresNotif();
+  generarResumenSistema();
+  alert('Historial de notificaciones limpiado');
+}
+
 // ===== HEADER QUE SE CONTRAE AL SCROLLEAR =====
 (() => {
   let lastScroll = 0;

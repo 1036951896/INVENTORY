@@ -916,127 +916,88 @@
 
         <!-- NOTIFICACIONES -->
         <section id="seccion-notificaciones" class="seccion-contenido" style="display: none;">
-          <h2>Historial de Notificaciones</h2>
-          
-          <div class="filtros-notif">
-            <button class="btn-filtro activo" onclick="filtrarNotificaciones('todas')">Todas</button>
-            <button class="btn-filtro" onclick="filtrarNotificaciones('NUEVO_PEDIDO')">Pedidos</button>
-            <button class="btn-filtro" onclick="filtrarNotificaciones('PRODUCTO_AGOTADO')">Agotados</button>
-            <button class="btn-filtro" onclick="filtrarNotificaciones('ALERTA_STOCK')">Stock Bajo</button>
+          <!-- HEADER: Profesional con acciones -->
+          <div class="notif-header">
+            <div>
+              <h1 style="margin: 0 0 0.5rem 0; font-size: 28px; color: #2f5f6b;">Centro de Notificaciones</h1>
+              <p style="margin: 0; color: #64748b; font-size: 14px; font-weight: 400;">Alertas y eventos del sistema</p>
+            </div>
+            <div class="notif-acciones">
+              <button class="btn-notif-accion" onclick="marcarTodasLeidas()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Marcar todas leídas
+              </button>
+              <button class="btn-notif-accion btn-danger" onclick="limpiarHistorial()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 4 21 4"></polyline>
+                  <path d="M19 4v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4"></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+                Limpiar historial
+              </button>
+            </div>
           </div>
 
-          <div class="tabla-contenedor">
-            <table class="tabla-notif">
-              <thead>
-                <tr>
-                  <th>Tipo</th>
-                  <th>Título</th>
-                  <th>Descripción</th>
-                  <th>Hora</th>
-                  <th>Estado</th>
-                </tr>
-              </thead>
-              <tbody id="tabla-notif-body">
-                <tr>
-                  <td colspan="5" style="text-align:center; padding: 20px; color: #999;">
-                    Cargando notificaciones...
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <!-- KPIs: Mini métricas del sistema -->
+          <div class="notif-kpis">
+            <div class="notif-kpi">
+              <div class="notif-kpi-valor" id="notif-alertas-activas">0</div>
+              <div class="notif-kpi-label">Alertas Activas</div>
+            </div>
+            <div class="notif-kpi">
+              <div class="notif-kpi-valor" id="notif-ultima">—</div>
+              <div class="notif-kpi-label">Última Notificación</div>
+            </div>
+            <div class="notif-kpi">
+              <div class="notif-kpi-valor" id="notif-estado-sistema">Estable</div>
+              <div class="notif-kpi-label">Estado del Sistema</div>
+            </div>
           </div>
 
-          <style>
-            .filtros-notif {
-              display: flex;
-              gap: 10px;
-              margin-bottom: 20px;
-              flex-wrap: wrap;
-            }
+          <!-- TABS: Filtros modernos con contadores -->
+          <div class="notif-tabs">
+            <button class="notif-tab activo" onclick="filtrarNotificacionesModerno('todas')">
+              Todas <span class="notif-contador" id="contador-todas">0</span>
+            </button>
+            <button class="notif-tab" onclick="filtrarNotificacionesModerno('NUEVO_PEDIDO')">
+              Pedidos <span class="notif-contador" id="contador-pedidos">0</span>
+            </button>
+            <button class="notif-tab" onclick="filtrarNotificacionesModerno('PRODUCTO_AGOTADO')">
+              Agotados <span class="notif-contador" id="contador-agotados">0</span>
+            </button>
+            <button class="notif-tab" onclick="filtrarNotificacionesModerno('ALERTA_STOCK')">
+              Stock Bajo <span class="notif-contador" id="contador-stock">0</span>
+            </button>
+            <button class="notif-tab" onclick="filtrarNotificacionesModerno('INFO')">
+              Sistema <span class="notif-contador" id="contador-info">0</span>
+            </button>
+          </div>
 
-            .btn-filtro {
-              background: white;
-              border: 2px solid #B6E1F2;
-              padding: 8px 16px;
-              border-radius: 4px;
-              cursor: pointer;
-              font-size: 13px;
-              transition: all 0.2s;
-            }
+          <!-- LISTA: Tarjetas modernas de notificaciones -->
+          <div class="notif-lista-contenedor">
+            <div id="notif-lista-vacia" class="notif-vacia" style="display: none;">
+              <div style="text-align: center; padding: 40px 20px;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 15px; color: #065f46;">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <strong style="display: block; font-size: 18px; color: #065f46; margin-bottom: 5px;">Todo está en orden</strong>
+                <p style="color: #64748b; margin: 0; font-size: 14px;">No se han generado alertas recientes.<br>El sistema funciona correctamente.</p>
+              </div>
+            </div>
+            <div id="notif-lista" class="notif-lista"></div>
+          </div>
 
-            .btn-filtro:hover,
-            .btn-filtro.activo {
-              background: #386273;
-              color: white;
-              border-color: #386273;
-            }
-
-            .tabla-notif {
-              width: 100%;
-              border-collapse: collapse;
-            }
-
-            .tabla-notif th {
-              background: #f5f5f5;
-              padding: 12px;
-              text-align: left;
-              color: #386273;
-              font-weight: bold;
-              border-bottom: 2px solid #B6E1F2;
-            }
-
-            .tabla-notif td {
-              padding: 12px;
-              border-bottom: 1px solid #f0f0f0;
-            }
-
-            .tabla-notif tbody tr:hover {
-              background: #f9f9f9;
-            }
-
-            .notif-tipo-badge {
-              display: inline-block;
-              padding: 4px 12px;
-              border-radius: 12px;
-              font-size: 11px;
-              font-weight: bold;
-              text-align: center;
-              min-width: 60px;
-            }
-
-            .notif-tipo-badge.NUEVO_PEDIDO {
-              background: #c8e6c9;
-              color: #2e7d32;
-            }
-
-            .notif-tipo-badge.PRODUCTO_AGOTADO {
-              background: #ffe0b2;
-              color: #e65100;
-            }
-
-            .notif-tipo-badge.ALERTA_STOCK {
-              background: #ffccbc;
-              color: #bf360c;
-            }
-
-            .notif-estado {
-              display: inline-block;
-              padding: 4px 12px;
-              border-radius: 12px;
-              font-size: 11px;
-              text-align: center;
-            }
-
-            .notif-estado.leida {
-              background: #e8f5e9;
-              color: #2e7d32;
-            }
-
-            .notif-estado.no-leida {
-              background: #e3f2fd;
-              color: #1565c0;
-            }
-          </style>
+          <!-- RESUMEN: Análisis del sistema -->
+          <div class="notif-resumen">
+            <h3>Resumen del Estado del Sistema</h3>
+            <p id="notif-resumen-texto" style="margin: 0; color: #475569; line-height: 1.6;">
+              Analizando estado del sistema...
+            </p>
+          </div>
         </section>
 
         <!-- OFERTAS -->
