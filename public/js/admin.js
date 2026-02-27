@@ -329,6 +329,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   cargarDatosAdmin();
   configurarMenu();
+  actualizarBadgeNotificaciones();
   
   // Asegurar que el dashboard se muestra por defecto
   document.getElementById('seccion-dashboard').style.display = 'block';
@@ -3245,6 +3246,22 @@ async function actualizarTablaNotificaciones(filtro = 'todas') {
   filtrarNotificacionesModerno(filtro);
 }
 
+// Actualizar badge de notificaciones en el menú lateral
+function actualizarBadgeNotificaciones() {
+  const badgeEl = document.getElementById('menu-notif-counter');
+  if (!badgeEl || !notificacionesData) return;
+  
+  // Contar notificaciones no leídas
+  const conteoNoLeidas = notificacionesData.filter(n => !n.leida).length;
+  
+  if (conteoNoLeidas > 0) {
+    badgeEl.textContent = conteoNoLeidas > 99 ? '99+' : conteoNoLeidas;
+    badgeEl.style.display = 'flex';
+  } else {
+    badgeEl.style.display = 'none';
+  }
+}
+
 // Filtrar notificaciones
 function filtrarNotificacionesModerno(filtro) {
   // Actualizar botones activos
@@ -3413,6 +3430,7 @@ function generarResumenSistema() {
 function marcarTodasLeidas() {
   notificacionesData.forEach(notif => notif.leida = true);
   filtrarNotificacionesModerno(filtroActualNotif);
+  actualizarBadgeNotificaciones();
   alert('Todas las notificaciones han sido marcadas como leídas');
 }
 
@@ -3427,6 +3445,7 @@ function limpiarHistorial() {
   document.getElementById('notif-lista-vacia').style.display = 'block';
   actualizarContadoresNotif();
   generarResumenSistema();
+  actualizarBadgeNotificaciones();
   alert('Historial de notificaciones limpiado');
 }
 
