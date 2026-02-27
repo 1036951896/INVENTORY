@@ -2424,9 +2424,10 @@ function exportarCategorias() {
 // Variables globales para gráficos de reportes
 window.chartDistribicionStock = null;
 window.chartTopVentas = null;
+window.chartCategorias = null;
 
 async function actualizarReporte() {
-  console.log('🔄 Actualizando reportes...');
+  console.log('Actualizando reportes...');
   try {
     const token = localStorage.getItem('admin-token');
     if (!token) {
@@ -2434,17 +2435,14 @@ async function actualizarReporte() {
       return;
     }
 
-    // Cargar productos y órdenes
-    const [prodRes, ordRes] = await Promise.all([
-      fetch(API_URL + '/products', { headers: { 'Authorization': `Bearer ${token}` } }),
-      fetch(API_URL + '/orders', { headers: { 'Authorization': `Bearer ${token}` } })
-    ]);
-
-    let productos = await prodRes.json();
+    // Cargar productos (JSON completo con 64 registros)
+    let productos = await cargarProductosFromJSON();
+    
+    // Cargar órdenes desde API
+    const ordRes = await fetch(API_URL + '/orders', { headers: { 'Authorization': `Bearer ${token}` } });
     let ordenes = await ordRes.json();
 
     // Normalizar arrays
-    productos = Array.isArray(productos) ? productos : (Array.isArray(productos.data) ? productos.data : []);
     ordenes = Array.isArray(ordenes) ? ordenes : (Array.isArray(ordenes.data) ? ordenes.data : []);
 
     // ===== ANÁLISIS DE INVENTARIO =====
@@ -2579,8 +2577,11 @@ async function actualizarReporte() {
 
     document.getElementById('tabla-bajo-stock-body').innerHTML = htmlTabla || '<tr><td colspan="5" style="text-align:center; padding: 20px; color: #999;">Todos los productos tienen stock normal</td></tr>';
 
-    // ===== RESUMEN ANALÍTICO: Nivel universitario =====
-    generarResumenAnalisis(productos, bajoStock, agotados, criticos, normal);
+    // ===== GRÁFICO 3: Distribución por categorías =====
+    generarGraficoCategoras(productos);
+
+    // ===== RESUMEN ANALÍTICO: Nivel universitario avanzado =====
+    generarResumenAnalisisExtendido(productos, bajoStock, agotados, criticos, normal, ordenes);
 
   } catch (error) {
     console.error('Error actualizando reportes:', error);
@@ -2588,43 +2589,233 @@ async function actualizarReporte() {
   }
 }
 
-function generarResumenAnalisis(productos, bajoStock, agotados, criticos, normal) {
-  let resumen = '';
+function generarGraficoCategoras(productos) {
+  // Agrupar por categoría
+  const porCategoria = {};
+  productos.forEach(prod => {
+    const cat = prod.categoria || 'Sin categoría';
+    if (!porCategoria[cat]) porCategoria[cat] = 0;
+    porCategoria[cat]++;
+  });
+
+  const labels = Object.keys(porCategoria);
+  const datos = Object.values(porCategoria);
+  
+  const coloresCategorias = ['#2f5f6b', '#1a9b7e', '#d97706', '#8b5cf6', '#ef4444', '#f59e0b', '#06b6d4', '#6366f1'];
+  
+  const ctxCat = document.getElementById('chart-categorias');
+  if (!ctxCat) return; // El canvas puede no existir aún
+  
+  const ctx = ctxCat.getContext('2d');
+  if (window.chartCategorias) window.chartCategorias.destroy();
+
+  window.chartCategorias = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Productos por Categoría',
+        data: datos,
+        backgroundColor: coloresCategorias.slice(0, labels.length),
+        borderRadius: 4,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: { legend: { display: false } },
+      scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } }
+    }
+  });
+}
+
+function generarResumenAnalisisExtendido(productos, bajoStock, agotados, criticos, normal, ordenes) {
   const totalProductos = productos.length;
   const pctBajoStock = totalProductos > 0 ? Math.round((bajoStock.length / totalProductos) * 100) : 0;
   const pctAgotados = totalProductos > 0 ? Math.round((agotados.length / totalProductos) * 100) : 0;
   const pctCriticos = totalProductos > 0 ? Math.round((criticos.length / totalProductos) * 100) : 0;
+  const pctNormal = totalProductos > 0 ? Math.round((normal.length / totalProductos) * 100) : 0;
+
+  // Calcular stock total y rotación
+  const stockTotal = productos.reduce((sum, p) => sum + (p.stock || 0), 0);
+  const ventasTotales = ordenes.filter(o => o.estado === 'completada' || o.estado === 'entregada' || o.estado === 'delivered').length;
+  
+  // Indicador de crecimiento
+  let indicadorCrecimiento = '↗';
+  let colorCrecimiento = '#065f46';
+  if (ventasTotales < 5) {
+    indicadorCrecimiento = '→';
+    colorCrecimiento = '#92400e';
+  }
+
+  let resumenHTML = '';
 
   if (agotados.length === 0 && criticos.length === 0) {
-    resumen = `
-      <strong style="color: #065f46;">✓ Inventario Óptimo</strong><br>
-      No existen productos en estado crítico. El inventario se encuentra en condiciones óptimas.
-      ${bajoStock.length > 0 ? ` Se requiere reposición de ${bajoStock.length} producto(s) con bajo stock en el corto plazo.` : ' No se requiere reposición inmediata.'}
+    resumenHTML = `
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #065f46;">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <strong style="color: #065f46;">Inventario Óptimo</strong>
+      </div>
+      <p style="margin: 0 0 12px 0;">No existen productos en estado crítico. El inventario se encuentra en condiciones óptimas (${pctNormal}% con stock normal).</p>
+      ${bajoStock.length > 0 ? `<p style="margin: 0;">Recomendación: Reposición de ${bajoStock.length} producto(s) con bajo stock en el corto plazo.</p>` : '<p style="margin: 0;">No se requiere acción inmediata de reposición.</p>'}
     `;
   } else if (pctCriticos <= 5) {
-    resumen = `
-      <strong style="color: #92400e;">⚠ Inventario con Moderada Urgencia</strong><br>
-      Se identificaron ${criticos.length} producto(s) en estado crítico (${pctCriticos}% del total).
-      Se recomienda realizar reposición inmediata de estos artículos.
-      ${bajoStock.length > 0 ? ` Adicionalmente, ${bajoStock.length} producto(s) requieren reposición urgente.` : ''}
+    resumenHTML = `
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #92400e;">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <strong style="color: #92400e;">Atención Requerida</strong>
+      </div>
+      <p style="margin: 0 0 12px 0;">Se identificaron ${criticos.length} producto(s) en estado crítico (${pctCriticos}% del total).</p>
+      <p style="margin: 0;">Recomendación: Realizar reposición inmediata de estos artículos.</p>
     `;
   } else {
-    resumen = `
-      <strong style="color: #991b1b;">🔴 Inventario Crítico</strong><br>
-      El ${pctCriticos}% del inventario se encuentra en estado crítico (${criticos.length} producto(s)).
-      Se requiere acción inmediata de reposición.
-      ${agotados.length > 0 ? ` Hay ${agotados.length} producto(s) completamente agotados que afectan la disponibilidad.` : ''}
+    resumenHTML = `
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #991b1b;">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+        <strong style="color: #991b1b;">Crítico - Acción Inmediata</strong>
+      </div>
+      <p style="margin: 0 0 12px 0;">El ${pctCriticos}% del inventario se encuentra en estado crítico (${criticos.length} producto(s)).</p>
+      <p style="margin: 0;">Acción: Reposición urgente requerida. ${agotados.length > 0 ? ` ${agotados.length} producto(s) completamente agotados.` : ''}</p>
     `;
   }
 
-  document.getElementById('texto-resumen-analisis').innerHTML = resumen;
+  // Agregar sección de indicadores
+  resumenHTML += `
+    <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e0e0e0;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;">
+        <div style="text-align: center;">
+          <div style="font-size: 18px; font-weight: 600; color: #2f5f6b;">${stockTotal}</div>
+          <div style="font-size: 12px; color: #64748b;">Unidades en Stock</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 18px; font-weight: 600; color: #2f5f6b;">${ventasTotales}</div>
+          <div style="font-size: 12px; color: #64748b;">Órdenes Completadas</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 18px; font-weight: 600; color: ${colorCrecimiento};">${indicadorCrecimiento}</div>
+          <div style="font-size: 12px; color: #64748b;">Tendencia General</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('texto-resumen-analisis').innerHTML = resumenHTML;
+}
+
+// Función antigua para compatibilidad
+function generarResumenAnalisis(productos, bajoStock, agotados, criticos, normal) {
+  generarResumenAnalisisExtendido(productos, bajoStock, agotados, criticos, normal, []);
 }
 
 // Inicializar reportes al cargar
 async function mostrarReporte(tipo) {
   // Mantener compatibilidad con código anterior
-  console.log('📊 Mostrando reporte:', tipo);
+  console.log('Mostrando reporte:', tipo);
   await actualizarReporte();
+}
+
+// Función para exportar reporte a PDF
+function exportarReportePDF() {
+  const token = localStorage.getItem('admin-token');
+  if (!token) {
+    alert('Error: No hay sesión activa');
+    return;
+  }
+
+  // Obtener datos visibles
+  const titulo = document.querySelector('.reportes-header h1').textContent;
+  const fecha = new Date().toLocaleDateString('es-CO');
+  const kpiTotal = document.getElementById('kpi-total-productos').textContent;
+  const kpiBajo = document.getElementById('kpi-bajo-stock').textContent;
+  const kpiAgotados = document.getElementById('kpi-agotados').textContent;
+  const kpiCriticos = document.getElementById('kpi-criticos').textContent;
+  const resumenHTML = document.getElementById('texto-resumen-analisis').innerHTML;
+
+  // Crear contenido HTML para PDF
+  const contenidoPDF = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <style>
+        body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #2f5f6b; padding-bottom: 15px; }
+        .header h1 { margin: 0; color: #2f5f6b; font-size: 24px; }
+        .header p { margin: 5px 0 0 0; color: #666; }
+        .fecha { text-align: right; color: #999; font-size: 12px; margin-bottom: 20px; }
+        .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
+        .kpi { text-align: center; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .kpi-valor { font-size: 24px; font-weight: bold; color: #2f5f6b; }
+        .kpi-label { font-size: 12px; color: #666; margin-top: 5px; }
+        .resumen { margin-top: 30px; padding: 15px; background: #f8fafc; border-left: 4px solid #2f5f6b; }
+        .resumen h3 { margin-top: 0; color: #2f5f6b; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #f8fafc; padding: 10px; text-align: left; border-bottom: 2px solid #2f5f6b; font-weight: 600; }
+        td { padding: 8px; border-bottom: 1px solid #ddd; }
+        .footer { margin-top: 40px; text-align: center; color: #999; font-size: 11px; border-top: 1px solid #ddd; padding-top: 15px; }
+      </style>
+    </head>
+    <body>
+      <div class=\"header\">
+        <h1>${titulo}</h1>
+        <p>Análisis estadístico de inventario y desempeño operacional</p>
+      </div>
+      <div class=\"fecha\">Generado: ${fecha}</div>
+      
+      <div class=\"kpis\">
+        <div class=\"kpi\">
+          <div class=\"kpi-valor\">${kpiTotal}</div>
+          <div class=\"kpi-label\">Productos Totales</div>
+        </div>
+        <div class=\"kpi\">
+          <div class=\"kpi-valor\">${kpiBajo}</div>
+          <div class=\"kpi-label\">Bajo Stock</div>
+        </div>
+        <div class=\"kpi\">
+          <div class=\"kpi-valor\">${kpiAgotados}</div>
+          <div class=\"kpi-label\">Productos Agotados</div>
+        </div>
+        <div class=\"kpi\">
+          <div class=\"kpi-valor\">${kpiCriticos}</div>
+          <div class=\"kpi-label\">Críticos (%)</div>
+        </div>
+      </div>
+
+      <div class=\"resumen\">
+        ${resumenHTML}
+      </div>
+
+      <div class=\"footer\">
+        Reporte generado automáticamente por StoreHub Admin | Confidencial
+      </div>
+    </body>
+    </html>
+  `;
+
+  // Crear blob y descargar
+  const blob = new Blob([contenidoPDF], { type: 'text/html' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Reporte-Inventario-${new Date().toISOString().split('T')[0]}.html`;
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+  document.body.removeChild(a);
+
+  alert('Reporte exportado correctamente. Abre el archivo con tu navegador para convertir a PDF.');
 }
 
 // ===== SISTEMA DE OFERTAS =====

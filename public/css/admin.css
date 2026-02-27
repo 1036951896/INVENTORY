@@ -2666,6 +2666,9 @@ body {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .btn-actualizar:hover {
@@ -2675,6 +2678,31 @@ body {
 }
 
 .btn-actualizar:active {
+  transform: translateY(0);
+}
+
+.btn-exportar-pdf {
+  padding: 0.75rem 1.25rem;
+  background: #d97706;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-exportar-pdf:hover {
+  background: #b45309;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
+}
+
+.btn-exportar-pdf:active {
   transform: translateY(0);
 }
 
@@ -2715,10 +2743,10 @@ body {
   font-weight: 500;
 }
 
-/* Gráficos: Dos equilibrados lado a lado */
+/* Gráficos: Tres analíticos profesionales */
 .reportes-graficos {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   margin-bottom: 3rem;
 }
@@ -2888,7 +2916,14 @@ body {
   line-height: 1.6;
 }
 
-/* RESPONSIVO: Tablet */
+/* RESPONSIVO: Tablet (1280px - 1024px) */
+@media (max-width: 1280px) {
+  .reportes-graficos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* RESPONSIVO: Tablet (1024px y menor) */
 @media (max-width: 1024px) {
   .reportes-header {
     flex-direction: column;
@@ -2902,10 +2937,13 @@ body {
 
   .reportes-toolbar {
     width: 100%;
+    flex-direction: column;
   }
 
-  .reportes-toolbar select {
-    flex: 1;
+  .reportes-toolbar select,
+  .btn-actualizar,
+  .btn-exportar-pdf {
+    width: 100%;
   }
 }
 
