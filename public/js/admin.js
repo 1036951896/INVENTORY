@@ -151,6 +151,149 @@ async function cargarProductosFromJSON() {
   return [];
 }
 
+// ===== FUNCIONES PARA CATEGORÍAS (SCOPE GLOBAL) =====
+
+function cargarGridCategorias() {
+  const grid = document.getElementById('categorias-grid');
+  if (!grid) return;
+
+  // Agrupar productos por categoría
+  const categoriaMap = {};
+  
+  productosAdmin.forEach(producto => {
+    const catId = producto.categoriaId || 'sin-categoria';
+    const catNombre = producto.categoria || 'Sin categoría';
+    
+    if (!categoriaMap[catId]) {
+      categoriaMap[catId] = {
+        id: catId,
+        nombre: catNombre,
+        productos: [],
+        totalStock: 0,
+        totalValor: 0
+      };
+    }
+    
+    categoriaMap[catId].productos.push(producto);
+    categoriaMap[catId].totalStock += parseInt(producto.stock) || 0;
+    categoriaMap[catId].totalValor += (parseFloat(producto.precio) || 0) * (parseInt(producto.stock) || 0);
+  });
+
+  const emojis = ['🧂', '🥔', '🥩', '🧈', '🍅', '🥕', '🌽', '🥬', '🍚', '🥛', '🧀', '🍞', '🥓', '🍳', '🥚'];
+  let emojiIndex = 0;
+
+  grid.innerHTML = Object.values(categoriaMap)
+    .sort((a, b) => b.productos.length - a.productos.length)
+    .map(cat => {
+      const emoji = emojis[emojiIndex % emojis.length];
+      emojiIndex++;
+      return `
+        <div class="categoria-card" onclick="abrirModalCategoriaProductos('${cat.id}', '${cat.nombre.replace(/'/g, "\\'")}')">
+          <div class="categoria-card-header">
+            <div class="categoria-card-icon">${emoji}</div>
+            <div class="categoria-card-titulo">${cat.nombre}</div>
+          </div>
+          <div class="categoria-card-body">
+            <div class="categoria-card-stats">
+              <div class="categoria-card-stat">
+                <span class="categoria-card-stat-numero">${cat.productos.length}</span>
+                <span class="categoria-card-stat-label">Productos</span>
+              </div>
+              <div class="categoria-card-stat">
+                <span class="categoria-card-stat-numero">${cat.totalStock}</span>
+                <span class="categoria-card-stat-label">Stock</span>
+              </div>
+            </div>
+            <div style="font-size: 12px; color: #999;">
+              Valor: <strong style="color: var(--azul-oscuro);">$${(cat.totalValor / 1000).toFixed(1)}k</strong>
+            </div>
+            <div class="categoria-card-footer">
+              <button class="categoria-card-btn">Ver Productos →</button>
+            </div>
+          </div>
+        </div>
+      `;
+    })
+    .join('');
+
+  actualizarMetricasCategorias();
+}
+
+function abrirModalCategoriaProductos(categoriaId, categoriaNombre) {
+  const modal = document.getElementById('modal-categoria-productos');
+  const titulo = document.getElementById('modal-cat-titulo');
+  const subtitle = document.getElementById('modal-cat-subtitle');
+  const tbody = document.getElementById('tabla-productos-categoria');
+
+  if (!modal) return;
+
+  const productosCategoria = productosAdmin.filter(p => (p.categoriaId || 'sin-categoria') === categoriaId);
+  
+  titulo.textContent = `Productos de ${categoriaNombre}`;
+  subtitle.textContent = `${productosCategoria.length} producto${productosCategoria.length !== 1 ? 's' : ''} en esta categoría`;
+
+  tbody.innerHTML = productosCategoria
+    .map(producto => {
+      const imagenNormalizada = normalizarImagenUrlAdmin(producto.imagen);
+      const badge = producto.stock <= 10 ? 'bajo' : producto.stock <= 30 ? 'medio' : 'alto';
+      const badgeTexto = badge === 'bajo' ? 'Bajo Stock' : badge === 'medio' ? 'Stock Medio' : 'En Stock';
+
+      return `
+        <tr>
+          <td><img src="${imagenNormalizada}" alt="${producto.nombre}" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #f0f0f0;"></td>
+          <td><strong>${producto.nombre}</strong></td>
+          <td>$${parseFloat(producto.precio).toFixed(2)}</td>
+          <td><strong>${producto.stock}</strong> unidades</td>
+          <td><span class="badge ${badge}">${badgeTexto}</span></td>
+          <td>
+            <button class="btn-accion" onclick="editarProducto('${producto.id}')" style="padding: 4px 8px; font-size: 12px;">✏️</button>
+            <button class="btn-accion" onclick="eliminarProducto('${producto.id}')" style="padding: 4px 8px; font-size: 12px; color: #f44336;">🗑️</button>
+          </td>
+        </tr>
+      `;
+    })
+    .join('');
+
+  modal.style.display = 'flex';
+  modal.classList.add('activo');
+}
+
+function cerrarModalCategoriaProductos() {
+  const modal = document.getElementById('modal-categoria-productos');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('activo');
+  }
+}
+
+function abrirModalCategoria() {
+  alert('Función para crear categorías - próximamente');
+}
+
+function actualizarMetricasCategorias() {
+  let totalProductos = 0;
+  let totalStock = 0;
+  let totalValor = 0;
+  const categoriasUnicas = new Set();
+
+  productosAdmin.forEach(p => {
+    totalProductos++;
+    totalStock += parseInt(p.stock) || 0;
+    totalValor += (parseFloat(p.precio) || 0) * (parseInt(p.stock) || 0);
+    categoriasUnicas.add(p.categoriaId || 'sin-categoria');
+  });
+
+  const elem1 = document.getElementById('kpi-cat-total-productos');
+  const elem2 = document.getElementById('kpi-cat-stock-total');
+  const elem3 = document.getElementById('kpi-cat-valor');
+  const elem4 = document.getElementById('kpi-cat-categorias');
+
+  if (elem1) elem1.textContent = totalProductos;
+  if (elem2) elem2.textContent = totalStock.toLocaleString();
+  if (elem3) elem3.textContent = '$' + (totalValor / 1000000).toFixed(1) + 'M';
+  if (elem4) elem4.textContent = categoriasUnicas.size;
+}
+
 // Inicialización automática al cargar la página admin
 document.addEventListener('DOMContentLoaded', function() {
   // Validar token y permisos antes de proceder
@@ -336,7 +479,7 @@ function configurarMenu() {
         // Actualizar tablas al cambiar de sección
         if (seccion === 'pedidos') cargarTablaPedidos();
         if (seccion === 'usuarios') cargarTablaUsuarios();
-        if (seccion === 'categorias') mostrarCategoriasConProductos();
+        if (seccion === 'categorias') cargarGridCategorias();
         if (seccion === 'notificaciones') actualizarTablaNotificaciones('todas');
         if (seccion === 'reportes') generarReporteInventario();
         if (seccion === 'ofertas') cargarTablaOfertas();
