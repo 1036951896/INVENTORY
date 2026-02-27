@@ -481,7 +481,7 @@ function configurarMenu() {
         if (seccion === 'usuarios') cargarTablaUsuarios();
         if (seccion === 'categorias') cargarGridCategorias();
         if (seccion === 'notificaciones') actualizarTablaNotificaciones('todas');
-        if (seccion === 'reportes') generarReporteInventario();
+        if (seccion === 'reportes') actualizarReporte();
         if (seccion === 'ofertas') cargarTablaOfertas();
     });
   });
@@ -2420,10 +2420,10 @@ function exportarCategorias() {
   }
 }
 
-// ===== REPORTES =====
-let chartInventario = null;
-let chartTopSellers = null;
-let chartSinRotacion = null;
+// ===== REPORTES: Sistema académico-profesional analítico =====
+// Variables globales para gráficos de reportes
+window.chartDistribicionStock = null;
+window.chartTopVentas = null;
 
 async function actualizarReporte() {
   console.log('🔄 Actualizando reportes...');
@@ -2625,185 +2625,6 @@ async function mostrarReporte(tipo) {
   // Mantener compatibilidad con código anterior
   console.log('📊 Mostrando reporte:', tipo);
   await actualizarReporte();
-}
-          nombre: prod?.nombre || 'Producto Desconocido',
-          categoria: prod?.categoria || 'N/A',
-          cantidad: data.cantidad,
-          ingresos: data.ingresos
-        };
-      })
-      .sort((a, b) => b.cantidad - a.cantidad)
-      .slice(0, 10);
-
-    const totalVendido = topVentas.reduce((sum, p) => sum + p.cantidad, 0);
-    const totalIngresos = topVentas.reduce((sum, p) => sum + p.ingresos, 0);
-
-    document.getElementById('stat-total-vendido').textContent = totalVendido;
-    document.getElementById('stat-ingresos-totales').textContent = '$' + totalIngresos.toLocaleString('es-CO', { minimumFractionDigits: 2 });
-    document.getElementById('stat-tickets-total').textContent = ordenes.filter(o => o.estado === 'completada' || o.estado === 'entregada').length;
-
-    // Llenar tabla
-    const html = topVentas.map((prod, idx) => `
-      <tr>
-        <td>${idx + 1}</td>
-        <td>${prod.nombre}</td>
-        <td>${prod.categoria}</td>
-        <td><strong>${prod.cantidad}</strong> unidades</td>
-        <td>$${prod.ingresos.toLocaleString('es-CO', { minimumFractionDigits: 2 })}</td>
-        <td>${((prod.cantidad / totalVendido) * 100).toFixed(1)}%</td>
-      </tr>
-    `).join('');
-
-    document.getElementById('tabla-top-sellers-body').innerHTML = html || '<tr><td colspan="6" style="text-align:center;">Sin datos</td></tr>';
-
-    // Gráfico
-    const ctx = document.getElementById('chart-top-sellers').getContext('2d');
-    
-    if (chartTopSellers) chartTopSellers.destroy();
-    
-    chartTopSellers = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: topVentas.map(p => p.nombre.substring(0, 15)),
-        datasets: [{
-          label: 'Unidades Vendidas',
-          data: topVentas.map(p => p.cantidad),
-          backgroundColor: '#386273',
-          borderColor: '#2c5a6f',
-          borderWidth: 1,
-          borderRadius: 6
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        indexAxis: 'y',
-        plugins: {
-          legend: { display: false }
-        },
-        scales: {
-          x: { beginAtZero: true }
-        }
-      }
-    });
-
-  } catch (error) {
-    console.error('Error generando reporte top sellers:', error);
-    document.getElementById('tabla-top-sellers-body').innerHTML = '<tr><td colspan="6" style="text-align:center; color: red;">Error cargando datos</td></tr>';
-  }
-}
-
-async function generarReporteSinRotacion() {
-  try {
-    const token = localStorage.getItem('admin-token');
-    if (!token) {
-      console.error('No hay token válido');
-      return;
-    }
-
-    // Cargar órdenes y productos
-    const ordRes = await fetch(API_URL + '/orders', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    const ordenes = await ordRes.json();
-
-    const prodRes = await fetch(API_URL + '/products', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    const productos = await prodRes.json();
-
-    // Identificar productos vendidos
-    const productosVendidos = new Set();
-    const ventasPorProducto = {};
-
-    ordenes.forEach(orden => {
-      if (orden.estado === 'completada' || orden.estado === 'entregada') {
-        if (orden.items && Array.isArray(orden.items)) {
-          orden.items.forEach(item => {
-            productosVendidos.add(item.product_id);
-            if (!ventasPorProducto[item.product_id]) {
-              ventasPorProducto[item.product_id] = 0;
-            }
-            ventasPorProducto[item.product_id] += item.quantity_sold || item.cantidad || 1;
-          });
-        }
-      }
-    });
-
-    // Clasificar productos
-    const sinVentas = productos.filter(p => !productosVendidos.has(p.id));
-    const rotacionMinima = productos.filter(p => productosVendidos.has(p.id) && (ventasPorProducto[p.id] || 0) < 5);
-    const stockMuerto = productos.filter(p => p.stock > 20 && (!productosVendidos.has(p.id) || (ventasPorProducto[p.id] || 0) < 3));
-
-    document.getElementById('stat-sin-venta').textContent = sinVentas.length;
-    document.getElementById('stat-stock-muerto').textContent = stockMuerto.length;
-    document.getElementById('stat-rotacion-minima').textContent = rotacionMinima.length;
-
-    // Combinar y mostrar todos los productos sin rotación
-    const productosSinRotacion = [
-      ...sinVentas.map(p => ({ ...p, problema: 'Sin ventas', ventas: 0 })),
-      ...rotacionMinima.map(p => ({ ...p, problema: 'Rotación mínima', ventas: ventasPorProducto[p.id] || 0 }))
-    ].sort((a, b) => a.ventas - b.ventas);
-
-    const html = productosSinRotacion.map(prod => `
-      <tr>
-        <td>${prod.nombre}</td>
-        <td>${prod.categoria || 'N/A'}</td>
-        <td><strong>${prod.stock}</strong> unidades</td>
-        <td>${prod.ventas}</td>
-        <td>
-          <span style="
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: bold;
-            background: ${prod.ventas === 0 ? '#ffccbc' : '#fff3cd'};
-            color: ${prod.ventas === 0 ? '#bf360c' : '#856404'};
-          ">
-            ${prod.problema}
-          </span>
-        </td>
-        <td>
-          <button class="btn btn-pequeno" onclick="editarProducto('${prod.id}')">Editar</button>
-        </td>
-      </tr>
-    `).join('');
-
-    document.getElementById('tabla-sin-rotacion-body').innerHTML = html || '<tr><td colspan="6" style="text-align:center;">Sin datos</td></tr>';
-
-    // Gráfico
-    const ctx = document.getElementById('chart-sin-rotacion').getContext('2d');
-    
-    if (chartSinRotacion) chartSinRotacion.destroy();
-    
-    chartSinRotacion = new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: ['Sin Rotación', 'Con Rotación Normal', 'Stock Crítico'],
-        datasets: [{
-          data: [
-            productosSinRotacion.length,
-            productos.filter(p => !productosSinRotacion.find(sr => sr.id === p.id)).length,
-            stockMuerto.length
-          ],
-          backgroundColor: ['#ffccbc', '#c8e6c9', '#ffe0b2'],
-          borderColor: ['#bf360c', '#2e7d32', '#e65100'],
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: {
-          legend: { position: 'bottom' }
-        }
-      }
-    });
-
-  } catch (error) {
-    console.error('Error generando reporte sin rotación:', error);
-    document.getElementById('tabla-sin-rotacion-body').innerHTML = '<tr><td colspan="6" style="text-align:center; color: red;">Error cargando datos</td></tr>';
-  }
 }
 
 // ===== SISTEMA DE OFERTAS =====
