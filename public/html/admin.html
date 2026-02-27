@@ -621,18 +621,43 @@
 
         <!-- USUARIOS -->
         <section id="seccion-usuarios" class="seccion-contenido" style="display: none;">
-          <div class="tabla-contenedor">
-            <div class="tabla-encabezado">
-              <h2>Gestión de Usuarios</h2>
+          
+          <!-- HEADER -->\n          <div class="usuarios-top">
+            <div>
+              <h1>Gestión de Usuarios</h1>
+              <p>Administración y control de cuentas registradas</p>
             </div>
+            <button class="btn-nuevo-usuario" onclick="abrirModalNuevoUsuario()">
+              + Nuevo Usuario
+            </button>
+          </div>
 
-            <table class="admin-tabla">
+          <!-- BARRAS DE HERRAMIENTAS -->
+          <div class="usuarios-toolbar">
+            <div class="buscador-usuarios">
+              <input type="text" id="buscar-usuarios" placeholder="🔍 Buscar por nombre o correo..." class="input-buscar-usuarios">
+            </div>
+            <div class="filtros-usuarios">
+              <select id="filtro-rol-usuarios" class="select-rol-usuarios" onchange="filtrarUsuariosActual()">
+                <option value="">Todos los roles</option>
+                <option value="ADMIN">Administradores</option>
+                <option value="CLIENT">Clientes</option>
+              </select>
+            </div>
+            <div class="contador-usuarios">
+              <span class="total-usuarios">Total: <strong id="contador-total-usuarios">0</strong> usuarios</span>
+            </div>
+          </div>
+
+          <!-- TABLA PROFESIONAL -->
+          <div class="usuarios-container">
+            <table class="usuarios-tabla">
               <thead>
                 <tr>
                   <th>Nombre</th>
-                  <th>Correo</th>
+                  <th>Correo Electrónico</th>
                   <th>Teléfono</th>
-                  <th>Tipo de Rol</th>
+                  <th>Rol</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -640,8 +665,65 @@
                 <!-- Se llenará con JavaScript -->
               </tbody>
             </table>
+            <div id="sin-usuarios-msg" class="sin-usuarios" style="display: none;">
+              <p>📭 No hay usuarios que mostrar</p>
+            </div>
           </div>
         </section>
+
+        <!-- MODAL: CREAR NUEVO USUARIO -->
+        <div id="modal-nuevo-usuario" class="modal" style="display: none;">
+          <div class="modal-contenido" style="max-width: 500px;">
+            <div class="modal-encabezado">
+              <h2>Crear Nuevo Usuario</h2>
+              <button class="cerrar-modal" onclick="cerrarModalNuevoUsuario()">&times;</button>
+            </div>
+            <form id="form-nuevo-usuario" onsubmit="guardarNuevoUsuario(event)" class="form-usuario">
+              <div class="form-group">
+                <label for="input-nombre-nuevo">Nombre Completo</label>
+                <input type="text" id="input-nombre-nuevo" required placeholder="Ej: Juan Pérez">
+              </div>
+              <div class="form-group">
+                <label for="input-email-nuevo">Correo Electrónico</label>
+                <input type="email" id="input-email-nuevo" required placeholder="Ej: juan@example.com">
+              </div>
+              <div class="form-group">
+                <label for="input-telefono-nuevo">Teléfono</label>
+                <input type="tel" id="input-telefono-nuevo" placeholder="Ej: +57 315 1234567">
+              </div>
+              <div class="form-group">
+                <label for="input-rol-nuevo">Rol</label>
+                <select id="input-rol-nuevo" required>
+                  <option value="CLIENT">Cliente</option>
+                  <option value="ADMIN">Administrador</option>
+                </select>
+              </div>
+              <div class="modal-acciones">
+                <button type="button" class="btn-cancelar" onclick="cerrarModalNuevoUsuario()">Cancelar</button>
+                <button type="submit" class="btn-guardar">Crear Usuario</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- MODAL: CONFIRMAR ELIMINAR -->
+        <div id="modal-confirmar-eliminar" class="modal" style="display: none;">
+          <div class="modal-contenido" style="max-width: 400px;">
+            <div class="modal-encabezado">
+              <h2>Confirmar Eliminación</h2>
+              <button class="cerrar-modal" onclick="cerrarModalConfirmarEliminar()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem; text-align: center;">
+              <p style="margin-bottom: 1rem; color: #666;">¿Estás seguro que deseas eliminar este usuario?</p>
+              <p style="font-weight: 600; color: #333;" id="nombre-usuario-a-eliminar">Usuario</p>
+              <p style="font-size: 0.9rem; color: #999; margin-top: 1rem;">Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-acciones">
+              <button class="btn-cancelar" onclick="cerrarModalConfirmarEliminar()">Cancelar</button>
+              <button class="btn-eliminar-confirm" onclick="confirmarEliminarUsuario()">Sí, Eliminar</button>
+            </div>
+          </div>
+        </div>
 
         <!-- CATEGORÍAS -->
         <section id="seccion-categorias" class="seccion-contenido" style="display: none;">

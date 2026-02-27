@@ -1201,32 +1201,170 @@ function confirmarPedidoYCerrar(pedidoId) {
   cerrarModalDetallePedido();
 }
 
-// Cargar tabla de usuarios
+// ============================================
+// MÓDULO DE USUARIOS REDISEÑADO (Universitario)
+// ============================================
+
+let usuarioParaEliminar = null;
+
+// Cargar tabla de usuarios (versión académica profesional)
 function cargarTablaUsuarios() {
   const tbody = document.getElementById('tabla-usuarios-body');
-  tbody.innerHTML = '';
+  const sinMsg = document.getElementById('sin-usuarios-msg');
+  
+  if (!Array.isArray(usuariosAdmin) || usuariosAdmin.length === 0) {
+    tbody.innerHTML = '';
+    sinMsg.style.display = 'block';
+    document.getElementById('contador-total-usuarios').textContent = '0';
+    return;
+  }
 
-  usuariosAdmin.forEach(usuario => {
-    // Determinar el tipo de usuario a mostrar
-    const rolDisplay = (usuario.rol === 'ADMIN' || usuario.rol === 'admin') ? 'Admin' : 'Cliente';
-    const colorRol = (usuario.rol === 'ADMIN' || usuario.rol === 'admin') ? '#FFE082' : '#E3F2FD';
+  sinMsg.style.display = 'none';
+  document.getElementById('contador-total-usuarios').textContent = usuariosAdmin.length;
+  
+  tbody.innerHTML = usuariosAdmin.map(usuario => {
+    const rolDisplay = (usuario.rol === 'ADMIN') ? 'Administrador' : 'Cliente';
+    const badgeClass = (usuario.rol === 'ADMIN') ? 'badge-admin' : 'badge-cliente';
     
-    const fila = document.createElement('tr');
-    fila.innerHTML = `
-      <td><strong>${usuario.nombre}</strong></td>
-      <td>${usuario.email}</td>
-      <td>${usuario.telefono || 'N/A'}</td>
-      <td>
-        <span style="background-color: ${colorRol}; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">
-          ${rolDisplay}
-        </span>
-      </td>
-      <td class="acciones-tabla">
-        <button class="btn-eliminar" onclick="eliminarUsuario('${usuario.id}')">🗑️ Eliminar</button>
-      </td>
+    return `
+      <tr class="fila-usuario">
+        <td class="celda-nombre">
+          <div class="nombre-usuario">${usuario.nombre}</div>
+          <div class="email-usuario">${usuario.email}</div>
+        </td>
+        <td class="celda-email"><a href="mailto:${usuario.email}">${usuario.email}</a></td>
+        <td class="celda-telefono">${usuario.telefono || 'N/A'}</td>
+        <td class="celda-rol">
+          <span class="badge ${badgeClass}">${rolDisplay}</span>
+        </td>
+        <td class="celda-acciones">
+          <button class="btn-usuario-editar" title="Editar usuario">✏️</button>
+          <button class="btn-usuario-eliminar" onclick="abrirModalConfirmarEliminar('${usuario.id}', '${usuario.nombre}')" title="Eliminar usuario">🗑</button>
+        </td>
+      </tr>
     `;
-    tbody.appendChild(fila);
+  }).join('');
+  
+  // Agregar evento al buscador
+  const buscador = document.getElementById('buscar-usuarios');
+  if (buscador) {
+    buscador.addEventListener('keyup', buscarUsuariosActual);
+  }
+}
+
+// Buscar usuarios
+function buscarUsuariosActual() {
+  const filtro = document.getElementById('buscar-usuarios')?.value.toLowerCase() || '';
+  const filas = document.querySelectorAll('.fila-usuario');
+  
+  filas.forEach(fila => {
+    const nombre = fila.querySelector('.nombre-usuario')?.textContent.toLowerCase() || '';
+    const email = fila.querySelector('.email-usuario')?.textContent.toLowerCase() || '';
+    
+    if (nombre.includes(filtro) || email.includes(filtro)) {
+      fila.style.display = '';
+    } else {
+      fila.style.display = 'none';
+    }
   });
+}
+
+// Filtrar por rol
+function filtrarUsuariosActual() {
+  const filtroRol = document.getElementById('filtro-rol-usuarios')?.value || '';
+  const filas = document.querySelectorAll('.fila-usuario');
+  
+  filas.forEach(fila => {
+    const badge = fila.querySelector('.badge');
+    const rol = badge?.classList.contains('badge-admin') ? 'ADMIN' : 'CLIENT';
+    
+    if (!filtroRol || rol === filtroRol) {
+      fila.style.display = '';
+    } else {
+      fila.style.display = 'none';
+    }
+  });
+}
+
+// Modal para crear nuevo usuario
+function abrirModalNuevoUsuario() {
+  const modal = document.getElementById('modal-nuevo-usuario');
+  const form = document.getElementById('form-nuevo-usuario');
+  if (modal && form) {
+    form.reset();
+    modal.style.display = 'flex';
+  }
+}
+
+function cerrarModalNuevoUsuario() {
+  const modal = document.getElementById('modal-nuevo-usuario');
+  if (modal) modal.style.display = 'none';
+}
+
+function guardarNuevoUsuario(event) {
+  event.preventDefault();
+  
+  const nombre = document.getElementById('input-nombre-nuevo')?.value || '';
+  const email = document.getElementById('input-email-nuevo')?.value || '';
+  const telefono = document.getElementById('input-telefono-nuevo')?.value || '';
+  const rol = document.getElementById('input-rol-nuevo')?.value || 'CLIENT';
+  
+  // Validar
+  if (!nombre || !email) {
+    alert('❌ Por favor completa todos los campos obligatorios');
+    return;
+  }
+  
+  // Crear nuevo usuario
+  const nuevoUsuario = {
+    id: 'usr_' + Date.now(),
+    nombre,
+    email,
+    telefono,
+    rol,
+    createdAt: new Date().toISOString()
+  };
+  
+  // Agregar a la lista
+  if (!Array.isArray(usuariosAdmin)) usuariosAdmin = [];
+  usuariosAdmin.push(nuevoUsuario);
+  
+  // Recargar tabla
+  cargarTablaUsuarios();
+  cerrarModalNuevoUsuario();
+  
+  // Mostrar mensaje
+  alert('✅ Usuario creado correctamente');
+}
+
+// Modal para confirmar eliminación
+function abrirModalConfirmarEliminar(usuarioId, nombreUsuario) {
+  usuarioParaEliminar = usuarioId;
+  const modal = document.getElementById('modal-confirmar-eliminar');
+  const nombreEl = document.getElementById('nombre-usuario-a-eliminar');
+  
+  if (nombreEl) nombreEl.textContent = nombreUsuario;
+  if (modal) modal.style.display = 'flex';
+}
+
+function cerrarModalConfirmarEliminar() {
+  const modal = document.getElementById('modal-confirmar-eliminar');
+  if (modal) modal.style.display = 'none';
+  usuarioParaEliminar = null;
+}
+
+function confirmarEliminarUsuario() {
+  if (!usuarioParaEliminar) return;
+  
+  // Eliminar usuario
+  usuariosAdmin = usuariosAdmin.filter(u => u.id !== usuarioParaEliminar);
+  
+  // Recargar tabla
+  cargarTablaUsuarios();
+  cerrarModalConfirmarEliminar();
+  
+  // Mostrar mensaje
+  alert('✅ Usuario eliminado correctamente');
 }
 
 // Modal de producto
