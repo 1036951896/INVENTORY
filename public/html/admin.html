@@ -456,31 +456,88 @@
         </section>
 
         <!-- PRODUCTOS -->
-        <section id="seccion-productos" class="seccion-contenido" style="display: none;">
-          <div class="tabla-contenedor">
-            <div class="tabla-encabezado">
-              <h2>Gestión de Productos</h2>
-              <div class="tabla-acciones">
-                <button class="btn btn-principal" onclick="abrirModalProducto()">+ Agregar Producto</button>
+        <section id="seccion-productos" class="seccion-contenido productos-section" style="display: none;">
+          
+          <!-- HEADER -->
+          <div class="productos-top">
+            <div>
+              <h1>Gestión de Productos</h1>
+              <p>Control total del inventario y disponibilidad</p>
+            </div>
+            <button class="btn-primary" onclick="abrirModalProducto()">
+              + Nuevo Producto
+            </button>
+          </div>
+
+          <!-- KPIs -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-info">
+                <span>Total Productos</span>
+                <h2 id="kpi-total">0</h2>
               </div>
+              <div class="kpi-icon">📦</div>
             </div>
 
+            <div class="kpi-card warning">
+              <div class="kpi-info">
+                <span>Stock Bajo</span>
+                <h2 id="kpi-bajo">0</h2>
+              </div>
+              <div class="kpi-icon">⚠️</div>
+            </div>
+
+            <div class="kpi-card success">
+              <div class="kpi-info">
+                <span>Valor Inventario</span>
+                <h2 id="kpi-valor">$0</h2>
+              </div>
+              <div class="kpi-icon">💰</div>
+            </div>
+          </div>
+
+          <!-- FILTROS -->
+          <div class="filtros-bar">
+            <input 
+              type="text" 
+              id="buscar-productos" 
+              placeholder="🔍 Buscar producto..." 
+              class="input-search"
+            />
+            <select id="filtro-categoria" class="select-filter">
+              <option value="">Todas las categorías</option>
+              <option value="Empaques">Empaques</option>
+              <option value="Condimentos">Condimentos</option>
+              <option value="Otros">Otros</option>
+            </select>
+            <button class="btn-secondary" onclick="exportarProductos()">📊 Exportar</button>
+          </div>
+
+          <!-- TABLA -->
+          <div class="tabla-wrapper">
             <div id="contenedor-tabla-productos">
-              <table class="admin-tabla">
+              <table>
                 <thead>
                   <tr>
-                    <th>Imagen</th>
-                    <th>Nombre</th>
+                    <th>Producto</th>
                     <th>Categoría</th>
                     <th>Precio</th>
                     <th>Stock</th>
-                    <th>Acciones</th>
+                    <th>Estado</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody id="tabla-productos-body">
-                  <!-- Se llenará con JavaScript -->
+                  <tr><td colspan="6" style="text-align: center; padding: 2rem;">Cargando productos...</td></tr>
                 </tbody>
               </table>
+            </div>
+
+            <!-- PAGINACIÓN -->
+            <div class="paginacion">
+              <button class="btn-pag" onclick="paginaAnterior()" id="btn-anterior">← Anterior</button>
+              <span id="info-paginacion">Página 1 de 1</span>
+              <button class="btn-pag" onclick="paginaSiguiente()" id="btn-siguiente">Siguiente →</button>
             </div>
           </div>
         </section>

@@ -613,31 +613,163 @@ function actualizarDashboard() {
   cargarTablaUsuarios();
 }
 
-// Cargar tabla de productos
+// Variables globales para paginación
+let productosPaginaActual = 1;
+const PRODUCTOS_POR_PAGINA = 10;
+let productosFiltrados = [];
+
+// Cargar tabla de productos (Versión Premium)
 function cargarTablaProductos() {
+  actualizarKPIsProductos();
+  productosFiltrados = [...productosAdmin];
+  mostrarPaginaProductos(1);
+  
+  // Agregar eventos de búsqueda y filtro
+  const inputBuscar = document.getElementById('buscar-productos');
+  const selectCategoria = document.getElementById('filtro-categoria');
+  
+  if (inputBuscar) {
+    inputBuscar.addEventListener('input', filtrarProductos);
+  }
+  if (selectCategoria) {
+    selectCategoria.addEventListener('change', filtrarProductos);
+  }
+}
+
+// Actualizar KPIs de productos
+function actualizarKPIsProductos() {
+  const totalProductos = productosAdmin.length;
+  const productosStockBajo = productosAdmin.filter(p => p.stock && p.stock <= 10).length;
+  const valorInventario = productosAdmin.reduce((sum, p) => sum + ((p.precio || 0) * (p.stock || 0)), 0);
+  
+  const kpiTotal = document.getElementById('kpi-total');
+  const kpiBajo = document.getElementById('kpi-bajo');
+  const kpiValor = document.getElementById('kpi-valor');
+  
+  if (kpiTotal) kpiTotal.textContent = totalProductos;
+  if (kpiBajo) kpiBajo.textContent = productosStockBajo;
+  if (kpiValor) kpiValor.textContent = '$' + valorInventario.toLocaleString('es-CO', {maximumFractionDigits: 0});
+}
+
+// Filtrar productos por búsqueda y categoría
+function filtrarProductos() {
+  const busqueda = (document.getElementById('buscar-productos')?.value || '').toLowerCase();
+  const categoria = document.getElementById('filtro-categoria')?.value || '';
+  
+  productosFiltrados = productosAdmin.filter(p => {
+    const coincideNombre = p.nombre.toLowerCase().includes(busqueda) || (p.id && p.id.toString().includes(busqueda));
+    const coincideCategoria = !categoria || p.categoria === categoria;
+    return coincideNombre && coincideCategoria;
+  });
+  
+  productosPaginaActual = 1;
+  mostrarPaginaProductos(1);
+}
+
+// Mostrar página de productos
+function mostrarPaginaProductos(numeroPagina) {
+  const inicio = (numeroPagina - 1) * PRODUCTOS_POR_PAGINA;
+  const fin = inicio + PRODUCTOS_POR_PAGINA;
+  const productosParaMostrar = productosFiltrados.slice(inicio, fin);
+  
   const tbody = document.getElementById('tabla-productos-body');
   tbody.innerHTML = '';
 
-  productosAdmin.forEach(producto => {
+  if (productosParaMostrar.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: #888;">No hay productos que mostrar</td></tr>';
+    actualizarPaginacion(0);
+    return;
+  }
+
+  productosParaMostrar.forEach(producto => {
+    const stock = producto.stock || 0;
+    let badgeClass = 'alto';
+    let badgeText = 'Stock Alto';
+    
+    if (stock <= 10) {
+      badgeClass = 'bajo';
+      badgeText = 'Stock Bajo';
+    } else if (stock <= 30) {
+      badgeClass = 'medio';
+      badgeText = 'Stock Medio';
+    }
+    
     const fila = document.createElement('tr');
     fila.innerHTML = `
-      <td>
-        <img src="${producto.imagen}" alt="${producto.nombre}" class="tabla-imagen">
+      <td class="producto-cell">
+        <div class="img-box">
+          <img src="${normalizarImagenUrlAdmin(producto.imagen)}" alt="${producto.nombre}" onerror="this.src='../assets/product-placeholder.svg'">
+        </div>
+        <div>
+          <strong>${producto.nombre}</strong>
+          <small>ID: #${producto.id}</small>
+        </div>
       </td>
-      <td><strong>${producto.nombre}</strong></td>
-      <td>${producto.categoria}</td>
-      <td>$${producto.precio.toLocaleString('es-CO')}</td>
-      <td>
-        <strong>${producto.stock}</strong>
-        ${producto.stock < 20 ? '<span style="color: var(--error);"> ⚠️ Bajo</span>' : ''}
-      </td>
-      <td class="acciones-tabla">
-        <button class="btn-editar" onclick="editarProducto('${producto.id}')">✎ Editar</button>
-        <button class="btn-eliminar" onclick="eliminarProducto('${producto.id}')">🗑️ Eliminar</button>
+      <td>${producto.categoria || 'N/A'}</td>
+      <td>$${(producto.precio || 0).toLocaleString('es-CO')}</td>
+      <td><strong>${stock}</strong></td>
+      <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+      <td class="acciones">
+        <button class="icon-btn" onclick="editarProducto('${producto.id}')" title="Editar">✏️</button>
+        <button class="icon-btn danger" onclick="if(confirm('¿Eliminar este producto?')) eliminarProducto('${producto.id}')" title="Eliminar">🗑️</button>
       </td>
     `;
     tbody.appendChild(fila);
   });
+  
+  actualizarPaginacion(Math.ceil(productosFiltrados.length / PRODUCTOS_POR_PAGINA));
+  productosPaginaActual = numeroPagina;
+}
+
+// Actualizar información de paginación
+function actualizarPaginacion(totalPaginas) {
+  const infoPaginacion = document.getElementById('info-paginacion');
+  const btnAnterior = document.getElementById('btn-anterior');
+  const btnSiguiente = document.getElementById('btn-siguiente');
+  
+  if (infoPaginacion) {
+    infoPaginacion.textContent = `Página ${productosPaginaActual} de ${totalPaginas}`;
+  }
+  if (btnAnterior) {
+    btnAnterior.disabled = productosPaginaActual === 1;
+  }
+  if (btnSiguiente) {
+    btnSiguiente.disabled = productosPaginaActual === totalPaginas || totalPaginas === 0;
+  }
+}
+
+// Navegación de paginación
+function paginaAnterior() {
+  if (productosPaginaActual > 1) {
+    mostrarPaginaProductos(productosPaginaActual - 1);
+  }
+}
+
+function paginaSiguiente() {
+  const totalPaginas = Math.ceil(productosFiltrados.length / PRODUCTOS_POR_PAGINA);
+  if (productosPaginaActual < totalPaginas) {
+    mostrarPaginaProductos(productosPaginaActual + 1);
+  }
+}
+
+// Exportar productos
+function exportarProductos() {
+  const csv = [
+    ['Nombre', 'Categoría', 'Precio', 'Stock', 'Estado'],
+    ...productosFiltrados.map(p => {
+      const stock = p.stock || 0;
+      const estado = stock <= 10 ? 'Stock Bajo' : stock <= 30 ? 'Stock Medio' : 'Stock Alto';
+      return [p.nombre, p.categoria || 'N/A', p.precio || 0, stock, estado];
+    })
+  ];
+  
+  const csvContent = csv.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'productos_' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
 }
 
 // Cargar tabla de pedidos
