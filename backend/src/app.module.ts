@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
 import { PrismaModule } from './prisma/prisma.module';
@@ -23,12 +22,6 @@ import { CartModule } from './modules/cart/cart.module';
       envFilePath: '.env',
     }),
     PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'your_jwt_secret_key',
-      signOptions: {
-        expiresIn: process.env.JWT_EXPIRATION ? Number(process.env.JWT_EXPIRATION) : 86400,
-      },
-    }),
     PrismaModule,
     HealthModule,
     AuthModule,

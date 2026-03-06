@@ -40,8 +40,6 @@ services:
       - key: ADMIN_EMAIL
         value: santis3268@gmail.com
 
-    buildCommand: npm install --legacy-peer-deps && npm run build
-    startCommand: node dist/main.js
     autoDeploy: true
 
     # Esperar a BD
@@ -60,20 +58,19 @@ services:
     postgresMajorVersion: 15
 
   # ============================================================================
-  # Frontend App (sirve desde /public)
+  # Frontend React + Vite
   # ============================================================================
   - type: web
-    name: inventory-app
+    name: inventory-frontend
     env: node
     repo: https://github.com/1036951896/INVENTORY
+    rootDir: ./frontend
 
-    # Build & Start desde raíz del proyecto
-    buildCommand: npm install --legacy-peer-deps --production
+    buildCommand: npm install --legacy-peer-deps && npm run build
     startCommand: npm start
 
-    # Variables
     envVars:
-      - key: API_URL
+      - key: VITE_API_URL
         value: https://inventory-api-74yl.onrender.com
       - key: NODE_ENV
         value: production

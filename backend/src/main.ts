@@ -1,15 +1,10 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import { AppModule } from './app.module';
-import * as express from 'express';
-import * as path from 'path';
 
 async function bootstrap() {
+  const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
-
-  // Servir archivos estáticos desde /public (accesibles en raíz /)
-  const publicPath = path.join(__dirname, '..', '..', 'public');
-  app.use(express.static(publicPath));
 
   // Validación global
   app.useGlobalPipes(
@@ -35,7 +30,7 @@ async function bootstrap() {
       'http://localhost:5500',
       'http://localhost:5501',
       'http://localhost:5502',
-      'https://inventory-app-r7ex.onrender.com',
+      'https://inventory-frontend-a8da.onrender.com',
       ...(process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : [])
     ],
     credentials: true,
@@ -49,13 +44,8 @@ async function bootstrap() {
   const port = parseInt(process.env.API_PORT || '3000', 10);
   await app.listen(port);
 
-  console.log(`
-╔══════════════════════════════════════╗
-║  🚀 Inventory Backend iniciado      ║
-║  📍 http://localhost:${port}${' '.repeat(port.toString().length > 4 ? 0 : 5 - port.toString().length)}      ║
-║  🔌 API: /api/v1                     ║
-╚══════════════════════════════════════╝
-  `);
+  logger.log(`Inventory Backend iniciado en http://localhost:${port}`);
+  logger.log(`API disponible en /api/v1`);
 }
 
 bootstrap();

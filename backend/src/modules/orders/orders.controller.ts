@@ -9,6 +9,7 @@ import {
   Request,
   HttpCode,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { OrdersService } from './orders.service';
@@ -16,15 +17,16 @@ import { CreateOrderDto, UpdateOrderStatusDto } from './dto/order.dto';
 
 @Controller('orders')
 export class OrdersController {
+  private readonly logger = new Logger(OrdersController.name);
+
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.CREATED)
   async create(@Request() req: any, @Body() createOrderDto: CreateOrderDto) {
-    console.log('📝 POST /orders recibido');
-    console.log('Usuario:', req.user);
-    console.log('DTO:', createOrderDto);
+    this.logger.log(`POST /orders recibido - Usuario: ${req.user.id}`);
+    this.logger.debug(`DTO: ${JSON.stringify(createOrderDto)}`);
     return this.ordersService.create(req.user.id, createOrderDto);
   }
 

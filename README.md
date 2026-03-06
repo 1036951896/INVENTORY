@@ -10,9 +10,32 @@ Sistema completo de e-commerce que permite a usuarios comprar productos en líne
 
 ### 🎯 Documentos Principales (NUEVOS)
 
-Estos documentos fueron creados en la refactorización de febrero 2026:
+Estos documentos fueron creados en la refactorización de febrero-marzo 2026:
 
-1. **[ARQUITECTURA_FUNCIONALIDAD.md](ARQUITECTURA_FUNCIONALIDAD.md)** ← **EMPEZAR AQUÍ**
+1. **[MANUAL_TECNICO_SOFTWARE.md](MANUAL_TECNICO_SOFTWARE.md)** ← **MANUAL TÉCNICO COMPLETO** 🆕
+   - 📘 Manual técnico profesional siguiendo estándares de la industria
+   - 📖 3 Capítulos completos: Introducción, Partes Esenciales, Mejores Prácticas
+   - 🔧 Instalación paso a paso (Docker y Manual)
+   - 🏗️ Arquitectura detallada con diagramas
+   - 📦 Documentación de todos los módulos y funciones
+   - 🔒 Seguridad, licencias y mantenimiento
+   - 💡 Casos de uso reales y ejemplos de código
+
+2. **[CORRECIONES_CODIGO.md](CORRECIONES_CODIGO.md)** ← **AUDITORÍA Y CORRECCIONES** 🆕
+   - 🔍 Auditoría completa del código (marzo 2026)
+   - ✅ Limpieza de código obsoleto (~20 MB eliminados)
+   - 🔧 Reemplazo de console.log con Logger de NestJS (23 instancias)
+   - 🏗️ Optimización de arquitectura y módulos
+   - 📊 Resumen de mejoras y verificación
+
+3. **[SOLUCION_RENDER.md](SOLUCION_RENDER.md)** ← **DEPLOYMENT FIX** 🆕
+   - 🔧 Solución al problema de backend caído en Render
+   - 📝 Diagnóstico completo del problema
+   - ✅ Pasos para actualizar servicios en Render
+   - 🚀 Configuración correcta de frontend + backend
+   - 📊 Checklist de verificación post-deployment
+
+4. **[ARQUITECTURA_FUNCIONALIDAD.md](ARQUITECTURA_FUNCIONALIDAD.md)**
    - 📐 Arquitectura completa del sistema
    - 🔌 Cómo funciona el backend y frontend
    - 🗄️ Diagrama base de datos
@@ -20,7 +43,7 @@ Estos documentos fueron creados en la refactorización de febrero 2026:
    - 📡 API REST endpoints completa (8 módulos)
    - 🔒 Seguridad y autenticación JWT
 
-2. **[MANUAL_CLIENTE.md](MANUAL_CLIENTE.md)**
+5. **[MANUAL_CLIENTE.md](MANUAL_CLIENTE.md)**
    - 👥 Guía completa para usuarios/clientes
    - 🛍️ Cómo navegar la tienda
    - 🛒 Proceso de compra paso a paso
@@ -28,7 +51,7 @@ Estos documentos fueron creados en la refactorización de febrero 2026:
    - ❓ 10 Preguntas frecuentes
    - 🔧 Solución de problemas
 
-3. **[MANUAL_ADMIN.md](MANUAL_ADMIN.md)**
+6. **[MANUAL_ADMIN.md](MANUAL_ADMIN.md)**
    - 👨‍💼 Guía completa para administradores
    - 📊 Dashboard y KPIs
    - 📦 Gestión de productos
@@ -37,7 +60,7 @@ Estos documentos fueron creados en la refactorización de febrero 2026:
    - 📈 Reportes y análisis
    - 🔒 Seguridad y mejores prácticas
 
-4. **[REFACTORIZACION_RESUMEN.md](REFACTORIZACION_RESUMEN.md)**
+7. **[REFACTORIZACION_RESUMEN.md](REFACTORIZACION_RESUMEN.md)**
    - 🔧 Resumen de cambios realizados
    - 📝 Guía de migración de código
    - 💻 Ejemplos de cómo usar nuevos servicios

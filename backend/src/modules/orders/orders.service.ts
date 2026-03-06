@@ -1,5 +1,5 @@
 
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateOrderDto, UpdateOrderStatusDto, OrderResponseDto } from './dto/order.dto';
 import { OrderStatus } from '@prisma/client';
@@ -7,6 +7,8 @@ import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class OrdersService {
+  private readonly logger = new Logger(OrdersService.name);
+
   constructor(
     private prisma: PrismaService,
     private notificationsService: NotificationsService,
@@ -29,17 +31,17 @@ export class OrdersService {
     // Validate products and stock
     let total = 0;
     for (const item of createOrderDto.items) {
-      console.log(`🔍 Buscando producto con ID: "${item.productoId}"`);
+      this.logger.debug(`Buscando producto con ID: "${item.productoId}"`);
       const product = await this.prisma.product.findUnique({
         where: { id: item.productoId },
       });
 
       if (!product) {
-        console.error(`❌ Producto NO ENCONTRADO: ${item.productoId}`);
+        this.logger.error(`Producto NO ENCONTRADO: ${item.productoId}`);
         throw new NotFoundException(`Producto con ID ${item.productoId} no encontrado`);
       }
 
-      console.log(`✓ Producto encontrado: ${product.nombre}`);
+      this.logger.debug(`Producto encontrado: ${product.nombre}`);
       if (product.stock < item.cantidad) {
         throw new BadRequestException(
           `Stock insuficiente para el producto "${product.nombre}". Disponible: ${product.stock}`,
@@ -132,7 +134,7 @@ export class OrdersService {
     try {
       await this.notificationsService.sendWhatsAppMessage(adminPhone, adminMsg, 'ADMIN');
     } catch (err) {
-      console.error('Error enviando notificación WhatsApp al admin:', err);
+      this.logger.error('Error enviando notificación WhatsApp al admin', err);
     }
 
     return this.formatOrderResponse(order);
@@ -296,7 +298,7 @@ export class OrdersService {
         try {
           await this.notificationsService.sendWhatsAppMessage(clientePhone, clienteMsg, 'CLIENTE');
         } catch (err) {
-          console.error('Error enviando notificación WhatsApp al cliente:', err);
+          this.logger.error('Error enviando notificación WhatsApp al cliente', err);
         }
       }
     }

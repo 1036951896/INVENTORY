@@ -1,14 +1,16 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class SeedService {
+  private readonly logger = new Logger(SeedService.name);
+
   constructor(private prisma: PrismaService) {}
 
   async executeSeed(forceReset: boolean = false) {
     try {
-      console.log('🌱 Iniciando Seed...');
+      this.logger.log('Iniciando Seed...');
 
       // Verificar si ya existen datos (verificar AMBOS users y products)
       const userCount = await this.prisma.user.count();
@@ -24,10 +26,10 @@ export class SeedService {
 
       // Si es force reset, limpiar todo
       if (forceReset) {
-        console.log('🧹 Force reset: limpiando base de datos...');
+        this.logger.log('Force reset: limpiando base de datos...');
         const productsBeforeDelete = await this.prisma.product.count();
         const usersBeforeDelete = await this.prisma.user.count();
-        console.log(`  📊 Antes: ${productsBeforeDelete} productos, ${usersBeforeDelete} usuarios`);
+        this.logger.log(`  Antes: ${productsBeforeDelete} productos, ${usersBeforeDelete} usuarios`);
 
         await this.prisma.orderItem.deleteMany({});
         await this.prisma.order.deleteMany({});
@@ -37,7 +39,7 @@ export class SeedService {
 
         const productsAfterDelete = await this.prisma.product.count();
         const usersAfterDelete = await this.prisma.user.count();
-        console.log(`  📊 Después: ${productsAfterDelete} productos, ${usersAfterDelete} usuarios`);
+        this.logger.log(`  Despues: ${productsAfterDelete} productos, ${usersAfterDelete} usuarios`);
       }
 
       const categoriasSeed = [
@@ -116,19 +118,19 @@ export class SeedService {
         { id: '64', nombre: 'BOLSA BIODEGRADABLE EXTRA RESISTANT', precio: 15000, stock: 50, categoriaId: '5' },
       ];
 
-      console.log('📦 Creando categorías...');
+      this.logger.log('Creando categorias...');
       for (const categoria of categoriasSeed) {
         try {
           await this.prisma.category.create({
             data: categoria,
           });
-          console.log(`  ✅ Categoría creada: ${categoria.nombre}`);
+          this.logger.log(`  Categoria creada: ${categoria.nombre}`);
         } catch (err) {
-          console.error(`  ⚠️ Error creando categoría "${categoria.nombre}":`, err.message);
+          this.logger.warn(`  Error creando categoria "${categoria.nombre}":`, err.message);
         }
       }
 
-      console.log('🛍️ Creando productos...');
+      this.logger.log('Creando productos...');
       let productsSucceeded = 0;
       let productsFailed = 0;
 
@@ -148,18 +150,18 @@ export class SeedService {
           });
           productsSucceeded++;
           if ((i + 1) % 10 === 0) {
-            console.log(`  ✅ ${i + 1}/${productosJSON.length} productos creados`);
+            this.logger.log(`  ${i + 1}/${productosJSON.length} productos creados`);
           }
         } catch (err) {
           productsFailed++;
-          console.error(`  ❌ Error al crear producto ${i + 1} (ID: "${producto.id}"):`, err.message);
+          this.logger.error(`  Error al crear producto ${i + 1} (ID: "${producto.id}"):`, err.message);
         }
       }
 
-      console.log(`✅ Productos: ${productsSucceeded} exitosos, ${productsFailed} fallidos`);
+      this.logger.log(`Productos: ${productsSucceeded} exitosos, ${productsFailed} fallidos`);
 
       // Crear usuarios de prueba
-      console.log('👤 Creando usuarios...');
+      this.logger.log('Creando usuarios...');
       const hashedAdminPassword = await bcrypt.hash('admin123', 10);
       const hashedClientPassword = await bcrypt.hash('cliente123', 10);
 
@@ -185,7 +187,7 @@ export class SeedService {
         },
       });
 
-      console.log('✅ ¡Seed completado!');
+      this.logger.log('Seed completado!');
 
       return {
         success: true,
@@ -211,7 +213,7 @@ export class SeedService {
         },
       };
     } catch (error) {
-      console.error('❌ Error en seed:', error);
+      this.logger.error('Error en seed:', error);
       throw new BadRequestException(`Error al ejecutar seed: ${error.message}`);
     }
   }
