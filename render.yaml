@@ -53,9 +53,8 @@ services:
   # ============================================================================
   - type: pserv
     name: inventory-db
-    ipAllowList: []
     plan: free
-    postgresMajorVersion: 15
+    ipAllowList: []
 
   # ============================================================================
   # Frontend React + Vite
