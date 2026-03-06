@@ -35,7 +35,26 @@ Estos documentos fueron creados en la refactorización de febrero-marzo 2026:
    - 🚀 Configuración correcta de frontend + backend
    - 📊 Checklist de verificación post-deployment
 
-4. **[ARQUITECTURA_FUNCIONALIDAD.md](ARQUITECTURA_FUNCIONALIDAD.md)**
+4. **[RENDER_PLAN_GRATUITO.md](RENDER_PLAN_GRATUITO.md)** ← **PLAN GRATUITO** 🆕
+   - ⚠️ Limitaciones del plan gratuito de Render
+   - 😴 Por qué el backend parece "caído" (auto-suspensión)
+   - ⏱️ Cold start de 30-60s explicado
+   - 🔄 Soluciones: Keep-Alive con cron-job.org
+   - 💰 Comparación: Gratis vs Motor de Arranque ($7/mes)
+
+5. **[ACCESO_DESDE_CELULAR.md](ACCESO_DESDE_CELULAR.md)** ← **ACCESO MÓVIL** 🆕
+   - 📱 Cómo acceder al sistema desde tu celular
+   - 🚀 Pasos para crear el frontend en Render
+   - ⚙️ Configuración de variables de entorno (.env)
+   - 🔧 Solución a errores comunes desde móvil
+   - 📋 Checklist completo de deployment del frontend
+
+6. **[ARQUITECTURA_FUNCIONALIDAD.md](ARQUITECTURA_FUNCIONALIDAD.md)**
+   - ⏱️ Cold start de 30-60s explicado
+   - 🔄 Soluciones: Keep-Alive con cron-job.org
+   - 💰 Comparación: Gratis vs Motor de Arranque ($7/mes)
+
+5. **[ARQUITECTURA_FUNCIONALIDAD.md](ARQUITECTURA_FUNCIONALIDAD.md)**
    - 📐 Arquitectura completa del sistema
    - 🔌 Cómo funciona el backend y frontend
    - 🗄️ Diagrama base de datos
@@ -43,7 +62,7 @@ Estos documentos fueron creados en la refactorización de febrero-marzo 2026:
    - 📡 API REST endpoints completa (8 módulos)
    - 🔒 Seguridad y autenticación JWT
 
-5. **[MANUAL_CLIENTE.md](MANUAL_CLIENTE.md)**
+6. **[MANUAL_CLIENTE.md](MANUAL_CLIENTE.md)**
    - 👥 Guía completa para usuarios/clientes
    - 🛍️ Cómo navegar la tienda
    - 🛒 Proceso de compra paso a paso
@@ -51,7 +70,7 @@ Estos documentos fueron creados en la refactorización de febrero-marzo 2026:
    - ❓ 10 Preguntas frecuentes
    - 🔧 Solución de problemas
 
-6. **[MANUAL_ADMIN.md](MANUAL_ADMIN.md)**
+7. **[MANUAL_ADMIN.md](MANUAL_ADMIN.md)**
    - 👨‍💼 Guía completa para administradores
    - 📊 Dashboard y KPIs
    - 📦 Gestión de productos
@@ -60,7 +79,7 @@ Estos documentos fueron creados en la refactorización de febrero-marzo 2026:
    - 📈 Reportes y análisis
    - 🔒 Seguridad y mejores prácticas
 
-7. **[REFACTORIZACION_RESUMEN.md](REFACTORIZACION_RESUMEN.md)**
+8. **[REFACTORIZACION_RESUMEN.md](REFACTORIZACION_RESUMEN.md)**
    - 🔧 Resumen de cambios realizados
    - 📝 Guía de migración de código
    - 💻 Ejemplos de cómo usar nuevos servicios
