@@ -134,9 +134,19 @@ export class OrdersService {
     const adminPhone = '573116579677'; // Número de prueba solicitado
     const adminMsg = `Hola Administrador,\n\nSe ha recibido un nuevo pedido (${order.numero}) de ${(order as any).usuario.nombre} (${(order as any).usuario.telefono || 'sin teléfono'}). Por favor, ingrese al panel para revisarlo.`;
     try {
-      await this.notificationsService.sendWhatsAppMessage(adminPhone, adminMsg, 'ADMIN');
+      await this.notificationsService.sendWhatsAppMessage(adminPhone, adminMsg, 'ADMIN', 'PEDIDO');
     } catch (err) {
       this.logger.error('Error enviando notificación WhatsApp al admin', err);
+    }
+
+    // Crear notificación en el panel del admin
+    try {
+      this.notificationsService.createAdminNotification(
+        `Nuevo pedido ${order.numero} de ${(order as any).usuario.nombre} - Total: $${order.total.toFixed(2)}`,
+        'PEDIDO'
+      );
+    } catch (err) {
+      this.logger.error('Error creando notificación en panel', err);
     }
 
     return this.formatOrderResponse(order);

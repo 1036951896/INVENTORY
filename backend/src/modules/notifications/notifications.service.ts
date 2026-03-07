@@ -1,13 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-interface NotificationLog {
+export interface NotificationLog {
   id: string;
-  phone: string;
+  phone?: string;
   message: string;
-  url: string;
+  url?: string;
   timestamp: Date;
   tipo: 'ADMIN' | 'CLIENTE';
   estado: 'GENERADA' | 'ENVIADA' | 'PENDIENTE';
+  leida?: boolean;
+  categoria?: 'PEDIDO' | 'PRODUCTO' | 'USUARIO' | 'REPORTE' | 'GENERAL';
 }
 
 @Injectable()
@@ -31,6 +33,7 @@ export class NotificationsService {
     phone: string,
     message: string,
     tipo: 'ADMIN' | 'CLIENTE' = 'CLIENTE',
+    categoria: 'PEDIDO' | 'PRODUCTO' | 'USUARIO' | 'REPORTE' | 'GENERAL' = 'GENERAL',
   ): Promise<string> {
     // Limpiar número de teléfono
     const cleanPhone = phone.replace(/[^\d]/g, '');
@@ -47,6 +50,8 @@ export class NotificationsService {
       timestamp: new Date(),
       tipo,
       estado: 'GENERADA',
+      leida: false,
+      categoria,
     };
 
     this.notificationHistory.push(notification);
@@ -65,6 +70,30 @@ export class NotificationsService {
   }
 
   /**
+   * Crear una notificación en el panel de admin
+   */
+  createAdminNotification(
+    message: string,
+    categoria: 'PEDIDO' | 'PRODUCTO' | 'USUARIO' | 'REPORTE' | 'GENERAL' = 'GENERAL',
+  ): NotificationLog {
+    const notification: NotificationLog = {
+      id: `notif-${Date.now()}`,
+      message,
+      timestamp: new Date(),
+      tipo: 'ADMIN',
+      estado: 'GENERADA',
+      leida: false,
+      categoria,
+    };
+
+    this.notificationHistory.push(notification);
+    
+    this.logger.log(`🔔 NOTIFICACIÓN ADMIN CREADA: ${message}`);
+    
+    return notification;
+  }
+
+  /**
    * Obtener historial de notificaciones
    */
   getNotificationHistory(tipo?: 'ADMIN' | 'CLIENTE', limit: number = 50): NotificationLog[] {
@@ -78,16 +107,44 @@ export class NotificationsService {
   }
 
   /**
-   * Obtener estadísticas de notificaciones
+   * Obtener notificaciones no leídas para admin
    */
-  getNotificationStats() {
-    return {
-      total: this.notificationHistory.length,
-      admin: this.notificationHistory.filter(n => n.tipo === 'ADMIN').length,
-      cliente: this.notificationHistory.filter(n => n.tipo === 'CLIENTE').length,
-      ultimaNotificacion: this.notificationHistory.length > 0 
-        ? this.notificationHistory[this.notificationHistory.length - 1].timestamp 
-        : null,
-    };
+  getUnreadNotifications(limit: number = 50): NotificationLog[] {
+    return this.notificationHistory
+      .filter(n => n.tipo === 'ADMIN' && !n.leida)
+      .slice(-limit)
+      .reverse();
+  }
+
+  /**
+   * Obtener notificaciones recientes (leídas y no leídas)
+   */
+  getRecentNotifications(limit: number = 20): NotificationLog[] {
+    return this.notificationHistory
+      .filter(n => n.tipo === 'ADMIN')
+      .slice(-limit)
+      .reverse();
+  }
+
+  /**
+   * Marcar notificación como leída
+   */
+  markAsRead(notificationId: string): NotificationLog | null {
+    const notification = this.notificationHistory.find(n => n.id === notificationId);
+    if (notification) {
+      notification.leida = true;
+    }
+    return notification || null;
+  }
+
+  /**
+   * Marcar todas las notificaciones como leídas
+   */
+  markAllAsRead(): void {
+    this.notificationHistory.forEach(n => {
+      if (n.tipo === 'ADMIN') {
+        n.leida = true;
+      }
+    });
   }
 }

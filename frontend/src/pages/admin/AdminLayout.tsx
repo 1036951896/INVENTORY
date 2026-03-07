@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { authService } from '../../services/auth.service';
 import { alert2 } from '../../utils/notifications';
+import NotificationBell from '../../components/NotificationBell';
 import './admin-layout.css';
 
 export default function AdminLayout() {
@@ -155,6 +156,8 @@ export default function AdminLayout() {
           </button>
 
           <div className="topbar-spacer"></div>
+
+          <NotificationBell />
 
           <div className="topbar-user">
             <div className="user-avatar">
