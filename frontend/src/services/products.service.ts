@@ -6,22 +6,35 @@ export const productsService = {
   async getAll(page = 1, limit = 100): Promise<Product[]> {
     try {
       const response = await api.get(`/products?page=${page}&limit=${limit}`);
-      console.log('API Response:', response.data);
+      console.log('Full API Response:', response);
+      console.log('Response data type:', typeof response.data);
+      console.log('Response.data:', response.data);
       
-      // El backend devuelve { data: [...], pagination: {...} }
-      let products = Array.isArray(response.data) ? response.data : response.data?.data;
+      // Manejar ambos casos: array directo o {data: [...], pagination: {...}}
+      let products: any[] = [];
       
-      if (!Array.isArray(products)) {
-        console.warn('Products is not an array, returning empty array', products);
+      if (Array.isArray(response.data)) {
+        // Si es un array directo
+        products = response.data;
+        console.log('Response is direct array');
+      } else if (response.data?.data && Array.isArray(response.data.data)) {
+        // Si es {data: [...], pagination: {...}}
+        products = response.data.data;
+        console.log('Response has data property');
+      } else {
+        // Caso inesperado
+        console.error('Unexpected response format:', response.data);
         return [];
       }
       
+      console.log('Products before mapping:', products.length, products);
+      
       // Mapear productos para extraer la imagen principal y convertir categoría
-      return products.map((product: any) => {
+      const mapped = products.map((product: any) => {
         const imagen = product.imagenes?.[0]?.url || product.imagen || '';
         const categoria = product.categoria?.nombre || product.categoria || 'Sin categoría';
         
-        return {
+        const mapped: Product = {
           id: product.id,
           nombre: product.nombre || '',
           descripcion: product.descripcion || '',
@@ -30,10 +43,15 @@ export const productsService = {
           categoria,
           imagen,
           activo: product.activo ?? true,
-        } as Product;
+        };
+        return mapped;
       });
+      
+      console.log('Mapped products:', mapped);
+      return mapped;
     } catch (error: any) {
       console.error('Error in productsService.getAll:', error);
+      console.error('Error response:', error.response);
       throw error;
     }
   },
@@ -65,10 +83,16 @@ export const productsService = {
   async search(query: string): Promise<Product[]> {
     try {
       const response = await api.get(`/products/search?q=${query}`);
-      let products = Array.isArray(response.data) ? response.data : response.data?.data;
       
-      if (!Array.isArray(products)) {
-        console.warn('Search products is not an array, returning empty array', products);
+      // Manejar ambos casos: array directo o {data: [...], pagination: {...}}
+      let products: any[] = [];
+      
+      if (Array.isArray(response.data)) {
+        products = response.data;
+      } else if (response.data?.data && Array.isArray(response.data.data)) {
+        products = response.data.data;
+      } else {
+        console.error('Unexpected search response format:', response.data);
         return [];
       }
       

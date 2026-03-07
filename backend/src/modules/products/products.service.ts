@@ -50,37 +50,42 @@ export class ProductsService {
         }
       : { activo: true };
 
-    const [products, total] = await Promise.all([
-      this.prisma.product.findMany({
-        where,
-        include: { 
-          categoria: true,
-          imagenes: {
-            select: {
-              id: true,
-              url: true,
-              principal: true,
-              orden: true
-            },
-            orderBy: { orden: 'asc' }
-          }
-        },
-        skip,
-        take: limitNum,
-        orderBy: { nombre: 'asc' },
-      }),
-      this.prisma.product.count({ where }),
-    ]);
+    try {
+      const [products, total] = await Promise.all([
+        this.prisma.product.findMany({
+          where,
+          include: { 
+            categoria: true,
+            imagenes: {
+              select: {
+                id: true,
+                url: true,
+                principal: true,
+                orden: true
+              },
+              orderBy: { orden: 'asc' }
+            }
+          },
+          skip,
+          take: limitNum,
+          orderBy: { nombre: 'asc' },
+        }),
+        this.prisma.product.count({ where }),
+      ]);
 
-    return {
-      data: products,
-      pagination: {
-        total,
-        page: pageNum,
-        limit: limitNum,
-        pages: Math.ceil(total / limitNum),
-      },
-    };
+      return {
+        data: products,
+        pagination: {
+          total,
+          page: pageNum,
+          limit: limitNum,
+          pages: Math.ceil(total / limitNum),
+        },
+      };
+    } catch (error) {
+      console.error('Error in ProductsService.findAll:', error);
+      throw error;
+    }
   }
 
   async findById(id: string) {
