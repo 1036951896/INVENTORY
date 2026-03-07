@@ -37,6 +37,7 @@ export default function ProductGrid({ activeCategory = 'todas' }: ProductGridPro
   const loadProducts = async () => {
     try {
       setLoading(true);
+      setError(null);
       
       if (USE_MOCK_DATA) {
         // Simular delay de red
@@ -45,15 +46,27 @@ export default function ProductGrid({ activeCategory = 'todas' }: ProductGridPro
         setFilteredProducts(mockProducts);
       } else {
         const data = await productsService.getAll();
+        console.log('Products loaded:', data);
+        
+        if (!Array.isArray(data)) {
+          throw new Error('Los productos no fueron cargados correctamente');
+        }
+        
+        if (data.length === 0) {
+          console.warn('No products found');
+        }
+        
         setProducts(data);
         setFilteredProducts(data);
       }
       
-      setError(null);
     } catch (err: any) {
       console.error('Error cargando productos:', err);
-      setError(err.message || 'Error al cargar productos');
-      alert2('Error al cargar productos', 'error');
+      const errorMsg = err.response?.data?.message || err.message || 'Error al cargar productos';
+      setError(errorMsg);
+      alert2(errorMsg, 'error');
+      setProducts([]);
+      setFilteredProducts([]);
     } finally {
       setLoading(false);
     }

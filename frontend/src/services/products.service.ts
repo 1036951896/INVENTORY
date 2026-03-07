@@ -4,17 +4,38 @@ import type { Product } from '../types';
 export const productsService = {
   // Obtener todos los productos
   async getAll(page = 1, limit = 100): Promise<Product[]> {
-    const response = await api.get(`/products?page=${page}&limit=${limit}`);
-    
-    // El backend devuelve { data: [...], pagination: {...} }
-    let products = Array.isArray(response.data) ? response.data : response.data?.data || [];
-    
-    // Mapear productos para extraer la imagen principal y convertir categoría
-    return products.map((product: any) => ({
-      ...product,
-      categoria: product.categoria?.nombre || product.categoria || 'Sin categoría',
-      imagen: product.imagenes?.[0]?.url || product.imagen || '',
-    }));
+    try {
+      const response = await api.get(`/products?page=${page}&limit=${limit}`);
+      console.log('API Response:', response.data);
+      
+      // El backend devuelve { data: [...], pagination: {...} }
+      let products = Array.isArray(response.data) ? response.data : response.data?.data;
+      
+      if (!Array.isArray(products)) {
+        console.warn('Products is not an array, returning empty array', products);
+        return [];
+      }
+      
+      // Mapear productos para extraer la imagen principal y convertir categoría
+      return products.map((product: any) => {
+        const imagen = product.imagenes?.[0]?.url || product.imagen || '';
+        const categoria = product.categoria?.nombre || product.categoria || 'Sin categoría';
+        
+        return {
+          id: product.id,
+          nombre: product.nombre || '',
+          descripcion: product.descripcion || '',
+          precio: product.precio || 0,
+          stock: product.stock || 0,
+          categoria,
+          imagen,
+          activo: product.activo ?? true,
+        } as Product;
+      });
+    } catch (error: any) {
+      console.error('Error in productsService.getAll:', error);
+      throw error;
+    }
   },
 
   // Obtener producto por ID
@@ -42,13 +63,33 @@ export const productsService = {
 
   // Buscar productos
   async search(query: string): Promise<Product[]> {
-    const response = await api.get(`/products/search?q=${query}`);
-    let products = Array.isArray(response.data) ? response.data : response.data?.data || [];
-    
-    return products.map((product: any) => ({
-      ...product,
-      categoria: product.categoria?.nombre || product.categoria || 'Sin categoría',
-      imagen: product.imagenes?.[0]?.url || product.imagen || '',
-    }));
+    try {
+      const response = await api.get(`/products/search?q=${query}`);
+      let products = Array.isArray(response.data) ? response.data : response.data?.data;
+      
+      if (!Array.isArray(products)) {
+        console.warn('Search products is not an array, returning empty array', products);
+        return [];
+      }
+      
+      return products.map((product: any) => {
+        const imagen = product.imagenes?.[0]?.url || product.imagen || '';
+        const categoria = product.categoria?.nombre || product.categoria || 'Sin categoría';
+        
+        return {
+          id: product.id,
+          nombre: product.nombre || '',
+          descripcion: product.descripcion || '',
+          precio: product.precio || 0,
+          stock: product.stock || 0,
+          categoria,
+          imagen,
+          activo: product.activo ?? true,
+        } as Product;
+      });
+    } catch (error: any) {
+      console.error('Error in productsService.search:', error);
+      throw error;
+    }
   },
 };
