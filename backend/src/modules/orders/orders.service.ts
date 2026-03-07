@@ -417,39 +417,79 @@ export class OrdersService {
         where: { estado: 'PENDIENTE' },
       });
 
-      // Sales by day (ALL DATA - sin filtro de fecha)
+      // Sales by day - traer TODOS y agrupar en JS
       let ordersByDay: any[] = [];
       try {
-        ordersByDay = (await this.prisma.$queryRaw`
-          SELECT 
-            DATE(created_at) as date,
-            COUNT(*) as orders,
-            COALESCE(SUM(total), 0) as total
-          FROM "Order"
-          GROUP BY DATE(created_at)
-          ORDER BY date ASC
-        `) as any[];
+        // Traer todas las órdenes sin agrupar
+        const allOrders = await this.prisma.order.findMany({
+          select: {
+            created_at: true,
+            total: true,
+          }
+        });
+        
+        // Agrupar por fecha en JavaScript
+        const groupedByDate: { [key: string]: { orders: number; total: number } } = {};
+        allOrders.forEach(order => {
+          const dateStr = order.created_at ? new Date(order.created_at).toISOString().split('T')[0] : 'Unknown';
+          if (!groupedByDate[dateStr]) {
+            groupedByDate[dateStr] = { orders: 0, total: 0 };
+          }
+          groupedByDate[dateStr].orders += 1;
+          groupedByDate[dateStr].total += order.total || 0;
+        });
+        
+        // Convertir a array y ordenar
+        ordersByDay = Object.entries(groupedByDate)
+          .map(([date, data]) => ({
+            date,
+            orders: data.orders,
+            total: data.total
+          }))
+          .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
       } catch (err) {
         this.logger.warn('Error fetching ordersByDay:', err);
         ordersByDay = [];
       }
 
-      // Sales by category (last 30 days)
+      // Sales by category 
       let salesByCategory: any[] = [];
       try {
-        salesByCategory = (await this.prisma.$queryRaw`
-          SELECT 
-            c.nombre as category,
-            COUNT(DISTINCT o.id) as orders,
-            COUNT(oi.id) as items,
-            COALESCE(SUM(oi.subtotal), 0) as total
-          FROM "Order" o
-          JOIN "OrderItem" oi ON o.id = oi.order_id
-          JOIN "Product" p ON oi.product_id = p.id
-          JOIN "Category" c ON p.category_id = c.id
-          GROUP BY c.id, c.nombre
-          ORDER BY total DESC
-        `) as any[];
+        const orderItems = await this.prisma.orderItem.findMany({
+          include: {
+            product: {
+              include: {
+                category: true
+              }
+            }
+          }
+        });
+
+        const groupedByCategory: { [key: string]: { category: string; orders: number; items: number; total: number } } = {};
+        
+        orderItems.forEach(item => {
+          const categoryName = item.product?.category?.nombre || 'Sin categoría';
+          if (!groupedByCategory[categoryName]) {
+            groupedByCategory[categoryName] = { 
+              category: categoryName, 
+              orders: new Set(), 
+              items: 0, 
+              total: 0 
+            };
+          }
+          groupedByCategory[categoryName].orders.add(item.order_id);
+          groupedByCategory[categoryName].items += 1;
+          groupedByCategory[categoryName].total += item.subtotal || 0;
+        });
+
+        salesByCategory = Object.values(groupedByCategory)
+          .map(data => ({
+            category: data.category,
+            orders: data.orders.size,
+            items: data.items,
+            total: data.total
+          }))
+          .sort((a, b) => b.total - a.total);
       } catch (err) {
         this.logger.warn('Error fetching salesByCategory:', err);
         salesByCategory = [];
@@ -477,25 +517,39 @@ export class OrdersService {
         topCustomers = [];
       }
 
-      // Top products (ALL DATA - sin filtro de fecha)
+      // Top products (ALL DATA)
       let topProducts: any[] = [];
       try {
-        topProducts = (await this.prisma.$queryRaw`
-          SELECT 
-            p.id,
-            p.nombre,
-            p.precio,
-            COUNT(oi.id) as cantidad_vendida,
-            SUM(oi.cantidad) as total_unidades,
-            COALESCE(SUM(oi.cantidad * oi.precio_unitario), 0) as total_ingresos
-          FROM "Product" p
-          LEFT JOIN "OrderItem" oi ON p.id = oi.producto_id
-          LEFT JOIN "Order" o ON oi.order_id = o.id
-          GROUP BY p.id, p.nombre, p.precio
-          HAVING COUNT(oi.id) > 0
-          ORDER BY total_unidades DESC
-          LIMIT 10
-        `) as any[];
+        const orderItems = await this.prisma.orderItem.findMany({
+          include: {
+            product: true
+          }
+        });
+
+        const productMap: { [key: string]: { id: string; nombre: string; precio: number; cantidad_vendida: number; total_unidades: number; total_ingresos: number } } = {};
+        
+        orderItems.forEach(item => {
+          if (!item.product) return;
+          const prodId = item.product.id;
+          if (!productMap[prodId]) {
+            productMap[prodId] = {
+              id: prodId,
+              nombre: item.product.nombre,
+              precio: item.product.precio,
+              cantidad_vendida: 0,
+              total_unidades: 0,
+              total_ingresos: 0
+            };
+          }
+          productMap[prodId].cantidad_vendida += 1;
+          productMap[prodId].total_unidades += item.cantidad || 0;
+          productMap[prodId].total_ingresos += (item.cantidad || 0) * (item.precio_unitario || 0);
+        });
+
+        topProducts = Object.values(productMap)
+          .filter(p => p.cantidad_vendida > 0)
+          .sort((a, b) => b.total_unidades - a.total_unidades)
+          .slice(0, 10);
       } catch (err) {
         this.logger.warn('Error fetching topProducts:', err);
         topProducts = [];
