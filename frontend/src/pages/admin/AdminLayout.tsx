@@ -157,6 +157,18 @@ export default function AdminLayout() {
 
           <div className="topbar-spacer"></div>
 
+          <button
+            className="btn-home"
+            onClick={() => navigate('/')}
+            title="Ir a la tienda"
+            aria-label="Ir a la tienda"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span className="btn-home-label">Tienda</span>
+          </button>
+
           <NotificationBell />
 
           <div className="topbar-user">

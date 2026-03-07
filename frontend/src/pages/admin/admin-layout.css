@@ -159,6 +159,37 @@
   border-radius: 6px;
 }
 
+.btn-home {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.btn-home:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-home-label {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .btn-home-label {
+    display: inline;
+  }
+}
+
 .topbar-spacer {
   flex: 1;
 }
