@@ -401,8 +401,9 @@ export class OrdersService {
 
   async getStatistics() {
     try {
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      // Cambiar a traer TODOS los datos sin filtro de fecha
+      // const thirtyDaysAgo = new Date();
+      // thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
       // Total metrics
       const totalOrders = await this.prisma.order.count();
@@ -416,7 +417,7 @@ export class OrdersService {
         where: { estado: 'PENDIENTE' },
       });
 
-      // Sales by day (last 30 days)
+      // Sales by day (ALL DATA - sin filtro de fecha)
       let ordersByDay: any[] = [];
       try {
         ordersByDay = (await this.prisma.$queryRaw`
@@ -425,7 +426,6 @@ export class OrdersService {
             COUNT(*) as orders,
             COALESCE(SUM(total), 0) as total
           FROM "Order"
-          WHERE created_at >= ${thirtyDaysAgo}
           GROUP BY DATE(created_at)
           ORDER BY date ASC
         `) as any[];
@@ -447,7 +447,6 @@ export class OrdersService {
           JOIN "OrderItem" oi ON o.id = oi.order_id
           JOIN "Product" p ON oi.product_id = p.id
           JOIN "Category" c ON p.category_id = c.id
-          WHERE o.created_at >= ${thirtyDaysAgo}
           GROUP BY c.id, c.nombre
           ORDER BY total DESC
         `) as any[];
@@ -467,7 +466,7 @@ export class OrdersService {
             COUNT(o.id) as orders,
             COALESCE(SUM(o.total), 0) as total
           FROM "User" u
-          LEFT JOIN "Order" o ON u.id = o.usuario_id AND o.created_at >= ${thirtyDaysAgo}
+          LEFT JOIN "Order" o ON u.id = o.usuario_id
           GROUP BY u.id, u.nombre, u.email
           HAVING COUNT(o.id) > 0
           ORDER BY total DESC
@@ -478,7 +477,7 @@ export class OrdersService {
         topCustomers = [];
       }
 
-      // Top products (last 30 days)
+      // Top products (ALL DATA - sin filtro de fecha)
       let topProducts: any[] = [];
       try {
         topProducts = (await this.prisma.$queryRaw`
@@ -491,7 +490,7 @@ export class OrdersService {
             COALESCE(SUM(oi.cantidad * oi.precio_unitario), 0) as total_ingresos
           FROM "Product" p
           LEFT JOIN "OrderItem" oi ON p.id = oi.producto_id
-          LEFT JOIN "Order" o ON oi.order_id = o.id AND o.created_at >= ${thirtyDaysAgo}
+          LEFT JOIN "Order" o ON oi.order_id = o.id
           GROUP BY p.id, p.nombre, p.precio
           HAVING COUNT(oi.id) > 0
           ORDER BY total_unidades DESC
