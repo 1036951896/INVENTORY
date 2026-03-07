@@ -41,6 +41,28 @@ export class AuthService {
       },
     });
 
+    // Crear dirección principal si viene en los datos
+    if (registerDto.direccion) {
+      try {
+        await this.prisma.address.create({
+          data: {
+            calle: registerDto.direccion.calle,
+            numero: registerDto.direccion.numero,
+            apartamento: registerDto.direccion.apartamento || null,
+            ciudad: registerDto.direccion.ciudad,
+            departamento: registerDto.direccion.departamento,
+            codigoPostal: registerDto.direccion.codigoPostal || null,
+            pais: registerDto.direccion.pais || 'Colombia',
+            esPrincipal: true,
+            usuarioId: user.id,
+          },
+        });
+      } catch (error) {
+        console.error('Error creating address:', error);
+        // No fallar si hay error en dirección, fue creado el usuario
+      }
+    }
+
     // Generar JWT
     const access_token = this.jwtService.sign({
       sub: user.id,

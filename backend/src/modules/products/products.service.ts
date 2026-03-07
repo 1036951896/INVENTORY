@@ -30,24 +30,24 @@ export class ProductsService {
     });
   }
 
-  async findAll(page: number = 1, limit: number = 20, search?: string) {
+  async findAll(page: number = 1, limit: number = 500, search?: string) {
     // Validar y normalizar page y limit
     let pageNum = Number(page);
     let limitNum = Number(limit);
     if (isNaN(pageNum) || pageNum < 1) pageNum = 1;
-    if (isNaN(limitNum) || limitNum < 1) limitNum = 20;
+    if (isNaN(limitNum) || limitNum < 1) limitNum = 500;
+    if (limitNum > 500) limitNum = 500; // Máximo 500 por solicitud
     const skip = (pageNum - 1) * limitNum;
 
     const where = search
       ? {
           activo: true,
-          stock: { gt: 0 },
           OR: [
             { nombre: { contains: search, mode: 'insensitive' as const } },
             { descripcion: { contains: search, mode: 'insensitive' as const } },
           ],
         }
-      : { activo: true, stock: { gt: 0 } };
+      : { activo: true };
 
     const [products, total] = await Promise.all([
       this.prisma.product.findMany({
@@ -102,7 +102,7 @@ export class ProductsService {
     return product;
   }
 
-  async findByCategory(categoriaId: string, page: number = 1, limit: number = 20) {
+  async findByCategory(categoriaId: string, page: number = 1, limit: number = 500) {
     const category = await this.prisma.category.findUnique({
       where: { id: categoriaId },
     });
@@ -111,6 +111,7 @@ export class ProductsService {
       throw new NotFoundException('Categoría no encontrada');
     }
 
+    if (limit > 500) limit = 500; // Máximo 500 por solicitud
     const skip = (page - 1) * limit;
 
     const [products, total] = await Promise.all([

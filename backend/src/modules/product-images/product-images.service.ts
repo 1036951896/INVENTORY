@@ -10,15 +10,39 @@ import axios from 'axios';
 export class ProductImagesService {
   constructor(private prisma: PrismaService) {}
 
-  async descargarYGuardarImagen(url: string) {
+  async subirImagenLocal(archivo: Express.Multer.File, productoId?: string, principal: boolean = false) {
+    try {
+      const nombreArchivo = archivo.filename;
+      const rutaPublica = `/images/productos/${nombreArchivo}`;
+
+      // Si se proporciona productoId, se almacena en la base de datos
+      if (productoId) {
+        return await this.agregar(productoId, {
+          url: rutaPublica,
+          principal,
+        });
+      }
+
+      return {
+        nombre: nombreArchivo,
+        url: rutaPublica,
+        ruta: rutaPublica,
+        mensaje: 'Imagen subida correctamente',
+      };
+    } catch (error) {
+      throw new BadRequestException(`Error al subir imagen: ${error.message}`);
+    }
+  }
+
+  async descargarYGuardarImagen(url: string, productoId?: string, principal: boolean = false) {
     try {
       // Validar que sea una URL válida
       new URL(url);
 
-      // Crear directorio de assets si no existe
-      const assetsDir = path.join(process.cwd(), 'public', 'assets');
-      if (!fs.existsSync(assetsDir)) {
-        fs.mkdirSync(assetsDir, { recursive: true });
+      // Crear directorio si no existe
+      const imagensDir = path.join(process.cwd(), 'public', 'images', 'productos');
+      if (!fs.existsSync(imagensDir)) {
+        fs.mkdirSync(imagensDir, { recursive: true });
       }
 
       // Descargar la imagen
@@ -35,19 +59,27 @@ export class ProductImagesService {
 
       // Generar nombre único para la imagen
       const extension = this.obtenerExtensionDesdeContentType(contentType);
-      const nombreArchivo = `${uuidv4()}${extension}`;
-      const rutaArchivo = path.join(assetsDir, nombreArchivo);
+      const nombreArchivo = `producto-${uuidv4()}${extension}`;
+      const rutaArchivo = path.join(imagensDir, nombreArchivo);
 
       // Guardar imagen en el sistema de archivos
       fs.writeFileSync(rutaArchivo, response.data);
 
-      // Devolver ruta relativa para usar desde el frontend
-      const rutaRelativa = `../assets/${nombreArchivo}`;
+      // Ruta pública
+      const rutaPublica = `/images/productos/${nombreArchivo}`;
+
+      // Si se proporciona productoId, se almacena en la base de datos
+      if (productoId) {
+        return await this.agregar(productoId, {
+          url: rutaPublica,
+          principal,
+        });
+      }
 
       return {
-        ruta: rutaRelativa,
         nombre: nombreArchivo,
-        url: `${process.env.API_URL || 'http://localhost:3000'}/assets/${nombreArchivo}`,
+        url: rutaPublica,
+        ruta: rutaPublica,
         mensaje: 'Imagen descargada y guardada correctamente',
       };
     } catch (error) {

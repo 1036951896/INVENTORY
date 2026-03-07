@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
   Logger,
+  ForbiddenException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { OrdersService } from './orders.service';
@@ -41,6 +42,17 @@ export class OrdersController {
     // Admin sees all orders, clients see only their orders
     const usuarioId = req.user.rol === 'ADMIN' ? undefined : req.user.id;
     return this.ordersService.findAll(usuarioId);
+  }
+
+  @Get('admin/statistics')
+  @UseGuards(AuthGuard('jwt'))
+  async getStatistics(@Request() req: any) {
+    // Only admins can access statistics
+    if (req.user.rol !== 'ADMIN') {
+      throw new ForbiddenException('Solo administradores pueden acceder a estadísticas');
+    }
+
+    return this.ordersService.getStatistics();
   }
 
   @Get(':id')

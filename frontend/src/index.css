@@ -1,0 +1,13 @@
+/* Los estilos principales vienen de /css/global.css, /css/ecommerce-figma.css, etc. */
+/* Este archivo solo garantiza configuración base */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  min-height: 100vh;
+  width: 100%;
+}

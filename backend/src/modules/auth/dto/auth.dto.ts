@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, MinLength, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, MinLength, IsString, IsOptional } from 'class-validator';
 
 export class LoginDto {
   @IsEmail()
@@ -9,10 +9,40 @@ export class LoginDto {
   password!: string;
 }
 
+export class AddressDataDto {
+  @IsString()
+  calle!: string;
+
+  @IsString()
+  numero!: string;
+
+  @IsOptional()
+  @IsString()
+  apartamento?: string;
+
+  @IsString()
+  ciudad!: string;
+
+  @IsString()
+  departamento!: string;
+
+  @IsOptional()
+  @IsString()
+  codigoPostal?: string;
+
+  @IsOptional()
+  @IsString()
+  pais?: string;
+}
+
 export class RegisterDto {
   @IsNotEmpty()
   @IsString()
   nombre!: string;
+
+  @IsOptional()
+  @IsString()
+  apellido?: string;
 
   @IsEmail()
   email!: string;
@@ -24,6 +54,9 @@ export class RegisterDto {
   @IsNotEmpty()
   @IsString()
   telefono!: string;
+
+  @IsOptional()
+  direccion?: AddressDataDto;
 }
 
 export class AuthResponseDto {

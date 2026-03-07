@@ -81,10 +81,13 @@ const categoriasSeed = [
 ];
 
 async function main() {
-  // Borrar datos existentes
+  // Borrar datos existentes (en orden correcto de FK)
   console.log('🧹 Limpiando base de datos...');
   await prisma.orderItem.deleteMany({});
+  await prisma.productImage.deleteMany({});
+  await prisma.stockMovement.deleteMany({});
   await prisma.order.deleteMany({});
+  await prisma.address.deleteMany({});
   await prisma.user.deleteMany({});
   await prisma.product.deleteMany({});
   await prisma.category.deleteMany({});
@@ -119,7 +122,7 @@ async function main() {
   const hashedAdminPassword = await bcrypt.hash('admin123', 10);
   const hashedClientPassword = await bcrypt.hash('cliente123', 10);
 
-  await prisma.user.create({
+  const adminUser = await prisma.user.create({
     data: {
       nombre: 'Administrador',
       email: 'admin@inventory.com',
@@ -130,7 +133,7 @@ async function main() {
     },
   });
 
-  await prisma.user.create({
+  const clientUser = await prisma.user.create({
     data: {
       nombre: 'Cliente Prueba',
       email: 'cliente@inventory.com',
@@ -141,12 +144,45 @@ async function main() {
     },
   });
 
+  // Crear direcciones por defecto para los usuarios
+  console.log('📍 Creando direcciones de prueba...');
+  await prisma.address.create({
+    data: {
+      usuarioId: adminUser.id,
+      calle: 'Carrera 64 b',
+      numero: '40-33',
+      apartamento: 'Oficina 1',
+      ciudad: 'Bogotá',
+      departamento: 'Cundinamarca',
+      codigoPostal: '110111',
+      pais: 'Colombia',
+      esPrincipal: true,
+    },
+  });
+
+  await prisma.address.create({
+    data: {
+      usuarioId: clientUser.id,
+      calle: 'Carrera 64 b',
+      numero: '40-33',
+      apartamento: 'Apto 101',
+      ciudad: 'Bogotá',
+      departamento: 'Cundinamarca',
+      codigoPostal: '110111',
+      pais: 'Colombia',
+      esPrincipal: true,
+    },
+  });
+
   console.log('\n✅ ¡Seed completado exitosamente!');
   console.log(`✓ ${categoriasSeed.length} categorías creadas`);
   console.log(`✓ ${productosJSON.length} productos creados`);
+  console.log('✓ 2 usuarios creados con direcciones');
   console.log('\n📋 Credenciales de prueba:');
   console.log('  Admin: admin@inventory.com / admin123');
   console.log('  Cliente: cliente@inventory.com / cliente123');
+  console.log('\n📍 Direcciones guardadas:');
+  console.log('  Carrera 64 b #40-33, Bogotá, Cundinamarca');
 }
 
 main()

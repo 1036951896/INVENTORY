@@ -1,6 +1,5 @@
-import { IsString, IsNumber, IsEnum, IsOptional, IsArray, ValidateNested, Min } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsArray, ValidateNested, Min } from 'class-validator';
 import { Type, Transform } from 'class-transformer';
-import { OrderStatus } from '@prisma/client';
 
 export class CreateOrderItemDto {
   @IsString()
@@ -30,9 +29,9 @@ export class CreateOrderDto {
 }
 
 export class UpdateOrderStatusDto {
-  @IsEnum(OrderStatus)
+  @IsString()
   @Transform(({ value }) => value?.toString().toUpperCase() || value)
-  estado: OrderStatus = OrderStatus.PENDIENTE;
+  estado: string = "PENDIENTE"; // PENDIENTE | EN_PREPARACION | ENTREGADO | CANCELADO
 
   @IsString()
   @IsOptional()
@@ -47,6 +46,7 @@ export class OrderItemResponseDto {
   producto: {
     id: string;
     nombre: string;
+    imagen?: string;
   } = { id: '', nombre: '' };
 }
 
@@ -54,7 +54,7 @@ export class OrderResponseDto {
   id: string = '';
   numero: string = '';
   total: number = 0;
-  estado: OrderStatus = OrderStatus.PENDIENTE;
+  estado: string = "PENDIENTE"; // PENDIENTE | EN_PREPARACION | ENTREGADO | CANCELADO
   notasEntrega?: string = '';
   entregaEn?: Date = undefined;
   usuario: {

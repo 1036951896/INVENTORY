@@ -2,7 +2,6 @@
 import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateOrderDto, UpdateOrderStatusDto, OrderResponseDto } from './dto/order.dto';
-import { OrderStatus } from '@prisma/client';
 import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
@@ -59,7 +58,7 @@ export class OrdersService {
       data: {
         numero,
         total,
-        estado: OrderStatus.PENDIENTE,
+        estado: "PENDIENTE",
         usuarioId,
         direccionId: createOrderDto.direccionId,
         notasEntrega: createOrderDto.notasEntrega,
@@ -97,8 +96,11 @@ export class OrdersService {
             producto: {
               select: {
                 id: true,
-                nombre: true,
-              },
+                nombre: true,                imagenes: {
+                  where: { principal: true },
+                  take: 1,
+                  select: { url: true }
+                }              },
             },
           },
         },
@@ -130,7 +132,7 @@ export class OrdersService {
 
     // Enviar WhatsApp al admin (número de prueba)
     const adminPhone = '573116579677'; // Número de prueba solicitado
-    const adminMsg = `Hola Administrador,\n\nSe ha recibido un nuevo pedido (${order.numero}) de ${order.usuario.nombre} (${order.usuario.telefono || 'sin teléfono'}). Por favor, ingrese al panel para revisarlo.`;
+    const adminMsg = `Hola Administrador,\n\nSe ha recibido un nuevo pedido (${order.numero}) de ${(order as any).usuario.nombre} (${(order as any).usuario.telefono || 'sin teléfono'}). Por favor, ingrese al panel para revisarlo.`;
     try {
       await this.notificationsService.sendWhatsAppMessage(adminPhone, adminMsg, 'ADMIN');
     } catch (err) {
@@ -160,6 +162,11 @@ export class OrdersService {
               select: {
                 id: true,
                 nombre: true,
+                imagenes: {
+                  where: { principal: true },
+                  take: 1,
+                  select: { url: true }
+                }
               },
             },
           },
@@ -200,6 +207,11 @@ export class OrdersService {
               select: {
                 id: true,
                 nombre: true,
+                imagenes: {
+                  where: { principal: true },
+                  take: 1,
+                  select: { url: true }
+                }
               },
             },
           },
@@ -250,7 +262,7 @@ export class OrdersService {
       updateData.notasEntrega = updateStatusDto.notasEntrega;
     }
 
-    if (updateStatusDto.estado === OrderStatus.ENTREGADO) {
+    if (updateStatusDto.estado === "ENTREGADO") {
       updateData.entregaEn = new Date();
     }
 
@@ -291,7 +303,7 @@ export class OrdersService {
     });
 
     // Si el pedido fue aprobado (por ejemplo, estado pasa a EN_PREPARACION o ENTREGADO), notificar al cliente
-    if (updated.estado === OrderStatus.EN_PREPARACION || updated.estado === OrderStatus.ENTREGADO) {
+    if (updated.estado === "EN_PREPARACION" || updated.estado === "ENTREGADO") {
       const clientePhone = updated.usuario.telefono;
       if (clientePhone) {
         const clienteMsg = `Estimado/a ${updated.usuario.nombre},\n\nNos complace informarle que su pedido (${updated.numero}) ha sido aprobado y será entregado en los próximos días.\nAgradecemos su confianza y preferencia.\n\nAtentamente, Distribuidora Inventory`;
@@ -316,7 +328,7 @@ export class OrdersService {
       throw new NotFoundException(`Orden con ID ${id} no encontrada`);
     }
 
-    if (order.estado === OrderStatus.ENTREGADO) {
+    if (order.estado === "ENTREGADO") {
       throw new BadRequestException('No se puede cancelar una orden entregada');
     }
 
@@ -334,7 +346,7 @@ export class OrdersService {
 
     const updated = await this.prisma.order.update({
       where: { id },
-      data: { estado: OrderStatus.CANCELADO },
+      data: { estado: "CANCELADO" },
       include: {
         usuario: {
           select: {
@@ -385,5 +397,134 @@ export class OrdersService {
       createdAt: order.createdAt,
       updatedAt: order.updatedAt,
     };
+  }
+
+  async getStatistics() {
+    try {
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      // Total metrics
+      const totalOrders = await this.prisma.order.count();
+      const totalRevenue = await this.prisma.order.aggregate({
+        _sum: { total: true },
+      });
+      const completedOrders = await this.prisma.order.count({
+        where: { estado: 'ENTREGADO' },
+      });
+      const pendingOrders = await this.prisma.order.count({
+        where: { estado: 'PENDIENTE' },
+      });
+
+      // Sales by day (last 30 days)
+      let ordersByDay: any[] = [];
+      try {
+        ordersByDay = (await this.prisma.$queryRaw`
+          SELECT 
+            DATE(created_at) as date,
+            COUNT(*) as orders,
+            COALESCE(SUM(total), 0) as total
+          FROM "Order"
+          WHERE created_at >= ${thirtyDaysAgo}
+          GROUP BY DATE(created_at)
+          ORDER BY date ASC
+        `) as any[];
+      } catch (err) {
+        this.logger.warn('Error fetching ordersByDay:', err);
+        ordersByDay = [];
+      }
+
+      // Sales by category (last 30 days)
+      let salesByCategory: any[] = [];
+      try {
+        salesByCategory = (await this.prisma.$queryRaw`
+          SELECT 
+            c.nombre as category,
+            COUNT(DISTINCT o.id) as orders,
+            COUNT(oi.id) as items,
+            COALESCE(SUM(oi.subtotal), 0) as total
+          FROM "Order" o
+          JOIN "OrderItem" oi ON o.id = oi.order_id
+          JOIN "Product" p ON oi.product_id = p.id
+          JOIN "Category" c ON p.category_id = c.id
+          WHERE o.created_at >= ${thirtyDaysAgo}
+          GROUP BY c.id, c.nombre
+          ORDER BY total DESC
+        `) as any[];
+      } catch (err) {
+        this.logger.warn('Error fetching salesByCategory:', err);
+        salesByCategory = [];
+      }
+
+      // Top customers (last 30 days)
+      let topCustomers: any[] = [];
+      try {
+        topCustomers = (await this.prisma.$queryRaw`
+          SELECT 
+            u.id,
+            u.nombre,
+            u.email,
+            COUNT(o.id) as orders,
+            COALESCE(SUM(o.total), 0) as total
+          FROM "User" u
+          LEFT JOIN "Order" o ON u.id = o.usuario_id AND o.created_at >= ${thirtyDaysAgo}
+          GROUP BY u.id, u.nombre, u.email
+          HAVING COUNT(o.id) > 0
+          ORDER BY total DESC
+          LIMIT 10
+        `) as any[];
+      } catch (err) {
+        this.logger.warn('Error fetching topCustomers:', err);
+        topCustomers = [];
+      }
+
+      // Order status breakdown
+      let statusBreakdown: any[] = [];
+      try {
+        const breakdown = await this.prisma.order.groupBy({
+          by: ['estado'],
+          _count: {
+            id: true,
+          },
+        });
+        statusBreakdown = breakdown as any[];
+      } catch (err) {
+        this.logger.warn('Error fetching statusBreakdown:', err);
+        statusBreakdown = [];
+      }
+
+      return {
+        summary: {
+          totalOrders,
+          totalRevenue: totalRevenue._sum.total || 0,
+          completedOrders,
+          pendingOrders,
+          completionRate: totalOrders > 0 ? Math.round((completedOrders / totalOrders) * 100) : 0,
+        },
+        salesByDay: ordersByDay,
+        salesByCategory: salesByCategory,
+        topCustomers: topCustomers,
+        statusBreakdown: statusBreakdown.map((status: any) => ({
+          status: status.estado,
+          count: status._count.id,
+        })),
+      };
+    } catch (err) {
+      this.logger.error('Error in getStatistics:', err);
+      // Return empty statistics on error
+      return {
+        summary: {
+          totalOrders: 0,
+          totalRevenue: 0,
+          completedOrders: 0,
+          pendingOrders: 0,
+          completionRate: 0,
+        },
+        salesByDay: [],
+        salesByCategory: [],
+        topCustomers: [],
+        statusBreakdown: [],
+      };
+    }
   }
 }

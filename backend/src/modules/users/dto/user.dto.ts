@@ -1,6 +1,5 @@
-import { IsString, IsEmail, IsOptional, IsEnum, IsBoolean, ValidateNested } from 'class-validator';
+import { IsString, IsEmail, IsOptional, IsBoolean, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { UserRole } from '@prisma/client';
 
 // DTO para direcciones
 export class CreateAddressDto {
@@ -51,9 +50,9 @@ export class CreateUserDto {
   @IsOptional()
   telefono?: string;
 
-  @IsEnum(UserRole)
+  @IsString()
   @IsOptional()
-  rol?: UserRole;
+  rol?: string; // ADMIN | CLIENTE
 
   // Datos de dirección
   @ValidateNested()
@@ -71,9 +70,9 @@ export class UpdateUserDto {
   @IsOptional()
   telefono?: string;
 
-  @IsEnum(UserRole)
+  @IsString()
   @IsOptional()
-  rol?: UserRole;
+  rol?: string; // ADMIN | CLIENTE
 }
 
 export class UserResponseDto {
@@ -81,7 +80,7 @@ export class UserResponseDto {
   nombre!: string;
   email!: string;
   telefono?: string;
-  rol!: UserRole;
+  rol!: string; // ADMIN | CLIENTE
   activo!: boolean;
   createdAt!: Date;
 }

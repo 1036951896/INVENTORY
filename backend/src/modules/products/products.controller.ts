@@ -16,7 +16,7 @@ export class ProductsController {
   @Get()
   async findAll(
     @Query('page') page: number = 1,
-    @Query('limit') limit: number = 20,
+    @Query('limit') limit: number = 500,
     @Query('search') search?: string,
   ) {
     return this.productsService.findAll(page, limit, search);
@@ -26,7 +26,7 @@ export class ProductsController {
   async findByCategory(
     @Param('categoriaId') categoriaId: string,
     @Query('page') page: number = 1,
-    @Query('limit') limit: number = 20,
+    @Query('limit') limit: number = 500,
   ) {
     return this.productsService.findByCategory(categoriaId, page, limit);
   }

@@ -6,21 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
-}
-
-// ===== ENUMS =====
-enum UserRole {
-  ADMIN
-  CLIENTE
-}
-
-enum OrderStatus {
-  PENDIENTE
-  EN_PREPARACION
-  ENTREGADO
-  CANCELADO
 }
 
 // ===== MODELS =====
@@ -32,7 +19,7 @@ model User {
   email     String     @unique
   password  String
   telefono  String?
-  rol       UserRole   @default(CLIENTE)
+  rol       String     @default("CLIENTE") // ADMIN | CLIENTE
   activo    Boolean    @default(true)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
@@ -194,7 +181,7 @@ model Order {
   id        String      @id @default(cuid())
   numero    String      @unique // Ej: PED-1234567890
   total     Int         // Total en centavos de COP
-  estado    OrderStatus @default(PENDIENTE)
+  estado    String      @default("PENDIENTE") // PENDIENTE | EN_PREPARACION | ENTREGADO | CANCELADO
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   entregaEn DateTime?
