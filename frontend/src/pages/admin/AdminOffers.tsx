@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react';
-import { authService } from '../../services/auth.service';
 import './admin-offers.css';
-
-const VITE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 interface Offer {
   id: string;
@@ -34,7 +31,6 @@ export default function AdminOffers() {
   const fetchOffers = async () => {
     try {
       setLoading(true);
-      const token = authService.getToken();
       // Simulamos datos de ejemplo hasta tener endpoint real
       const mockOffers: Offer[] = [
         {

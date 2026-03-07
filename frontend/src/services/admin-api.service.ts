@@ -94,15 +94,15 @@ export const offersApiService = {
   },
 
   // Actualizar una oferta
-  update: async (id: string, data: any) => {
+  update: async (_id: string, data: any) => {
     // TODO: Implementar en backend
     return data;
   },
 
   // Eliminar una oferta
-  delete: async (id: string) => {
+  delete: async (_id: string) => {
     // TODO: Implementar en backend
-    return { id };
+    return { id: _id };
   },
 };
 

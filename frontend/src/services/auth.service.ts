@@ -82,7 +82,7 @@ export const authService = {
   // Verificar si es admin
   isAdmin(): boolean {
     const user = this.getCurrentUser();
-    return user?.role === 'administrador';
+    return user?.rol === 'ADMIN';
   },
 
   // Obtener token actual

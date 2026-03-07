@@ -97,7 +97,7 @@ export default function AdminReports() {
         const productosVendidos = Object.values(salesByProduct)
           .sort((a, b) => b.units - a.units)
           .slice(0, 10)
-          .map((prod, idx) => ({
+          .map((prod) => ({
             ...prod,
             percentage: Math.round((prod.units / Math.max(...Object.values(salesByProduct).map(p => p.units), 1)) * 100)
           }));
