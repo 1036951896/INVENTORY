@@ -23,6 +23,7 @@ export class ProductsService {
         precio: createProductDto.precio,
         stock: createProductDto.stock,
         categoriaId: createProductDto.categoriaId,
+        activo: true, // Productos nuevos activos por defecto
       },
       include: {
         categoria: true,

@@ -7,7 +7,7 @@ import { alert2 } from '../utils/notifications';
 import { mockProducts } from '../data/mockProducts';
 
 const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-const USE_MOCK_DATA = true; // Cambiar a false cuando tengas el backend corriendo
+const USE_MOCK_DATA = false; // Cambiar a false cuando tengas el backend corriendo
 
 interface ProductGridProps {
   activeCategory?: string;
