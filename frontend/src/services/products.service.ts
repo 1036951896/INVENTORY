@@ -5,8 +5,16 @@ export const productsService = {
   // Obtener todos los productos
   async getAll(page = 1, limit = 100): Promise<Product[]> {
     const response = await api.get(`/products?page=${page}&limit=${limit}`);
-    // El backend puede devolver {data: [...]} o directamente [...]
-    return Array.isArray(response.data) ? response.data : response.data.data;
+    
+    // El backend devuelve { data: [...], pagination: {...} }
+    let products = Array.isArray(response.data) ? response.data : response.data?.data || [];
+    
+    // Mapear productos para extraer la imagen principal y convertir categoría
+    return products.map((product: any) => ({
+      ...product,
+      categoria: product.categoria?.nombre || product.categoria || 'Sin categoría',
+      imagen: product.imagenes?.[0]?.url || product.imagen || '',
+    }));
   },
 
   // Obtener producto por ID
@@ -35,6 +43,12 @@ export const productsService = {
   // Buscar productos
   async search(query: string): Promise<Product[]> {
     const response = await api.get(`/products/search?q=${query}`);
-    return Array.isArray(response.data) ? response.data : response.data.data;
+    let products = Array.isArray(response.data) ? response.data : response.data?.data || [];
+    
+    return products.map((product: any) => ({
+      ...product,
+      categoria: product.categoria?.nombre || product.categoria || 'Sin categoría',
+      imagen: product.imagenes?.[0]?.url || product.imagen || '',
+    }));
   },
 };
