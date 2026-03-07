@@ -57,21 +57,26 @@ services:
     ipAllowList: []
 
   # ============================================================================
-  # Frontend React + Vite (DESHABILITADO - aún no está listo)
+  # Frontend React + Vite
   # ============================================================================
-  # - type: web
-  #   name: inventory-frontend
-  #   env: node
-  #   repo: https://github.com/1036951896/INVENTORY
-  #   rootDir: ./frontend
+  - type: web
+    name: inventory-frontend
+    env: node
+    repo: https://github.com/1036951896/INVENTORY
+    rootDir: ./frontend
+    runtime: node
+    nodeVersion: 18
 
-  #   buildCommand: npm install --legacy-peer-deps && npm run build
-  #   startCommand: npm start
+    buildCommand: npm install && npm run build
+    startCommand: npm run preview
 
-  #   envVars:
-  #     - key: VITE_API_URL
-  #       value: https://inventory-api-74yl.onrender.com
-  #     - key: NODE_ENV
-  #       value: production
+    envVars:
+      - key: VITE_API_URL
+        value: https://inventory-api-74yl.onrender.com
+      - key: NODE_ENV
+        value: production
 
-  #   autoDeploy: true
+    autoDeploy: true
+
+    # Health check para frontend
+    healthCheckPath: /
