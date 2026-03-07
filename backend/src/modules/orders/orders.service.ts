@@ -423,7 +423,7 @@ export class OrdersService {
         // Traer todas las órdenes sin agrupar
         const allOrders = await this.prisma.order.findMany({
           select: {
-            created_at: true,
+            createdAt: true,
             total: true,
           }
         });
@@ -431,7 +431,7 @@ export class OrdersService {
         // Agrupar por fecha en JavaScript
         const groupedByDate: { [key: string]: { orders: number; total: number } } = {};
         allOrders.forEach(order => {
-          const dateStr = order.created_at ? new Date(order.created_at).toISOString().split('T')[0] : 'Unknown';
+          const dateStr = order.createdAt ? new Date(order.createdAt).toISOString().split('T')[0] : 'Unknown';
           if (!groupedByDate[dateStr]) {
             groupedByDate[dateStr] = { orders: 0, total: 0 };
           }
@@ -457,18 +457,18 @@ export class OrdersService {
       try {
         const orderItems = await this.prisma.orderItem.findMany({
           include: {
-            product: {
+            producto: {
               include: {
-                category: true
+                categoria: true
               }
             }
           }
         });
 
-        const groupedByCategory: { [key: string]: { category: string; orders: number; items: number; total: number } } = {};
+        const groupedByCategory: { [key: string]: { category: string; orders: Set<string>; items: number; total: number } } = {};
         
         orderItems.forEach(item => {
-          const categoryName = item.product?.category?.nombre || 'Sin categoría';
+          const categoryName = item.producto?.categoria?.nombre || 'Sin categoría';
           if (!groupedByCategory[categoryName]) {
             groupedByCategory[categoryName] = { 
               category: categoryName, 
@@ -477,7 +477,7 @@ export class OrdersService {
               total: 0 
             };
           }
-          groupedByCategory[categoryName].orders.add(item.order_id);
+          groupedByCategory[categoryName].orders.add(item.ordenId);
           groupedByCategory[categoryName].items += 1;
           groupedByCategory[categoryName].total += item.subtotal || 0;
         });
@@ -522,20 +522,20 @@ export class OrdersService {
       try {
         const orderItems = await this.prisma.orderItem.findMany({
           include: {
-            product: true
+            producto: true
           }
         });
 
         const productMap: { [key: string]: { id: string; nombre: string; precio: number; cantidad_vendida: number; total_unidades: number; total_ingresos: number } } = {};
         
         orderItems.forEach(item => {
-          if (!item.product) return;
-          const prodId = item.product.id;
+          if (!item.producto) return;
+          const prodId = item.producto.id;
           if (!productMap[prodId]) {
             productMap[prodId] = {
               id: prodId,
-              nombre: item.product.nombre,
-              precio: item.product.precio,
+              nombre: item.producto.nombre,
+              precio: item.producto.precio,
               cantidad_vendida: 0,
               total_unidades: 0,
               total_ingresos: 0
@@ -543,7 +543,7 @@ export class OrdersService {
           }
           productMap[prodId].cantidad_vendida += 1;
           productMap[prodId].total_unidades += item.cantidad || 0;
-          productMap[prodId].total_ingresos += (item.cantidad || 0) * (item.precio_unitario || 0);
+          productMap[prodId].total_ingresos += (item.cantidad || 0) * (item.precioUnitario || 0);
         });
 
         topProducts = Object.values(productMap)
