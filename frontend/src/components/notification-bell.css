@@ -14,18 +14,19 @@
   justify-content: center;
   width: 40px;
   height: 40px;
+  padding: 0;
   border: none;
   background: transparent;
-  color: #333;
+  color: #667eea;
   cursor: pointer;
-  border-radius: 50%;
+  border-radius: 6px;
   transition: all 0.3s ease;
   margin-right: 12px;
 }
 
 .notification-bell-btn:hover {
-  background-color: #f0f0f0;
-  color: #0066cc;
+  background-color: rgba(102, 126, 234, 0.1);
+  color: #5568d3;
 }
 
 .notification-bell-btn svg {
