@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { authService } from '../../services/auth.service';
 import { alert2 } from '../../utils/notifications';
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import './admin-reports.css';
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -282,8 +283,35 @@ export default function AdminReports() {
               </div>
 
               <div className="report-placeholder">
-                <p>Gráfico de tendencia de ventas</p>
-                <p style={{fontSize: '0.9rem', color: '#9ca3af', marginTop: '0.5rem'}}>Integrar con Recharts</p>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={reportData.data || []}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis 
+                      dataKey="date" 
+                      stroke="#9ca3af"
+                      style={{ fontSize: '0.85rem' }}
+                    />
+                    <YAxis 
+                      stroke="#9ca3af"
+                      style={{ fontSize: '0.85rem' }}
+                      label={{ value: 'COP $', angle: -90, position: 'insideLeft' }}
+                    />
+                    <Tooltip 
+                      formatter={(value: any) => `$${value?.toLocaleString('es-CO', {maximumFractionDigits: 0}) || 0}`}
+                      contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '0.5rem' }}
+                    />
+                    <Legend />
+                    <Line 
+                      type="monotone" 
+                      dataKey="sales" 
+                      stroke="#6366f1" 
+                      strokeWidth={2}
+                      dot={{ fill: '#6366f1', r: 4 }}
+                      activeDot={{ r: 6 }}
+                      name="Ingresos"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
               </div>
 
               <table className="report-table">
@@ -319,6 +347,34 @@ export default function AdminReports() {
                 <button className="btn-export-csv" onClick={exportCSV}>
                   Exportar CSV
                 </button>
+              </div>
+
+              <div style={{ marginBottom: '2rem' }}>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={reportData.data || []}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis 
+                      dataKey="name" 
+                      angle={-45}
+                      textAnchor="end"
+                      height={100}
+                      stroke="#9ca3af"
+                      style={{ fontSize: '0.75rem' }}
+                    />
+                    <YAxis 
+                      stroke="#9ca3af"
+                      style={{ fontSize: '0.85rem' }}
+                      label={{ value: 'Unidades', angle: -90, position: 'insideLeft' }}
+                    />
+                    <Tooltip formatter={(value: any) => value}/>
+                    <Legend />
+                    <Bar 
+                      dataKey="units" 
+                      fill="#6366f1"
+                      name="Unidades Vendidas"
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
 
               <table className="report-table">
