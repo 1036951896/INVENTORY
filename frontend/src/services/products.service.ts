@@ -6,9 +6,6 @@ export const productsService = {
   async getAll(page = 1, limit = 100): Promise<Product[]> {
     try {
       const response = await api.get(`/products?page=${page}&limit=${limit}`);
-      console.log('Full API Response:', response);
-      console.log('Response data type:', typeof response.data);
-      console.log('Response.data:', response.data);
       
       // Manejar ambos casos: array directo o {data: [...], pagination: {...}}
       let products: any[] = [];
@@ -16,25 +13,21 @@ export const productsService = {
       if (Array.isArray(response.data)) {
         // Si es un array directo
         products = response.data;
-        console.log('Response is direct array');
       } else if (response.data?.data && Array.isArray(response.data.data)) {
         // Si es {data: [...], pagination: {...}}
         products = response.data.data;
-        console.log('Response has data property');
       } else {
         // Caso inesperado
         console.error('Unexpected response format:', response.data);
         return [];
       }
       
-      console.log('Products before mapping:', products.length, products);
-      
       // Mapear productos para extraer la imagen principal y convertir categoría
       const mapped = products.map((product: any) => {
         const imagen = product.imagenes?.[0]?.url || product.imagen || '';
         const categoria = product.categoria?.nombre || product.categoria || 'Sin categoría';
         
-        const mapped: Product = {
+        const mappedProduct: Product = {
           id: product.id,
           nombre: product.nombre || '',
           descripcion: product.descripcion || '',
@@ -44,14 +37,12 @@ export const productsService = {
           imagen,
           activo: product.activo ?? true,
         };
-        return mapped;
+        return mappedProduct;
       });
       
-      console.log('Mapped products:', mapped);
       return mapped;
     } catch (error: any) {
       console.error('Error in productsService.getAll:', error);
-      console.error('Error response:', error.response);
       throw error;
     }
   },

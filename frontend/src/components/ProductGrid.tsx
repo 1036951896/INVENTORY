@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Product } from '../types';
 import { productsService } from '../services/products.service';
@@ -21,20 +21,7 @@ export default function ProductGrid({ activeCategory = 'todas' }: ProductGridPro
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    loadProducts();
-  }, []);
-
-  // Filtrar productos cuando cambia la categoría
-  useEffect(() => {
-    if (activeCategory === 'todas') {
-      setFilteredProducts(products);
-    } else {
-      setFilteredProducts(products.filter(p => p.categoria === activeCategory));
-    }
-  }, [activeCategory, products]);
-
-  const loadProducts = async () => {
+  const loadProducts = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -46,14 +33,9 @@ export default function ProductGrid({ activeCategory = 'todas' }: ProductGridPro
         setFilteredProducts(mockProducts);
       } else {
         const data = await productsService.getAll();
-        console.log('Products loaded:', data);
         
         if (!Array.isArray(data)) {
           throw new Error('Los productos no fueron cargados correctamente');
-        }
-        
-        if (data.length === 0) {
-          console.warn('No products found');
         }
         
         setProducts(data);
@@ -70,7 +52,20 @@ export default function ProductGrid({ activeCategory = 'todas' }: ProductGridPro
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadProducts();
+  }, []); // Solo ejecutarse una vez al montar
+
+  // Filtrar productos cuando cambia la categoría
+  useEffect(() => {
+    if (activeCategory === 'todas') {
+      setFilteredProducts(products);
+    } else {
+      setFilteredProducts(products.filter(p => p.categoria === activeCategory));
+    }
+  }, [activeCategory, products]);
 
   const handleAddToCart = (product: Product, e?: React.MouseEvent) => {
     if (e) {
