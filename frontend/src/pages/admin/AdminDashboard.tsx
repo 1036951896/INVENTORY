@@ -19,6 +19,7 @@ interface Statistics {
   salesByDay: Array<{ date: string; orders: number; total: number }>;
   salesByCategory: Array<{ category: string; orders: number; items: number; total: number }>;
   topCustomers: Array<{ id: string; nombre: string; email: string; orders: number; total: number }>;
+  topProducts: Array<{ id: string; nombre: string; precio: number; cantidad_vendida: number; total_unidades: number; total_ingresos: number }>;
   statusBreakdown: Array<{ status: string; count: number }>;
 }
 
@@ -231,30 +232,40 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Top Customers */}
+      {/* Top Products */}
       <div className="top-customers-card">
-        <h3>Clientes Top</h3>
+        <h3>Productos Más Vendidos</h3>
         <div className="customers-table">
           <div className="table-header">
-            <div className="col-nombre">Cliente</div>
-            <div className="col-email">Email</div>
-            <div className="col-orders">Pedidos</div>
-            <div className="col-total">Gasto Total</div>
+            <div className="col-nombre">Producto</div>
+            <div className="col-email">Precio</div>
+            <div className="col-orders">Unidades</div>
+            <div className="col-total">Ingresos</div>
           </div>
           <div className="table-body">
-            {statistics.topCustomers.map((customer, index) => (
-              <div key={customer.id} className="table-row">
-                <div className="col-nombre">
-                  <span className="rank">#{index + 1}</span>
-                  {customer.nombre}
+            {statistics.topProducts && statistics.topProducts.length > 0 ? (
+              statistics.topProducts.map((product, index) => (
+                <div key={product.id} className="table-row">
+                  <div className="col-nombre">
+                    <span className="rank">#{index + 1}</span>
+                    {product.nombre}
+                  </div>
+                  <div className="col-email">
+                    ${product.precio.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+                  </div>
+                  <div className="col-orders">{product.total_unidades || 0}</div>
+                  <div className="col-total">
+                    ${(product.total_ingresos || 0).toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+                  </div>
                 </div>
-                <div className="col-email">{customer.email}</div>
-                <div className="col-orders">{customer.orders}</div>
-                <div className="col-total">
-                  ${customer.total.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+              ))
+            ) : (
+              <div className="table-row">
+                <div style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#9ca3af' }}>
+                  No hay datos disponibles
                 </div>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>

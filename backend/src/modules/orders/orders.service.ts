@@ -478,6 +478,30 @@ export class OrdersService {
         topCustomers = [];
       }
 
+      // Top products (last 30 days)
+      let topProducts: any[] = [];
+      try {
+        topProducts = (await this.prisma.$queryRaw`
+          SELECT 
+            p.id,
+            p.nombre,
+            p.precio,
+            COUNT(oi.id) as cantidad_vendida,
+            SUM(oi.cantidad) as total_unidades,
+            COALESCE(SUM(oi.cantidad * oi.precio_unitario), 0) as total_ingresos
+          FROM "Product" p
+          LEFT JOIN "OrderItem" oi ON p.id = oi.producto_id
+          LEFT JOIN "Order" o ON oi.order_id = o.id AND o.created_at >= ${thirtyDaysAgo}
+          GROUP BY p.id, p.nombre, p.precio
+          HAVING COUNT(oi.id) > 0
+          ORDER BY total_unidades DESC
+          LIMIT 10
+        `) as any[];
+      } catch (err) {
+        this.logger.warn('Error fetching topProducts:', err);
+        topProducts = [];
+      }
+
       // Order status breakdown
       let statusBreakdown: any[] = [];
       try {
@@ -504,6 +528,7 @@ export class OrdersService {
         salesByDay: ordersByDay,
         salesByCategory: salesByCategory,
         topCustomers: topCustomers,
+        topProducts: topProducts,
         statusBreakdown: statusBreakdown.map((status: any) => ({
           status: status.estado,
           count: status._count.id,
