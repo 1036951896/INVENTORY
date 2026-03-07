@@ -1,5 +1,13 @@
 services:
   # ============================================================================
+  # PostgreSQL Database
+  # ============================================================================
+  - type: pserv
+    name: inventory-db
+    plan: free
+    ipAllowList: []
+
+  # ============================================================================
   # Backend NestJS API
   # ============================================================================
   - type: web
@@ -24,9 +32,8 @@ services:
       - key: JWT_REFRESH_SECRET
         generateValue: true
       - key: CORS_ORIGIN
-        value: https://inventory-frontend-a8da.onrender.com
-      - key: API_URL
-        value: https://inventory-api-74yl.onrender.com
+        # Se actualizará después de crear el frontend
+        value: https://inventory-frontend.onrender.com
       - key: SMTP_HOST
         value: smtp.gmail.com
       - key: SMTP_PORT
@@ -49,14 +56,6 @@ services:
     healthCheckPath: /api/v1/health
 
   # ============================================================================
-  # PostgreSQL Database
-  # ============================================================================
-  - type: pserv
-    name: inventory-db
-    plan: free
-    ipAllowList: []
-
-  # ============================================================================
   # Frontend React + Vite
   # ============================================================================
   - type: web
@@ -68,15 +67,15 @@ services:
     nodeVersion: 18
 
     buildCommand: npm install && npm run build
-    startCommand: npm run preview
+    startCommand: npm run preview -- --host 0.0.0.0 --port 3000
 
     envVars:
       - key: VITE_API_URL
-        value: https://inventory-api-74yl.onrender.com
+        # Se actualizará después de crear el backend
+        value: https://inventory-api.onrender.com
       - key: NODE_ENV
         value: production
 
     autoDeploy: true
 
-    # Health check para frontend
     healthCheckPath: /
