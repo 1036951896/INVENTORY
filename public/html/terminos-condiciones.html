@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Términos y Condiciones - StoreHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/ecommerce-figma.css">
+  <link rel="stylesheet" href="../css/header-limpio.css">
+  <link rel="icon" href="../assets/logo-storehub.svg" type="image/svg+xml">
+  
+  <!-- Configurar BACKEND_URL globalmente -->
+  <script>
+    // En producción en Render, usa la variable de ambiente API_URL
+    // En desarrollo local, usa localhost:3000
+    window.BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3000'
+      : 'https://storehub-api-74yl.onrender.com';
+  </script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+
+    .legal-container {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    .legal-header {
+      background: white;
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border-left: 4px solid #386273;
+    }
+
+    .legal-header h1 {
+      font-size: 2rem;
+      color: #386273;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .legal-header p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .legal-content {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      line-height: 1.8;
+    }
+
+    .legal-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .legal-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .legal-section h2 {
+      font-size: 1.3rem;
+      color: #386273;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      border-bottom: 2px solid #B6E1F2;
+      padding-bottom: 0.5rem;
+    }
+
+    .legal-section h3 {
+      font-size: 1.1rem;
+      color: #555;
+      margin-top: 1.5rem;
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+    }
+
+    .legal-section p {
+      color: #555;
+      margin-bottom: 1rem;
+    }
+
+    .legal-section ul {
+      list-style: none;
+      padding-left: 1.5rem;
+    }
+
+    .legal-section li {
+      color: #555;
+      margin-bottom: 0.8rem;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .legal-section li:before {
+      content: "▪";
+      position: absolute;
+      left: 0;
+      color: #386273;
+      font-weight: bold;
+    }
+
+    .legal-section strong {
+      color: #386273;
+      font-weight: 600;
+    }
+
+    .highlight-box {
+      background-color: #fff3cd;
+      border-left: 4px solid #ff9800;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 8px;
+    }
+
+    .highlight-box p {
+      margin: 0;
+      color: #856404;
+    }
+
+    footer {
+      margin-top: 4rem;
+      background-color: #2c5f73;
+    }
+
+    .nav-toggle {
+      display: none !important;
+    }
+
+    @media (max-width: 768px) {
+      .legal-container {
+        margin: 1.5rem auto;
+      }
+
+      .legal-content {
+        padding: 1.5rem;
+      }
+
+      .legal-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .legal-section h2 {
+        font-size: 1.1rem;
+      }
+    }
+
+    .nav-toggle {
+      display: none !important;
+    }
+
+    /* Header scroll effect */
+    header {
+      transition: all 0.3s ease;
+    }
+
+    header.header-scroll {
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Footer fade in effect */
+    footer {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s ease;
+    }
+  </style>
+</head>
+<body>
+  <!-- ENCABEZADO -->
+  <header>
+    <div class="contenedor">
+      <div class="encabezado-contenedor">
+        <!-- LOGO -->
+        <div class="logo">
+          <img src="../assets/logo-storehub.svg" alt="Logo StoreHub" class="logo-img">
+        </div>
+
+        <!-- BOTÓN HOME A LA DERECHA -->
+        <a href="index.html" class="btn-home" title="Volver a la tienda">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="legal-container">
+      <div class="legal-header">
+        <h1>Términos y Condiciones</h1>
+        <p>Última actualización: 26 de febrero de 2026</p>
+      </div>
+
+      <div class="legal-content">
+        <div class="legal-section">
+          <h2>1. Aceptación de los Términos</h2>
+          <p>Al acceder y utilizar StoreHub (www.storehub.com), aceptas que has leído, entendido y aceptas estar vinculado por estos Términos y Condiciones. Si no aceptas estos términos, por favor no utilices nuestro sitio web o servicios.</p>
+        </div>
+
+        <div class="legal-section">
+          <h2>2. Descripción de Servicios</h2>
+          <p>StoreHub proporciona una plataforma de comercio electrónico para la compra y venta de productos de distribución, abarrotes y artículos de hogar. Nos reservamos el derecho de cambiar, modificar o descontinuar cualquier aspecto de nuestros servicios en cualquier momento.</p>
+        </div>
+
+        <div class="legal-section">
+          <h2>3. Elegibilidad de Usuarios</h2>
+          <p>Para utilizar StoreHub, debes:</p>
+          <ul>
+            <li>Tener al menos 18 años de edad</li>
+            <li>Ser residente de Colombia</li>
+            <li>Proporcionar información precisa y completa en tu registro</li>
+            <li>Mantener la confidencialidad de tu contraseña</li>
+            <li>Usar StoreHub exclusivamente para propósitos legales</li>
+          </ul>
+        </div>
+
+        <div class="legal-section">
+          <h2>4. Creación de Cuenta</h2>
+          <p>Al crear una cuenta, aceptas:</p>
+          <ul>
+            <li>Proporcionar información exacta, actual y completa</li>
+            <li>Mantener la seguridad de tu contraseña</li>
+            <li>Ser responsable de todas las actividades bajo tu cuenta</li>
+            <li>Notificarnos de cualquier uso no autorizado de tu cuenta</li>
+            <li>Aceptar recibir comunicaciones de StoreHub</li>
+          </ul>
+          <p>StoreHub se reserva el derecho de suspender o cancelar cuentas que violen estos términos.</p>
+        </div>
+
+        <div class="legal-section">
+          <h2>5. Catálogo de Productos y Precios</h2>
+          <p>Los precios mostrados en StoreHub están sujetos a cambio sin previo aviso. Nos esforzamos por mantener información de productos precisa, pero no garantizamos que todas las descripciones, precios o disponibilidades sean exactos.</p>
+          <ul>
+            <li>Todos los precios están en COP (Pesos Colombianos)</li>
+            <li>Los precios no incluyen IVA a menos que se indique específicamente</li>
+            <li>Nos reservamos el derecho de rechazar o cancelar pedidos</li>
+            <li>La disponibilidad de productos está limitada al stock actual</li>
+          </ul>
+        </div>
+
+        <div class="legal-section">
+          <h2>6. Proceso de Compra y Pago</h2>
+          <p>Al realizar una compra en StoreHub:</p>
+          <ul>
+            <li>Aceptas los términos de venta de los productos seleccionados</li>
+            <li>Confirmas que tienes autorización para realizar el pago</li>
+            <li>Autorizas a StoreHub a cobrar al método de pago proporcionado</li>
+            <li>La información de pago es procesada por proveedores de pago certificados</li>
+            <li>Un pedido se considera confirmado cuando recibes una confirmación por correo</li>
+          </ul>
+        </div>
+
+        <div class="legal-section">
+          <h2>7. Envío y Entrega</h2>
+          <p>StoreHub utiliza terceros de logística para el envío de producto:</p>
+          <ul>
+            <li>Los tiempos de entrega son estimados y no garantizados</li>
+            <li>El riesgo de pérdida se transfiere al recibir el producto</li>
+            <li>Proporcionamos número de seguimiento para monitorear tu pedido</li>
+            <li>En caso de daño o pérdida, contacta en 7 días hábiles</li>
+            <li>Las entregas rechazadas pueden incurrir en costos adicionales</li>
+          </ul>
+          <div class="highlight-box">
+            <p><strong>⚠ Importante:</strong> Verifica que el producto coincida con tu pedido al momento de la entrega.</p>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <h2>8. Devoluciones y Reembolsos</h2>
+          <p><strong>Política de Devolución:</strong></p>
+          <ul>
+            <li>Los productos pueden devolverse en un plazo de <strong>7 días</strong> desde la entrega</li>
+            <li>El producto debe estar sin uso, en su empaque original</li>
+            <li>El cliente debe reportar defectos dentro de 7 días con pruebas (fotos)</li>
+            <li>Los costos de envío de la compra original no son reembolsables (excepto por defecto)</li>
+            <li>Los reembolsos se procesan en 5-10 días hábiles después de inspección</li>
+          </ul>
+        </div>
+
+        <div class="legal-section">
+          <h2>9. Limitación de Responsabilidad</h2>
+          <p>StoreHub NO es responsable por:</p>
+          <ul>
+            <li>Daños directos, indirectos, incidentales o consecuentes</li>
+            <li>Pérdida de datos, ingresos o beneficios esperados</li>
+            <li>Indisponibilidad temporal del sitio web</li>
+            <li>Errores u omisiones en descripciones de productos</li>
+            <li>Circunstancias de fuerza mayor o casos fortuitos</li>
+          </ul>
+          <p>La responsabilidad total de StoreHub ante cualquier reclamo no excederá el monto pagado por el producto.</p>
+        </div>
+
+        <div class="legal-section">
+          <h2>10. Prohibiciones</h2>
+          <p>No está permitido:</p>
+          <ul>
+            <li>Utilizar StoreHub para actividades ilegales</li>
+            <li>Acceder no autorizado a nuestros sistemas</li>
+            <li>Recopilar datos de otros usuarios</li>
+            <li>Realizar múltiples pedidos para eludir restricciones</li>
+            <li>Usar información falsa para registrarse o comprar</li>
+            <li>Acosar, amenazar o ofender a personal de StoreHub</li>
+            <li>Realizar comentarios o reseñas falsas sobre productos</li>
+          </ul>
+        </div>
+
+        <div class="legal-section">
+          <h2>11. Propiedad Intelectual</h2>
+          <p>Todo contenido en StoreHub (textos, imágenes, logos, diseños) son propiedad exclusiva de StoreHub o están bajo licencia. No está permitido reproducir, distribuir o crear obras derivadas sin autorización expresa.</p>
+        </div>
+
+        <div class="legal-section">
+          <h2>12. Cambios a estos Términos</h2>
+          <p>StoreHub se reserva el derecho de modificar estos Términos en cualquier momento. Los cambios entrarán en vigencia inmediatamente después de su publicación. Tu uso continuado de StoreHub constituye aceptación de los cambios.</p>
+        </div>
+
+        <div class="legal-section">
+          <h2>13. Contacto y Disputas</h2>
+          <p>Para reportar violaciones de estos términos o resolver disputas:</p>
+          <ul>
+            <li><strong>Email:</strong> legal@storehub.com</li>
+            <li><strong>WhatsApp:</strong> +57 315 5508228</li>
+            <li><strong>Dirección:</strong> Carrera 64 b # 40-33, Bogotá, Colombia</li>
+          </ul>
+          <p>Estos términos se rigen por las leyes de Colombia.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-contenido">
+      <div class="footer-seccion">
+        <h3>Sobre Nosotros</h3>
+        <p>StoreHub es tu distribuidora de confianza para productos de hogar y abarrotes de la mejor calidad.</p>
+        <div class="redes-sociales">
+          <a href="#" title="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+          <a href="#" title="Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
+              <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.117.6c-.388.15-.76.368-1.085.683-.315.309-.533.697-.686 1.086-.266.79-.467 1.66-.527 2.938C1.031 8.333 1.016 8.74 1.016 12s.015 3.667.072 4.947c.06 1.277.261 2.148.527 2.938.153.389.37.756.686 1.084.309.317.677.533 1.07.687.76.272 1.632.474 2.898.536 1.22.057 1.627.072 4.947.072s3.728-.015 4.947-.072c1.266-.062 2.139-.263 2.898-.536.389-.153.756-.37 1.084-.686.317-.309.533-.677.687-1.07.272-.76.474-1.632.536-2.898.057-1.22.072-1.627.072-4.947s-.015-3.667-.072-4.947c-.062-1.266-.263-2.139-.536-2.898-.153-.389-.37-.756-.686-1.084-.309-.317-.677-.533-1.07-.687-.76-.272-1.632-.474-2.898-.536C15.667 1.031 15.26 1.016 12 1.016s-3.667.015-4.947.072zm0 2.016c3.183 0 3.556.01 4.812.063 1.161.053 1.792.247 2.21.412.557.217.953.477 1.369.893.416.416.676.812.893 1.369.165.418.36 1.049.412 2.21.053 1.255.063 1.629.063 4.812s-.01 3.557-.063 4.812c-.053 1.161-.247 1.792-.412 2.21-.217.557-.477.953-.893 1.369-.416.416-.812.676-1.369.893-.418.165-1.049.36-2.21.412-1.255.053-1.629.063-4.812.063s-3.557-.01-4.812-.063c-1.161-.053-1.792-.247-2.21-.412-.557-.217-.953-.477-1.369-.893-.416-.416-.676-.812-.893-1.369-.165-.418-.36-1.049-.412-2.21-.053-1.255-.063-1.629-.063-4.812s.01-3.557.063-4.812c.053-1.161.247-1.792.412-2.21.217-.557.477-.953.893-1.369.416-.416.812-.676 1.369-.893.418-.165 1.049-.36 2.21-.412 1.255-.053 1.629-.063 4.812-.063z"/>
+              <circle cx="12" cy="12" r="3.206"/>
+              <circle cx="18.406" cy="5.594" r=".75"/>
+            </svg>
+          </a>
+          <a href="#" title="Twitter">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417a9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            </svg>
+          </a>
+          <a href="https://wa.me/573155508228" target="_blank" title="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
+              <circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" stroke-width="1"/>
+              <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16z" fill="currentColor"/>
+              <path d="M7 12c0-2.76 2.24-5 5-5s5 2.24 5 5-2.24 5-5 5-5-2.24-5-5z" fill="currentColor"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-seccion">
+        <h3>Información</h3>
+        <a href="preguntas-frecuentes.html">Preguntas Frecuentes</a>
+        <a href="politica-privacidad.html">Política de Privacidad</a>
+        <a href="terminos-condiciones.html">Términos y Condiciones</a>
+        <a href="contacto.html">Contacto</a>
+      </div>
+
+      <div class="footer-seccion">
+        <h3>Contacto</h3>
+        <p><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Carrera 64 b # 40-33</p>
+        <p><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Barrio El Porvenir, Primera etapa</p>
+        <p><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>+57 315 5508228</p>
+        <p><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><path d="M12 1v6m0 6v6"></path><path d="M4.22 4.22l4.24 4.24m0 5.08l-4.24 4.24"></path><path d="M1 12h6m6 0h6"></path></svg>Lun - Vie: 8am - 6pm</p>
+        <p><a href="https://wa.me/573155508228" target="_blank"><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>Chatea en WhatsApp</a></p>
+      </div>
+
+      <div class="footer-seccion">
+        <h3>Métodos de Pago</h3>
+        <div class="payment-method"><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg><span>Tarjeta de Crédito/Débito</span></div>
+        <div class="payment-method"><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2" ry="2"></rect><line x1="2" y1="7" x2="22" y2="7"></line></svg><span>Transferencia Bancaria</span></div>
+        <div class="payment-method"><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6m0 3v0.01"></path></svg><span>Efectivo Contra Entrega</span></div>
+        <div class="payment-method"><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="20" x2="12" y2="20.01"></line></svg><span>Billetera Digital</span></div>
+      </div>
+    </div>
+
+    <div class="footer-separador">
+      <p>&copy; 2026 StoreHub. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+    // 🎯 HEADER SCROLL EFFECT - CORPORATE STYLE
+    window.addEventListener("scroll", function () {
+      const header = document.querySelector("header");
+      if (window.scrollY > 50) {
+        header.classList.add("header-scroll");
+      } else {
+        header.classList.remove("header-scroll");
+      }
+    });
+
+    // 🧊 FOOTER FADE-IN ON SCROLL - TECH MODERN
+    const footerObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    const footer = document.querySelector('footer');
+    if (footer) {
+      footer.style.opacity = '0';
+      footer.style.transform = 'translateY(40px)';
+      footer.style.transition = 'all 0.8s ease';
+      footerObserver.observe(footer);
+    }
+  </script>
+</body>
+</html>

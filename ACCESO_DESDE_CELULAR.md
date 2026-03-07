@@ -37,6 +37,7 @@ git push origin main
    - Click "Connect"
 
 3. **Configurar el Servicio:**
+
    ```
    Name: inventory-frontend
    Region: Ohio (US East)
@@ -51,9 +52,9 @@ git push origin main
    - Seleccionar: **"Free"** (0$/mes)
 
 5. **Variables de Entorno:**
-   
+
    Click en "Advanced" → "Add Environment Variable"
-   
+
    ```
    VITE_API_URL=https://inventory-api-74yl.onrender.com
    NODE_ENV=production
@@ -100,11 +101,13 @@ https://inventory-frontend-XXXX.onrender.com
 ### Opción A: Probar el Health Endpoint
 
 En el navegador de tu celular:
+
 ```
 https://inventory-api-74yl.onrender.com/api/v1/health
 ```
 
 Deberías ver:
+
 ```json
 {
   "estado": "ok",
@@ -128,11 +131,13 @@ curl -X POST https://inventory-api-74yl.onrender.com/api/v1/auth/login \
 He creado un script que hace todo automáticamente. Ejecútalo:
 
 **En tu PC:**
+
 ```powershell
 .\deploy-frontend-render.ps1
 ```
 
 Esto hará:
+
 1. ✅ Add y commit de los archivos .env
 2. ✅ Push a GitHub
 3. 📋 Te dará las instrucciones paso a paso para crear el servicio en Render
@@ -146,11 +151,13 @@ Esto hará:
 ### Paso 1: Obtener la IP de tu PC
 
 En tu PC, abre PowerShell:
+
 ```powershell
 ipconfig
 ```
 
 Busca algo como:
+
 ```
 IPv4 Address: 192.168.1.XXX
 ```
@@ -165,6 +172,7 @@ npm run dev -- --host 0.0.0.0
 ### Paso 3: Acceder desde el Celular
 
 En el navegador de tu celular:
+
 ```
 http://192.168.1.XXX:5173
 ```
@@ -201,14 +209,17 @@ Con el plan gratuito:
 ## 🆘 Si Sigue Sin Funcionar
 
 ### Error 1: "Cannot connect to server"
+
 **Causa:** El servicio está dormido  
 **Solución:** Esperar 60 segundos
 
 ### Error 2: "CORS Error"
+
 **Causa:** El backend no permite tu origen  
 **Solución:** Verificar que la URL del frontend esté en CORS_ORIGIN
 
 ### Error 3: "404 Not Found"
+
 **Causa:** El frontend no está deployado  
 **Solución:** Crear el servicio de frontend en Render primero
 

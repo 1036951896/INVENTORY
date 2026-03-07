@@ -1,0 +1,88 @@
+[
+  {"id":1,"name":"PAPA CAFÉ X 2.5 FARM FRITES","priceCOP":22500,"stock":10},
+  {"id":2,"name":"PAPA NACIONAL X 2.5","priceCOP":21600,"stock":10},
+  {"id":3,"name":"PAPA X 2 K FARM FRITES","priceCOP":16000,"stock":10},
+  {"id":4,"name":"PAPA X 2 K STAR FRITES","priceCOP":15000,"stock":10},
+  {"id":5,"name":"PAPA X 1 K CRUNCH HOUSE","priceCOP":9700,"stock":10},
+  {"id":6,"name":"PAPA X 500 CRUNCH HOUSE","priceCOP":5400,"stock":10},
+
+  {"id":7,"name":"RIPIO SAN MIGUEL X 1 K","priceCOP":9000,"stock":10},
+  {"id":8,"name":"RIPIO X 1 K SABROSURA DEL CAMPO","priceCOP":8000,"stock":10},
+  {"id":9,"name":"RIPIO X 500 SABROSURA DEL CAMPO","priceCOP":5500,"stock":10},
+  {"id":10,"name":"RIPIO X 250 SABROSURA DEL CAMPO","priceCOP":3500,"stock":10},
+  {"id":11,"name":"RIPIO JA X 1 K","priceCOP":0,"stock":0},
+  {"id":12,"name":"RIPIO FRESH COOL X 1 K","priceCOP":0,"stock":0},
+  {"id":13,"name":"RIPIO FRESH COOL X 500 GR","priceCOP":0,"stock":0},
+  {"id":14,"name":"RIPIO FRESH COOL X 250 GR","priceCOP":0,"stock":0},
+
+  {"id":15,"name":"MAIZ SAN MIGUEL X 1 K","priceCOP":8700,"stock":10},
+  {"id":16,"name":"MAIZ SAN MIGUEL X 500 GR","priceCOP":4700,"stock":10},
+  {"id":17,"name":"MAIZ A GRANEL SAN MIGUEL X 10 K","priceCOP":80000,"stock":5},
+
+  {"id":18,"name":"MIX VERDURAS SAN MIGUEL X 500 GR","priceCOP":4700,"stock":10},
+
+  {"id":19,"name":"YUCA ALRICO X 1 K","priceCOP":6900,"stock":10},
+  {"id":20,"name":"YUCA ALRICO X 500 GR","priceCOP":3800,"stock":10},
+
+  {"id":21,"name":"VINIPEL 20 MTS","priceCOP":1500,"stock":50},
+  {"id":22,"name":"VINILPEX X50 MTS","priceCOP":2700,"stock":50},
+  {"id":23,"name":"VINILPEX X100 MTS","priceCOP":4700,"stock":50},
+  {"id":24,"name":"VINILPEX X 300 MTS LARGO","priceCOP":8700,"stock":20},
+  {"id":25,"name":"VINILPEX X 300 MTS CORTO","priceCOP":0,"stock":0},
+  {"id":26,"name":"VINILPEX X 300 1/2","priceCOP":4700,"stock":20},
+
+  {"id":27,"name":"GUANTES PLASTICOS TRANSPARENTE HAUSE","priceCOP":1670,"stock":50},
+  {"id":28,"name":"GUANTES NITRILO NEGRO T M HAUSE","priceCOP":21600,"stock":30},
+  {"id":29,"name":"GUANTES NITRILO NEGRO T L HAUSE","priceCOP":21600,"stock":30},
+
+  {"id":30,"name":"LAM PARAFINADA 15X15 REGULAR LIBRA","priceCOP":9700,"stock":40},
+  {"id":31,"name":"LAM PARAFINADA 15X15 ECOLOGICA LIBRA","priceCOP":7800,"stock":40},
+  {"id":32,"name":"LAM PARAFINADA 15X15 COLOR REGULAR","priceCOP":9700,"stock":40},
+  {"id":33,"name":"LAM PARAFINADA 30X30 COLOR REGULAR","priceCOP":9700,"stock":40},
+  {"id":34,"name":"LAM PARAFINADA 30X30 ECOLOGICA","priceCOP":7800,"stock":40},
+  {"id":35,"name":"ROLLO PARAFINADO X 50 MTS","priceCOP":17400,"stock":20},
+  {"id":36,"name":"ROLLO PARAFINADO X 10 MTS","priceCOP":2800,"stock":60},
+
+  {"id":37,"name":"ALUMINIO 7 MTS","priceCOP":2500,"stock":50},
+  {"id":38,"name":"ALUMINIO 16 MTS","priceCOP":4700,"stock":50},
+  {"id":39,"name":"ALUMINIO 40 MTS","priceCOP":9500,"stock":30},
+  {"id":40,"name":"ALUMINIO 100 MTS","priceCOP":23000,"stock":10},
+
+  {"id":41,"name":"BOLSA METALIZADA 6X6 ABTA","priceCOP":1900,"stock":100},
+  {"id":42,"name":"BOLSA METALIZADA 7X10","priceCOP":3500,"stock":100},
+  {"id":43,"name":"BOLSA METALIZADA 8X10","priceCOP":3900,"stock":100},
+  {"id":44,"name":"BOLSA METALIZADA 8X12","priceCOP":4800,"stock":100},
+  {"id":45,"name":"BOLSA METALIZADA 10X14","priceCOP":6900,"stock":100},
+
+  {"id":46,"name":"PORTA HAMBURGUESA CARTON","priceCOP":9000,"stock":50},
+  {"id":47,"name":"PORTA PERRO CARTON","priceCOP":9000,"stock":50},
+
+  {"id":48,"name":"SERVILLETA NUBE X 300","priceCOP":3600,"stock":200},
+  {"id":49,"name":"SERVILLETA MIA 1 A 1 X 200","priceCOP":2500,"stock":200},
+  {"id":50,"name":"TOHALLA MANO X 150","priceCOP":7600,"stock":100},
+  {"id":51,"name":"TOHALLA COCINA X 120","priceCOP":5720,"stock":100},
+
+  {"id":52,"name":"BOLSA PAPEL # 1","priceCOP":3100,"stock":100},
+  {"id":53,"name":"BOLSA PAPEL # 2","priceCOP":4200,"stock":100},
+  {"id":54,"name":"BOLSA PAPEL # 3","priceCOP":5300,"stock":100},
+  {"id":55,"name":"BOLSA PAPEL # 4","priceCOP":6300,"stock":100},
+  {"id":56,"name":"BOLSA PAPEL # 6","priceCOP":9000,"stock":100},
+
+  {"id":57,"name":"SACHET TOMATE 9GR X 102","priceCOP":7800,"stock":50},
+  {"id":58,"name":"SACHET TOMATE 6 GR X 204","priceCOP":11400,"stock":50},
+  {"id":59,"name":"SACHET MIEL 9GR X 102","priceCOP":7800,"stock":50},
+  {"id":60,"name":"SACHET ROSADA 9GR X 102","priceCOP":11400,"stock":50},
+  {"id":61,"name":"SALSA TOMATE X 4 K","priceCOP":25300,"stock":20},
+  {"id":62,"name":"MAYONESA X 4 K","priceCOP":34000,"stock":20},
+
+  {"id":63,"name":"CARNE DE HAMBURG 9GR X 10","priceCOP":12300,"stock":30},
+
+  {"id":64,"name":"PATACON COCTELERO X 1000 GR","priceCOP":9600,"stock":40},
+  {"id":65,"name":"PATACON MEDIANO X 1000 GR","priceCOP":9600,"stock":40},
+  {"id":66,"name":"PATACON OVALADO X 1000 GR","priceCOP":9600,"stock":40},
+  {"id":67,"name":"PATACON REDONDO X 1000 GR","priceCOP":9600,"stock":40},
+
+  {"id":68,"name":"BOLSA T 20 LEC BIO-SOSTENIBLE","priceCOP":2800,"stock":100},
+  {"id":69,"name":"BOLSA T-25 LEC R.U BIO-SOSTENIBLE","priceCOP":3600,"stock":100},
+  {"id":70,"name":"BOLSA T-30 LEC ECONOMICA R.U BIO-SOSTENIBLE","priceCOP":5700,"stock":100}
+]

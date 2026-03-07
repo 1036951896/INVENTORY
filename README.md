@@ -54,7 +54,7 @@ Estos documentos fueron creados en la refactorización de febrero-marzo 2026:
    - 🔄 Soluciones: Keep-Alive con cron-job.org
    - 💰 Comparación: Gratis vs Motor de Arranque ($7/mes)
 
-5. **[ARQUITECTURA_FUNCIONALIDAD.md](ARQUITECTURA_FUNCIONALIDAD.md)**
+7. **[ARQUITECTURA_FUNCIONALIDAD.md](ARQUITECTURA_FUNCIONALIDAD.md)**
    - 📐 Arquitectura completa del sistema
    - 🔌 Cómo funciona el backend y frontend
    - 🗄️ Diagrama base de datos
@@ -62,7 +62,7 @@ Estos documentos fueron creados en la refactorización de febrero-marzo 2026:
    - 📡 API REST endpoints completa (8 módulos)
    - 🔒 Seguridad y autenticación JWT
 
-6. **[MANUAL_CLIENTE.md](MANUAL_CLIENTE.md)**
+8. **[MANUAL_CLIENTE.md](MANUAL_CLIENTE.md)**
    - 👥 Guía completa para usuarios/clientes
    - 🛍️ Cómo navegar la tienda
    - 🛒 Proceso de compra paso a paso
@@ -70,7 +70,7 @@ Estos documentos fueron creados en la refactorización de febrero-marzo 2026:
    - ❓ 10 Preguntas frecuentes
    - 🔧 Solución de problemas
 
-7. **[MANUAL_ADMIN.md](MANUAL_ADMIN.md)**
+9. **[MANUAL_ADMIN.md](MANUAL_ADMIN.md)**
    - 👨‍💼 Guía completa para administradores
    - 📊 Dashboard y KPIs
    - 📦 Gestión de productos
@@ -79,12 +79,12 @@ Estos documentos fueron creados en la refactorización de febrero-marzo 2026:
    - 📈 Reportes y análisis
    - 🔒 Seguridad y mejores prácticas
 
-8. **[REFACTORIZACION_RESUMEN.md](REFACTORIZACION_RESUMEN.md)**
-   - 🔧 Resumen de cambios realizados
-   - 📝 Guía de migración de código
-   - 💻 Ejemplos de cómo usar nuevos servicios
-   - 📊 Métricas de mejora
-   - ✅ Checklist de verificación
+10. **[REFACTORIZACION_RESUMEN.md](REFACTORIZACION_RESUMEN.md)**
+    - 🔧 Resumen de cambios realizados
+    - 📝 Guía de migración de código
+    - 💻 Ejemplos de cómo usar nuevos servicios
+    - 📊 Métricas de mejora
+    - ✅ Checklist de verificación
 
 ---
 
