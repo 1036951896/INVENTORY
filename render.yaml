@@ -14,13 +14,15 @@ services:
     name: inventory-api
     env: docker
     region: oregon
-    dockerfilePath: ./backend/Dockerfile
-    dockerContext: ./backend
-    port: 3000
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
 
     envVars:
       - key: NODE_ENV
         value: production
+
+      - key: PORT
+        value: 3000
 
       - key: DATABASE_URL
         fromDatabase:
@@ -53,9 +55,6 @@ services:
 
       - key: ADMIN_EMAIL
         value: santis3268@gmail.com
-
-    dependsOn:
-      - inventory-db
 
     healthCheckPath: /api/v1/health
     autoDeploy: true
