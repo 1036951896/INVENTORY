@@ -6,7 +6,6 @@ services:
     name: inventory-db
     plan: free
     region: oregon
-    ipAllowList: []
 
   # ============================================================================
   # Backend NestJS API (Docker)
@@ -14,7 +13,8 @@ services:
   - type: web
     name: inventory-api
     env: docker
-    repo: https://github.com/1036951896/INVENTORY
+    repo: 1036951896/INVENTORY
+    branch: main
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     region: oregon
@@ -23,9 +23,6 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-
-      - key: API_PORT
-        value: 3000
 
       - key: DATABASE_URL
         fromDatabase:
@@ -71,7 +68,8 @@ services:
   - type: web
     name: inventory-frontend
     env: static
-    repo: https://github.com/1036951896/INVENTORY
+    repo: 1036951896/INVENTORY
+    branch: main
     rootDir: ./frontend
     region: oregon
 
