@@ -1,9 +1,8 @@
-# Definición de la base de datos PostgreSQL (NO va en services)
+# Definición de la base de datos PostgreSQL
 databases:
   - name: inventory-db
     plan: free
     region: oregon
-    # Opcional: puedes especificar la versión de PostgreSQL, ej: version: 15
 
 # Definición de los servicios (aplicaciones)
 services:
