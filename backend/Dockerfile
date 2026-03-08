@@ -16,6 +16,7 @@ COPY tsconfig.json ./
 COPY tsconfig.build.json ./
 COPY prisma ./prisma
 COPY src ./src
+COPY public ./public
 
 # Instalar dependencias
 RUN npm install --legacy-peer-deps

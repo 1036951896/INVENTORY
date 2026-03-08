@@ -1,15 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { AppModule } from './app.module';
-import { join } from 'path';
 import * as express from 'express';
+import { join } from 'path';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
   
-  // Servir archivos estáticos desde backend/public
-  app.use('/assets', express.static(join(__dirname, '..', 'public', 'assets')));
+  // Servir archivos estáticos desde backend/public/assets
+  // En producción, look for public folder relative to dist
+  const publicPath = join(__dirname, '..', 'public', 'assets');
+  app.use('/assets', express.static(publicPath));
+  logger.log(`Sirviendo assets desde: ${publicPath}`);
 
   // Validación global
   app.useGlobalPipes(
