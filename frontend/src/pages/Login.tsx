@@ -85,6 +85,21 @@ export default function Login() {
     } catch (err: any) {
       const msg = err.response?.data?.message || err.message || 'Correo o contraseña incorrectos';
       setError(msg);
+      
+      // Si es un usuario no registrado, mostrar alerta con opción de registro
+      if (msg.toLowerCase().includes('no encontrado') || 
+          msg.toLowerCase().includes('no existe') ||
+          msg.toLowerCase().includes('no registrado') ||
+          msg.toLowerCase().includes('correo o contraseña')) {
+        
+        const respuesta = confirm(
+          '👤 No tenemos registrado este usuario.\n\n¿Deseas ir a la página de registro para crear tu cuenta?'
+        );
+        
+        if (respuesta) {
+          navigate('/registro');
+        }
+      }
     } finally {
       setLoading(false);
     }
