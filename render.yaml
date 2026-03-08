@@ -61,6 +61,7 @@ services:
     repo: https://github.com/1036951896/INVENTORY
     rootDir: ./frontend
     region: oregon
+    port: 3000
     buildCommand: npm install && npm run build
     startCommand: npx serve -s dist -l 3000
     envVars:
