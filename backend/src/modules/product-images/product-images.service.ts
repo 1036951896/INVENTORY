@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+﻿import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UpdateProductImageDto } from './dto/product-image.dto';
 import * as fs from 'fs';
@@ -36,7 +36,7 @@ export class ProductImagesService {
 
   async descargarYGuardarImagen(url: string, productoId?: string, principal: boolean = false) {
     try {
-      // Validar que sea una URL válida
+      // Validar que sea una URL vÃ¡lida
       new URL(url);
 
       // Crear directorio si no existe
@@ -57,7 +57,7 @@ export class ProductImagesService {
         throw new BadRequestException('URL does not point to a valid image');
       }
 
-      // Generar nombre único para la imagen
+      // Generar nombre Ãºnico para la imagen
       const extension = this.obtenerExtensionDesdeContentType(contentType);
       const nombreArchivo = `producto-${randomUUID()}${extension}`;
       const rutaArchivo = path.join(imagensDir, nombreArchivo);
@@ -65,7 +65,7 @@ export class ProductImagesService {
       // Guardar imagen en el sistema de archivos
       fs.writeFileSync(rutaArchivo, response.data);
 
-      // Ruta pública
+      // Ruta pÃºblica
       const rutaPublica = `/images/productos/${nombreArchivo}`;
 
       // Si se proporciona productoId, se almacena en la base de datos
@@ -102,7 +102,7 @@ export class ProductImagesService {
   }
 
   async agregar(productoId: string, dto: { url: string; principal?: boolean }) {
-    // Si es principal, desmarcar otras imágenes
+    // Si es principal, desmarcar otras imÃ¡genes
     if (dto.principal) {
       await this.prisma.productImage.updateMany({
         where: { productoId, principal: true },
@@ -110,7 +110,7 @@ export class ProductImagesService {
       });
     }
 
-    // Obtener el máximo orden
+    // Obtener el mÃ¡ximo orden
     const ultimaImagen = await this.prisma.productImage.findFirst({
       where: { productoId },
       orderBy: { orden: 'desc' },
@@ -152,7 +152,7 @@ export class ProductImagesService {
 
       return { imagenes: imagenes.sort((a, b) => a.nombre.localeCompare(b.nombre)) };
     } catch (error) {
-      throw new BadRequestException(`Error al obtener imágenes disponibles: ${error.message}`);
+      throw new BadRequestException(`Error al obtener imÃ¡genes disponibles: ${error.message}`);
     }
   }
 

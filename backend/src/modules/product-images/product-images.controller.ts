@@ -1,4 +1,4 @@
-import {
+﻿import {
   Controller,
   Get,
   Post,
@@ -57,7 +57,7 @@ export class ProductImagesController {
     @Body() body: { productoId?: string; principal?: string },
   ) {
     if (!archivo) {
-      throw new BadRequestException('No se proporcionó archivo');
+      throw new BadRequestException('No se proporcionÃ³ archivo');
     }
     return this.productImagesService.subirImagenLocal(archivo, body.productoId, body.principal === 'true');
   }
