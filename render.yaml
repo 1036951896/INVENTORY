@@ -12,6 +12,7 @@ services:
   # ============================================================================
   - type: web
     name: inventory-api
+    runtime: docker
     dockerfilePath: backend/Dockerfile
     dockerContext: backend
     region: oregon
@@ -63,10 +64,9 @@ services:
   # ============================================================================
   - type: web
     name: inventory-frontend
-    rootDir: frontend
-
     buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    startCommand: serve -s dist -l 3000
+    rootDir: frontend
 
     envVars:
       - key: VITE_API_URL
