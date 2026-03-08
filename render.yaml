@@ -5,13 +5,14 @@ services:
   - type: pserv
     name: inventory-db
     plan: free
+    region: oregon
 
   # ============================================================================
   # Backend NestJS API (Docker)
   # ============================================================================
   - type: web
     name: inventory-api
-    runtime: docker
+    env: docker
     dockerfilePath: backend/Dockerfile
     dockerContext: backend
     region: oregon
