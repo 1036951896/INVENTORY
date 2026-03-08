@@ -8,25 +8,7 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
   
-  // Servir archivos estáticos desde backend/public/assets
-  // En producción, look for public folder relative to dist
-  const publicPath = join(__dirname, '..', 'public', 'assets');
-  app.use('/assets', express.static(publicPath));
-  logger.log(`Sirviendo assets desde: ${publicPath}`);
-
-  // Validación global
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
-    }),
-  );
-
-  // CORS
+  // CORS - Aplicar primero
   app.enableCors({
     origin: [
       'http://localhost:5173',
@@ -48,6 +30,24 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
+  
+  // Servir archivos estáticos desde backend/public/assets
+  // En producción, look for public folder relative to dist
+  const publicPath = join(__dirname, '..', 'public', 'assets');
+  app.use('/assets', express.static(publicPath));
+  logger.log(`Sirviendo assets desde: ${publicPath}`);
+
+  // Validación global
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
 
   // Prefijo global
   app.setGlobalPrefix(`api/${process.env.API_VERSION || 'v1'}`);
