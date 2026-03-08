@@ -124,7 +124,7 @@ async function main() {
       data: {
         productoId: producto.id,
         url: `https://via.placeholder.com/300x300?text=${encodeURIComponent(producto.nombre.substring(0, 15))}`,
-        esPortada: true,
+        principal: true,
         orden: 1,
       },
     });
