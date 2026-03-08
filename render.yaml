@@ -42,7 +42,7 @@ services:
       - key: SMTP_USER
         value: santis3268@gmail.com
       - key: SMTP_PASSWORD
-        value: fnlrizogotanzrza
+        generateValue: true
       - key: EMAIL_FROM
         value: noreply@inventory.com
       - key: ADMIN_EMAIL
@@ -54,19 +54,21 @@ services:
     healthCheckPath: /api/v1/health
 
   # ============================================================================
-  # Frontend React + Vite (Static Site)
+  # Frontend React + Vite
   # ============================================================================
-  - type: web
+  - type: static_site
     name: inventory-frontend
     repo: https://github.com/1036951896/INVENTORY
     rootDir: ./frontend
     region: oregon
+
     buildCommand: npm install && npm run build
-    startCommand: npx serve -s dist -l 3000
-    port: 3000
+    publishDir: dist
+
     envVars:
       - key: NODE_ENV
         value: production
       - key: VITE_API_URL
         value: https://inventory-api.onrender.com
+
     autoDeploy: true
