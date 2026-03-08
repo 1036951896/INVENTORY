@@ -160,6 +160,31 @@ export class SeedService {
 
       this.logger.log(`Productos: ${productsSucceeded} exitosos, ${productsFailed} fallidos`);
 
+      // Crear imágenes para los productos
+      this.logger.log('🖼️ Creando imágenes de prueba...');
+      let imagesCreated = 0;
+      for (const producto of productosJSON) {
+        try {
+          await this.prisma.productImage.create({
+            data: {
+              productoId: producto.id,
+              url: `https://via.placeholder.com/300x300?text=${encodeURIComponent(
+                producto.nombre.substring(0, 15)
+              )}`,
+              principal: true,
+              orden: 1,
+            },
+          });
+          imagesCreated++;
+        } catch (error) {
+          this.logger.error(
+            `Error creando imagen para producto ${producto.id}:`,
+            error.message
+          );
+        }
+      }
+      this.logger.log(`✓ ${imagesCreated} imágenes creadas`);
+
       // Crear usuarios de prueba
       this.logger.log('Creando usuarios...');
       const hashedAdminPassword = await bcrypt.hash('admin123', 10);
@@ -197,6 +222,7 @@ export class SeedService {
           categoriesCreated: categoriasSeed.length,
           productsCreated: productsSucceeded,
           productsFailed: productsFailed,
+          imagesCreated: imagesCreated,
           usersCreated: 2,
           testAccounts: [
             {
