@@ -58,12 +58,11 @@ services:
   # ============================================================================
   - type: web
     name: inventory-frontend
-    runtime: static
     repo: https://github.com/1036951896/INVENTORY
     rootDir: ./frontend
     region: oregon
     buildCommand: npm install && npm run build
-    publishPath: dist
+    startCommand: npm install -g serve && serve -s dist -l 3000
     envVars:
       - key: NODE_ENV
         value: production
