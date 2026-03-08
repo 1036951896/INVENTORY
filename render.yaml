@@ -12,7 +12,7 @@ services:
   # ============================================================================
   - type: web
     name: inventory-api
-    env: docker
+    runtime: docker
     dockerfilePath: backend/Dockerfile
     dockerContext: backend
     region: oregon
@@ -64,7 +64,7 @@ services:
   # ============================================================================
   - type: web
     name: inventory-frontend
-    env: static
+    runtime: static
     rootDir: frontend
 
     buildCommand: npm install && npm run build
