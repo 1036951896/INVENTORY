@@ -61,7 +61,7 @@ services:
     repo: https://github.com/1036951896/INVENTORY
     rootDir: ./frontend
     region: oregon
-    
+
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
 
