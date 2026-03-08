@@ -49,8 +49,9 @@ services:
   # ============================================================================
   # Frontend React + Vite (Sitio estático)
   # ============================================================================
-  - type: static
+  - type: web
     name: inventory-frontend
+    runtime: static
     region: oregon
     rootDir: frontend
     buildCommand: npm install && npm run build
