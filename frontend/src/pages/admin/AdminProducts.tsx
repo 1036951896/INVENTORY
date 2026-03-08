@@ -176,8 +176,8 @@ export default function AdminProducts() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('¿Eliminar este producto?')) return;
+  const handleSuspend = async (id: string) => {
+    if (!confirm('¿Suspender este producto?')) return;
 
     try {
       const token = authService.getToken();
@@ -186,9 +186,9 @@ export default function AdminProducts() {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
-      if (!response.ok) throw new Error('Error al eliminar');
+      if (!response.ok) throw new Error('Error al suspender');
 
-      alert2('Producto eliminado', 'success');
+      alert2('Producto suspendido', 'success');
       fetchData();
     } catch (error: any) {
       console.error('Error:', error);
@@ -612,12 +612,12 @@ export default function AdminProducts() {
                     </svg>
                   </button>
                   <button 
-                    className="btn-action delete"
-                    onClick={() => handleDelete(product.id)}
-                    title="Eliminar"
+                    className="btn-action suspend"
+                    onClick={() => handleSuspend(product.id)}
+                    title="Suspender"
                   >
                     <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                      <path d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6M10 5h4a1 1 0 0 1 1 1v0a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v0a1 1 0 0 1 1-1z"/>
+                      <path d="M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m6 5v6m-3-3h6"/>
                     </svg>
                   </button>
                 </div>

@@ -73,7 +73,7 @@
   .btn-nuevo-producto,
   .btn-crear,
   .btn-editar,
-  .btn-eliminar,
+  .btn-suspend,
   .btn-guardar {
     padding: 0.6rem 1rem !important;
     font-size: 0.85rem !important;
@@ -258,7 +258,7 @@
   }
 
   .actions-cell .btn-editar,
-  .actions-cell .btn-eliminar {
+  .actions-cell .btn-suspend {
     padding: 0.4rem 0.6rem !important;
     font-size: 0.8rem !important;
   }

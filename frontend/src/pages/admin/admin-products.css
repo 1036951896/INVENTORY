@@ -491,9 +491,9 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.btn-action.delete:hover {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  border-color: #ef4444;
+.btn-action.suspend:hover {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  border-color: #f97316;
 }
 
 /* ===== FORM ===== */

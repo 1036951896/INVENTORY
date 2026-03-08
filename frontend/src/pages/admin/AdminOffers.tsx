@@ -87,7 +87,7 @@ export default function AdminOffers() {
     setShowForm(false);
   };
 
-  const handleDeleteOffer = (id: string) => {
+  const handleSuspendOffer = (id: string) => {
     setOffers(offers.filter(o => o.id !== id));
   };
 
@@ -252,10 +252,10 @@ export default function AdminOffers() {
                   {offer.activa ? 'Desactivar' : 'Activar'}
                 </button>
                 <button
-                  className="btn-eliminar"
-                  onClick={() => handleDeleteOffer(offer.id)}
+                  className="btn-suspend"
+                  onClick={() => handleSuspendOffer(offer.id)}
                 >
-                  Eliminar
+                  Suspender
                 </button>
               </div>
             </div>
