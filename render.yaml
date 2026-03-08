@@ -49,14 +49,14 @@ services:
     autoDeploy: true
 
   # ============================================================================
-  # Frontend React + Vite (Sitio estático)
+  # Frontend React + Vite (Web Service para SPA routing)
   # ============================================================================
   - type: web
     name: inventory-frontend
-    runtime: static
+    runtime: node
     rootDir: frontend
     buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    startCommand: node server.js
     envVars:
       - key: VITE_API_URL
         value: https://inventory-api.onrender.com
