@@ -6,9 +6,10 @@ services:
     name: inventory-db
     plan: free
     ipAllowList: []
+    region: oregon
 
   # ============================================================================
-  # Backend NestJS API
+  # Backend NestJS API (Docker)
   # ============================================================================
   - type: web
     name: inventory-api
@@ -16,6 +17,7 @@ services:
     repo: https://github.com/1036951896/INVENTORY
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
+    region: oregon
     port: 3000
 
     envVars:
@@ -32,7 +34,6 @@ services:
       - key: JWT_REFRESH_SECRET
         generateValue: true
       - key: CORS_ORIGIN
-        # Se actualizará después de crear el frontend
         value: https://inventory-frontend.onrender.com
       - key: SMTP_HOST
         value: smtp.gmail.com
@@ -48,34 +49,24 @@ services:
         value: santis3268@gmail.com
 
     autoDeploy: true
-
-    # Esperar a BD
     dependsOn:
       - inventory-db
-
     healthCheckPath: /api/v1/health
 
   # ============================================================================
-  # Frontend React + Vite
+  # Frontend React + Vite (Build Static)
   # ============================================================================
-  - type: web
+  - type: static_site
     name: inventory-frontend
-    env: node
     repo: https://github.com/1036951896/INVENTORY
     rootDir: ./frontend
-    runtime: node
-    nodeVersion: 18
-
+    region: oregon
+    
     buildCommand: npm install && npm run build
-    startCommand: npm run preview -- --host 0.0.0.0 --port 3000
+    staticPublishPath: ./dist
 
     envVars:
       - key: VITE_API_URL
-        # Se actualizará después de crear el backend
         value: https://inventory-api.onrender.com
-      - key: NODE_ENV
-        value: production
 
     autoDeploy: true
-
-    healthCheckPath: /
