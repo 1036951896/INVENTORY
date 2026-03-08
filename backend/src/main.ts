@@ -33,7 +33,7 @@ async function bootstrap() {
       'http://localhost:5500',
       'http://localhost:5501',
       'http://localhost:5502',
-      'https://inventory-frontend-a8da.onrender.com',
+      'https://inventory-frontend-97h4.onrender.com',
       ...(process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : [])
     ],
     credentials: true,
