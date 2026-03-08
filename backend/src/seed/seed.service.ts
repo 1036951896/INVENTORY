@@ -162,76 +162,142 @@ export class SeedService {
 
       // Crear imágenes para los productos
       this.logger.log('🖼️ Creando imágenes de prueba desde backend/public/assets...');
+      
+      // Lista de todas las imágenes disponibles (fallback para productos sin mapeo específico)
+      const availableImages = [
+        'papa_cafe_2.5kg_new.jpeg',
+        'papa_nacional_2.5_new.jpeg',
+        'PAPA_X_2_K_FARM FRITES.jpeg',
+        'star frites 2k.jpeg',
+        'papa_crunch_500gr_new.jpeg',
+        'sabrosura_del_campo_1kg.jpeg',
+        'RIPIO_X_500_SABROSURA_DEL_CAMPO.jpeg',
+        'RIPIO_X_250_SABROSURA_DEL_CAMPO.jpeg',
+        'MAIZ_SAN_MIGUEL_X_1_K.jpeg',
+        'MAIZ_SAN_MIGUEL_X_500_gr.jpeg',
+        'MAIZ_A_GRANEL_SAN_MIGUEL_10_K.jpeg',
+        'MIX_VERDURAS_SAN_MIGUEL_X_500_GR.jpeg',
+        'YUCA_ALRICO_X_1k.jpeg',
+        'YUCA_ALRICO_X_500gr.jpeg',
+        'vinipel_20ts.jpeg',
+        'vinipel_50mts.jpeg',
+        'vinipel_100mts.jpeg',
+        'vinipel_300mts.jpeg',
+        'guantes_transparente_Hause.jpeg',
+        'guantes_nitrilo_negro_tm.jpeg',
+        'guantes_nitrilo_negro_tl.jpeg',
+        'lam_parafinada_15x15_regular_libra.jpeg',
+        'lam_parafinada_15x15_ecologica_libra.jpeg',
+        'LAM_PARAFINADA_30X30_COLOR_REGULAR.jpeg',
+        'papel_parafinado_ecologico_30x30.jpeg',
+        'rollo_parafinado_x10mts.jpeg',
+        'aluminio_7mts.jpeg',
+        'aluminio_16mts.jpeg',
+        'aluminio_40mts.jpeg',
+        'aluminio_100mts.jpeg',
+        'bolsa_metalizada_6x6.jpeg',
+        'bolsa_metalizada_7x10.jpeg',
+        'bolsa_metalizada_8x10.jpeg',
+        'BOLSA_METALIZADA_10X14.jpeg',
+        'PORTA_HAMBURGUESA_CARTON.jpeg',
+        'PORTA_PERRO_CARTON.jpeg',
+        'bolsa_papel_1.jpeg',
+        'bolsa_papel2.jpeg',
+        'bolsa_papel_3.jpeg',
+        'bolsa_papel_4.jpeg',
+        'bolsa_papel_6.jpeg',
+        'sachet_salsa_tomate_9gr.jpeg',
+        'sachet_salsa_tomate_6gr.jpeg',
+        'sachet_miel.jpeg',
+        'sachet_salsa_rosada_9gr.jpeg',
+        'salsa_tomate_x4kg.jpeg',
+        'mayonesa_4kg.jpeg',
+        'CARNE_HAMBURGUESA_9GRX10.jpeg',
+        'patacon_coctelero.jpeg',
+        'patacon_mediano_1000gr.jpeg',
+        'patacon_ovalado_1000gr.jpeg',
+        'patacon_redondo_1000gr.jpeg',
+        'bolsa_t20_lec.jpeg',
+        'bolsa_t25_lec.jpeg',
+        'bolsa_t30_lec.jpeg',
+        'bolsa_biodegradable_extraresistente.png',
+      ];
+      
+      // Mapeo específico por producto ID
       const imageMap: { [key: string]: string } = {
-        '1': 'papa_cafe_2.5kg_new.jpeg',           // PAPA CAFÉ X 2.5 FARM FRITES
-        '2': 'papa_nacional_2.5_new.jpeg',        // PAPA NACIONAL X 2.5
-        '3': 'PAPA_X_2_K_FARM FRITES.jpeg',       // PAPA X 2 K FARM FRITES
-        '4': 'star frites 2k.jpeg',               // PAPA X 2 K STAR FRITES
-        '5': 'papa_crunch_500gr_new.jpeg',        // PAPA X 1 K CRUNCH HOUSE
-        '6': 'papa_crunch_500gr_new.jpeg',        // PAPA X 500 CRUNCH HOUSE
-        '7': 'sabrosura_del_campo_1kg.jpeg',      // RIPIO SAN MIGUEL X 1 K
-        '8': 'sabrosura_del_campo_1kg.jpeg',      // RIPIO X 1 K SABROSURA
-        '9': 'RIPIO_X_500_SABROSURA_DEL_CAMPO.jpeg', // RIPIO X 500
-        '10': 'RIPIO_X_250_SABROSURA_DEL_CAMPO.jpeg', // RIPIO X 250
-        '11': 'MAIZ_SAN_MIGUEL_X_1_K.jpeg',       // MAIZ SAN MIGUEL X 1 K
-        '12': 'MAIZ_SAN_MIGUEL_X_500_gr.jpeg',    // MAIZ SAN MIGUEL X 500 GR
-        '13': 'MAIZ_A_GRANEL_SAN_MIGUEL_10_K.jpeg', // MAIZ A GRANEL
-        '14': 'MIX_VERDURAS_SAN_MIGUEL_X_500_GR.jpeg', // MIX VERDURAS
-        '15': 'YUCA_ALRICO_X_1k.jpeg',            // YUCA ALRICO X 1 K
-        '16': 'YUCA_ALRICO_X_500gr.jpeg',         // YUCA ALRICO X 500 GR
-        '17': 'vinipel_20ts.jpeg',                // VINIPEL 20 MTS
-        '18': 'vinipel_50mts.jpeg',               // VINILPEX X50 MTS
-        '19': 'vinipel_100mts.jpeg',              // VINILPEX X100 MTS
-        '20': 'vinipel_300mts.jpeg',              // VINILPEX X 300 MTS
-        '21': 'vinipel_300mts.jpeg',              // VINILPEX X 300 1/2
-        '22': 'guantes_transparente_Hause.jpeg',  // GUANTES PLASTICOS
-        '23': 'guantes_nitrilo_negro_tm.jpeg',    // GUANTES NITRILO T M
-        '24': 'guantes_nitrilo_negro_tl.jpeg',    // GUANTES NITRILO T L
-        '25': 'lam_parafinada_15x15_regular_libra.jpeg', // LAM PARAFINADA 15X15
-        '26': 'lam_parafinada_15x15_ecologica_libra.jpeg', // LAM PARAFINADA ECOLÓGICA
-        '27': 'LAM_PARAFINADA_30X30_COLOR_REGULAR.jpeg', // LAM PARAFINADA 30X30
-        '28': 'papel_parafinado_ecologico_30x30.jpeg', // ROLLO PARAFINADO
-        '29': 'rollo_parafinado_x10mts.jpeg',     // ROLLO PARAFINADO X 10 MTS
-        '30': 'aluminio_7mts.jpeg',               // ALUMINIO 7 MTS
-        '31': 'aluminio_16mts.jpeg',              // ALUMINIO 16 MTS
-        '32': 'aluminio_40mts.jpeg',              // ALUMINIO 40 MTS
-        '33': 'aluminio_100mts.jpeg',             // ALUMINIO 100 MTS
-        '34': 'bolsa_metalizada_6x6.jpeg',        // BOLSA METALIZADA 6X6
-        '35': 'bolsa_metalizada_7x10.jpeg',       // BOLSA METALIZADA 7X10
-        '36': 'bolsa_metalizada_8x10.jpeg',       // BOLSA METALIZADA 8X10
-        '37': 'BOLSA_METALIZADA_10X14.jpeg',      // BOLSA METALIZADA 10X14
-        '38': 'bolsa_metalizada_8x10.jpeg',       // Fallback
-        '39': 'PORTA_HAMBURGUESA_CARTON.jpeg',    // PORTA HAMBURGUESA
-        '40': 'PORTA_PERRO_CARTON.jpeg',          // PORTA PERRO
-        '41': 'bolsa_papel_1.jpeg',               // BOLSA PAPEL # 1
-        '42': 'bolsa_papel2.jpeg',                // BOLSA PAPEL # 2
-        '43': 'bolsa_papel_3.jpeg',               // BOLSA PAPEL # 3
-        '44': 'bolsa_papel_4.jpeg',               // BOLSA PAPEL # 4
-        '45': 'bolsa_papel_6.jpeg',               // BOLSA PAPEL # 6
-        '46': 'sachet_salsa_tomate_9gr.jpeg',     // SACHET TOMATE 9GR
-        '47': 'sachet_salsa_tomate_6gr.jpeg',     // SACHET TOMATE 6GR
-        '48': 'sachet_miel.jpeg',                 // SACHET MIEL
-        '49': 'sachet_salsa_rosada_9gr.jpeg',     // SACHET ROSADA
-        '50': 'salsa_tomate_x4kg.jpeg',           // SALSA TOMATE X 4 K
-        '51': 'mayonesa_4kg.jpeg',                // MAYONESA X 4 K
-        '52': 'CARNE_HAMBURGUESA_9GRX10.jpeg',    // CARNE HAMBURG
-        '53': 'patacon_coctelero.jpeg',           // PATACON COCTELERO
-        '54': 'patacon_mediano_1000gr.jpeg',      // PATACON MEDIANO
-        '55': 'patacon_ovalado_1000gr.jpeg',      // PATACON OVALADO
-        '56': 'patacon_redondo_1000gr.jpeg',      // PATACON REDONDO
-        '57': 'bolsa_t20_lec.jpeg',               // BOLSA T 20 LEC
-        '58': 'bolsa_t25_lec.jpeg',               // BOLSA T-25 LEC
-        '59': 'bolsa_t30_lec.jpeg',               // BOLSA T-30 LEC
-        '60': 'bolsa_t25_lec.jpeg',               // BOLSA T-35 LEC
-        '61': 'bolsa_t30_lec.jpeg',               // BOLSA T-40 LEC
-        '62': 'BOLSA_METALIZADA_10X14.jpeg',      // BOLSA T-50 LEC
-        '63': 'BOLSA_METALIZADA_10X14.jpeg',      // BOLSA T-60
-        '64': 'bolsa_biodegradable_extraresistente.png', // BOLSA BIODEGRADABLE
+        '1': 'papa_cafe_2.5kg_new.jpeg',
+        '2': 'papa_nacional_2.5_new.jpeg',
+        '3': 'PAPA_X_2_K_FARM FRITES.jpeg',
+        '4': 'star frites 2k.jpeg',
+        '5': 'papa_crunch_500gr_new.jpeg',
+        '6': 'papa_crunch_500gr_new.jpeg',
+        '7': 'sabrosura_del_campo_1kg.jpeg',
+        '8': 'sabrosura_del_campo_1kg.jpeg',
+        '9': 'RIPIO_X_500_SABROSURA_DEL_CAMPO.jpeg',
+        '10': 'RIPIO_X_250_SABROSURA_DEL_CAMPO.jpeg',
+        '11': 'MAIZ_SAN_MIGUEL_X_1_K.jpeg',
+        '12': 'MAIZ_SAN_MIGUEL_X_500_gr.jpeg',
+        '13': 'MAIZ_A_GRANEL_SAN_MIGUEL_10_K.jpeg',
+        '14': 'MIX_VERDURAS_SAN_MIGUEL_X_500_GR.jpeg',
+        '15': 'YUCA_ALRICO_X_1k.jpeg',
+        '16': 'YUCA_ALRICO_X_500gr.jpeg',
+        '17': 'vinipel_20ts.jpeg',
+        '18': 'vinipel_50mts.jpeg',
+        '19': 'vinipel_100mts.jpeg',
+        '20': 'vinipel_300mts.jpeg',
+        '21': 'vinipel_300mts.jpeg',
+        '22': 'guantes_transparente_Hause.jpeg',
+        '23': 'guantes_nitrilo_negro_tm.jpeg',
+        '24': 'guantes_nitrilo_negro_tl.jpeg',
+        '25': 'lam_parafinada_15x15_regular_libra.jpeg',
+        '26': 'lam_parafinada_15x15_ecologica_libra.jpeg',
+        '27': 'LAM_PARAFINADA_30X30_COLOR_REGULAR.jpeg',
+        '28': 'papel_parafinado_ecologico_30x30.jpeg',
+        '29': 'rollo_parafinado_x10mts.jpeg',
+        '30': 'aluminio_7mts.jpeg',
+        '31': 'aluminio_16mts.jpeg',
+        '32': 'aluminio_40mts.jpeg',
+        '33': 'aluminio_100mts.jpeg',
+        '34': 'bolsa_metalizada_6x6.jpeg',
+        '35': 'bolsa_metalizada_7x10.jpeg',
+        '36': 'bolsa_metalizada_8x10.jpeg',
+        '37': 'BOLSA_METALIZADA_10X14.jpeg',
+        '38': 'bolsa_metalizada_8x10.jpeg',
+        '39': 'PORTA_HAMBURGUESA_CARTON.jpeg',
+        '40': 'PORTA_PERRO_CARTON.jpeg',
+        '41': 'bolsa_papel_1.jpeg',
+        '42': 'bolsa_papel2.jpeg',
+        '43': 'bolsa_papel_3.jpeg',
+        '44': 'bolsa_papel_4.jpeg',
+        '45': 'bolsa_papel_6.jpeg',
+        '46': 'sachet_salsa_tomate_9gr.jpeg',
+        '47': 'sachet_salsa_tomate_6gr.jpeg',
+        '48': 'sachet_miel.jpeg',
+        '49': 'sachet_salsa_rosada_9gr.jpeg',
+        '50': 'salsa_tomate_x4kg.jpeg',
+        '51': 'mayonesa_4kg.jpeg',
+        '52': 'CARNE_HAMBURGUESA_9GRX10.jpeg',
+        '53': 'patacon_coctelero.jpeg',
+        '54': 'patacon_mediano_1000gr.jpeg',
+        '55': 'patacon_ovalado_1000gr.jpeg',
+        '56': 'patacon_redondo_1000gr.jpeg',
+        '57': 'bolsa_t20_lec.jpeg',
+        '58': 'bolsa_t25_lec.jpeg',
+        '59': 'bolsa_t30_lec.jpeg',
+        '60': 'bolsa_t25_lec.jpeg',
+        '61': 'bolsa_t30_lec.jpeg',
+        '62': 'BOLSA_METALIZADA_10X14.jpeg',
+        '63': 'BOLSA_METALIZADA_10X14.jpeg',
+        '64': 'bolsa_biodegradable_extraresistente.png',
       };
       
       let imagesCreated = 0;
-      for (const producto of productosJSON) {
-        const imageName = imageMap[producto.id] || 'product-placeholder.svg';
+      let imagesFailed = 0;
+      for (let i = 0; i < productosJSON.length; i++) {
+        const producto = productosJSON[i];
+        // Usar mapeo específico, si no, ciclar entre imágenes disponibles
+        const imageName = imageMap[producto.id] || availableImages[i % availableImages.length];
+        
         try {
           await this.prisma.productImage.create({
             data: {
@@ -242,15 +308,16 @@ export class SeedService {
             },
           });
           imagesCreated++;
-          this.logger.debug(`Imagen ${producto.id}: ${imageName}`);
+          this.logger.debug(`✓ Imagen ${producto.id}: ${imageName}`);
         } catch (error) {
+          imagesFailed++;
           this.logger.error(
-            `Error creando imagen para producto ${producto.id}:`,
+            `✗ Error creando imagen para producto ${producto.id} (${producto.nombre}):`,
             error.message
           );
         }
       }
-      this.logger.log(`✓ ${imagesCreated} imágenes creadas`);
+      this.logger.log(`✓ ${imagesCreated} imágenes creadas, ${imagesFailed} fallidas`);
 
       // Crear usuarios de prueba
       this.logger.log('Creando usuarios...');
