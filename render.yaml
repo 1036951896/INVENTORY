@@ -62,7 +62,7 @@ services:
     rootDir: ./frontend
     region: oregon
     buildCommand: npm install && npm run build
-    startCommand: npm install -g serve && serve -s dist -l 3000
+    startCommand: sh -c 'serve -s dist -l ${PORT:-3000}'
     envVars:
       - key: NODE_ENV
         value: production
