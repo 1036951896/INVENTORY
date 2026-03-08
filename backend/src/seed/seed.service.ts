@@ -163,14 +163,13 @@ export class SeedService {
       // Crear imágenes para los productos
       this.logger.log('🖼️ Creando imágenes de prueba...');
       let imagesCreated = 0;
-      for (const producto of productosJSON) {
+      for (let i = 0; i < productosJSON.length; i++) {
+        const producto = productosJSON[i];
         try {
           await this.prisma.productImage.create({
             data: {
               productoId: producto.id,
-              url: `https://via.placeholder.com/300x300?text=${encodeURIComponent(
-                producto.nombre.substring(0, 15)
-              )}`,
+              url: `https://picsum.photos/300/300?random=${i + 1}`,
               principal: true,
               orden: 1,
             },
