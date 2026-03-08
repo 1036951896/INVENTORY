@@ -58,14 +58,14 @@ export const exportToPDF = (data: ExportData) => {
   
   const pageHeight = doc.internal.pageSize.getHeight();
   const pageWidth = doc.internal.pageSize.getWidth();
-  const margin = 10;
-  let currentY = 18;
+  const margin: number = 10;
+  let currentY: number = 18;
   
   // Agregar título
   doc.setFontSize(14);
   doc.setFont(undefined, 'bold');
   doc.setTextColor(102, 126, 234);
-  doc.text(String(title || ''), margin, currentY);
+  doc.text((title || '') as string, margin, currentY);
   currentY += 10;
   
   // Agregar fecha
@@ -73,7 +73,7 @@ export const exportToPDF = (data: ExportData) => {
   doc.setFont(undefined, 'normal');
   doc.setTextColor(128, 128, 128);
   const fechaExportacion = new Date().toLocaleDateString('es-CO');
-  doc.text(`Exportado: ${fechaExportacion}`, margin, currentY);
+  doc.text(`Exportado: ${fechaExportacion}` as string, margin, currentY);
   currentY += 8;
   
   // Configurar tabla
@@ -118,7 +118,7 @@ export const exportToPDF = (data: ExportData) => {
     
     const headerLines = splitText(header, colWidth);
     headerLines.forEach((line, lineIndex) => {
-      doc.text(String(line || ''), x + 2, currentY + 4 + lineIndex * 3, { maxWidth: colWidth - 4, align: 'left' });
+      doc.text((line || '') as string, x + 2, currentY + 4 + lineIndex * 3, { maxWidth: colWidth - 4, align: 'left' });
     });
   });
   
@@ -167,7 +167,7 @@ export const exportToPDF = (data: ExportData) => {
       const cellLines = splitText(cellText, colWidth);
       
       cellLines.forEach((line, lineIndex) => {
-        doc.text(String(line || ''), x + 2, currentY + 5 + lineIndex * 3, { 
+        doc.text((line || '') as string, x + 2, currentY + 5 + lineIndex * 3, { 
           maxWidth: colWidth - 4,
           align: 'left'
         });
@@ -185,7 +185,7 @@ export const exportToPDF = (data: ExportData) => {
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
     doc.text(
-      String(`Página ${i} de ${pageCount}`),
+      (`Página ${i} de ${pageCount}`) as string,
       pageWidth / 2,
       pageHeight - 7,
       { align: 'center' }
