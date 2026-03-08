@@ -119,16 +119,23 @@ async function main() {
 
   // Crear imágenes para los productos
   console.log('🖼️ Creando imágenes de prueba...');
+  let imagesCreated = 0;
   for (const producto of productosJSON) {
-    await prisma.productImage.create({
-      data: {
-        productoId: producto.id,
-        url: `https://via.placeholder.com/300x300?text=${encodeURIComponent(producto.nombre.substring(0, 15))}`,
-        principal: true,
-        orden: 1,
-      },
-    });
+    try {
+      await prisma.productImage.create({
+        data: {
+          productoId: producto.id,
+          url: `https://via.placeholder.com/300x300?text=${encodeURIComponent(producto.nombre.substring(0, 15))}`,
+          principal: true,
+          orden: 1,
+        },
+      });
+      imagesCreated++;
+    } catch (error) {
+      console.error(`Error creando imagen para producto ${producto.id}:`, error);
+    }
   }
+  console.log(`✓ ${imagesCreated} imágenes creadas`);
 
   // Crear usuarios de prueba
   console.log('👤 Creando usuarios...');
