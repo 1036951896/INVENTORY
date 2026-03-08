@@ -54,19 +54,18 @@ services:
     healthCheckPath: /api/v1/health
 
   # ============================================================================
-  # Frontend React + Vite (Build Static)
+  # Frontend React + Vite (Web Service Static)
   # ============================================================================
-  - type: static_site
+  - type: web
     name: inventory-frontend
     repo: https://github.com/1036951896/INVENTORY
     rootDir: ./frontend
     region: oregon
-
     buildCommand: npm install && npm run build
-    staticPublishPath: ./dist
-
+    startCommand: npx serve -s dist -l 3000
     envVars:
+      - key: NODE_ENV
+        value: production
       - key: VITE_API_URL
         value: https://inventory-api.onrender.com
-
     autoDeploy: true
