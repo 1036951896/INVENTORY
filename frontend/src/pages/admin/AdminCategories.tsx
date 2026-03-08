@@ -93,6 +93,26 @@ export default function AdminCategories() {
     }
   };
 
+  const handleSuspend = async (id: string) => {
+    if (!confirm('¿Suspender esta categoría?')) return;
+
+    try {
+      const token = authService.getToken();
+      const response = await fetch(`${VITE_API_URL}/api/v1/categories/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (!response.ok) throw new Error('Error al suspender');
+
+      alert2('Categoría suspendida', 'success');
+      fetchCategories();
+    } catch (error: any) {
+      console.error('Error:', error);
+      alert2(error.message, 'error');
+    }
+  };
+
   const handleEdit = (category: Category) => {
     setFormData({
       nombre: category.nombre,

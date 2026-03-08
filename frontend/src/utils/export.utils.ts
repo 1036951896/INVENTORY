@@ -65,7 +65,7 @@ export const exportToPDF = (data: ExportData) => {
   doc.setFontSize(14);
   doc.setFont(undefined, 'bold');
   doc.setTextColor(102, 126, 234);
-  doc.text(title, margin, currentY);
+  doc.text(String(title || ''), margin, currentY);
   currentY += 10;
   
   // Agregar fecha
@@ -118,7 +118,7 @@ export const exportToPDF = (data: ExportData) => {
     
     const headerLines = splitText(header, colWidth);
     headerLines.forEach((line, lineIndex) => {
-      doc.text(line, x + 2, currentY + 4 + lineIndex * 3, { maxWidth: colWidth - 4, align: 'left' });
+      doc.text(String(line || ''), x + 2, currentY + 4 + lineIndex * 3, { maxWidth: colWidth - 4, align: 'left' });
     });
   });
   
@@ -167,7 +167,7 @@ export const exportToPDF = (data: ExportData) => {
       const cellLines = splitText(cellText, colWidth);
       
       cellLines.forEach((line, lineIndex) => {
-        doc.text(line, x + 2, currentY + 5 + lineIndex * 3, { 
+        doc.text(String(line || ''), x + 2, currentY + 5 + lineIndex * 3, { 
           maxWidth: colWidth - 4,
           align: 'left'
         });
@@ -185,7 +185,7 @@ export const exportToPDF = (data: ExportData) => {
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
     doc.text(
-      `Página ${i} de ${pageCount}`,
+      String(`Página ${i} de ${pageCount}`),
       pageWidth / 2,
       pageHeight - 7,
       { align: 'center' }
