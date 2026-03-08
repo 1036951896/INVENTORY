@@ -70,6 +70,7 @@ export const exportToPDF = (data: ExportData) => {
   doc.setFontSize(14);
   doc.setFont(undefined, 'bold');
   doc.setTextColor(102, 126, 234);
+  // @ts-expect-error - jsPDF type compatibility
   addText(title || '', margin, currentY);
   currentY += 10;
   
@@ -78,6 +79,7 @@ export const exportToPDF = (data: ExportData) => {
   doc.setFont(undefined, 'normal');
   doc.setTextColor(128, 128, 128);
   const fechaExportacion = new Date().toLocaleDateString('es-CO');
+  // @ts-expect-error - jsPDF type compatibility
   addText(`Exportado: ${fechaExportacion}`, margin, currentY);
   currentY += 8;
   
@@ -123,6 +125,7 @@ export const exportToPDF = (data: ExportData) => {
     
     const headerLines = splitText(header, colWidth);
     headerLines.forEach((line, lineIndex) => {
+      // @ts-expect-error - jsPDF type compatibility
       addText(line || '', x + 2, currentY + 4 + lineIndex * 3, { maxWidth: colWidth - 4, align: 'left' });
     });
   });
@@ -172,6 +175,7 @@ export const exportToPDF = (data: ExportData) => {
       const cellLines = splitText(cellText, colWidth);
       
       cellLines.forEach((line, lineIndex) => {
+        // @ts-expect-error - jsPDF type compatibility
         addText(line || '', x + 2, currentY + 5 + lineIndex * 3, { 
           maxWidth: colWidth - 4,
           align: 'left'
@@ -189,6 +193,7 @@ export const exportToPDF = (data: ExportData) => {
   const pageCount = doc.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
+    // @ts-expect-error - jsPDF type compatibility
     addText(
       `Página ${i} de ${pageCount}`,
       pageWidth / 2,
