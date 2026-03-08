@@ -58,14 +58,19 @@ export const exportToPDF = (data: ExportData) => {
   
   const pageHeight = doc.internal.pageSize.getHeight();
   const pageWidth = doc.internal.pageSize.getWidth();
-  const margin: number = 10;
-  let currentY: number = 18;
+  const margin = 10 as number;
+  let currentY = 18 as number;
+  
+  // Helper function to safely call doc.text
+  const addText = (text: string, x: number, y: number, options?: any) => {
+    doc.text(text as string, x as number, y as number, options);
+  };
   
   // Agregar título
   doc.setFontSize(14);
   doc.setFont(undefined, 'bold');
   doc.setTextColor(102, 126, 234);
-  doc.text((title || '') as string, margin, currentY);
+  addText(title || '', margin, currentY);
   currentY += 10;
   
   // Agregar fecha
@@ -73,7 +78,7 @@ export const exportToPDF = (data: ExportData) => {
   doc.setFont(undefined, 'normal');
   doc.setTextColor(128, 128, 128);
   const fechaExportacion = new Date().toLocaleDateString('es-CO');
-  doc.text(`Exportado: ${fechaExportacion}` as string, margin, currentY);
+  addText(`Exportado: ${fechaExportacion}`, margin, currentY);
   currentY += 8;
   
   // Configurar tabla
@@ -118,7 +123,7 @@ export const exportToPDF = (data: ExportData) => {
     
     const headerLines = splitText(header, colWidth);
     headerLines.forEach((line, lineIndex) => {
-      doc.text((line || '') as string, x + 2, currentY + 4 + lineIndex * 3, { maxWidth: colWidth - 4, align: 'left' });
+      addText(line || '', x + 2, currentY + 4 + lineIndex * 3, { maxWidth: colWidth - 4, align: 'left' });
     });
   });
   
@@ -167,7 +172,7 @@ export const exportToPDF = (data: ExportData) => {
       const cellLines = splitText(cellText, colWidth);
       
       cellLines.forEach((line, lineIndex) => {
-        doc.text((line || '') as string, x + 2, currentY + 5 + lineIndex * 3, { 
+        addText(line || '', x + 2, currentY + 5 + lineIndex * 3, { 
           maxWidth: colWidth - 4,
           align: 'left'
         });
@@ -184,8 +189,8 @@ export const exportToPDF = (data: ExportData) => {
   const pageCount = doc.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
-    doc.text(
-      (`Página ${i} de ${pageCount}`) as string,
+    addText(
+      `Página ${i} de ${pageCount}`,
       pageWidth / 2,
       pageHeight - 7,
       { align: 'center' }
