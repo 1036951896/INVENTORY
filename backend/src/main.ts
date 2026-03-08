@@ -1,10 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { join } from 'path';
+import * as express from 'express';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
+  
+  // Servir archivos estáticos desde backend/public
+  app.use('/assets', express.static(join(__dirname, '..', 'public', 'assets')));
 
   // Validación global
   app.useGlobalPipes(
