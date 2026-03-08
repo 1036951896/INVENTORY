@@ -55,36 +55,30 @@ export const exportToPDF = (data: ExportData) => {
   console.log('📊 exportToPDF recibido:', { title, headersCount: headers.length, rowsCount: rows.length });
   
   const doc = new jsPDFConstructor('l'); // landscape
+  const docAny = doc as any; // Cast to any to avoid jsPDF type incompatibilities
   
-  const pageHeight = doc.internal.pageSize.getHeight();
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const margin = 10 as number;
-  let currentY = 18 as number;
-  
-  // Helper function to safely call doc.text
-  const addText = (text: string, x: number, y: number, options?: any) => {
-    doc.text(text as string, x as number, y as number, options);
-  };
+  const pageHeight = docAny.internal.pageSize.getHeight();
+  const pageWidth = docAny.internal.pageSize.getWidth();
+  const margin = 10;
+  let currentY = 18;
   
   // Agregar título
-  doc.setFontSize(14);
-  doc.setFont(undefined, 'bold');
-  doc.setTextColor(102, 126, 234);
-  // @ts-expect-error - jsPDF type compatibility
-  addText(title || '', margin, currentY);
+  docAny.setFontSize(14);
+  docAny.setFont(undefined, 'bold');
+  docAny.setTextColor(102, 126, 234);
+  docAny.text(title || '', margin, currentY);
   currentY += 10;
   
   // Agregar fecha
-  doc.setFontSize(8);
-  doc.setFont(undefined, 'normal');
-  doc.setTextColor(128, 128, 128);
+  docAny.setFontSize(8);
+  docAny.setFont(undefined, 'normal');
+  docAny.setTextColor(128, 128, 128);
   const fechaExportacion = new Date().toLocaleDateString('es-CO');
-  // @ts-expect-error - jsPDF type compatibility
-  addText(`Exportado: ${fechaExportacion}`, margin, currentY);
+  docAny.text(`Exportado: ${fechaExportacion}`, margin, currentY);
   currentY += 8;
   
   // Configurar tabla
-  doc.setFontSize(8);
+  docAny.setFontSize(8);
   const colCount = headers.length;
   const colWidth = (pageWidth - 2 * margin) / colCount;
   const rowHeight = 9; // Aumentado para mejor legibilidad
@@ -98,7 +92,7 @@ export const exportToPDF = (data: ExportData) => {
     
     words.forEach(word => {
       const testLine = currentLine + (currentLine ? ' ' : '') + word;
-      const testWidth = doc.getStringUnitWidth(testLine) * doc.getFontSize() / 1000;
+      const testWidth = docAny.getStringUnitWidth(testLine) * docAny.getFontSize() / 1000;
       
       if (testWidth > maxWidth - 2) {
         if (currentLine) lines.push(currentLine);
@@ -113,28 +107,27 @@ export const exportToPDF = (data: ExportData) => {
   };
   
   // Dibujar encabezados
-  doc.setFillColor(102, 126, 234);
-  doc.setTextColor(255, 255, 255);
-  doc.setFont(undefined, 'bold');
+  docAny.setFillColor(102, 126, 234);
+  docAny.setTextColor(255, 255, 255);
+  docAny.setFont(undefined, 'bold');
   
   headers.forEach((header, colIndex) => {
     const x = margin + colIndex * colWidth;
-    doc.rect(x, currentY, colWidth, headerHeight, 'F');
-    doc.setDrawColor(255, 255, 255);
-    doc.rect(x, currentY, colWidth, headerHeight);
+    docAny.rect(x, currentY, colWidth, headerHeight, 'F');
+    docAny.setDrawColor(255, 255, 255);
+    docAny.rect(x, currentY, colWidth, headerHeight);
     
     const headerLines = splitText(header, colWidth);
     headerLines.forEach((line, lineIndex) => {
-      // @ts-expect-error - jsPDF type compatibility
-      addText(line || '', x + 2, currentY + 4 + lineIndex * 3, { maxWidth: colWidth - 4, align: 'left' });
+      docAny.text(line || '', x + 2, currentY + 4 + lineIndex * 3, { maxWidth: colWidth - 4, align: 'left' });
     });
   });
   
   currentY += headerHeight;
   
   // Dibujar filas
-  doc.setTextColor(0, 0, 0);
-  doc.setFont(undefined, 'normal');
+  docAny.setTextColor(0, 0, 0);
+  docAny.setFont(undefined, 'normal');
   let rowColor = false;
   
   rows.forEach((row, rowIndex) => {
@@ -148,24 +141,24 @@ export const exportToPDF = (data: ExportData) => {
     
     // Verificar si necesita página nueva
     if (currentY + dynamicRowHeight > pageHeight - 12) {
-      doc.addPage();
+      docAny.addPage();
       currentY = 20;
     }
     
     // Color alternado
     if (rowColor) {
-      doc.setFillColor(245, 247, 250);
-      doc.rect(margin, currentY, pageWidth - 2 * margin, dynamicRowHeight, 'F');
+      docAny.setFillColor(245, 247, 250);
+      docAny.rect(margin, currentY, pageWidth - 2 * margin, dynamicRowHeight, 'F');
     }
     
     // Dibujar borde
-    doc.setDrawColor(200, 200, 200);
-    doc.rect(margin, currentY, pageWidth - 2 * margin, dynamicRowHeight);
+    docAny.setDrawColor(200, 200, 200);
+    docAny.rect(margin, currentY, pageWidth - 2 * margin, dynamicRowHeight);
     
     // Dibujar divisiones de columnas
     for (let i = 1; i < colCount; i++) {
       const x = margin + i * colWidth;
-      doc.line(x, currentY, x, currentY + dynamicRowHeight);
+      docAny.line(x, currentY, x, currentY + dynamicRowHeight);
     }
     
     // Dibujar celdas
@@ -175,8 +168,7 @@ export const exportToPDF = (data: ExportData) => {
       const cellLines = splitText(cellText, colWidth);
       
       cellLines.forEach((line, lineIndex) => {
-        // @ts-expect-error - jsPDF type compatibility
-        addText(line || '', x + 2, currentY + 5 + lineIndex * 3, { 
+        docAny.text(line || '', x + 2, currentY + 5 + lineIndex * 3, { 
           maxWidth: colWidth - 4,
           align: 'left'
         });
@@ -188,13 +180,12 @@ export const exportToPDF = (data: ExportData) => {
   });
   
   // Agregar pie de página
-  doc.setFontSize(7);
-  doc.setTextColor(128, 128, 128);
-  const pageCount = doc.getNumberOfPages();
+  docAny.setFontSize(7);
+  docAny.setTextColor(128, 128, 128);
+  const pageCount = docAny.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
-    doc.setPage(i);
-    // @ts-expect-error - jsPDF type compatibility
-    addText(
+    docAny.setPage(i);
+    docAny.text(
       `Página ${i} de ${pageCount}`,
       pageWidth / 2,
       pageHeight - 7,
@@ -203,7 +194,7 @@ export const exportToPDF = (data: ExportData) => {
   }
   
   console.log('✅ PDF creado correctamente');
-  doc.save(`${filename}-${new Date().toISOString().split('T')[0]}.pdf`);
+  docAny.save(`${filename}-${new Date().toISOString().split('T')[0]}.pdf`);
 };
 
 /**
