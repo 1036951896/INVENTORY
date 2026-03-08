@@ -174,7 +174,7 @@ export default function ProductGrid({ activeCategory = 'todas' }: ProductGridPro
               >
                 <div className="tarjeta-producto-imagen">
                   <img
-                    src={getImageUrl(product.imagen)}
+                    src={getImageUrl((product as any).imagenes?.[0]?.url || product.imagen)}
                     alt={product.nombre}
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = `${BACKEND_URL}/assets/product-placeholder.svg`;
