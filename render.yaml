@@ -2,20 +2,22 @@ services:
   # ============================================================================
   # PostgreSQL Database
   # ============================================================================
-  - type: pserv
+  - type: postgres
     name: inventory-db
     plan: free
     region: oregon
+    # Opcional: especifica la versión de PostgreSQL (ej: 15, 16)
+    # version: 15
 
   # ============================================================================
   # Backend NestJS API (Docker)
   # ============================================================================
   - type: web
     name: inventory-api
+    runtime: docker                     # ← Agregado explícitamente
     region: oregon
     dockerfilePath: backend/Dockerfile
     dockerContext: backend
-
     envVars:
       - key: NODE_ENV
         value: production
@@ -43,23 +45,19 @@ services:
         value: noreply@inventory.com
       - key: ADMIN_EMAIL
         value: santis3268@gmail.com
-
     healthCheckPath: /api/v1/health
     autoDeploy: true
 
   # ============================================================================
-  # Frontend React + Vite
+  # Frontend React + Vite (Sitio estático)
   # ============================================================================
-  - type: web
+  - type: static                       # ← Cambiado de 'web' a 'static'
     name: inventory-frontend
     region: oregon
     rootDir: frontend
-
     buildCommand: npm install && npm run build
     staticPublishPath: dist
-
     envVars:
       - key: VITE_API_URL
         value: https://inventory-api.onrender.com
-
     autoDeploy: true
