@@ -34,7 +34,7 @@ async function bootstrap() {
   app.enableCors(corsOptions);
   
   // Middleware personalizado para CORS en archivos estáticos
-  app.use((req, res, next) => {
+  app.use((req: any, res: any, next: any) => {
     const origin = req.headers.origin;
     if (corsOptions.origin.includes(origin) || corsOptions.origin.includes('*')) {
       res.header('Access-Control-Allow-Origin', origin);
