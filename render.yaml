@@ -56,14 +56,15 @@ services:
   # ============================================================================
   # Frontend React + Vite
   # ============================================================================
-  - type: static_site
+  - type: web
     name: inventory-frontend
+    env: static
     repo: https://github.com/1036951896/INVENTORY
     rootDir: ./frontend
     region: oregon
 
     buildCommand: npm install && npm run build
-    publishDir: dist
+    staticPublishPath: dist
 
     envVars:
       - key: NODE_ENV
