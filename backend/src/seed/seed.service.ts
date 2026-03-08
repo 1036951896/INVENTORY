@@ -162,14 +162,40 @@ export class SeedService {
 
       // Crear imágenes para los productos
       this.logger.log('🖼️ Creando imágenes de prueba...');
+      const productImages = [
+        'bolsa-biodegradable-extraresistente.png',
+        'producto-bolsa-metalizada.jpg',
+        'producto-bolsa-papel.jpg',
+        'producto-carne-hamburg.webp',
+        'producto-mayonesa.jpg',
+        'producto-parafinada.png',
+        'producto-patacon-coctelero.jpg',
+        'producto-patacon-mediano.jpg',
+        'producto-patacon-ovalado.jpg',
+        'producto-porta.jpg',
+        'producto-ripio-sabrosura.jpg',
+        'producto-rollo-parafinado.png',
+        'producto-sachet-miel.jpg',
+        'producto-sachet-rosada.jpg',
+        'producto-sachet-salsa.jpg',
+        'producto-sachet-tomate-6gr.webp',
+        'producto-salsa-tomate.png',
+        'producto-servilleta-mia.jpg',
+        'producto-servilleta.jpg',
+        'producto-toalla-cocina.jpg',
+        'producto-toalla-mano.jpg',
+        'producto-vinipel.jpg',
+      ];
+      
       let imagesCreated = 0;
       for (let i = 0; i < productosJSON.length; i++) {
         const producto = productosJSON[i];
+        const imageFile = productImages[i % productImages.length];
         try {
           await this.prisma.productImage.create({
             data: {
               productoId: producto.id,
-              url: `https://picsum.photos/300/300?random=${i + 1}`,
+              url: `https://inventory-frontend-97h4.onrender.com/images/productos/${imageFile}`,
               principal: true,
               orden: 1,
             },
