@@ -117,6 +117,19 @@ async function main() {
     });
   }
 
+  // Crear imágenes para los productos
+  console.log('🖼️ Creando imágenes de prueba...');
+  for (const producto of productosJSON) {
+    await prisma.productImage.create({
+      data: {
+        productoId: producto.id,
+        url: `https://via.placeholder.com/300x300?text=${encodeURIComponent(producto.nombre.substring(0, 15))}`,
+        esPortada: true,
+        orden: 1,
+      },
+    });
+  }
+
   // Crear usuarios de prueba
   console.log('👤 Creando usuarios...');
   const hashedAdminPassword = await bcrypt.hash('admin123', 10);
@@ -177,6 +190,7 @@ async function main() {
   console.log('\n✅ ¡Seed completado exitosamente!');
   console.log(`✓ ${categoriasSeed.length} categorías creadas`);
   console.log(`✓ ${productosJSON.length} productos creados`);
+  console.log(`✓ ${productosJSON.length} imágenes creadas`);
   console.log('✓ 2 usuarios creados con direcciones');
   console.log('\n📋 Credenciales de prueba:');
   console.log('  Admin: admin@inventory.com / admin123');
