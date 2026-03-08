@@ -14,7 +14,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import * as path from 'path';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { ProductImagesService } from './product-images.service';
 import { CreateProductImageDto, UpdateProductImageDto } from './dto/product-image.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -28,7 +28,7 @@ const storage = diskStorage({
   },
   filename: (_req, _file, cb) => {
     const ext = path.extname(_file.originalname);
-    const nombre = `producto-${uuidv4()}${ext}`;
+    const nombre = `producto-${randomUUID()}${ext}`;
     cb(null, nombre);
   },
 });

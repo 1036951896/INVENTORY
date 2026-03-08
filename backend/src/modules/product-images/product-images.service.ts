@@ -3,7 +3,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { UpdateProductImageDto } from './dto/product-image.dto';
 import * as fs from 'fs';
 import * as path from 'path';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import axios from 'axios';
 
 @Injectable()
@@ -59,7 +59,7 @@ export class ProductImagesService {
 
       // Generar nombre único para la imagen
       const extension = this.obtenerExtensionDesdeContentType(contentType);
-      const nombreArchivo = `producto-${uuidv4()}${extension}`;
+      const nombreArchivo = `producto-${randomUUID()}${extension}`;
       const rutaArchivo = path.join(imagensDir, nombreArchivo);
 
       // Guardar imagen en el sistema de archivos
