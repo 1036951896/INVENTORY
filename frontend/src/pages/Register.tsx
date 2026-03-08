@@ -62,7 +62,6 @@ export default function Register() {
         email: formData.email,
         telefono: formData.telefono,
         password: formData.password,
-        rol: 'CLIENTE',
         direccion: {
           calle: formData.calle,
           numero: formData.numero,

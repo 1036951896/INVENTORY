@@ -74,6 +74,13 @@ export class ProductImagesController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
+  @Get('available-images')
+  async obtenerImagenesDisponibles() {
+    return this.productImagesService.obtenerImagenesDisponibles();
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
   @Post()
   async agregar(@Body() dto: CreateProductImageDto) {
     return this.productImagesService.agregar(dto.productoId, {

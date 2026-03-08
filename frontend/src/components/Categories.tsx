@@ -5,9 +5,10 @@ interface CategoriesProps {
   products: Product[];
   onCategoryChange: (category: string) => void;
   activeCategory: string;
+  showMobile?: boolean;
 }
 
-export default function Categories({ products, onCategoryChange, activeCategory }: CategoriesProps) {
+export default function Categories({ products, onCategoryChange, activeCategory, showMobile = false }: CategoriesProps) {
   const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export default function Categories({ products, onCategoryChange, activeCategory 
   };
 
   return (
-    <section className="categorias-seccion">
+    <section className={`categorias-seccion ${showMobile ? 'mostrar-mobile' : ''}`}>
       <div className="categorias">
         <div className="contenedor-filtros">
           <div className="categorias-lista" id="categorias-lista">

@@ -1,51 +1,108 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { mockProducts } from '../data/mockProducts';
 import { alert2 } from '../utils/notifications';
+import { productsService } from '../services/products.service';
 import type { Product } from '../types';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CartPanel from '../components/CartPanel';
 import '../styles/product-detail.css';
 
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+interface ProductWithImages extends Product {
+  imagenes?: Array<{ url: string; principal: boolean; orden: number }>;
+}
+
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { addToCart } = useCart();
   
-  const [product, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<ProductWithImages | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [salesCount, setSalesCount] = useState(0);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Buscar producto por ID
-    const foundProduct = mockProducts.find(p => String(p.id) === String(id));
-    
-    if (!foundProduct) {
-      alert2('Producto no encontrado', 'error');
-      navigate('/');
-      return;
+    const loadProduct = async () => {
+      try {
+        setLoading(true);
+        
+        // Obtener producto de la API
+        const response = await productsService.getById(id || '');
+        
+        if (!response) {
+          alert2('Producto no encontrado', 'error');
+          navigate('/');
+          return;
+        }
+        
+        setProduct(response as ProductWithImages);
+        
+        // Generar número aleatorio de ventas (10-40)
+        setSalesCount(Math.floor(Math.random() * 30) + 10);
+        
+        // Cargar todos los productos para encontrar relacionados
+        const allProducts = await productsService.getAll();
+        const related = allProducts
+          .filter(p => p.categoria === response.categoria && String(p.id) !== String(response.id))
+          .slice(0, 4);
+        setRelatedProducts(related);
+      } catch (error: any) {
+        console.error('Error cargando producto:', error);
+        alert2('Error al cargar el producto', 'error');
+        navigate('/');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      loadProduct();
     }
-    
-    setProduct(foundProduct);
-    
-    // Generar número aleatorio de ventas (10-40)
-    setSalesCount(Math.floor(Math.random() * 30) + 10);
-    
-    // Cargar productos relacionados (misma categoría, máximo 4)
-    const related = mockProducts
-      .filter(p => p.categoria === foundProduct.categoria && String(p.id) !== String(foundProduct.id))
-      .slice(0, 4);
-    setRelatedProducts(related);
   }, [id, navigate]);
 
-  if (!product) {
-    return <div>Cargando...</div>;
+  if (loading) {
+    return (
+      <>
+        <Header onCartClick={() => setIsCartOpen(!isCartOpen)} />
+        <main className="contenedor">
+          <div style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+            <p>Cargando producto...</p>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
   }
 
+  if (!product) {
+    return (
+      <>
+        <Header onCartClick={() => setIsCartOpen(!isCartOpen)} />
+        <main className="contenedor">
+          <div style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+            <p>Producto no encontrado</p>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  const getImageUrl = (imagePath: string | undefined) => {
+    if (!imagePath) return `${BACKEND_URL}/assets/product-placeholder.svg`;
+    if (imagePath.startsWith('http')) return imagePath;
+    if (imagePath.startsWith('/')) return `${BACKEND_URL}${imagePath}`;
+    return `${BACKEND_URL}/${imagePath}`;
+  };
+
+  // Obtener imagen principal del array de imagenes
+  const mainImage = product.imagenes?.find(img => img.principal)?.url || product.imagen;
   const precioOriginal = Math.round(product.precio * 1.1);
   const descuento = Math.round(((precioOriginal - product.precio) / precioOriginal) * 100);
   const cuotaMensual = Math.round(product.precio / 3);
@@ -80,7 +137,7 @@ export default function ProductDetail() {
     }
     
     handleAddToCart();
-    navigate('/carrito');
+    navigate('/checkout');
   };
 
   const handleRelatedClick = (productId: number | string) => {
@@ -105,8 +162,11 @@ export default function ProductDetail() {
           <div className="detalle-imagen">
             <img 
               id="imagen-producto" 
-              src={product.imagen} 
+              src={getImageUrl(mainImage)}
               alt={product.nombre}
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = `${BACKEND_URL}/assets/product-placeholder.svg`;
+              }}
             />
           </div>
 
@@ -238,7 +298,13 @@ export default function ProductDetail() {
                   onClick={() => handleRelatedClick(p.id)}
                 >
                   <div className="tarjeta-producto-mini-imagen">
-                    <img src={p.imagen} alt={p.nombre} />
+                    <img 
+                      src={getImageUrl(p.imagen)} 
+                      alt={p.nombre}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = `${BACKEND_URL}/assets/product-placeholder.svg`;
+                      }}
+                    />
                   </div>
                   <div className="tarjeta-producto-mini-info">
                     <div className="tarjeta-producto-mini-nombre">{p.nombre}</div>

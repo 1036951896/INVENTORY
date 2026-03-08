@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { authService } from '../../services/auth.service';
 import { alert2 } from '../../utils/notifications';
+import { exportData } from '../../utils/export.utils';
 import './admin-users.css';
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -144,20 +145,39 @@ export default function AdminUsers() {
       new Date(user.createdAt).toLocaleDateString('es-CO')
     ]);
 
-    const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
-    ].join('\n');
+    exportData.csv({
+      headers,
+      rows,
+      title: 'REPORTE DE USUARIOS',
+      filename: 'usuarios'
+    });
 
-    const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent));
-    element.setAttribute('download', `usuarios-${new Date().toISOString().split('T')[0]}.csv`);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+    alert2('Usuarios exportados a CSV correctamente', 'success');
+  };
 
-    alert2('Usuarios exportados correctamente', 'success');
+  const handleExportPDF = () => {
+    if (filteredUsers.length === 0) {
+      alert2('No hay usuarios para exportar', 'info');
+      return;
+    }
+
+    const headers = ['Nombre', 'Email', 'Rol', 'Estado', 'Fecha Creación'];
+    const rows = filteredUsers.map(user => [
+      user.nombre,
+      user.email,
+      user.rol,
+      user.activo ? 'Activo' : 'Inactivo',
+      new Date(user.createdAt).toLocaleDateString('es-CO')
+    ]);
+
+    exportData.pdf({
+      headers,
+      rows,
+      title: 'REPORTE DE USUARIOS',
+      filename: 'usuarios'
+    });
+
+    alert2('Usuarios exportados a PDF correctamente', 'success');
   };
 
   const resetFilters = () => {
@@ -236,17 +256,31 @@ export default function AdminUsers() {
           >
             Limpiar filtros
           </button>
-          <button 
-            className="btn-export" 
-            onClick={handleExportCSV}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            Exportar CSV
-          </button>
+          <div className="export-buttons-group">
+            <button 
+              className="btn-export btn-csv" 
+              onClick={handleExportCSV}
+              title="Exportar a CSV"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              CSV
+            </button>
+            <button 
+              className="btn-export btn-pdf" 
+              onClick={handleExportPDF}
+              title="Exportar a PDF"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              PDF
+            </button>
+          </div>
         </div>
       </div>
 

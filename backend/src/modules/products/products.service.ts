@@ -93,6 +93,15 @@ export class ProductsService {
       where: { id },
       include: {
         categoria: true,
+        imagenes: {
+          select: {
+            id: true,
+            url: true,
+            principal: true,
+            orden: true
+          },
+          orderBy: { orden: 'asc' }
+        },
         orderItems: {
           select: {
             cantidad: true,

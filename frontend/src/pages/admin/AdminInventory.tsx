@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { authService } from '../../services/auth.service';
 import { alert2 } from '../../utils/notifications';
+import { exportData } from '../../utils/export.utils';
 import './admin-inventory.css';
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -8,12 +9,13 @@ const VITE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 interface Product {
   id: string;
   nombre: string;
-  sku: string;
-  categoria: {
+  sku?: string;
+  categoria?: {
     nombre: string;
   };
+  categoriaId?: string;
   stock: number;
-  stockMinimo: number;
+  stockMinimo?: number;
   precio: number;
 }
 
@@ -32,17 +34,30 @@ export default function AdminInventory() {
       setLoading(true);
       const token = authService.getToken();
 
-      const response = await fetch(`${VITE_API_URL}/api/v1/products`, {
+      const response = await fetch(`${VITE_API_URL}/api/v1/products?limit=500&page=1`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
-      if (!response.ok) throw new Error('Error al cargar productos');
+      if (!response.ok) {
+        throw new Error('Error al cargar productos');
+      }
 
       const data = await response.json();
-      setProducts(Array.isArray(data) ? data : []);
+      
+      // Manejo flexible de la respuesta del API
+      let productsData = [];
+      if (Array.isArray(data)) {
+        productsData = data;
+      } else if (data.data && Array.isArray(data.data)) {
+        productsData = data.data;
+      }
+
+      console.log('Productos cargados:', productsData.length);
+      setProducts(productsData);
     } catch (error: any) {
-      console.error('Error:', error);
+      console.error('Error al cargar productos:', error);
       alert2(error.message || 'Error al cargar productos', 'error');
+      setProducts([]);
     } finally {
       setLoading(false);
     }
@@ -50,7 +65,8 @@ export default function AdminInventory() {
 
   const getMetrics = () => {
     const totalValue = products.reduce((sum, p) => sum + (p.precio * p.stock), 0);
-    const lowStock = products.filter(p => p.stock > 0 && p.stock <= p.stockMinimo).length;
+    const stockMinDefault = 10; // Valor por defecto si no existe
+    const lowStock = products.filter(p => p.stock > 0 && p.stock <= (p.stockMinimo || stockMinDefault)).length;
     const outOfStock = products.filter(p => p.stock === 0).length;
 
     return {
@@ -64,15 +80,88 @@ export default function AdminInventory() {
   const filteredProducts = products.filter(product => {
     const matchesSearch = 
       product.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.sku.toLowerCase().includes(searchTerm.toLowerCase());
+      (product.sku && product.sku.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = !categoryFilter || product.categoria?.nombre === categoryFilter;
     return matchesSearch && matchesCategory;
   });
 
   const getStockStatus = (product: Product) => {
+    const stockMinDefault = 10;
     if (product.stock === 0) return { status: 'agotado', label: 'Agotado' };
-    if (product.stock <= product.stockMinimo) return { status: 'bajo', label: 'Bajo stock' };
+    if (product.stock <= (product.stockMinimo || stockMinDefault)) return { status: 'bajo', label: 'Bajo stock' };
     return { status: 'normal', label: 'Normal' };
+  };
+
+  const handleExportCSV = () => {
+    if (filteredProducts.length === 0) {
+      alert2('No hay productos para exportar', 'info');
+      return;
+    }
+
+    const stockMinDefault = 10;
+    const headers = ['Producto', 'SKU', 'Categoría', 'Stock', 'Stock Mínimo', 'Precio', 'Valor Total', 'Estado'];
+    const rows = filteredProducts.map(product => {
+      const status = getStockStatus(product);
+      const totalValue = product.precio * product.stock;
+      return [
+        product.nombre,
+        product.sku || '-',
+        product.categoria?.nombre || '-',
+        product.stock,
+        product.stockMinimo || stockMinDefault,
+        `$${product.precio.toLocaleString('es-CO')}`,
+        `$${totalValue.toLocaleString('es-CO')}`,
+        status.label
+      ];
+    });
+
+    exportData.csv({
+      headers,
+      rows,
+      title: 'REPORTE DE INVENTARIO',
+      filename: 'inventario'
+    });
+
+    alert2('Inventario exportado a CSV correctamente', 'success');
+  };
+
+  const handleExportPDF = () => {
+    if (filteredProducts.length === 0) {
+      alert2('No hay productos para exportar', 'info');
+      return;
+    }
+
+    const stockMinDefault = 10;
+    const headers = ['Producto', 'SKU', 'Categoría', 'Stock', 'Precio', 'Valor Total', 'Estado'];
+    const rows = filteredProducts.map(product => {
+      const status = getStockStatus(product);
+      const totalValue = product.precio * product.stock;
+      return [
+        product.nombre,
+        product.sku || '-',
+        product.categoria?.nombre || '-',
+        product.stock,
+        `$${product.precio.toLocaleString('es-CO')}`,
+        `$${totalValue.toLocaleString('es-CO')}`,
+        status.label
+      ];
+    });
+
+    console.log('📋 AdminInventory handleExportPDF:', {
+      productsCount: filteredProducts.length,
+      headersCount: headers.length,
+      rowsCount: rows.length,
+      firstRow: rows[0]
+    });
+
+    exportData.pdf({
+      headers,
+      rows,
+      title: 'REPORTE DE INVENTARIO',
+      filename: 'inventario'
+    });
+
+    alert2('Inventario exportado a PDF correctamente', 'success');
   };
 
   const categories = Array.from(new Set(products.map(p => p.categoria?.nombre).filter(Boolean)));
@@ -179,6 +268,23 @@ export default function AdminInventory() {
               ))}
             </select>
           </div>
+
+          <div className="export-buttons-group">
+            <button 
+              className="btn-export btn-csv" 
+              onClick={handleExportCSV}
+              title="Exportar a CSV"
+            >
+              CSV
+            </button>
+            <button 
+              className="btn-export btn-pdf" 
+              onClick={handleExportPDF}
+              title="Exportar a PDF"
+            >
+              PDF
+            </button>
+          </div>
         </div>
       </div>
 
@@ -206,16 +312,17 @@ export default function AdminInventory() {
               {filteredProducts.map((product) => {
                 const status = getStockStatus(product);
                 const totalValue = product.precio * product.stock;
+                const stockMinDefault = 10;
 
                 return (
                   <tr key={product.id}>
                     <td className="product-name">{product.nombre}</td>
-                    <td className="sku">{product.sku}</td>
+                    <td className="sku">{product.sku || '-'}</td>
                     <td className="category">{product.categoria?.nombre || '-'}</td>
                     <td className="stock">
                       <strong>{product.stock}</strong>
                     </td>
-                    <td className="stock-min">{product.stockMinimo}</td>
+                    <td className="stock-min">{product.stockMinimo || stockMinDefault}</td>
                     <td className="price">${product.precio.toLocaleString('es-CO', {maximumFractionDigits: 0})}</td>
                     <td className="value">${totalValue.toLocaleString('es-CO', {maximumFractionDigits: 0})}</td>
                     <td>

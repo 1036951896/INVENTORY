@@ -1,3 +1,5 @@
+@import './export-buttons.css';
+
 /* ===== ADMIN ORDERS ===== */
 .orders-container {
   max-width: 1400px;
@@ -697,6 +699,8 @@
   .filter-select {
     padding: 0.5rem 0.5rem;
     font-size: 0.8rem;
+  }
+
   .modal-body,
   .modal-footer {
     padding: 1rem;

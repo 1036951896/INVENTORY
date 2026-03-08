@@ -33,6 +33,7 @@
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/passport": "^10.0.1",
     "@nestjs/platform-express": "^10.2.8",
+    "@nestjs/serve-static": "^5.0.4",
     "@prisma/client": "^5.7.1",
     "@types/ms": "^2.1.0",
     "axios": "^1.13.6",
@@ -46,7 +47,8 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^5.0.5",
     "rxjs": "^7.8.1",
-    "uuid": "^13.0.0"
+    "uuid": "^13.0.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.2.1",

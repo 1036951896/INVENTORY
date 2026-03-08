@@ -1314,6 +1314,70 @@ footer {
     border-radius: 0;
     max-height: 100vh;
   }
+}
+
+/* ===== CATEGORÍAS - RESPONSIVE MÓVIL ===== */
+@media (max-width: 768px) {
+  /* Ocultar categorías en móvil por defecto */
+  .categorias-seccion {
+    display: none;
+  }
+
+  /* Mostrar como overlay cuando tiene la clase mostrar-mobile */
+  .categorias-seccion.mostrar-mobile {
+    display: block;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: white;
+    z-index: 1001;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    padding: 0.5rem 0;
+    animation: slideDown 0.3s ease-out;
+  }
+
+  .categorias-seccion.mostrar-mobile .categorias-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .categorias-seccion.mostrar-mobile .categoria {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border-radius: 0;
+    border-bottom: 1px solid #f0f0f0;
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .categorias-seccion.mostrar-mobile .categoria:hover {
+    background: #f9f9f9;
+  }
+
+  .categorias-seccion.mostrar-mobile .categoria.activo {
+    background: #f0f5ff;
+    color: #386273;
+    font-weight: 600;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
 
   .carrito-panel.activo {
     right: 0;

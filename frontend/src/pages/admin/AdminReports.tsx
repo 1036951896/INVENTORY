@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { authService } from '../../services/auth.service';
 import { alert2 } from '../../utils/notifications';
+import { exportData } from '../../utils/export.utils';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import './admin-reports.css';
 
@@ -175,11 +176,45 @@ export default function AdminReports() {
   };
 
   const exportPDF = () => {
-    alert2('PDF generado correctamente', 'success');
+    if (!reportData || !reportData.data || reportData.data.length === 0) {
+      alert2('No hay datos para exportar', 'info');
+      return;
+    }
+
+    const headers = Object.keys(reportData.data[0] || {});
+    const rows = reportData.data.map((item: any) => 
+      headers.map(key => item[key])
+    );
+
+    exportData.pdf({
+      headers,
+      rows,
+      title: `REPORTE: ${reportData.type?.toUpperCase()} (${reportData.period?.toUpperCase()})`,
+      filename: `reporte-${reportData.type}`
+    });
+
+    alert2('Reporte exportado a PDF correctamente', 'success');
   };
 
   const exportCSV = () => {
-    alert2('CSV exportado correctamente', 'success');
+    if (!reportData || !reportData.data || reportData.data.length === 0) {
+      alert2('No hay datos para exportar', 'info');
+      return;
+    }
+
+    const headers = Object.keys(reportData.data[0] || {});
+    const rows = reportData.data.map((item: any) => 
+      headers.map(key => item[key])
+    );
+
+    exportData.csv({
+      headers,
+      rows,
+      title: `REPORTE: ${reportData.type?.toUpperCase()} (${reportData.period?.toUpperCase()})`,
+      filename: `reporte-${reportData.type}`
+    });
+
+    alert2('Reporte exportado a CSV correctamente', 'success');
   };
 
   return (

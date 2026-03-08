@@ -12,7 +12,6 @@ interface RegisterData {
   email: string;
   password: string;
   telefono: string;
-  rol: string;
   direccion: {
     calle: string;
     numero: string;

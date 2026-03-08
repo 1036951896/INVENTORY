@@ -133,6 +133,29 @@ export class ProductImagesService {
     });
   }
 
+  async obtenerImagenesDisponibles() {
+    try {
+      const assetsDir = path.join(process.cwd(), 'public', 'assets');
+      if (!fs.existsSync(assetsDir)) {
+        return { imagenes: [] };
+      }
+
+      const archivos = fs.readdirSync(assetsDir).filter(file => {
+        const ext = path.extname(file).toLowerCase();
+        return ['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext);
+      });
+
+      const imagenes = archivos.map(archivo => ({
+        nombre: archivo,
+        ruta: `/assets/${archivo}`,
+      }));
+
+      return { imagenes: imagenes.sort((a, b) => a.nombre.localeCompare(b.nombre)) };
+    } catch (error) {
+      throw new BadRequestException(`Error al obtener imágenes disponibles: ${error.message}`);
+    }
+  }
+
   async obtenerPrincipal(productoId: string) {
     return this.prisma.productImage.findFirst({
       where: { productoId, principal: true },

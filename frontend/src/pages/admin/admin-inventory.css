@@ -1,3 +1,5 @@
+@import './export-buttons.css';
+
 /* ===== INVENTORY ADMIN ===== */
 .inventory-container {
   max-width: 1400px;

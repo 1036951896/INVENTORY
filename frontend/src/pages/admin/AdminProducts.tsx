@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { authService } from '../../services/auth.service';
 import { alert2 } from '../../utils/notifications';
+import { exportData } from '../../utils/export.utils';
 import './admin-products.css';
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -26,6 +27,11 @@ interface ProductImage {
   orden: number;
 }
 
+interface AvailableImage {
+  nombre: string;
+  ruta: string;
+}
+
 export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -41,6 +47,7 @@ export default function AdminProducts() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
   const [imageUrl, setImageUrl] = useState<string>('');
+  const [availableImages, setAvailableImages] = useState<AvailableImage[]>([]);
   const [formData, setFormData] = useState({
     nombre: '',
     descripcion: '',
@@ -52,6 +59,12 @@ export default function AdminProducts() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (showForm) {
+      fetchAvailableImages();
+    }
+  }, [showForm]);
 
   const fetchData = async () => {
     try {
@@ -71,6 +84,37 @@ export default function AdminProducts() {
       alert2(error.message || 'Error al cargar datos', 'error');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchAvailableImages = async () => {
+    try {
+      const token = authService.getToken();
+      const response = await fetch(`${VITE_API_URL}/api/v1/product-images/available-images`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAvailableImages(data.imagenes || []);
+      }
+    } catch (error: any) {
+      console.error('Error al cargar imágenes disponibles:', error);
+    }
+  };
+
+  const handleSelectAvailableImage = async (imagePath: string) => {
+    try {
+      const newImage = {
+        id: Math.random().toString(),
+        url: imagePath,
+        principal: productImages.length === 0,
+        orden: productImages.length,
+      };
+      setProductImages([...productImages, newImage]);
+      alert2('Imagen agregada correctamente', 'success');
+    } catch (error: any) {
+      alert2(error.message || 'Error al agregar imagen', 'error');
     }
   };
 
@@ -282,26 +326,49 @@ export default function AdminProducts() {
       return [
         product.nombre,
         catName,
-        product.precio,
+        `$${product.precio.toLocaleString('es-CO')}`,
         product.stock,
         product.descripcion || ''
       ];
     });
 
-    const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
-    ].join('\n');
+    exportData.csv({
+      headers,
+      rows,
+      title: 'REPORTE DE PRODUCTOS',
+      filename: 'productos'
+    });
 
-    const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent));
-    element.setAttribute('download', `productos-${new Date().toISOString().split('T')[0]}.csv`);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+    alert2('Productos exportados a CSV correctamente', 'success');
+  };
 
-    alert2('Productos exportados correctamente', 'success');
+  const handleExportPDF = () => {
+    if (filteredProducts.length === 0) {
+      alert2('No hay productos para exportar', 'info');
+      return;
+    }
+
+    const headers = ['Nombre', 'Categoría', 'Precio', 'Stock', 'Estado'];
+    const rows = filteredProducts.map(product => {
+      const catName = categories.find(c => c.id === product.categoriaId)?.nombre || '-';
+      const estado = product.stock === 0 ? 'Sin Stock' : product.stock < 10 ? 'Stock Bajo' : 'En Stock';
+      return [
+        product.nombre,
+        catName,
+        `$${product.precio.toLocaleString('es-CO')}`,
+        product.stock,
+        estado
+      ];
+    });
+
+    exportData.pdf({
+      headers,
+      rows,
+      title: 'REPORTE DE PRODUCTOS',
+      filename: 'productos'
+    });
+
+    alert2('Productos exportados a PDF correctamente', 'success');
   };
 
   const resetFilters = () => {
@@ -467,15 +534,29 @@ export default function AdminProducts() {
           >
             Limpiar Filtros
           </button>
-          <button 
-            className="btn-export" 
-            onClick={handleExportCSV}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
-              <path d="M12 17v-5M8 12l4 4 4-4M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/>
-            </svg>
-            Exportar CSV
-          </button>
+          <div className="export-buttons-group">
+            <button 
+              className="btn-export btn-csv" 
+              onClick={handleExportCSV}
+              title="Exportar a CSV"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
+                <path d="M12 17v-5M8 12l4 4 4-4M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/>
+              </svg>
+              CSV
+            </button>
+            <button 
+              className="btn-export btn-pdf" 
+              onClick={handleExportPDF}
+              title="Exportar a PDF"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+              PDF
+            </button>
+          </div>
           <span className="filter-count">Mostrando <strong>{filteredProducts.length}</strong> de {products.length}</span>
         </div>
       </div>
@@ -662,6 +743,34 @@ export default function AdminProducts() {
                       </button>
                     </div>
                   </div>
+
+                  {availableImages.length > 0 && (
+                    <>
+                      <div className="divider">O</div>
+
+                      <div className="upload-method available-method">
+                        <label className="available-label">Seleccionar de Imágenes Disponibles</label>
+                        <div className="available-images-grid">
+                          {availableImages.map((img) => (
+                            <div key={img.nombre} className="available-image-item">
+                              <img src={img.ruta} alt={img.nombre} />
+                              <button
+                                type="button"
+                                onClick={() => handleSelectAvailableImage(img.ruta)}
+                                className="btn-select-image"
+                                title={img.nombre}
+                              >
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                                </svg>
+                              </button>
+                              <span className="image-name">{img.nombre.substring(0, 15)}...</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* VISTA PREVIA DE IMÁGENES */}

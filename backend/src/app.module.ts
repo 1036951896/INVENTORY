@@ -1,7 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
+import { CorsMiddleware } from './middleware/cors.middleware';
 import { PrismaModule } from './prisma/prisma.module';
 import { HealthModule } from './health/health.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -21,6 +24,10 @@ import { CartModule } from './modules/cart/cart.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/',
+    }),
     PassportModule,
     PrismaModule,
     HealthModule,
@@ -38,4 +45,8 @@ import { CartModule } from './modules/cart/cart.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CorsMiddleware).forRoutes('*');
+  }
+}

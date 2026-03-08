@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { authService } from '../../services/auth.service';
 import { alert2 } from '../../utils/notifications';
+import { exportData } from '../../utils/export.utils';
 import './admin-orders.css';
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -113,25 +114,45 @@ export default function AdminOrders() {
       order.usuario.nombre,
       order.usuario.email,
       order.usuario.telefono || '-',
-      order.total,
+      `$${order.total.toLocaleString('es-CO')}`,
       order.estado,
       new Date(order.createdAt).toLocaleDateString('es-CO')
     ]);
 
-    const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
-    ].join('\n');
+    exportData.csv({
+      headers,
+      rows,
+      title: 'REPORTE DE PEDIDOS',
+      filename: 'pedidos'
+    });
 
-    const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent));
-    element.setAttribute('download', `ordenes-${new Date().toISOString().split('T')[0]}.csv`);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+    alert2('Órdenes exportadas a CSV correctamente', 'success');
+  };
 
-    alert2('Órdenes exportadas correctamente', 'success');
+  const handleExportPDF = () => {
+    if (filteredOrders.length === 0) {
+      alert2('No hay órdenes para exportar', 'info');
+      return;
+    }
+
+    const headers = ['Número', 'Cliente', 'Email', 'Total', 'Estado', 'Fecha'];
+    const rows = filteredOrders.map(order => [
+      order.numero,
+      order.usuario.nombre,
+      order.usuario.email,
+      `$${order.total.toLocaleString('es-CO')}`,
+      order.estado,
+      new Date(order.createdAt).toLocaleDateString('es-CO')
+    ]);
+
+    exportData.pdf({
+      headers,
+      rows,
+      title: 'REPORTE DE PEDIDOS',
+      filename: 'pedidos'
+    });
+
+    alert2('Órdenes exportadas a PDF correctamente', 'success');
   };
 
   const resetFilters = () => {
@@ -343,12 +364,22 @@ export default function AdminOrders() {
             >
               Limpiar
             </button>
-            <button 
-              className="btn-export" 
-              onClick={handleExportCSV}
-            >
-              Exportar CSV
-            </button>
+            <div className="export-buttons-group">
+              <button 
+                className="btn-export btn-csv" 
+                onClick={handleExportCSV}
+                title="Exportar a CSV"
+              >
+                CSV
+              </button>
+              <button 
+                className="btn-export btn-pdf" 
+                onClick={handleExportPDF}
+                title="Exportar a PDF"
+              >
+                PDF
+              </button>
+            </div>
           </div>
         </div>
       </div>

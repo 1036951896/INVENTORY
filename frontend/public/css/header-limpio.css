@@ -619,6 +619,11 @@ header.header-scroll .barra-busqueda {
     display: none !important;
   }
   
+  .categorias-seccion.mostrar-mobile {
+    display: block !important;
+    z-index: 1001 !important;
+  }
+
   .categorias {
     display: none !important;
   }
@@ -637,6 +642,10 @@ header.header-scroll .barra-busqueda {
 
   .barra-busqueda-contenedor-desktop {
     display: none !important;
+  }
+
+  .barra-busqueda-contenedor-desktop.activo {
+    display: flex !important;
   }
 
   .btn-busqueda-movil {

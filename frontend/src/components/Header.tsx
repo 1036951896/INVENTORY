@@ -1,17 +1,92 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { authService, isUserAdmin } from '../services/auth.service';
 
 interface HeaderProps {
   onCartClick?: () => void;
+  onSearch?: (searchTerm: string) => void;
+  onHamburguesaClick?: () => void;
 }
 
-export default function Header({ onCartClick }: HeaderProps) {
+export default function Header({ onCartClick, onSearch, onHamburguesaClick }: HeaderProps) {
   const { getCartItemsCount } = useCart();
-  const [user] = useState(authService.getCurrentUser());
+  const [user, setUser] = useState(authService.getCurrentUser());
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showSearchMobile, setShowSearchMobile] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const cartCount = getCartItemsCount();
   const navigate = useNavigate();
+
+  // Cerrar menú al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const headerElement = document.querySelector('header');
+      
+      // Si el click fue fuera del header, cerrar el menú de usuario
+      if (headerElement && !headerElement.contains(target)) {
+        setShowUserMenu(false);
+        setShowSearchMobile(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Enfocar input cuando se abre búsqueda móvil
+  useEffect(() => {
+    if (showSearchMobile && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [showSearchMobile]);
+
+  const handleLogout = () => {
+    authService.logout();
+    setUser(null);
+    setShowUserMenu(false);
+    navigate('/login');
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    // Pasar el término de búsqueda al componente padre si tiene callback
+    if (onSearch) {
+      onSearch(term);
+    }
+    // Guardar en localStorage para persistencia
+    if (term.trim()) {
+      localStorage.setItem('searchTerm', term);
+    } else {
+      localStorage.removeItem('searchTerm');
+    }
+    // Disparar custom event para que otros componentes escuchen
+    window.dispatchEvent(new CustomEvent('searchchange', { detail: { searchTerm: term } }));
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      // Guardar término y navegar a home (donde se aplicará el filtro)
+      localStorage.setItem('searchTerm', searchTerm);
+      navigate('/');
+      setShowSearchMobile(false);
+    }
+  };
+
+  const handleSearchMobileClick = () => {
+    setShowSearchMobile(!showSearchMobile);
+  };
+
+  const handleHamburguesaClick = () => {
+    if (onHamburguesaClick) {
+      onHamburguesaClick();
+    }
+  };
 
   return (
     <header>
@@ -24,7 +99,12 @@ export default function Header({ onCartClick }: HeaderProps) {
 
           {/* BARRA DE BÚSQUEDA */}
           <div className="barra-busqueda-grupo">
-            <button className="btn-hamburguesa" id="btn-hamburguesa" title="Filtros">
+            <button 
+              className="btn-hamburguesa" 
+              id="btn-hamburguesa" 
+              title="Filtros"
+              onClick={handleHamburguesaClick}
+            >
               <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" width="20" height="20" strokeLinecap="round">
                 <line x1="3" y1="6" x2="21" y2="6"></line>
                 <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -32,17 +112,35 @@ export default function Header({ onCartClick }: HeaderProps) {
               </svg>
             </button>
 
-            <div className="barra-busqueda-contenedor-desktop">
+            <div className={`barra-busqueda-contenedor-desktop ${showSearchMobile ? 'activo' : ''}`}>
               <div className="barra-busqueda">
                 <svg className="icono-buscar-fijo" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="11" cy="11" r="8"></circle>
                   <path d="m21 21-4.35-4.35"></path>
                 </svg>
-                <input type="text" id="buscar" placeholder="Buscar producto..." className="input-buscar" />
+                <input 
+                  ref={searchInputRef}
+                  type="text" 
+                  id="buscar" 
+                  placeholder="Buscar producto..." 
+                  className="input-buscar"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSearchSubmit(e);
+                    }
+                  }}
+                />
               </div>
             </div>
 
-            <button className="btn-busqueda-movil" id="btn-busqueda-movil" title="Buscar">
+            <button 
+              className="btn-busqueda-movil" 
+              id="btn-busqueda-movil" 
+              title="Buscar"
+              onClick={handleSearchMobileClick}
+            >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="m21 21-4.35-4.35"></path>
@@ -69,13 +167,73 @@ export default function Header({ onCartClick }: HeaderProps) {
             </div>
 
             {/* USUARIO */}
-            <div id="menu-usuario">
+            <div id="menu-usuario" ref={menuRef} style={{ position: 'relative' }}>
               {user ? (
-                <button className="btn-icono" title={`Bienvenido ${user.nombre}`}>
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                  </svg>
-                </button>
+                <>
+                  <button 
+                    className="btn-icono" 
+                    title={`Bienvenido ${user.nombre}`}
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                  </button>
+                  
+                  {/* Menú desplegable */}
+                  {showUserMenu && (
+                    <div style={{
+                      position: 'absolute',
+                      top: '100%',
+                      right: 0,
+                      backgroundColor: 'white',
+                      border: '1px solid #ddd',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                      minWidth: '160px',
+                      zIndex: 1000,
+                      marginTop: '8px'
+                    }}>
+                      <div style={{
+                        padding: '12px 16px',
+                        borderBottom: '1px solid #eee',
+                        fontSize: '14px',
+                        fontWeight: '500',
+                        color: '#333'
+                      }}>
+                        {user.nombre}
+                      </div>
+                      
+                      <button
+                        onClick={handleLogout}
+                        style={{
+                          width: '100%',
+                          padding: '12px 16px',
+                          border: 'none',
+                          background: 'none',
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                          fontSize: '14px',
+                          color: '#E74C3C',
+                          transition: 'background-color 0.2s',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fff5f5'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                      >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
+                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                          <polyline points="16 17 21 12 16 7"></polyline>
+                          <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Cerrar sesión
+                      </button>
+                    </div>
+                  )}
+                </>
               ) : (
                 <button className="btn-icono" onClick={() => navigate('/login')} title="Iniciar sesión">
                   <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">

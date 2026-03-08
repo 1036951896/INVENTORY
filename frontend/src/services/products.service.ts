@@ -49,8 +49,29 @@ export const productsService = {
 
   // Obtener producto por ID
   async getById(id: number | string): Promise<Product> {
-    const response = await api.get(`/products/${id}`);
-    return response.data;
+    try {
+      const response = await api.get(`/products/${id}`);
+      const product = response.data;
+      
+      // Procesar la respuesta
+      const imagen = product.imagenes?.[0]?.url || product.imagen || '';
+      const categoria = product.categoria?.nombre || product.categoria || 'Sin categoría';
+      
+      return {
+        id: product.id,
+        nombre: product.nombre || '',
+        descripcion: product.descripcion || '',
+        precio: product.precio || 0,
+        stock: product.stock || 0,
+        categoria,
+        imagen,
+        activo: product.activo ?? true,
+        imagenes: product.imagenes || [] // Incluir array completo de imágenes
+      } as any;
+    } catch (error: any) {
+      console.error('Error in productsService.getById:', error);
+      throw error;
+    }
   },
 
   // Crear producto (solo admin)

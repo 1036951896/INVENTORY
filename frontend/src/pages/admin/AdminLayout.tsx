@@ -4,6 +4,7 @@ import { authService } from '../../services/auth.service';
 import { alert2 } from '../../utils/notifications';
 import NotificationBell from '../../components/NotificationBell';
 import './admin-layout.css';
+import './admin-responsive.css';
 
 export default function AdminLayout() {
   const navigate = useNavigate();

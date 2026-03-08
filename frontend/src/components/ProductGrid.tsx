@@ -18,6 +18,7 @@ export default function ProductGrid({ activeCategory = 'todas' }: ProductGridPro
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
@@ -58,14 +59,40 @@ export default function ProductGrid({ activeCategory = 'todas' }: ProductGridPro
     loadProducts();
   }, []); // Solo ejecutarse una vez al montar
 
-  // Filtrar productos cuando cambia la categoría
+  // Leer término de búsqueda de localStorage al montar
   useEffect(() => {
-    if (activeCategory === 'todas') {
-      setFilteredProducts(products);
-    } else {
-      setFilteredProducts(products.filter(p => p.categoria === activeCategory));
+    const savedSearchTerm = localStorage.getItem('searchTerm') || '';
+    setSearchTerm(savedSearchTerm);
+    
+    // Escuchar custom event de cambios de búsqueda
+    const handleSearchChange = (e: any) => {
+      setSearchTerm(e.detail.searchTerm);
+    };
+    
+    window.addEventListener('searchchange', handleSearchChange);
+    return () => window.removeEventListener('searchchange', handleSearchChange);
+  }, []);
+
+  // Filtrar productos cuando cambia la categoría o el término de búsqueda (excluir precio = 0)
+  useEffect(() => {
+    // Sempre excluir productos con precio = 0 (no disponibles en tienda)
+    let filtered = products.filter(p => p.precio > 0);
+    
+    // Filtrar por categoría
+    if (activeCategory !== 'todas') {
+      filtered = filtered.filter(p => p.categoria === activeCategory);
     }
-  }, [activeCategory, products]);
+    
+    // Filtrar por término de búsqueda
+    if (searchTerm.trim()) {
+      filtered = filtered.filter(p => 
+        p.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.descripcion?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    setFilteredProducts(filtered);
+  }, [activeCategory, products, searchTerm]);
 
   const handleAddToCart = (product: Product, e?: React.MouseEvent) => {
     if (e) {
@@ -83,7 +110,8 @@ export default function ProductGrid({ activeCategory = 'todas' }: ProductGridPro
   const getImageUrl = (imagePath: string | undefined) => {
     if (!imagePath) return `${BACKEND_URL}/assets/product-placeholder.svg`;
     if (imagePath.startsWith('http')) return imagePath;
-    return imagePath;
+    if (imagePath.startsWith('/')) return `${BACKEND_URL}${imagePath}`;
+    return `${BACKEND_URL}/${imagePath}`;
   };
 
   if (loading) {
