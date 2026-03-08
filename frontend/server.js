@@ -7,14 +7,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Servir archivos estáticos desde dist
-app.use(express.static(join(__dirname, 'dist')));
+app.use(express.static(join(__dirname, 'dist'), {
+  maxAge: '1d',
+  etag: false
+}));
 
-// Redirigir todas las rutas a index.html (SPA routing)
-app.get('*', (req, res) => {
+// SPA Fallback - redirigir todas las rutas desconocidas a index.html
+app.use((req, res) => {
   res.sendFile(join(__dirname, 'dist', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ Frontend servido en puerto ${PORT}`);
+  console.log(`✅ Frontend servido en http://localhost:${PORT}`);
 });
