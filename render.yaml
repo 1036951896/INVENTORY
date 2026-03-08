@@ -13,11 +13,9 @@ services:
   - type: web
     name: inventory-api
     env: docker
-    repo: 1036951896/INVENTORY
-    branch: main
+    region: oregon
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
-    region: oregon
     port: 3000
 
     envVars:
@@ -68,9 +66,7 @@ services:
   - type: web
     name: inventory-frontend
     env: static
-    repo: 1036951896/INVENTORY
-    branch: main
-    rootDir: ./frontend
+    rootDir: frontend
     region: oregon
 
     buildCommand: npm install && npm run build
