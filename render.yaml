@@ -1,20 +1,18 @@
-services:
-  # ============================================================================
-  # PostgreSQL Database
-  # ============================================================================
-  - type: postgres
-    name: inventory-db
+# Definición de la base de datos PostgreSQL (NO va en services)
+databases:
+  - name: inventory-db
     plan: free
     region: oregon
-    # Opcional: especifica la versión de PostgreSQL (ej: 15, 16)
-    # version: 15
+    # Opcional: puedes especificar la versión de PostgreSQL, ej: version: 15
 
+# Definición de los servicios (aplicaciones)
+services:
   # ============================================================================
   # Backend NestJS API (Docker)
   # ============================================================================
   - type: web
     name: inventory-api
-    runtime: docker                     # ← Agregado explícitamente
+    runtime: docker
     region: oregon
     dockerfilePath: backend/Dockerfile
     dockerContext: backend
@@ -51,7 +49,7 @@ services:
   # ============================================================================
   # Frontend React + Vite (Sitio estático)
   # ============================================================================
-  - type: static                       # ← Cambiado de 'web' a 'static'
+  - type: static
     name: inventory-frontend
     region: oregon
     rootDir: frontend
