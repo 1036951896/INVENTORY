@@ -52,6 +52,9 @@ export default function ProductDetail() {
           .filter(p => p.categoria === response.categoria && String(p.id) !== String(response.id))
           .slice(0, 4);
         setRelatedProducts(related);
+        
+        // Scroll al inicio de la página
+        window.scrollTo(0, 0);
       } catch (error: any) {
         console.error('Error cargando producto:', error);
         alert2('Error al cargar el producto', 'error');
