@@ -81,6 +81,7 @@ export default function OrderConfirmation() {
       };
 
       setOrder(formattedOrder);
+      window.scrollTo(0, 0);
     } catch (error: any) {
       console.error('Error fetching order:', error);
       alert2(error.message || 'Error al cargar el pedido', 'error');

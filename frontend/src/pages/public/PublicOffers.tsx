@@ -56,6 +56,7 @@ const PublicOffers: React.FC = () => {
         console.error('Error fetching public offers:', error);
       } finally {
         setLoading(false);
+        window.scrollTo(0, 0);
       }
     };
     fetchOffers();

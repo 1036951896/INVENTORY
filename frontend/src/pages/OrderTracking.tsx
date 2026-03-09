@@ -47,6 +47,7 @@ export default function OrderTracking() {
 
       const data = await response.json();
       setOrders(Array.isArray(data) ? data : data.data || []);
+      window.scrollTo(0, 0);
     } catch (error: any) {
       console.error('Error fetching orders:', error);
       alert2(error.message || 'Error al cargar los pedidos', 'error');
