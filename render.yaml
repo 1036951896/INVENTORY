@@ -49,7 +49,7 @@ services:
     autoDeploy: true
 
   # ============================================================================
-  # Frontend React + Vite (Web Service para SPA routing)
+  # Frontend React + Vite (Web Service para SPA routing con fallback a index.html)
   # ============================================================================
   - type: web
     name: inventory-frontend
@@ -60,4 +60,6 @@ services:
     envVars:
       - key: VITE_API_URL
         value: https://inventory-1-jkh2.onrender.com
+      - key: NODE_ENV
+        value: production
     autoDeploy: true
