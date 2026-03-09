@@ -56,7 +56,7 @@ services:
     runtime: node
     rootDir: frontend
     buildCommand: npm install && npm run build
-    startCommand: node server.js
+    startCommand: npm start
     envVars:
       - key: VITE_API_URL
         value: https://inventory-1-jkh2.onrender.com
