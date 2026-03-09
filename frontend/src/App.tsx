@@ -15,6 +15,7 @@ import FAQ from './pages/FAQ';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsConditions from './pages/TermsConditions';
 import Contact from './pages/Contact';
+import PublicOffers from './pages/public/PublicOffers';
 
 // Páginas Admin
 import AdminLayout from './pages/admin/AdminLayout';
@@ -47,6 +48,7 @@ function App() {
           <Route path="/politica-privacidad" element={<PrivacyPolicy />} />
           <Route path="/terminos-condiciones" element={<TermsConditions />} />
           <Route path="/contacto" element={<Contact />} />
+          <Route path="/ofertas" element={<PublicOffers />} />
           
           {/* Rutas Admin */}
           <Route path="/admin" element={<AdminLayout />}>

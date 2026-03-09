@@ -193,6 +193,11 @@ export const inventoryApiService = {
   },
 };
 
+export const getPublicOffers = async () => {
+  const response = await api.get('/api/public/offers'); // Asegúrate de que este endpoint exista en el backend
+  return response.data;
+};
+
 export default {
   productsApiService,
   categoriesApiService,
