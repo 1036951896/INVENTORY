@@ -3,22 +3,22 @@ import React, { useEffect, useState } from 'react';
 import './public-offers.css';
 import { getPublicOffers } from '../../services/admin-api.service';
 
-interface Offer {
-  id: string;
-  title: string;
-  description: string;
-  discount: number;
-  validUntil: string;
-  product?: Product;
+interface Product {
+  id?: string;
+  nombre?: string;
+  imagen?: string;
+  categoria?: string;
+  precio?: number;
+  stock?: number;
 }
 
-interface Product {
-  id: string;
-  nombre: string;
-  imagen: string;
-  categoria: string;
-  precio: number;
-  stock: number;
+interface Offer {
+  id?: string;
+  title?: string;
+  description?: string;
+  discount?: number;
+  validUntil?: string;
+  product?: Product;
 }
 
 const PublicOffers: React.FC = () => {
@@ -33,7 +33,23 @@ const PublicOffers: React.FC = () => {
       try {
         const data = await getPublicOffers();
         // Ordenar por fecha de vigencia descendente
-        const sorted = data.sort((a: Offer, b: Offer) => new Date(b.validUntil).getTime() - new Date(a.validUntil).getTime());
+        // Validar que cada oferta tenga la estructura esperada
+        const offersData: Offer[] = Array.isArray(data) ? data.map((o: any) => ({
+          id: o.id,
+          title: o.title,
+          description: o.description,
+          discount: o.discount,
+          validUntil: o.validUntil,
+          product: o.product ? {
+            id: o.product.id,
+            nombre: o.product.nombre,
+            imagen: o.product.imagen,
+            categoria: o.product.categoria,
+            precio: o.product.precio,
+            stock: o.product.stock,
+          } : {},
+        })) : [];
+        const sorted = offersData.sort((a, b) => new Date(b.validUntil || '').getTime() - new Date(a.validUntil || '').getTime());
         setOffers(sorted);
         setFilteredOffers(sorted);
       } catch (error) {
@@ -139,28 +155,28 @@ const PublicOffers: React.FC = () => {
         ) : (
           filteredOffers.map(offer => {
             const prod = offer.product || {};
-            const precioOriginal = prod.precio || 0;
-            const descuentoPorcentaje = offer.discount || 0;
+            const precioOriginal = typeof prod.precio === 'number' ? prod.precio : 0;
+            const descuentoPorcentaje = typeof offer.discount === 'number' ? offer.discount : 0;
             const precioOferta = Math.floor(precioOriginal * (1 - descuentoPorcentaje / 100));
             return (
-              <div key={offer.id} className="tarjeta-producto">
+              <div key={offer.id || Math.random()} className="tarjeta-producto">
                 <div className="tarjeta-producto-imagen" style={{ position: 'relative' }}>
                   <div className="badge-descuento">-{descuentoPorcentaje}%</div>
                   <img
                     src={prod.imagen || '/assets/product-placeholder.svg'}
-                    alt={prod.nombre}
+                    alt={prod.nombre || 'Producto'}
                     onError={e => { e.currentTarget.src = '/assets/product-placeholder.svg'; }}
                   />
                 </div>
                 <div className="tarjeta-producto-contenido">
-                  <div className="tarjeta-producto-nombre">{prod.nombre}</div>
-                  <div className="tarjeta-producto-categoria">{prod.categoria}</div>
+                  <div className="tarjeta-producto-nombre">{prod.nombre || 'Sin nombre'}</div>
+                  <div className="tarjeta-producto-categoria">{prod.categoria || 'Sin categoría'}</div>
                   <div>
                     <div className="precio-original">${precioOriginal.toLocaleString('es-CO')}</div>
                     <div className="precio-oferta">${precioOferta.toLocaleString('es-CO')}</div>
                   </div>
                   <div className="tarjeta-producto-stock">
-                    Stock: <strong>{prod.stock}</strong>
+                    Stock: <strong>{typeof prod.stock === 'number' ? prod.stock : 'N/A'}</strong>
                   </div>
                   <div className="tarjeta-producto-botones">
                     <button className="btn btn-principal">
