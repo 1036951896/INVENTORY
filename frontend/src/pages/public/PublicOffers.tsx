@@ -83,7 +83,7 @@ const PublicOffers: React.FC = () => {
   }, [search, activeCategory, offers]);
 
   // Extraer categorías únicas
-  const categories = Array.from(new Set(offers.map(o => o.product?.categoria).filter(Boolean)));
+  const categories = Array.from(new Set(offers.map(o => o.product?.categoria).filter((cat): cat is string => Boolean(cat))));
 
   if (loading) {
     return <div className="public-offers-container"><p>Cargando ofertas...</p></div>;
