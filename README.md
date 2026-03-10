@@ -1,439 +1,191 @@
-# 📦 SISTEMA E-COMMERCE CON GESTIÓN INTEGRAL DE INVENTARIO
+# 📦 StoreHub - E-Commerce Inventory System
 
-**Versión**: 1.0 | **Estado**: ✅ PRODUCCIÓN | **Fecha**: 11 Febrero 2026
+**Versión**: 2.0 | **Estado**: ✅ En Producción en Render | **Stack**: React + NestJS + PostgreSQL
 
-Sistema completo de e-commerce que permite a usuarios comprar productos en línea y a administradores gestionar inventario, órdenes, categorías y ofertas. Construido con **NestJS + PostgreSQL + React (Vite)**.
-
----
-
-## 📚 DOCUMENTACIÓN NUEVA (REFACTORIZACIÓN 2026)
-
-### 🎯 Documentos Principales (NUEVOS)
-
-Estos documentos fueron creados en la refactorización de febrero-marzo 2026:
-
-1. **[MANUAL_TECNICO_SOFTWARE.md](MANUAL_TECNICO_SOFTWARE.md)** ← **MANUAL TÉCNICO COMPLETO** 🆕
-   - 📘 Manual técnico profesional siguiendo estándares de la industria
-   - 📖 3 Capítulos completos: Introducción, Partes Esenciales, Mejores Prácticas
-   - 🔧 Instalación paso a paso (Docker y Manual)
-   - 🏗️ Arquitectura detallada con diagramas
-   - 📦 Documentación de todos los módulos y funciones
-   - 🔒 Seguridad, licencias y mantenimiento
-   - 💡 Casos de uso reales y ejemplos de código
-
-2. **[CORRECIONES_CODIGO.md](CORRECIONES_CODIGO.md)** ← **AUDITORÍA Y CORRECCIONES** 🆕
-   - 🔍 Auditoría completa del código (marzo 2026)
-   - ✅ Limpieza de código obsoleto (~20 MB eliminados)
-   - 🔧 Reemplazo de console.log con Logger de NestJS (23 instancias)
-   - 🏗️ Optimización de arquitectura y módulos
-   - 📊 Resumen de mejoras y verificación
-
-3. **[SOLUCION_RENDER.md](SOLUCION_RENDER.md)** ← **DEPLOYMENT FIX** 🆕
-   - 🔧 Solución al problema de backend caído en Render
-   - 📝 Diagnóstico completo del problema
-   - ✅ Pasos para actualizar servicios en Render
-   - 🚀 Configuración correcta de frontend + backend
-   - 📊 Checklist de verificación post-deployment
-
-4. **[RENDER_PLAN_GRATUITO.md](RENDER_PLAN_GRATUITO.md)** ← **PLAN GRATUITO** 🆕
-   - ⚠️ Limitaciones del plan gratuito de Render
-   - 😴 Por qué el backend parece "caído" (auto-suspensión)
-   - ⏱️ Cold start de 30-60s explicado
-   - 🔄 Soluciones: Keep-Alive con cron-job.org
-   - 💰 Comparación: Gratis vs Motor de Arranque ($7/mes)
-
-5. **[ACCESO_DESDE_CELULAR.md](ACCESO_DESDE_CELULAR.md)** ← **ACCESO MÓVIL** 🆕
-   - 📱 Cómo acceder al sistema desde tu celular
-   - 🚀 Pasos para crear el frontend en Render
-   - ⚙️ Configuración de variables de entorno (.env)
-   - 🔧 Solución a errores comunes desde móvil
-   - 📋 Checklist completo de deployment del frontend
-
-6. **[ARQUITECTURA_FUNCIONALIDAD.md](ARQUITECTURA_FUNCIONALIDAD.md)**
-   - ⏱️ Cold start de 30-60s explicado
-   - 🔄 Soluciones: Keep-Alive con cron-job.org
-   - 💰 Comparación: Gratis vs Motor de Arranque ($7/mes)
-
-7. **[ARQUITECTURA_FUNCIONALIDAD.md](ARQUITECTURA_FUNCIONALIDAD.md)**
-   - 📐 Arquitectura completa del sistema
-   - 🔌 Cómo funciona el backend y frontend
-   - 🗄️ Diagrama base de datos
-   - 🔀 Flujos principales (compra, admin)
-   - 📡 API REST endpoints completa (8 módulos)
-   - 🔒 Seguridad y autenticación JWT
-
-8. **[MANUAL_CLIENTE.md](MANUAL_CLIENTE.md)**
-   - 👥 Guía completa para usuarios/clientes
-   - 🛍️ Cómo navegar la tienda
-   - 🛒 Proceso de compra paso a paso
-   - 📦 Seguimiento de órdenes
-   - ❓ 10 Preguntas frecuentes
-   - 🔧 Solución de problemas
-
-9. **[MANUAL_ADMIN.md](MANUAL_ADMIN.md)**
-   - 👨‍💼 Guía completa para administradores
-   - 📊 Dashboard y KPIs
-   - 📦 Gestión de productos
-   - 🛒 Gestión de órdenes
-   - 👥 Gestión de usuarios
-   - 📈 Reportes y análisis
-   - 🔒 Seguridad y mejores prácticas
-
-10. **[REFACTORIZACION_RESUMEN.md](REFACTORIZACION_RESUMEN.md)**
-    - 🔧 Resumen de cambios realizados
-    - 📝 Guía de migración de código
-    - 💻 Ejemplos de cómo usar nuevos servicios
-    - 📊 Métricas de mejora
-    - ✅ Checklist de verificación
+Sistema moderno de e-commerce con gestión integral de inventario, órdenes y ofertas. Totalmente funcional en producción.
 
 ---
 
-## 📚 DOCUMENTACIÓN ORIGINAL
+## 🚀 Estructura del Proyecto
 
-### 🔍 Índice de Referencia Rápida
-
-👉 **[INDICE_DOCUMENTACION.md](INDICE_DOCUMENTACION.md)** - Busca documentación por tema, propósito o rol
-
-### 🎯 Para Empezar (Original)
-
-- **[MANUAL_SISTEMA_COMPLETO.md](MANUAL_SISTEMA_COMPLETO.md)**
-  - Guía técnica completa, instalación, módulos, API, BD
-
-### 📋 Para Evaluación Académica
-
-1. **[IEEE_830_ESPECIFICACION.md](IEEE_830_ESPECIFICACION.md)**
-   - Especificación de requisitos, funcionalidades, criterios de aceptación
-
-2. **[PLAN_RIESGOS.md](PLAN_RIESGOS.md)**
-   - Identificación de riesgos, mitigación, contingencias
-
-3. **[MANUAL_CALIDAD.md](MANUAL_CALIDAD.md)**
-   - Pruebas realizadas, resultados, métricas de calidad
-
-4. **[ACTA_CIERRE_PROYECTO.md](ACTA_CIERRE_PROYECTO.md)**
-   - Cierre oficial, entregables, autorización
-
-### 📊 Diagramas y Modelos
-
-- **[MER_PROYECTO.sql](MER_PROYECTO.sql)** - Modelo entidad-relación SQL
-- **[MER_PROYECTO.puml](MER_PROYECTO.puml)** - Diagramas UML
-- **[MER_PROYECTO.json](MER_PROYECTO.json)** - Estructura de datos
-
----
-
-## ⚡ INICIO RÁPIDO
-
-### Con Docker (Recomendado)
-
-```bash
-git clone <repo>
-cd "inventory app"
-docker-compose up
-
-# Acceder a:
-# E-commerce: http://localhost
-# Admin: http://localhost/public/html/admin.html
-# API: http://localhost:3000/api/v1
+```
+├── frontend/                    # React 19 + Vite + React Router
+│   ├── src/
+│   │   ├── components/         # Componentes reutilizables
+│   │   ├── pages/              # Páginas (Home, Login, ProductDetail, etc)
+│   │   ├── services/           # APIs y servicios
+│   │   ├── context/            # React Context (Carrito)
+│   │   └── styles/             # CSS modular
+│   ├── server.js               # Express para SPA routing
+│   └── package.json
+│
+├── backend/                     # NestJS + PostgreSQL
+│   ├── src/
+│   │   ├── modules/            # Módulos (Products, Orders, Auth, etc)
+│   │   ├── prisma/             # Configuración ORM
+│   │   └── health/             # Health check
+│   ├── Dockerfile
+│   └── package.json
+│
+├── nginx/                       # Configuración Nginx (producción)
+│   └── nginx.conf
+│
+├── legacy/                      # 📚 Código anterior a React
+│   ├── html-css-js-inicial/    # HTML/CSS/JS original
+│   └── README.md               # Explicación
+│
+├── render.yaml                  # Configuración Auto-Deploy Render
+└── .vscode/                     # Configuración VS Code
 ```
 
-### Manual
+---
+
+## 🎯 URLs en Producción
+
+> **Frontend**: https://inventory-2-sewi.onrender.com  
+> **Backend**: https://inventory-1-jkh2.onrender.com  
+> **API Base**: https://inventory-1-jkh2.onrender.com/api/v1
+
+---
+
+## 🏃 Quick Start
+
+### Desarrollo Local
 
 ```bash
+# Frontend (React dev server)
+cd frontend
+npm install
+npm run dev          # http://localhost:5173
+
+# Backend (en otra terminal)
 cd backend
 npm install
-npx prisma migrate dev
-npm run seed
-npm run start:dev
-
-# Frontend ya disponible en http://localhost/public/html/
+npm run start:dev    # http://localhost:3000
 ```
 
----
-
-## 🎯 FEATURES IMPLEMENTADOS
-
-### E-Commerce (Cliente)
-
-✅ Catálogo de productos | Búsqueda y filtrado | Carrito persistente  
-✅ Ofertas automáticas | Checkout validado | Seguimiento sin login
-
-### Panel Administrativo
-
-✅ Dashboard con estadísticas | CRUD productos | CRUD categorías  
-✅ Gestión de pedidos | Reportes| Sistema de ofertas
-
-### Seguridad
-
-✅ Autenticación JWT | Control de permisos | Validación entrada  
-✅ Encriptación contraseñas | Headers de seguridad
-
-### Base de Datos
-
-✅ PostgreSQL normalizado | Migraciones automáticas  
-✅ Transacciones ACID | Backup automático
-
----
-
-## 📊 INDICADORES DE ÉXITO
-
-| Indicador          | Meta        | Logrado   | Estado |
-| ------------------ | ----------- | --------- | ------ |
-| **Funcionalidad**  | 100%        | 100%      | ✅     |
-| **Confiabilidad**  | 99%         | 100%      | ✅     |
-| **Seguridad**      | 90%         | 87.5%     | ⚠️     |
-| **Rendimiento**    | <3s         | 1.2s      | ✅     |
-| **Usabilidad**     | >80%        | 86%       | ✅     |
-| **Mantenibilidad** | Documentado | Si        | ✅     |
-| **Promedio**       | -           | **93.8%** | ✅     |
-
----
-
-## 👤 USUARIOS DE PRUEBA
-
-### Cliente
-
-```
-Email: cliente@test.com
-Password: cliente123
-```
-
-### Administrador
-
-```
-Email: admin@test.com
-Password: admin123
-```
-
----
-
-## 🧪 PRUEBAS
-
-✅ **Funcionales**: 50/50 aprobadas (100%)  
-✅ **Seguridad**: 7/8 aprobadas (87.5%)  
-✅ **Rendimiento**: 5/5 aprobadas (100%)  
-✅ **Usabilidad**: 10/10 aprobadas (100%)  
-✅ **Compatibilidad**: 12/12 aprobadas (100%)
-
-**Score General**: 84/85 (98.8%) - Ver [MANUAL_CALIDAD.md](MANUAL_CALIDAD.md)
-
----
-
-## 🛠️ COMANDOS PRINCIPALES
+### Build para Producción
 
 ```bash
-# Backend
-cd backend && npm install
-npx prisma migrate dev       # Migraciones
-npm run seed                 # Cargar datos
-npm run start:dev            # Desarrollo
-npm run start                # Producción
+# Frontend
+cd frontend
+npm run build        # Genera dist/
 
-# Docker
-docker-compose up            # Iniciar
-docker-compose down          # Detener
-docker-compose logs -f       # Logs
-
-# Backup
-./backend/scripts/backup-db.sh
+# Backend (Docker)
+docker build -t inventory-backend:latest .
 ```
 
 ---
 
-## 📁 ESTRUCTURA
+## 🔄 Deploy en Render
 
-```
-inventory app/
-├── backend/                    # NestJS API
-├── frontend/                   # React (Vite)
-├── public/                     # HTML/CSS/JS actual
-├── nginx/                      # Servidor web
-│
-├── MANUAL_SISTEMA_COMPLETO.md ← Documentación principal
-├── IEEE_830_ESPECIFICACION.md
-├── PLAN_RIESGOS.md
-├── MANUAL_CALIDAD.md
-├── ACTA_CIERRE_PROYECTO.md
-├── MER_PROYECTO.sql
-├── MER_PROYECTO.puml
-├── docker-compose.yml
-│
-└── backups/                    # Respaldos automáticos
-```
+El repositorio está configurado con **auto-deploy** mediante `render.yaml`:
+
+1. **Frontend**: Web Service Node.js
+   - Build: `npm install && npm run build`
+   - Start: `npm start` (Express server)
+
+2. **Backend**: Web Service Docker
+   - Build: Dockerfile automático
+   - Expone puerto 3000
+
+**Proceso automático**: Push a `main` → Render detecta cambios → Deploy automático
 
 ---
 
-## 🌐 ENDPOINTS PRINCIPALES
+## ✨ Características
 
-### Autenticación
-
-```
-POST /api/v1/auth/login
-POST /api/v1/auth/admin-login
-```
-
-### Productos
-
-```
-GET    /api/v1/products
-POST   /api/v1/products          (ADMIN)
-PUT    /api/v1/products/:id      (ADMIN)
-DELETE /api/v1/products/:id      (ADMIN)
-```
-
-### Órdenes
-
-```
-GET    /api/v1/orders
-POST   /api/v1/orders
-PATCH  /api/v1/orders/:id/status (ADMIN)
-```
-
-Documentación completa: [MANUAL_SISTEMA_COMPLETO.md#api-rest](MANUAL_SISTEMA_COMPLETO.md#api-rest---documentación-técnica)
+- ✅ **E-Commerce Completo**: Catálogo, carrito, checkout, órdenes
+- ✅ **Autenticación**: Login/Registro de clientes y admin
+- ✅ **Admin Panel**: Gestión de productos, órdenes, categorías y ofertas
+- ✅ **SPA Routing**: React Router con fallback a index.html
+- ✅ **Base de Datos**: PostgreSQL con Prisma ORM
+- ✅ **Notificaciones**: Sonner para feedback visual
+- ✅ **Responsive**: Mobile-first design
+- ✅ **Scroll automático**: Al navegar a nuevas páginas
 
 ---
 
-## 🔒 SEGURIDAD
+## 🛠️ Tech Stack
 
-- ✅ JWT con expiry 24h
-- ✅ Contraseñas hasheadas (bcrypt)
-- ✅ Validación DTOs
-- ✅ Headers de seguridad Nginx
-- ✅ CORS configurado
-- ⚠️ CSRF tokens (Fase 2)
-
----
-
-## 🚀 DEPLOYMENT
-
-### Servidor Ubuntu 22.04
-
-```bash
-git clone <repo> /opt/inventory-app
-cd /opt/inventory-app
-docker-compose up -d
-
-# Verificar
-curl http://localhost/api/v1/health
-```
-
-### HTTPS (Fase 2)
-
-Implementar Let's Encrypt con Certbot
+| Capa | Tecnología | 
+|------|-----------|
+| **Frontend** | React 19 + TypeScript |
+| **Build** | Vite ^5 |
+| **Backend** | NestJS + TypeScript |
+| **Database** | PostgreSQL 14+ |
+| **ORM** | Prisma |
+| **Auth** | JWT |
+| **Hosting** | Render.com |
 
 ---
 
-## 🐛 DEFECTOS CONOCIDOS
+## 📁 Carpeta `legacy/`
 
-| ID    | Descripción                | Severidad |
-| ----- | -------------------------- | --------- |
-| D-001 | CSRF token no implementado | Baja      |
+La carpeta **`legacy/`** contiene el código HTML/CSS/JS original anterior a la migración a React.
 
-**Total**: 1 defecto (Bajo) - Recomendado para Fase 2
+**¿Por qué está aquí?**
+- Referencia histórica del proyecto
+- Documentación de evolución
+- **⚠️ NO está en producción** - Solo para consulta
 
----
-
-## 📈 ROADMAP
-
-### ✅ Fase 1 (COMPLETADO)
-
-- E-commerce funcional
-- Panel administrativo
-- Autenticación y permisos
-- Documentación completa
-
-### 🔄 Fase 2 (4 semanas)
-
-- Tests automatizados
-- HTTPS/SSL
-- CSRF tokens
-- Redis caché
-
-### 🎯 Fase 3 (Long-term)
-
-- App móvil
-- Pagos (Stripe)
-- IA recomendaciones
+Ver [legacy/README.md](legacy/README.md) para más detalles.
 
 ---
 
-## 📞 SOPORTE
+## 🚀 Pasos al Deployar
 
-### Documentación
+1. **Commit & Push** a `main`
+   ```bash
+   git add .
+   git commit -m "Descripción del cambio"
+   git push origin main
+   ```
 
-- Manual Completo: [MANUAL_SISTEMA_COMPLETO.md](MANUAL_SISTEMA_COMPLETO.md)
-- Requisitos: [IEEE_830_ESPECIFICACION.md](IEEE_830_ESPECIFICACION.md)
-- Riesgos: [PLAN_RIESGOS.md](PLAN_RIESGOS.md)
+2. **Render detecta automáticamente** el cambio
 
-### Problemas Comunes
+3. **Build inicia automáticamente**
+   - Frontend: `npm install && npm run build`
+   - Backend: Docker build
 
-**"Connection refused"**  
-→ Esperar 30s a que PostgreSQL inicie en Docker
-
-**"Token inválido"**  
-→ Hacer login nuevamente (tokens expiran 24h)
-
-**"Producto no encontrado"**  
-→ Ejecutar `npm run seed`
+4. **Deploy completado** - Los cambios son visibles en producción
 
 ---
 
-## 📋 CHECKLIST PRE-EVALUACIÓN
+## 🐛 Problemas Comunes
 
-- [x] Código documentado y comentado
-- [x] Documentación IEEE 830 completa
-- [x] Plan de riesgos identificados
-- [x] Manual de calidad con pruebas
-- [x] Acta de cierre de proyecto
-- [x] Modelo ER y UML
-- [x] Scripts de instalación
-- [x] Docker configurado
-- [x] Backup en lugar seguro
-- [x] Tests manuales aprobados
+### Frontend muestra 404 en rutas SPA
+✅ **Solucionado**: `server.js` hace fallback a `index.html` para todas las rutas
 
-**Estado**: ✅ **LISTO PARA EVALUACIÓN**
+### Backend responde lentamente (Plan gratuito Render)
+✅ **Normal**: 30-60s cold start en plan gratuito
+
+### Scroll va al footer al navegar
+✅ **Solucionado**: Scroll automático al inicio en todas las páginas dinámicas
 
 ---
 
-## 🎓 VALOR EDUCATIVO
+## 📚 Documentación por Componente
 
-Demuestra:
-✅ Arquitectura cliente-servidor  
-✅ API REST design patterns  
-✅ Base de datos normalizada  
-✅ Autenticación y seguridad  
-✅ DevOps con Docker  
-✅ Control de versiones Git  
-✅ Documentación profesional  
-✅ Metodología de pruebas  
-✅ Gestión de riesgos
+### Frontend
+- **Pages**: Home, ProductDetail, Checkout, OrderConfirmation, OrderTracking, PublicOffers
+- **Components**: Header, Hero, ProductGrid, Categories, CartPanel
+- **Services**: products-service, auth-service, admin-api-service
+- **Context**: CartContext para estado global del carrito
 
----
-
-## 📊 ESTADÍSTICAS
-
-- **Duración**: 8 semanas
-- **Horas**: 320+
-- **Líneas de Código**: ~6000
-- **Endpoints API**: 25+
-- **Documentación**: 5 documentos maestros
-- **Tests**: 50 casos funcionales
-- **Defectos**: 3 (Todos corregidos)
+### Backend
+- **Modules**: products, orders, categories, offers, auth, users
+- **Database**: Prisma schema con relaciones completas
+- **Authentication**: JWT con roles (admin/cliente)
 
 ---
 
-## ✅ CONCLUSIÓN
+## 📞 Desarrollo
 
-**El sistema E-commerce está COMPLETADO, PROBADO y LISTO PARA PRODUCCIÓN.**
-
-Documentación conforme a estándares académicos y profesionales.
-
-**Estado**: ✅ **APROBADO PARA EVALUACIÓN**
+**Team**: 1 Desarrollador  
+**Última actualización**: Marzo 9, 2026  
+**Status**: ✅ Completamente Funcional
 
 ---
 
-**Versión**: 1.0  
-**Actualizado**: 11 Febrero 2026  
-**Autor**: Equipo de Desarrollo  
-**Licencia**: MIT
-
-🎉 **¡Proyecto Exitoso!** 🎉
+**Stack limpio, moderno y en producción. 🎉**

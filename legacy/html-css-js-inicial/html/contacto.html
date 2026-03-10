@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto - StoreHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/ecommerce-figma.css">
+  <link rel="stylesheet" href="../css/header-limpio.css">
+  <link rel="icon" href="../assets/logo-storehub.svg" type="image/svg+xml">
+  
+  <!-- Configurar BACKEND_URL globalmente -->
+  <script>
+    // En producción en Render, usa la variable de ambiente API_URL
+    // En desarrollo local, usa localhost:3000
+    window.BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3000'
+      : 'https://storehub-api-74yl.onrender.com';
+  </script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e8f0f5 100%);
+      min-height: 100vh;
+    }
+
+    .contact-container {
+      max-width: 1100px;
+      margin: 3rem auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    .contact-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .contact-header h1 {
+      font-size: 2.5rem;
+      color: #386273;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .contact-header p {
+      font-size: 1.1rem;
+      color: #666;
+    }
+
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .contact-form {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-form h2 {
+      font-size: 1.5rem;
+      color: #386273;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-size: 0.9rem;
+      color: #386273;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      padding: 0.875rem 1rem;
+      border: 2px solid #B6E1F2;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      background-color: #ffffff;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #386273;
+      box-shadow: 0 0 0 3px rgba(56, 98, 115, 0.1);
+      background-color: #f8fafb;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #999;
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, #386273 0%, #2f5665 100%);
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(56, 98, 115, 0.3);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .info-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+
+    .info-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #386273 0%, #2f5665 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .info-icon svg {
+      width: 24px;
+      height: 24px;
+      color: white;
+    }
+
+    .info-content h3 {
+      color: #386273;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .info-content p {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .info-content a {
+      color: #386273;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .info-content a:hover {
+      color: #B6E1F2;
+      text-decoration: underline;
+    }
+
+    .hours-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .hours-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+
+    .hours-item strong {
+      color: #386273;
+    }
+
+    .message-success {
+      display: none;
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid #4caf50;
+    }
+
+    .message-error {
+      display: none;
+      background-color: #ffebee;
+      color: #c62828;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid #f44336;
+    }
+
+    footer {
+      margin-top: 4rem;
+      background-color: #2c5f73;
+    }
+
+    .nav-toggle {
+      display: none !important;
+    }
+
+    @media (max-width: 968px) {
+      .contact-wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .hours-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .contact-container {
+        margin: 1.5rem auto;
+      }
+
+      .contact-form {
+        padding: 1.5rem;
+      }
+
+      .info-card {
+        padding: 1.5rem;
+      }
+    }
+
+    .nav-toggle {
+      display: none !important;
+    }
+
+    /* Header scroll effect */
+    header {
+      transition: all 0.3s ease;
+    }
+
+    header.header-scroll {
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Footer fade in effect */
+    footer {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s ease;
+    }
+  </style>
+</head>
+<body>
+  <!-- ENCABEZADO -->
+  <header>
+    <div class="contenedor">
+      <div class="encabezado-contenedor">
+        <!-- LOGO -->
+        <div class="logo">
+          <img src="../assets/logo-storehub.svg" alt="Logo StoreHub" class="logo-img">
+        </div>
+
+        <!-- BOTÓN HOME A LA DERECHA -->
+        <a href="index.html" class="btn-home" title="Volver a la tienda">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="contact-container">
+      <div class="contact-header">
+        <h1>Contacto</h1>
+        <p>Estamos aquí para ayudarte. Únete con nosotros por tu canal preferido</p>
+      </div>
+
+      <div class="contact-wrapper">
+        <div class="contact-form">
+          <h2>Envíanos un Mensaje</h2>
+          <div id="message-success" class="message-success">¡Mensaje enviado correctamente! Nos pondremos en contacto pronto.</div>
+          <div id="message-error" class="message-error"></div>
+
+          <form id="contact-form">
+            <div class="form-group">
+              <label for="nombre">Nombre Completo *</label>
+              <input 
+                type="text" 
+                id="nombre" 
+                name="nombre" 
+                required 
+                placeholder="Tu nombre"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="email">Correo Electrónico *</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                required 
+                placeholder="tu@email.com"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="telefono">Teléfono</label>
+              <input 
+                type="tel" 
+                id="telefono" 
+                name="telefono" 
+                placeholder="+57 315 5508228"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="asunto">Asunto *</label>
+              <input 
+                type="text" 
+                id="asunto" 
+                name="asunto" 
+                required 
+                placeholder="¿En qué te podemos ayudar?"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="mensaje">Mensaje *</label>
+              <textarea 
+                id="mensaje" 
+                name="mensaje" 
+                required 
+                placeholder="Cuéntanos tu pregunta o comentario..."
+              ></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Enviar Mensaje</button>
+          </form>
+        </div>
+
+        <div class="contact-info">
+          <div class="info-card">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+            </div>
+            <div class="info-content">
+              <h3>Ubicación</h3>
+              <p>
+                Carrera 64 b # 40-33<br>
+                Barrio El Porvenir, Primera etapa<br>
+                Bogotá, Cundinamarca<br>
+                Colombia
+              </p>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+            </div>
+            <div class="info-content">
+              <h3>Teléfono</h3>
+              <p>
+                <strong>Celular:</strong> <a href="tel:+573155508228">+57 315 5508228</a><br>
+                <strong>WhatsApp:</strong> <a href="https://wa.me/573155508228" target="_blank">+57 315 5508228</a><br>
+              </p>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <path d="M7 9l5 3.5L17 9"></path>
+              </svg>
+            </div>
+            <div class="info-content">
+              <h3>Correo Electrónico</h3>
+              <p>
+                <strong>General:</strong> <a href="mailto:info@storehub.com">info@storehub.com</a><br>
+                <strong>Soporte:</strong> <a href="mailto:soporte@storehub.com">soporte@storehub.com</a><br>
+              </p>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="1"></circle>
+                <path d="M12 1v6m0 6v6"></path>
+                <path d="M4.22 4.22l4.24 4.24m0 5.08l-4.24 4.24"></path>
+                <path d="M1 12h6m6 0h6"></path>
+              </svg>
+            </div>
+            <div class="info-content">
+              <h3>Horario de Atención</h3>
+              <div class="hours-grid">
+                <div class="hours-item">
+                  <strong>Lun - Vie:</strong>
+                  <span>8:00 AM - 6:00 PM</span>
+                </div>
+                <div class="hours-item">
+                  <strong>Sábado:</strong>
+                  <span>10:00 AM - 4:00 PM</span>
+                </div>
+                <div class="hours-item">
+                  <strong>Domingo:</strong>
+                  <span>Cerrado</span>
+                </div>
+                <div class="hours-item">
+                  <strong>Festivos:</strong>
+                  <span>Cerrado</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-contenido">
+      <div class="footer-seccion">
+        <h3>Sobre Nosotros</h3>
+        <p>StoreHub es tu distribuidora de confianza para productos de hogar y abarrotes de la mejor calidad.</p>
+        <div class="redes-sociales">
+          <a href="#" title="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+          <a href="#" title="Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
+              <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.117.6c-.388.15-.76.368-1.085.683-.315.309-.533.697-.686 1.086-.266.79-.467 1.66-.527 2.938C1.031 8.333 1.016 8.74 1.016 12s.015 3.667.072 4.947c.06 1.277.261 2.148.527 2.938.153.389.37.756.686 1.084.309.317.677.533 1.07.687.76.272 1.632.474 2.898.536 1.22.057 1.627.072 4.947.072s3.728-.015 4.947-.072c1.266-.062 2.139-.263 2.898-.536.389-.153.756-.37 1.084-.686.317-.309.533-.677.687-1.07.272-.76.474-1.632.536-2.898.057-1.22.072-1.627.072-4.947s-.015-3.667-.072-4.947c-.062-1.266-.263-2.139-.536-2.898-.153-.389-.37-.756-.686-1.084-.309-.317-.677-.533-1.07-.687-.76-.272-1.632-.474-2.898-.536C15.667 1.031 15.26 1.016 12 1.016s-3.667.015-4.947.072zm0 2.016c3.183 0 3.556.01 4.812.063 1.161.053 1.792.247 2.21.412.557.217.953.477 1.369.893.416.416.676.812.893 1.369.165.418.36 1.049.412 2.21.053 1.255.063 1.629.063 4.812s-.01 3.557-.063 4.812c-.053 1.161-.247 1.792-.412 2.21-.217.557-.477.953-.893 1.369-.416.416-.812.676-1.369.893-.418.165-1.049.36-2.21.412-1.255.053-1.629.063-4.812.063s-3.557-.01-4.812-.063c-1.161-.053-1.792-.247-2.21-.412-.557-.217-.953-.477-1.369-.893-.416-.416-.676-.812-.893-1.369-.165-.418-.36-1.049-.412-2.21-.053-1.255-.063-1.629-.063-4.812s.01-3.557.063-4.812c.053-1.161.247-1.792.412-2.21.217-.557.477-.953.893-1.369.416-.416.812-.676 1.369-.893.418-.165 1.049-.36 2.21-.412 1.255-.053 1.629-.063 4.812-.063z"/>
+              <circle cx="12" cy="12" r="3.206"/>
+              <circle cx="18.406" cy="5.594" r=".75"/>
+            </svg>
+          </a>
+          <a href="#" title="Twitter">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417a9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            </svg>
+          </a>
+          <a href="https://wa.me/573155508228?text=Vengo%20desde%20el%20sitio%20web%2C%20tengo%20una%20duda" target="_blank" title="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
+              <circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" stroke-width="1"/>
+              <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16z" fill="currentColor"/>
+              <path d="M7 12c0-2.76 2.24-5 5-5s5 2.24 5 5-2.24 5-5 5-5-2.24-5-5z" fill="currentColor"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-seccion">
+        <h3>Información</h3>
+        <a href="preguntas-frecuentes.html">Preguntas Frecuentes</a>
+        <a href="politica-privacidad.html">Política de Privacidad</a>
+        <a href="terminos-condiciones.html">Términos y Condiciones</a>
+        <a href="contacto.html">Contacto</a>
+      </div>
+
+      <div class="footer-seccion">
+        <h3>Contacto</h3>
+        <p><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Carrera 64 b # 40-33</p>
+        <p><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Barrio El Porvenir, Primera etapa</p>
+        <p><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>+57 315 5508228</p>
+        <p><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><path d="M12 1v6m0 6v6"></path><path d="M4.22 4.22l4.24 4.24m0 5.08l-4.24 4.24"></path><path d="M1 12h6m6 0h6"></path></svg>Lun - Vie: 8am - 6pm</p>
+        <p><a href="https://wa.me/573155508228" target="_blank"><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>Chatea en WhatsApp</a></p>
+      </div>
+
+      <div class="footer-seccion">
+        <h3>Métodos de Pago</h3>
+        <div class="payment-method"><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg><span>Tarjeta de Crédito/Débito</span></div>
+        <div class="payment-method"><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2" ry="2"></rect><line x1="2" y1="7" x2="22" y2="7"></line></svg><span>Transferencia Bancaria</span></div>
+        <div class="payment-method"><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6m0 3v0.01"></path></svg><span>Efectivo Contra Entrega</span></div>
+        <div class="payment-method"><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="20" x2="12" y2="20.01"></line></svg><span>Billetera Digital</span></div>
+      </div>
+    </div>
+
+    <div class="footer-separador">
+      <p>&copy; 2026 StoreHub. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const successMsg = document.getElementById('message-success');
+      const errorMsg = document.getElementById('message-error');
+      
+      successMsg.style.display = 'none';
+      errorMsg.style.display = 'none';
+
+      const formData = {
+        nombre: document.getElementById('nombre').value,
+        email: document.getElementById('email').value,
+        telefono: document.getElementById('telefono').value,
+        asunto: document.getElementById('asunto').value,
+        mensaje: document.getElementById('mensaje').value,
+        fecha: new Date().toLocaleString('es-CO')
+      };
+
+      try {
+        const response = await fetch('https://api.storehub.com/v1/contacto', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+          successMsg.style.display = 'block';
+          document.getElementById('contact-form').reset();
+          setTimeout(() => {
+            successMsg.style.display = 'none';
+          }, 5000);
+        } else {
+          throw new Error('Error en la solicitud');
+        }
+      } catch (error) {
+        errorMsg.textContent = 'Error al enviar el mensaje. Por favor, intenta más tarde o contáctanos directamente.';
+        errorMsg.style.display = 'block';
+        console.error('Error:', error);
+      }
+    });
+
+    // 🎯 HEADER SCROLL EFFECT - CORPORATE STYLE
+    window.addEventListener("scroll", function () {
+      const header = document.querySelector("header");
+      if (window.scrollY > 50) {
+        header.classList.add("header-scroll");
+      } else {
+        header.classList.remove("header-scroll");
+      }
+    });
+
+    // 🧊 FOOTER FADE-IN ON SCROLL - TECH MODERN
+    const footerObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    const footer = document.querySelector('footer');
+    if (footer) {
+      footer.style.opacity = '0';
+      footer.style.transform = 'translateY(40px)';
+      footer.style.transition = 'all 0.8s ease';
+      footerObserver.observe(footer);
+    }
+  </script>
+</body>
+</html>

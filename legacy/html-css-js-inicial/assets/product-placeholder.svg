@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="250" height="200" viewBox="0 0 250 200">
+  <rect width="250" height="200" fill="#f0f0f0"/>
+  <g fill="#9aa8b2">
+    <rect x="15" y="30" width="220" height="140" rx="8"/>
+    <text x="50%" y="50%" fill="#6b7880" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" dominant-baseline="middle">Producto</text>
+  </g>
+</svg>
