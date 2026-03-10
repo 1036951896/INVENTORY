@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoreHub - Arquitectura del Proyecto</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm 1.5cm;
+        }
+        
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            h1, h2 {
+                page-break-after: avoid;
+            }
+            pre, table {
+                page-break-inside: avoid;
+            }
+            a {
+                color: #0066cc;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+        }
+        
+        body {
+            font-family: 'Calibri', 'Segoe UI', 'Arial', sans-serif;
+            font-size: 11pt;
+            line-height: 1.8;
+            color: #333;
+            background-color: #fff;
+            padding: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 32pt;
+            color: #003d99;
+            margin: 40px 0 25px 0;
+            padding-bottom: 15px;
+            border-bottom: 3pt solid #003d99;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+        
+        h2 {
+            font-size: 20pt;
+            color: #0066cc;
+            margin: 30px 0 15px 0;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+        
+        h3 {
+            font-size: 14pt;
+            color: #333;
+            margin: 20px 0 12px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 10px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 12pt;
+            text-align: justify;
+            line-height: 1.8;
+        }
+        
+        code {
+            background-color: #f4f4f4;
+            padding: 3pt 6pt;
+            border-radius: 3pt;
+            font-family: 'Courier New', 'Consolas', monospace;
+            font-size: 10pt;
+            color: #d63384;
+            border: 1px solid #e0e0e0;
+        }
+        
+        pre {
+            background-color: #f8f9fa;
+            border-left: 4pt solid #0066cc;
+            border: 1px solid #ddd;
+            padding: 14pt 15pt;
+            margin: 15pt 0;
+            border-radius: 4pt;
+            overflow-x: auto;
+            font-size: 9pt;
+            line-height: 1.5;
+            font-family: 'Courier New', 'Consolas', monospace;
+        }
+        
+        pre code {
+            background: none;
+            color: #333;
+            padding: 0;
+            border: none;
+            font-size: 9pt;
+        }
+        
+        ul {
+            margin: 12pt 0;
+            padding-left: 25pt;
+        }
+        
+        li {
+            margin-bottom: 8pt;
+            line-height: 1.7;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15pt 0;
+            font-size: 10pt;
+        }
+        
+        th {
+            background-color: #0066cc;
+            color: white;
+            padding: 10pt;
+            text-align: left;
+            font-weight: bold;
+            border: 1pt solid #004499;
+        }
+        
+        td {
+            border: 1pt solid #ddd;
+            padding: 9pt;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        blockquote {
+            border-left: 4pt solid #0066cc;
+            margin: 15pt 0;
+            padding: 12pt 15pt;
+            background-color: #f0f7ff;
+            color: #333;
+        }
+        
+        a {
+            color: #0066cc;
+            text-decoration: underline;
+        }
+        
+        a:visited {
+            color: #004499;
+        }
+        
+        hr {
+            border: none;
+            border-top: 2pt solid #ccc;
+            margin: 25pt 0;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30pt;
+            border-bottom: 2pt solid #003d99;
+            padding-bottom: 15pt;
+        }
+        
+        .header h1 {
+            margin: 0 0 10pt 0;
+        }
+        
+        .meta {
+            font-size: 10pt;
+            color: #666;
+            margin-bottom: 5pt;
+        }
+        
+        .footer {
+            margin-top: 50pt;
+            padding-top: 15pt;
+            border-top: 1pt solid #ddd;
+            font-size: 9pt;
+            color: #999;
+            text-align: center;
+        }
+        
+        strong {
+            font-weight: bold;
+            color: #222;
+        }
+        
+        em {
+            font-style: italic;
+        }
+        
+        .toc {
+            background-color: #f5f5f5;
+            padding: 15pt;
+            margin: 20pt 0;
+            border-radius: 4pt;
+            border-left: 4pt solid #0066cc;
+            page-break-inside: avoid;
+        }
+        
+        .section {
+            margin-bottom: 20pt;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏗️ StoreHub - Arquitectura del Proyecto</h1>
+        <div class="meta">
+            <p><strong>Versión:</strong> 2.0 | <strong>Fecha:</strong> Marzo 2026 | <strong>Estado:</strong> Documentado</p>
+        </div>
+    </div>
+    
+    <div class="toc">
+        <h3>📋 Tabla de Contenidos</h3>
+        <ul>
+            <li><a href="#vision">Visión General</a></li>
+            <li><a href="#alto-nivel">Arquitectura de Alto Nivel</a></li>
+            <li><a href="#frontend">Frontend - React</a></li>
+            <li><a href="#backend">Backend - NestJS</a></li>
+            <li><a href="#database">Base de Datos</a></li>
+            <li><a href="#flujo">Flujo de Datos</a></li>
+            <li><a href="#patrones">Patrones de Diseño</a></li>
+            <li><a href="#seguridad">Seguridad</a></li>
+            <li><a href="#deploy">Deploy</a></li>
+        </ul>
+    </div>
+
+    <h2 id="vision">📖 Visión General</h2>
+    
+    <p><strong>StoreHub</strong> es un sistema e-commerce moderno con arquitectura de <strong>tres capas</strong>:</p>
+    
+    <pre><code>┌─────────────────────────────────────────────────────────┐
+│                  FRONTEND - REACT 19 (SPA)              │
+│         (Vite, React Router, Context API)               │
+│         https://inventory-2-sewi.onrender.com           │
+└────────────────────┬────────────────────────────────────┘
+                     │ HTTP/REST
+                     ↓
+┌─────────────────────────────────────────────────────────┐
+│                BACKEND - NESTJS API                     │
+│      (Modular, JWT Auth, Prisma ORM)                    │
+│      https://inventory-1-jkh2.onrender.com/api/v1       │
+└────────────────────┬────────────────────────────────────┘
+                     │ SQL
+                     ↓
+┌─────────────────────────────────────────────────────────┐
+│          DATABASE - POSTGRESQL 14+                      │
+│    (Relacional, Prisma Migrations)                      │
+│         Alojada en Render.com                           │
+└─────────────────────────────────────────────────────────┘</code></pre>
+
+    <h2 id="alto-nivel">🏛️ Arquitectura de Alto Nivel</h2>
+    
+    <h3>🎭 Capas</h3>
+    
+    <h4>1. Presentation Layer (Frontend)</h4>
+    <ul>
+        <li><strong>Responsabilidad:</strong> Interfaz de usuario, renderizado, interacción</li>
+        <li><strong>Tecnología:</strong> React 19 + TypeScript + Vite</li>
+        <li><strong>Ubicación:</strong> /frontend</li>
+        <li><strong>Servidor:</strong> Express.js (SPA routing)</li>
+    </ul>
+    
+    <h4>2. API Layer (Backend)</h4>
+    <ul>
+        <li><strong>Responsabilidad:</strong> Lógica de negocio, validación, autenticación</li>
+        <li><strong>Tecnología:</strong> NestJS + TypeScript + Prisma ORM</li>
+        <li><strong>Ubicación:</strong> /backend</li>
+        <li><strong>Servidor:</strong> Node.js en Docker</li>
+    </ul>
+    
+    <h4>3. Data Layer (Database)</h4>
+    <ul>
+        <li><strong>Responsabilidad:</strong> Persistencia de datos</li>
+        <li><strong>Tecnología:</strong> PostgreSQL 14+</li>
+        <li><strong>ORM:</strong> Prisma</li>
+        <li><strong>Ubicación:</strong> Managed Database en Render</li>
+    </ul>
+
+    <h2 id="frontend">⚛️ Frontend - React</h2>
+    
+    <h3>Estructura de Carpetas</h3>
+    
+    <pre><code>frontend/
+├── src/
+│   ├── components/              # Componentes reutilizables
+│   │   ├── Header.tsx          # Encabezado con navegación
+│   │   ├── Hero.tsx            # Sección hero landing
+│   │   ├── ProductGrid.tsx     # Grilla de productos
+│   │   ├── CartPanel.tsx       # Panel carrito deslizable
+│   │   ├── Footer.tsx          # Pie de página
+│   │   └── ...
+│   │
+│   ├── pages/                   # Páginas SPA
+│   │   ├── Home.tsx            # Página principal
+│   │   ├── ProductDetail.tsx   # Detalles de producto
+│   │   ├── Checkout.tsx        # Carrito y pedido
+│   │   └── ...
+│   │
+│   ├── context/                 # React Context (Estado Global)
+│   │   └── CartContext.tsx     # Contexto del carrito
+│   │
+│   ├── services/                # Servicios API
+│   │   ├── products.service.ts
+│   │   ├── auth.service.ts
+│   │   └── ...
+│   │
+│   └── styles/                  # CSS modular</code></pre>
+
+    <h3>Componentes Principales</h3>
+    
+    <p><strong>Header:</strong> Navegación principal, búsqueda de productos, botón carrito</p>
+    <p><strong>ProductGrid:</strong> Obtiene productos de API, filtra por categoría, renderiza tarjetas</p>
+    <p><strong>CartPanel:</strong> Usa CartContext, muestra items, cálculo total</p>
+
+    <h2 id="backend">🔧 Backend - NestJS</h2>
+    
+    <h3>Arquitectura Modular</h3>
+    
+    <p>Cada módulo sigue el patrón <strong>Feature Module</strong>:</p>
+    
+    <pre><code>ProductsModule
+├── ProductsController (Rutas HTTP)
+├── ProductsService (Lógica negocio)
+├── Prisma (Acceso datos)
+├── DTOs (Validación entrada)
+└── Entities (Modelos)</code></pre>
+
+    <h3>Módulos Disponibles</h3>
+    <ul>
+        <li><strong>Products Module:</strong> CRUD de productos</li>
+        <li><strong>Orders Module:</strong> Gestión de órdenes</li>
+        <li><strong>Auth Module:</strong> Autenticación JWT</li>
+        <li><strong>Users Module:</strong> Gestión de usuarios</li>
+        <li><strong>Categories Module:</strong> Categorías de productos</li>
+        <li><strong>Offers Module:</strong> Ofertas especiales</li>
+    </ul>
+
+    <h3>Autenticación JWT</h3>
+    
+    <pre><code>// auth.service.ts
+async login(email: string, password: string) {
+  const user = await this.usersService.findByEmail(email);
+  
+  if (!user || !bcrypt.compareSync(password, user.password)) {
+    throw new UnauthorizedException();
+  }
+  
+  const token = this.jwtService.sign({
+    sub: user.id,
+    email: user.email,
+    role: user.role
+  });
+  
+  return { access_token: token, user };
+}</code></pre>
+
+    <h2 id="database">🗄️ Base de Datos</h2>
+    
+    <h3>Modelos Principales</h3>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Modelo</th>
+                <th>Descripción</th>
+                <th>Relaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>User</strong></td>
+                <td>Usuarios del sistema</td>
+                <td>Tiene muchas Orders y Addresses</td>
+            </tr>
+            <tr>
+                <td><strong>Product</strong></td>
+                <td>Productos disponibles</td>
+                <td>Muchas imágenes, ofertas, items</td>
+            </tr>
+            <tr>
+                <td><strong>Order</strong></td>
+                <td>Órdenes de compra</td>
+                <td>Pertenece a User, tiene items</td>
+            </tr>
+            <tr>
+                <td><strong>Category</strong></td>
+                <td>Categorías de productos</td>
+                <td>Muchos productos</td>
+            </tr>
+            <tr>
+                <td><strong>Offer</strong></td>
+                <td>Ofertas especiales</td>
+                <td>Pertenece a Product</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="flujo">📊 Flujo de Datos - Compra de Producto</h2>
+    
+    <pre><code>1. Usuario hace clic en "Agregar al Carrito"
+   ↓
+2. CartContext.addToCart(product, quantity)
+   ↓
+3. Notificación de éxito (Sonner)
+   ↓
+4. Usuario va a Checkout
+   ↓
+5. Confirma orden → POST /api/v1/orders
+   ↓ BACKEND
+6. OrdersService.create()
+   ↓
+7. Valida stock y crea Order en DB
+   ↓
+8. Retorna { orderId, numero, total }
+   ↓ FRONTEND
+9. CartContext.clearCart()
+   ↓
+10. Redirige a /confirmacion/:orderId
+    ↓
+11. Muestra confirmación con número orden</code></pre>
+
+    <h2 id="patrones">🎯 Patrones de Diseño</h2>
+    
+    <ul>
+        <li><strong>Module Pattern:</strong> NestJS módulos independientes</li>
+        <li><strong>Service Layer:</strong> Controllers, Services, Prisma</li>
+        <li><strong>Context API:</strong> Estado global sin props drilling</li>
+        <li><strong>Custom Hooks:</strong> React hooks personalizados</li>
+        <li><strong>Guard Pattern:</strong> Protección de rutas</li>
+        <li><strong>DTO Pattern:</strong> Separación entrada/salida</li>
+        <li><strong>Strategy Pattern:</strong> JWT auth strategies</li>
+    </ul>
+
+    <h2 id="seguridad">🔒 Seguridad</h2>
+    
+    <h3>Frontend</h3>
+    <ul>
+        <li>Token JWT en localStorage</li>
+        <li>Headers con Authorization Bearer</li>
+        <li>Rutas protegidas con autenticación</li>
+        <li>Validación TypeScript</li>
+    </ul>
+    
+    <h3>Backend</h3>
+    <ul>
+        <li>Contraseñas con bcrypt (10 rounds)</li>
+        <li>Validación de entrada con DTOs</li>
+        <li>Guards JWT en rutas protegidas</li>
+        <li>Roles (admin/cliente) con autorización</li>
+        <li>CORS configurado correctamente</li>
+        <li>Variables de entorno para secretos</li>
+    </ul>
+
+    <h2 id="deploy">🚀 Deploy - Render.com</h2>
+    
+    <h3>Configuración render.yaml</h3>
+    
+    <pre><code>Frontend:
+  - Build: npm install && npm run build
+  - Start: npm start (Express server)
+  - Runtime: Node.js
+
+Backend:
+  - Build: Docker image
+  - Expose: Puerto 3000
+  - Runtime: Node.js in Docker</code></pre>
+
+    <h3>URLs en Producción</h3>
+    <ul>
+        <li><strong>Frontend:</strong> https://inventory-2-sewi.onrender.com</li>
+        <li><strong>Backend:</strong> https://inventory-1-jkh2.onrender.com</li>
+        <li><strong>API Base:</strong> https://inventory-1-jkh2.onrender.com/api/v1</li>
+    </ul>
+
+    <h3>Proceso Deploy Automático</h3>
+    <pre><code>1. Push a GitHub (main branch)
+       ↓
+2. Render webhook se activa
+       ↓
+3. Frontend build: npm run build → dist/
+       ↓
+4. Express server sirve dist/
+       ↓
+5. Backend build: Docker image
+       ↓
+6. Backend run: npm run start:prod
+       ↓
+7. Prisma: Aplica migraciones
+       ↓
+8. Servicios online en producción</code></pre>
+
+    <h2 id="conclusión">✅ Conclusión</h2>
+    
+    <p><strong>StoreHub</strong> mantiene una arquitectura limpia, modular y escalable:</p>
+    
+    <ul>
+        <li>✅ <strong>Frontend:</strong> Componentes reusables, Context API, servicios tipados</li>
+        <li>✅ <strong>Backend:</strong> Módulos feature, JWT auth, Prisma ORM</li>
+        <li>✅ <strong>Base de Datos:</strong> Schema normalizado con relaciones claras</li>
+        <li>✅ <strong>Deploy:</strong> Auto-deploy en Render con CI/CD implícita</li>
+        <li>✅ <strong>Seguridad:</strong> JWT, bcrypt, CORS, validaciones</li>
+    </ul>
+    
+    <p><strong>Para crecer:</strong> Agregar caching (Redis), testing (Jest), y monitoreo (Sentry).</p>
+
+    <div class="footer">
+        <hr>
+        <p><strong>Documento de Arquitectura</strong></p>
+        <p>StoreHub E-Commerce | Marzo 2026</p>
+        <p>Proyecto completamente funcional en producción en Render.com</p>
+        <p style="margin-top: 20px; font-size: 10pt; color: #aaa;">
+            Para convertir a PDF: Presiona Ctrl+P (o Cmd+P en Mac) → Guardar como PDF
+        </p>
+    </div>
+</body>
+</html>
