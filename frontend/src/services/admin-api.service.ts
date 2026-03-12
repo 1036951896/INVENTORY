@@ -216,7 +216,7 @@ export const getPublicOffers = async () => {
     return activeOffers.map((offer) => {
       // Obtener TODOS los productos de la oferta
       const productosDeLaOferta = offer.productosIds
-        ?.map(productId => productsList.find(p => String(p.id) === String(productId)))
+        ?.map(productId => productsList.find((p: any) => String(p.id) === String(productId)))
         .filter(Boolean) || [];
       
       // Función para obtener la imagen del producto
