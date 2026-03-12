@@ -403,6 +403,66 @@
   color: #9ca3af;
 }
 
+/* ===== PASSWORD TOGGLE ===== */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 2.8rem;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.password-toggle:hover {
+  color: #3483fa;
+}
+
+/* ===== PASSWORD HINT ===== */
+.password-hint {
+  font-size: 0.78rem;
+  color: #6b7280;
+  margin-top: 0.1rem;
+}
+
+.hint-ok {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.hint-error {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+/* ===== BADGE OPCIONAL ===== */
+.opcional-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 500;
+  background: #f3f4f6;
+  color: #6b7280;
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-left: 6px;
+  vertical-align: middle;
+  letter-spacing: 0.02em;
+}
+
 /* ===== LEGACY - Deprecated ===== */
 .section-divider {
   border-top: 1px solid #e5e7eb;

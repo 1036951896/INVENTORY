@@ -22,7 +22,16 @@ export default function Register() {
   const [terminos, setTerminos] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+
+  const isPasswordValid = (pwd: string) => {
+    if (pwd.length <= 8) return false;
+    const hasLetter = /[a-zA-Z]/.test(pwd);
+    const hasNumber = /[0-9]/.test(pwd);
+    return hasLetter && hasNumber;
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -40,6 +49,11 @@ export default function Register() {
         !formData.telefono || !formData.password || !formData.confirmPassword ||
         !formData.calle || !formData.numero || !formData.ciudad || !formData.departamento) {
       setError('Por favor completa todos los campos obligatorios');
+      return;
+    }
+
+    if (!isPasswordValid(formData.password)) {
+      setError('La contraseña debe tener más de 8 caracteres y contener letras y números');
       return;
     }
 
@@ -215,7 +229,7 @@ export default function Register() {
 
             <div className="grid-2">
               <div className="input-group">
-                <label htmlFor="apartamento">Apartamento (Opcional)</label>
+                <label htmlFor="apartamento">Apartamento <span className="opcional-badge">opcional</span></label>
                 <input
                   type="text"
                   id="apartamento"
@@ -257,7 +271,7 @@ export default function Register() {
               </div>
 
               <div className="input-group">
-                <label htmlFor="codigoPostal">Código Postal (Opcional)</label>
+                <label htmlFor="codigoPostal">Código Postal <span className="opcional-badge">opcional</span></label>
                 <input
                   type="text"
                   id="codigoPostal"
@@ -289,30 +303,72 @@ export default function Register() {
             <div className="grid-2">
               <div className="input-group">
                 <label htmlFor="password">Contraseña</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  required
-                  placeholder="••••••••"
-                  autoComplete="new-password"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
+                <div className="password-wrapper">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    name="password"
+                    required
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() => setShowPassword(v => !v)}
+                    aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                  >
+                    {showPassword ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    )}
+                  </button>
+                </div>
+                <span className="password-hint">
+                  Mínimo 9 caracteres, con letras y números
+                  {formData.password.length > 0 && (
+                    isPasswordValid(formData.password)
+                      ? <span className="hint-ok"> ✓ Válida</span>
+                      : <span className="hint-error"> ✗ No cumple los requisitos</span>
+                  )}
+                </span>
               </div>
 
               <div className="input-group">
                 <label htmlFor="confirmPassword">Confirmar contraseña</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  required
-                  placeholder="••••••••"
-                  autoComplete="new-password"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
+                <div className="password-wrapper">
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    required
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() => setShowConfirmPassword(v => !v)}
+                    aria-label={showConfirmPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                  >
+                    {showConfirmPassword ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    )}
+                  </button>
+                </div>
+                {formData.confirmPassword.length > 0 && formData.password !== formData.confirmPassword && (
+                  <span className="password-hint hint-error">✗ Las contraseñas no coinciden</span>
+                )}
+                {formData.confirmPassword.length > 0 && formData.password === formData.confirmPassword && isPasswordValid(formData.password) && (
+                  <span className="password-hint hint-ok">✓ Las contraseñas coinciden</span>
+                )}
               </div>
             </div>
           </div>
