@@ -70,4 +70,10 @@ export class HealthController {
     const forceReset = force === 'true';
     return await this.seedService.executeSeed(forceReset);
   }
+
+  @Post('fix-carnes')
+  @HttpCode(200)
+  async fixCarnes() {
+    return await this.seedService.fixCarnesCategory();
+  }
 }
