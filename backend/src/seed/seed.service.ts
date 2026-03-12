@@ -49,6 +49,7 @@ export class SeedService {
         { id: '4', nombre: 'Raices y tuberculos', descripcion: 'Yuca y otros tubérculos', icono: '🥕' },
         { id: '5', nombre: 'Empaques', descripcion: 'Bolsas y empaques', icono: '📦' },
         { id: '6', nombre: 'Condimentos', descripcion: 'Salsas y condimentos', icono: '🧂' },
+        { id: '7', nombre: 'Carnes', descripcion: 'Carnes y proteínas', icono: '🥩' },
       ];
 
       const productosJSON = [
@@ -103,7 +104,7 @@ export class SeedService {
         { id: '49', nombre: 'SACHET ROSADA 9GR X 102', precio: 11400, stock: 50, categoriaId: '6' },
         { id: '50', nombre: 'SALSA TOMATE X 4 K', precio: 25300, stock: 20, categoriaId: '6' },
         { id: '51', nombre: 'MAYONESA X 4 K', precio: 34000, stock: 20, categoriaId: '6' },
-        { id: '52', nombre: 'CARNE DE HAMBURG 9GR X 10', precio: 12300, stock: 30, categoriaId: '6' },
+        { id: '52', nombre: 'CARNE DE HAMBURG 9GR X 10', precio: 12300, stock: 30, categoriaId: '7' },
         { id: '53', nombre: 'PATACON COCTELERO X 1000 GR', precio: 9600, stock: 40, categoriaId: '1' },
         { id: '54', nombre: 'PATACON MEDIANO X 1000 GR', precio: 9600, stock: 40, categoriaId: '1' },
         { id: '55', nombre: 'PATACON OVALADO X 1000 GR', precio: 9600, stock: 40, categoriaId: '1' },
@@ -375,6 +376,31 @@ export class SeedService {
     } catch (error) {
       this.logger.error('Error en seed:', error);
       throw new BadRequestException(`Error al ejecutar seed: ${error.message}`);
+    }
+  }
+
+  async fixCarnesCategory() {
+    try {
+      // Crear categoría Carnes si no existe
+      const carnes = await this.prisma.category.upsert({
+        where: { id: '7' },
+        update: { nombre: 'Carnes', descripcion: 'Carnes y proteínas', icono: '🥩' },
+        create: { id: '7', nombre: 'Carnes', descripcion: 'Carnes y proteínas', icono: '🥩' },
+      });
+
+      // Mover el producto de carne de hamburguesa a categoría Carnes
+      const updated = await this.prisma.product.updateMany({
+        where: { nombre: { contains: 'CARNE DE HAMBURG' } },
+        data: { categoriaId: '7' },
+      });
+
+      return {
+        success: true,
+        message: `Categoría "${carnes.nombre}" creada/actualizada. ${updated.count} producto(s) movidos a Carnes.`,
+      };
+    } catch (error) {
+      this.logger.error('Error en fixCarnesCategory:', error);
+      throw new BadRequestException(`Error: ${error.message}`);
     }
   }
 }

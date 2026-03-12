@@ -56,7 +56,7 @@ const productosJSON = [
   { id: "49", nombre: 'SACHET ROSADA 9GR X 102', precio: 11400, stock: 50, categoriaId: '6' },
   { id: "50", nombre: 'SALSA TOMATE X 4 K', precio: 25300, stock: 20, categoriaId: '6' },
   { id: "51", nombre: 'MAYONESA X 4 K', precio: 34000, stock: 20, categoriaId: '6' },
-  { id: "52", nombre: 'CARNE DE HAMBURG 9GR X 10', precio: 12300, stock: 30, categoriaId: '6' },
+  { id: "52", nombre: 'CARNE DE HAMBURG 9GR X 10', precio: 12300, stock: 30, categoriaId: '7' },
   { id: "53", nombre: 'PATACON COCTELERO X 1000 GR', precio: 9600, stock: 40, categoriaId: '1' },
   { id: "54", nombre: 'PATACON MEDIANO X 1000 GR', precio: 9600, stock: 40, categoriaId: '1' },
   { id: "55", nombre: 'PATACON OVALADO X 1000 GR', precio: 9600, stock: 40, categoriaId: '1' },
@@ -78,6 +78,7 @@ const categoriasSeed = [
   { id: '4', nombre: 'Tubérculos', descripcion: 'Yuca y otros tubérculos', icono: '🥕' },
   { id: '5', nombre: 'Empaques', descripcion: 'Empaques y bolsas', icono: '📦' },
   { id: '6', nombre: 'Condimentos', descripcion: 'Salsas y condimentos', icono: '🧂' },
+  { id: '7', nombre: 'Carnes', descripcion: 'Carnes y proteínas', icono: '🥩' },
 ];
 
 async function main() {

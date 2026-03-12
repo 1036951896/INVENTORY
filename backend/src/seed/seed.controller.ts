@@ -5,13 +5,19 @@ import { SeedService } from './seed.service';
 export class SeedController {
   constructor(private readonly seedService: SeedService) {}
 
-  /**
-   * Endpoint para ejecutar el seed (solo una vez)
-   * Este endpoint puede ser llamado sin autenticación para inicializar la BD
-   */
   @Post('seed')
   @HttpCode(200)
   async seed() {
     return await this.seedService.executeSeed();
+  }
+
+  /**
+   * Endpoint one-time para mover la carne de hamburguesa a la categoría Carnes
+   * Puede llamarse con POST /api/v1/health/fix-carnes
+   */
+  @Post('fix-carnes')
+  @HttpCode(200)
+  async fixCarnesCategory() {
+    return await this.seedService.fixCarnesCategory();
   }
 }
