@@ -1,11 +1,12 @@
-import { api } from './api';
+import { api, BACKEND_URL } from './api';
+import { getActiveOffers } from '../utils/offersStorage';
 
 /**
  * Servicio para gestionar productos
  */
 export const productsApiService = {
   // Obtener todos los productos
-  getAll: async (limit = 100, page = 1) => {
+  getAll: async (limit = 500, page = 1) => {
     const response = await api.get(`/products?limit=${limit}&page=${page}`);
     return response.data;
   },
@@ -194,8 +195,89 @@ export const inventoryApiService = {
 };
 
 export const getPublicOffers = async () => {
-  const response = await api.get('/api/public/offers'); // Asegúrate de que este endpoint exista en el backend
-  return response.data;
+  try {
+    // Cargar ofertas activas desde localStorage
+    const activeOffers = getActiveOffers();
+    
+    // Cargar productos para vincular datos reales
+    const allProducts = await productsApiService.getAll();
+    let productsList = [];
+    
+    // Manejar diferentes estructuras de respuesta del API
+    if (Array.isArray(allProducts)) {
+      productsList = allProducts;
+    } else if (allProducts && Array.isArray(allProducts.data)) {
+      productsList = allProducts.data;
+    } else if (allProducts && Array.isArray(allProducts.products)) {
+      productsList = allProducts.products;
+    }
+    
+    // Transformar al formato esperado por PublicOffers
+    return activeOffers.map((offer) => {
+      // Obtener TODOS los productos de la oferta
+      const productosDeLaOferta = offer.productosIds
+        ?.map(productId => productsList.find(p => String(p.id) === String(productId)))
+        .filter(Boolean) || [];
+      
+      // Función para obtener la imagen del producto
+      const getProductImage = (product: any): string => {
+        // Obtener imagen principal: primero del array, luego fallback
+        const imagen = product.imagenes?.[0]?.url || product.imagen || '';
+        
+        if (!imagen) return '';
+        // Las imágenes vienen con rutas relativas tipo /images/productos/nombre.jpg
+        if (imagen.startsWith('http')) return imagen;
+        if (imagen.startsWith('/')) return `${BACKEND_URL}${imagen}`;
+        return `${BACKEND_URL}/${imagen}`;
+      };
+      
+      // Usar datos del primer producto real, o valores por defecto
+      const primerProducto = productosDeLaOferta[0];
+      
+      return {
+        id: offer.id,
+        title: offer.nombre,
+        description: offer.descripcion,
+        discount: offer.descuentoPorcentaje || offer.descuentoFijo || 0,
+        validUntil: offer.fechaFin,
+        product: primerProducto ? {
+          id: primerProducto.id,
+          nombre: primerProducto.nombre,
+          imagen: getProductImage(primerProducto),
+          categoria: primerProducto.categoria?.nombre || primerProducto.categoria?.name || 'General',
+          precio: primerProducto.precio || 100,
+          stock: primerProducto.stock || 10,
+        } : {
+          id: offer.id,
+          nombre: offer.nombre,
+          imagen: '',
+          categoria: 'General',
+          precio: 100,
+          stock: 10,
+        },
+        // Pasar TODOS los productos de la oferta (no solo los primeros 3)
+        productos: productosDeLaOferta.map(p => ({
+          id: p.id,
+          nombre: p.nombre,
+          imagen: getProductImage(p),
+          categoria: p.categoria?.nombre || p.categoria?.name || 'General',
+          precio: p.precio || 100,
+          stock: p.stock || 10,
+        })),
+        offerType: offer.tipo,
+        offerDetails: {
+          percentaje: offer.descuentoPorcentaje,
+          fijo: offer.descuentoFijo,
+          compre: offer.cantidadCompre,
+          lleve: offer.cantidadLleve,
+        },
+        productosCount: offer.productosIds?.length || 1,
+      };
+    });
+  } catch (error) {
+    console.error('Error fetching public offers:', error);
+    return [];
+  }
 };
 
 export default {

@@ -93,9 +93,9 @@ export default function Header({ onCartClick, onSearch, onHamburguesaClick }: He
       <div className="contenedor">
         <div className="encabezado-contenedor">
           {/* LOGO */}
-          <div className="logo">
+          <Link to="/" className="logo" style={{ textDecoration: 'none' }}>
             <img src="/logo-storehub.svg" alt="Logo StoreHub" className="logo-img" />
-          </div>
+          </Link>
 
           {/* BARRA DE BÚSQUEDA */}
           <div className="barra-busqueda-grupo">

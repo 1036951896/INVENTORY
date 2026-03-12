@@ -51,18 +51,21 @@ StoreHub es un **sistema e-commerce moderno** con arquitectura de **tres capas**
 ### 🎭 Capas
 
 #### 1. **Presentation Layer (Frontend)**
+
 - **Responsabilidad**: Interfaz de usuario, renderizado, interacción
 - **Tecnología**: React 19 + TypeScript + Vite
 - **Ubicación**: `/frontend`
 - **Servidor**: Express.js (SPA routing)
 
 #### 2. **API Layer (Backend)**
+
 - **Responsabilidad**: Lógica de negocio, validación, autenticación
 - **Tecnología**: NestJS + TypeScript + Prisma ORM
 - **Ubicación**: `/backend`
 - **Servidor**: Node.js en Docker
 
 #### 3. **Data Layer (Database)**
+
 - **Responsabilidad**: Persistencia de datos
 - **Tecnología**: PostgreSQL 14+
 - **ORM**: Prisma
@@ -144,6 +147,7 @@ frontend/
 ### Componentes Principales
 
 #### **Header**
+
 ```tsx
 export default function Header({ onCartClick, onHamburguesaClick }) {
   // Navegación principal
@@ -154,6 +158,7 @@ export default function Header({ onCartClick, onHamburguesaClick }) {
 ```
 
 #### **ProductGrid**
+
 ```tsx
 export default function ProductGrid({ activeCategory }) {
   // Obtiene productos de API
@@ -164,6 +169,7 @@ export default function ProductGrid({ activeCategory }) {
 ```
 
 #### **CartPanel**
+
 ```tsx
 export default function CartPanel({ isOpen, onClose }) {
   // Usa CartContext
@@ -197,34 +203,37 @@ const { cart, addToCart } = useCart();
 ### Servicios API
 
 #### **products.service.ts**
+
 ```typescript
 export const productsService = {
-  getAll: () => fetch('/api/v1/products'),
+  getAll: () => fetch("/api/v1/products"),
   getById: (id) => fetch(`/api/v1/products/${id}`),
   search: (query) => fetch(`/api/v1/products/search?q=${query}`),
-  getByCategory: (category) => fetch(`/api/v1/products/category/${category}`)
+  getByCategory: (category) => fetch(`/api/v1/products/category/${category}`),
 };
 ```
 
 #### **auth.service.ts**
+
 ```typescript
 export const authService = {
-  login: (email, password) => POST('/api/v1/auth/login'),
-  register: (data) => POST('/api/v1/auth/register'),
-  getToken: () => localStorage.getItem('authToken'),
-  getCurrentUser: () => JSON.parse(localStorage.getItem('user')),
-  logout: () => localStorage.clear()
+  login: (email, password) => POST("/api/v1/auth/login"),
+  register: (data) => POST("/api/v1/auth/register"),
+  getToken: () => localStorage.getItem("authToken"),
+  getCurrentUser: () => JSON.parse(localStorage.getItem("user")),
+  logout: () => localStorage.clear(),
 };
 ```
 
 #### **admin-api.service.ts**
+
 ```typescript
 // Operaciones administrativas
 export const productsApiService = {
-  create: (data) => POST('/api/v1/admin/products', data),
+  create: (data) => POST("/api/v1/admin/products", data),
   update: (id, data) => PUT(`/api/v1/admin/products/${id}`, data),
   delete: (id) => DELETE(`/api/v1/admin/products/${id}`),
-  getOffers: () => GET('/api/v1/admin/offers')
+  getOffers: () => GET("/api/v1/admin/offers"),
 };
 ```
 
@@ -374,48 +383,48 @@ ProductsModule
 @Module({
   controllers: [ProductsController],
   providers: [ProductsService],
-  exports: [ProductsService]
+  exports: [ProductsService],
 })
 export class ProductsModule {}
 
 // products.controller.ts (Endpoints)
-@Controller('api/v1/products')
+@Controller("api/v1/products")
 export class ProductsController {
   @Get()
-  findAll() { }
-  
-  @Get(':id')
-  findOne(@Param('id') id: string) { }
-  
+  findAll() {}
+
+  @Get(":id")
+  findOne(@Param("id") id: string) {}
+
   @Post()
   @UseGuards(JwtGuard)
-  @Roles('admin')
-  create(@Body() dto: CreateProductDto) { }
-  
-  @Put(':id')
+  @Roles("admin")
+  create(@Body() dto: CreateProductDto) {}
+
+  @Put(":id")
   @UseGuards(JwtGuard)
-  @Roles('admin')
-  update(@Param('id') id: string, @Body() dto: UpdateProductDto) { }
-  
-  @Delete(':id')
+  @Roles("admin")
+  update(@Param("id") id: string, @Body() dto: UpdateProductDto) {}
+
+  @Delete(":id")
   @UseGuards(JwtGuard)
-  @Roles('admin')
-  delete(@Param('id') id: string) { }
+  @Roles("admin")
+  delete(@Param("id") id: string) {}
 }
 
 // products.service.ts (Lógica negocio)
 @Injectable()
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
-  
+
   async findAll(where?: any, skip?: number, take?: number) {
     return this.prisma.product.findMany({ where, skip, take });
   }
-  
+
   async findById(id: string) {
     return this.prisma.product.findUnique({ where: { id } });
   }
-  
+
   async create(dto: CreateProductDto) {
     return this.prisma.product.create({ data: dto });
   }
@@ -430,30 +439,30 @@ export class ProductsService {
 export class AuthService {
   constructor(
     private usersService: UsersService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
-  
+
   async login(email: string, password: string) {
     const user = await this.usersService.findByEmail(email);
-    
+
     if (!user || !bcrypt.compareSync(password, user.password)) {
       throw new UnauthorizedException();
     }
-    
+
     const token = this.jwtService.sign({
       sub: user.id,
       email: user.email,
-      role: user.role
+      role: user.role,
     });
-    
+
     return { access_token: token, user };
   }
-  
+
   async register(dto: CreateUserDto) {
     const hashedPassword = bcrypt.hashSync(dto.password, 10);
     return this.usersService.create({
       ...dto,
-      password: hashedPassword
+      password: hashedPassword,
     });
   }
 }
@@ -476,7 +485,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
 // jwt.guard.ts (Protege rutas)
 @Injectable()
-export class JwtGuard extends AuthGuard('jwt') {}
+export class JwtGuard extends AuthGuard("jwt") {}
 
 // roles.guard.ts (Autorización)
 @Injectable()
@@ -485,7 +494,7 @@ export class RolesGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const requiredRoles = this.reflector.get<string[]>(
-      'roles',
+      "roles",
       context.getHandler(),
     );
     if (!requiredRoles) return true;
@@ -553,10 +562,10 @@ model User {
   nombre    String
   telefono  String?
   role      String     @default("cliente") // 'admin' | 'cliente'
-  
+
   ordenes   Order[]
   direcciones Address[]
-  
+
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -569,13 +578,13 @@ model Product {
   stock     Int
   imagen    String?
   imagenes  ProductImage[]
-  
+
   categoria String
   categories Category[]
-  
+
   ofertas   Offer[]
   orderItems OrderItem[]
-  
+
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -585,7 +594,7 @@ model ProductImage {
   url       String
   principal Boolean    @default(false)
   orden     Int        @default(0)
-  
+
   product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId String
 }
@@ -593,32 +602,32 @@ model ProductImage {
 model Order {
   id        String     @id @default(cuid())
   numero    String     @unique
-  
+
   usuario   User       @relation(fields: [usuarioId], references: [id])
   usuarioId String
-  
+
   items     OrderItem[]
   total     Float
-  
+
   estado    String     @default("pendiente") // 'pendiente' | 'en_preparacion' | 'entregado'
-  
+
   direccion String
   telefonoEntrega String
   notasEntrega String?
-  
+
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
 
 model OrderItem {
   id        String     @id @default(cuid())
-  
+
   order     Order      @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId   String
-  
+
   product   Product    @relation(fields: [productId], references: [id])
   productId String
-  
+
   cantidad  Int
   precioUnitario Float
   subtotal Float
@@ -628,9 +637,9 @@ model Category {
   id        String     @id @default(cuid())
   nombre    String     @unique
   descripcion String?
-  
+
   products  Product[]
-  
+
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -640,13 +649,13 @@ model Offer {
   title     String
   description String?
   discount  Int        // Porcentaje
-  
+
   product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId String
-  
+
   validUntil DateTime
   activa    Boolean    @default(true)
-  
+
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -660,10 +669,10 @@ model Address {
   departamento String
   codigoPostal String
   pais      String     @default("Colombia")
-  
+
   usuario   User       @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   usuarioId String
-  
+
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -819,26 +828,32 @@ FRONTEND
 ## Patrones de Diseño
 
 ### 1. **Module Pattern** (NestJS)
+
 Cada feature es un módulo independiente con su propio controller, service, y DTO.
 
 ### 2. **Service Layer**
+
 - Controllers: Manejan HTTP
 - Services: Lógica de negocio
 - Prisma: Acceso datos
 
 ### 3. **Context API** (React)
+
 CartContext para estado global sin props drilling.
 
 ### 4. **Custom Hooks** (React)
+
 ```typescript
 const { cart, addToCart } = useCart();
 const user = useAuth();
 ```
 
 ### 5. **Guard Pattern** (NestJS)
+
 Para proteger rutas y autorizar acceso.
 
 ### 6. **DTO Pattern** (NestJS)
+
 Separación entre entrada (DTO) y salida (Entity).
 
 ```typescript
@@ -850,6 +865,7 @@ return product as ProductEntity
 ```
 
 ### 7. **Strategy Pattern** (JWT)
+
 Passport.js maneja múltiples estrategias de auth.
 
 ---
@@ -868,8 +884,8 @@ const headers = {
 };
 
 // ✅ Permitir solo usuarios autenticados
-<Route 
-  path="/checkout" 
+<Route
+  path="/checkout"
   element={<ProtectedRoute component={<Checkout />} />}
 />
 
@@ -1033,7 +1049,7 @@ StoreHub mantiene una **arquitectura limpia, modular y escalable**:
 ✅ **Backend**: Módulos feature, JWT auth, Prisma ORM  
 ✅ **Base Datos**: Schema normalizado con relaciones claras  
 ✅ **Deploy**: Auto-deploy en Render con CI/CD implícita  
-✅ **Seguridad**: JWT, bcrypt, CORS, validaciones  
+✅ **Seguridad**: JWT, bcrypt, CORS, validaciones
 
 **Para crecer**: Agregar caching (Redis), testing (Jest), y monitoreo (Sentry).
 

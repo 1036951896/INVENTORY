@@ -117,15 +117,85 @@ async function main() {
     });
   }
 
-  // Crear imágenes para los productos
-  console.log('🖼️ Creando imágenes de prueba...');
+  // Mapeo de product id → ruta real en /assets/
+  const imagenesProductos: Record<string, string> = {
+    '1':  '/assets/papa_cafe_2.5kg_new.jpeg',
+    '2':  '/assets/papa_nacional_2.5_new.jpeg',
+    '3':  '/assets/PAPA_X_2_K_FARM FRITES.jpeg',
+    '4':  '/assets/star frites 2k.jpeg',
+    '5':  '/assets/crunch house 1k.jpeg',
+    '6':  '/assets/papa_crunch_500gr_new.jpeg',
+    '7':  '/assets/Ripio_papa.jpg',
+    '8':  '/assets/sabrosura_del_campo_1kg.jpeg',
+    '9':  '/assets/RIPIO_X_500_SABROSURA_DEL_CAMPO.jpeg',
+    '10': '/assets/RIPIO_X_250_SABROSURA_DEL_CAMPO.jpeg',
+    '11': '/assets/MAIZ_SAN_MIGUEL_X_1_K.jpeg',
+    '12': '/assets/MAIZ_SAN_MIGUEL_X_500_gr.jpeg',
+    '13': '/assets/MAIZ_A_GRANEL_SAN_MIGUEL_10_K.jpeg',
+    '14': '/assets/MIX_VERDURAS_SAN_MIGUEL_X_500_GR.jpeg',
+    '15': '/assets/YUCA_ALRICO_X_1k.jpeg',
+    '16': '/assets/YUCA_ALRICO_X_500gr.jpeg',
+    '17': '/assets/vinipel_20ts.jpeg',
+    '18': '/assets/vinipel_50mts.jpeg',
+    '19': '/assets/vinipel_100mts.jpeg',
+    '20': '/assets/vinipel_300mts.jpeg',
+    '21': '/assets/vinipel_300mts.jpeg',
+    '22': '/assets/guantes_transparente_Hause.jpeg',
+    '23': '/assets/guantes_nitrilo_negro_tm.jpeg',
+    '24': '/assets/guantes_nitrilo_negro_tl.jpeg',
+    '25': '/assets/lam_parafinada_15x15_regular_libra.jpeg',
+    '26': '/assets/lam_parafinada_15x15_ecologica_libra.jpeg',
+    '27': '/assets/LAM_PARAFINADA_30X30_COLOR_REGULAR.jpeg',
+    '28': '/assets/papel_parafinado_ecologico_30x30.jpeg',
+    '29': '/assets/rollo_parafinado_x10mts.jpeg',
+    '30': '/assets/aluminio_7mts.jpeg',
+    '31': '/assets/aluminio_16mts.jpeg',
+    '32': '/assets/aluminio_40mts.jpeg',
+    '33': '/assets/aluminio_100mts.jpeg',
+    '34': '/assets/bolsa_metalizada_6x6.jpeg',
+    '35': '/assets/bolsa_metalizada_7x10.jpeg',
+    '36': '/assets/bolsa_metalizada_8x10.jpeg',
+    '37': '/assets/bolsa_metalizada_8x10.jpeg',
+    '38': '/assets/BOLSA_METALIZADA_10X14.jpeg',
+    '39': '/assets/PORTA_HAMBURGUESA_CARTON.jpeg',
+    '40': '/assets/PORTA_PERRO_CARTON.jpeg',
+    '41': '/assets/bolsa_papel_1.jpeg',
+    '42': '/assets/bolsa_papel2.jpeg',
+    '43': '/assets/bolsa_papel_3.jpeg',
+    '44': '/assets/bolsa_papel_4.jpeg',
+    '45': '/assets/bolsa_papel_6.jpeg',
+    '46': '/assets/sachet_salsa_tomate_9gr.jpeg',
+    '47': '/assets/sachet_salsa_tomate_6gr.jpeg',
+    '48': '/assets/sachet_miel.jpeg',
+    '49': '/assets/sachet_salsa_rosada_9gr.jpeg',
+    '50': '/assets/salsa_tomate_x4kg.jpeg',
+    '51': '/assets/mayonesa_4kg.jpeg',
+    '52': '/assets/CARNE_HAMBURGUESA_9GRX10.jpeg',
+    '53': '/assets/patacon_coctelero.jpeg',
+    '54': '/assets/patacon_mediano_1000gr.jpeg',
+    '55': '/assets/patacon_ovalado_1000gr.jpeg',
+    '56': '/assets/patacon_redondo_1000gr.jpeg',
+    '57': '/assets/bolsa_t20_lec.jpeg',
+    '58': '/assets/bolsa_t25_lec.jpeg',
+    '59': '/assets/bolsa_t30_lec.jpeg',
+    '60': '/assets/bolsa_t30_lec.jpeg',
+    '61': '/assets/bolsa_t30_lec.jpeg',
+    '62': '/assets/bolsa_t30_lec.jpeg',
+    '63': '/assets/bolsa_t30_lec.jpeg',
+    '64': '/assets/bolsa_biodegradable_extraresistente.png',
+  };
+
+  // Crear imágenes para los productos usando archivos reales en /assets/
+  console.log('🖼️ Creando imágenes de productos...');
   let imagesCreated = 0;
   for (const producto of productosJSON) {
     try {
+      const imageUrl = imagenesProductos[producto.id] ||
+        `https://via.placeholder.com/300x300?text=${encodeURIComponent(producto.nombre.substring(0, 15))}`;
       await prisma.productImage.create({
         data: {
           productoId: producto.id,
-          url: `https://via.placeholder.com/300x300?text=${encodeURIComponent(producto.nombre.substring(0, 15))}`,
+          url: imageUrl,
           principal: true,
           orden: 1,
         },

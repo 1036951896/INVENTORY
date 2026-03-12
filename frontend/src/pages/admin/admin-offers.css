@@ -398,6 +398,158 @@
   }
 }
 
+/* ===== TIPO OFERTA TABS ===== */
+.tipo-oferta-tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  padding: 0.75rem 1.25rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-weight: 600;
+  cursor: pointer;
+  color: #718096;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.tab-btn:hover {
+  color: #667eea;
+}
+
+.tab-btn.activo {
+  color: #667eea;
+  border-bottom-color: #667eea;
+}
+
+/* ===== PRODUCTOS SELECTOR ===== */
+.productos-selector {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #f8f9fa;
+}
+
+.productos-grid-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.producto-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.producto-checkbox:hover {
+  border-color: #667eea;
+  background: #f0f4ff;
+}
+
+.producto-checkbox input[type="checkbox"] {
+  margin-top: 0.25rem;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #667eea;
+}
+
+.producto-checkbox input[type="checkbox"]:checked ~ .producto-info {
+  color: #667eea;
+}
+
+.producto-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.producto-info strong {
+  font-weight: 600;
+  color: #1a202c;
+  font-size: 0.95rem;
+}
+
+.producto-info small {
+  color: #718096;
+  font-size: 0.85rem;
+}
+
+/* ===== OFERTA CARD UPDATES ===== */
+.oferta-tipo-badge {
+  display: inline-block;
+  padding: 0.6rem 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.oferta-tipo-desc {
+  color: #667eea;
+  font-weight: 600;
+  margin: 0.5rem 0 0.75rem 0 !important;
+}
+
+.oferta-desc {
+  color: #718096;
+  font-size: 0.9rem;
+  margin-bottom: 1rem !important;
+  line-height: 1.5;
+}
+
+.oferta-productos-count {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: #f0f4ff;
+  color: #667eea;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.oferta-fechas {
+  display: block !important;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: #4a5568;
+  margin-top: 1rem;
+}
+
+.btn-suspend {
+  background: #fed7d7;
+  color: #742a2a;
+  border: none;
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-suspend:hover {
+  background: #fc8181;
+}
+
 @media (max-width: 480px) {
   .offers-container {
     padding: 0.75rem;

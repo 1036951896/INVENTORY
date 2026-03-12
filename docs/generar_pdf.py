@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
 Convertidor de ARCHITECTURE.md a PDF con buen formato
-Soporta múltiples métodos: pandoc, weasyprint, o HTML para navegador
+Soporta múltiples métodos: fpdf2, pandoc, weasyprint, o HTML para navegador
 """
 
 import subprocess
 import os
 import sys
+import re
 
 def convert_with_pandoc():
     """Intenta convertir usando pandoc"""
@@ -408,9 +409,168 @@ def generate_html_for_browser():
         print(f"❌ Error generando HTML: {e}")
         return False
 
+def clean_markdown(text):
+    """Limpia sintaxis markdown del texto para PDF"""
+    import re
+    # Remover caracteres no ASCII (emojis, etc.)
+    text = text.encode('ascii', 'ignore').decode('ascii')
+    # Remover negritas y cursivas: **texto** -> texto
+    text = re.sub(r'\*\*(.+?)\*\*', r'\1', text)
+    text = re.sub(r'\*(.+?)\*', r'\1', text)
+    text = re.sub(r'__(.+?)__', r'\1', text)
+    text = re.sub(r'_(.+?)_', r'\1', text)
+    # Remover código inline: `texto` -> texto
+    text = re.sub(r'`(.+?)`', r'\1', text)
+    # Remover links: [texto](url) -> texto
+    text = re.sub(r'\[(.+?)\]\(.+?\)', r'\1', text)
+    # Remover HR: --- o ===
+    text = re.sub(r'^[-=]{3,}$', '', text)
+    return text.strip()
+
+
+def convert_with_fpdf2():
+    """Intenta convertir usando FPDF2"""
+    try:
+        from fpdf import FPDF
+        from fpdf.enums import XPos, YPos
+        import re
+        
+        with open('ARCHITECTURE.md', 'r', encoding='utf-8') as f:
+            md_content = f.read()
+        
+        pdf = FPDF()
+        pdf.set_margins(20, 20, 20)
+        pdf.set_auto_page_break(auto=True, margin=20)
+        pdf.add_page()
+        
+        in_code_block = False
+        blank_count = 0
+        lines = md_content.split('\n')
+        
+        for line in lines:
+            raw = line.rstrip()
+            
+            # Detectar bloques de código (``` ... ```)
+            if raw.strip().startswith('```'):
+                in_code_block = not in_code_block
+                continue
+            if in_code_block:
+                # Mostrar código con fuente monoespaciada
+                code_line = raw.encode('ascii', 'ignore').decode('ascii')[:90]
+                if code_line.strip():
+                    pdf.set_font("Courier", "", 8)
+                    pdf.set_fill_color(240, 240, 240)
+                    pdf.cell(0, 5, code_line, fill=True,
+                             new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+                continue
+            
+            # Línea vacía
+            stripped = raw.strip()
+            if not stripped:
+                blank_count += 1
+                if blank_count == 1:
+                    pdf.ln(4)
+                continue
+            blank_count = 0
+            
+            # Limpiar markdown del texto
+            clean = clean_markdown(stripped)
+            if not clean:
+                continue
+            
+            # === Título H1 ===
+            if stripped.startswith('# ') and not stripped.startswith('## '):
+                text = clean_markdown(stripped[2:])
+                pdf.set_font("Helvetica", "B", 16)
+                pdf.set_text_color(10, 50, 130)
+                pdf.multi_cell(0, 10, text, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+                # Línea decorativa bajo H1
+                pdf.set_draw_color(10, 50, 130)
+                pdf.set_line_width(0.5)
+                x = pdf.get_x()
+                y = pdf.get_y()
+                pdf.line(20, y, 190, y)
+                pdf.ln(4)
+                pdf.set_text_color(0, 0, 0)
+                continue
+            
+            # === Título H2 ===
+            if stripped.startswith('## ') and not stripped.startswith('### '):
+                text = clean_markdown(stripped[3:])
+                pdf.ln(3)
+                pdf.set_font("Helvetica", "B", 13)
+                pdf.set_text_color(0, 80, 180)
+                pdf.multi_cell(0, 8, text, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+                pdf.ln(2)
+                pdf.set_text_color(0, 0, 0)
+                continue
+            
+            # === Título H3 ===
+            if stripped.startswith('### ') and not stripped.startswith('#### '):
+                text = clean_markdown(stripped[4:])
+                pdf.ln(2)
+                pdf.set_font("Helvetica", "B", 11)
+                pdf.set_text_color(40, 40, 40)
+                pdf.multi_cell(0, 7, text, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+                pdf.ln(1)
+                pdf.set_text_color(0, 0, 0)
+                continue
+            
+            # === Título H4 ===
+            if stripped.startswith('#### '):
+                text = clean_markdown(stripped[5:])
+                pdf.ln(1)
+                pdf.set_font("Helvetica", "BI", 10)
+                pdf.set_text_color(60, 60, 60)
+                pdf.multi_cell(0, 6, text, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+                pdf.set_text_color(0, 0, 0)
+                continue
+            
+            # === Listas con guion o asterisco ===
+            list_match = re.match(r'^(\s*)([-*+])\s+(.+)', stripped)
+            if list_match:
+                indent_level = len(list_match.group(1)) // 2
+                item_text = clean_markdown(list_match.group(3))
+                x_offset = 5 + indent_level * 4
+                pdf.set_font("Helvetica", "", 9)
+                pdf.set_x(20 + x_offset)
+                pdf.cell(4, 5, chr(149))  # bullet
+                pdf.multi_cell(0, 5, item_text, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+                continue
+            
+            # === Listas numeradas ===
+            num_match = re.match(r'^\d+\.\s+(.+)', stripped)
+            if num_match:
+                item_text = clean_markdown(num_match.group(1))
+                num = re.match(r'^(\d+)\.', stripped).group(1)
+                pdf.set_font("Helvetica", "", 9)
+                pdf.set_x(20)
+                pdf.cell(6, 5, f"{num}.")
+                pdf.multi_cell(0, 5, item_text, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+                continue
+            
+            # === Texto normal ===
+            pdf.set_font("Helvetica", "", 9)
+            pdf.set_text_color(30, 30, 30)
+            pdf.multi_cell(0, 5.5, clean, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+        
+        pdf.output("ARCHITECTURE.pdf")
+        print("✅ PDF generado exitosamente: ARCHITECTURE.pdf")
+        return True
+        
+    except Exception as e:
+        print(f"⚠️  Error con FPDF2: {str(e)}")
+        return False
+
 def main():
     """Función principal"""
     print("\n🔄 Convirtiendo ARCHITECTURE.md a PDF...\n")
+    
+    # Intentar conversión con FPDF2 primero
+    if convert_with_fpdf2():
+        return
+    
+    print("⚠️  FPDF2 no disponible. Intentando Pandoc...\n")
     
     # Intentar conversión con pandoc
     if convert_with_pandoc():

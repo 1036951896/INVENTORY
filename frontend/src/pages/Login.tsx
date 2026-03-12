@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { authService } from '../services/auth.service';
 import { alert2 } from '../utils/notifications';
 import '../styles/auth.css';
@@ -10,6 +10,8 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const sessionExpired = searchParams.get('expired') === '1';
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -148,6 +150,11 @@ export default function Login() {
           </div>
 
           <form onSubmit={handleSubmit} className="form-login">
+            {sessionExpired && (
+              <div className="mensaje error" style={{ background: '#fff3cd', color: '#856404', borderColor: '#ffc107' }}>
+                ⚠️ Tu sesión expiró. Por favor inicia sesión de nuevo.
+              </div>
+            )}
             {error && (
               <div className="mensaje error">
                 {error}

@@ -233,11 +233,27 @@
   flex-direction: column;
   height: 100%;
   position: relative;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.tarjeta-producto::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 109, 0, 0.15) 0%, rgba(255, 143, 0, 0.1) 100%);
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 12px;
 }
 
 .tarjeta-producto:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+  border-color: rgba(255, 109, 0, 0.3);
 }
 
 .tarjeta-producto-imagen {
@@ -261,17 +277,110 @@
 
 .badge-descuento {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 8px;
+  right: 8px;
   background: linear-gradient(135deg, #ff6d00 0%, #ff8f00 100%);
   color: white;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 800;
   z-index: 10;
-  box-shadow: 0 4px 12px rgba(255, 109, 0, 0.25);
+  box-shadow: 0 6px 20px rgba(255, 109, 0, 0.4);
   letter-spacing: -0.3px;
+  transform: rotate(-8deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 70px;
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+.badge-descuento::before {
+  content: 'OFERTA';
+  display: block;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  opacity: 0.95;
+  margin-bottom: 2px;
+}
+
+@keyframes pulse-badge {
+  0%, 100% {
+    transform: rotate(-8deg) scale(1);
+  }
+  50% {
+    transform: rotate(-8deg) scale(1.08);
+  }
+}
+
+/* Badges para diferentes tipos de ofertas */
+.badge-descuento.percentage {
+  background: linear-gradient(135deg, #ff6d00 0%, #ff8f00 100%);
+  box-shadow: 0 6px 20px rgba(255, 109, 0, 0.4);
+}
+
+.badge-descuento.fixed {
+  background: linear-gradient(135deg, #d32f2f 0%, #f44336 100%);
+  box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
+}
+
+.badge-descuento.bulk {
+  background: linear-gradient(135deg, #7b1fa2 0%, #9c27b0 100%);
+  box-shadow: 0 6px 20px rgba(123, 31, 162, 0.4);
+}
+
+/* Tarjeta según tipo de oferta */
+.tarjeta-producto.oferta-tipo-percentage {
+  border-color: rgba(255, 109, 0, 0.3);
+}
+
+.tarjeta-producto.oferta-tipo-percentage:hover {
+  border-color: rgba(255, 109, 0, 0.6);
+  box-shadow: 0 12px 28px rgba(255, 109, 0, 0.15);
+}
+
+.tarjeta-producto.oferta-tipo-fixed {
+  border-color: rgba(211, 47, 47, 0.3);
+}
+
+.tarjeta-producto.oferta-tipo-fixed:hover {
+  border-color: rgba(211, 47, 47, 0.6);
+  box-shadow: 0 12px 28px rgba(211, 47, 47, 0.15);
+}
+
+.tarjeta-producto.oferta-tipo-bulk {
+  border-color: rgba(123, 31, 162, 0.3);
+}
+
+.tarjeta-producto.oferta-tipo-bulk:hover {
+  border-color: rgba(123, 31, 162, 0.6);
+  box-shadow: 0 12px 28px rgba(123, 31, 162, 0.15);
+}
+
+.tarjeta-producto.oferta-tipo-bulk .badge-descuento {
+  padding: 10px 16px;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.oferta-tipo-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #667eea;
+  margin-bottom: 10px;
+  padding: 6px 8px;
+  background: #f0f4ff;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.precios {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
 }
 
 .tarjeta-producto-contenido {

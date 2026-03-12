@@ -43,3 +43,9 @@ tmp/
 .Spotlight-V100
 .Trashes
 ehthumbs.db
+
+# Documentos generados (binarios - no subir al repo)
+docs/*.pdf
+docs/*.docx
+docs/*.doc
+docs/*.xlsx

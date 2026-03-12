@@ -1,4 +1,4 @@
-import api from './api';
+import api, { BACKEND_URL } from './api';
 import type { Product } from '../types';
 
 export const productsService = {
@@ -22,9 +22,20 @@ export const productsService = {
         return [];
       }
       
+      // Función para obtener URL de imagen completa
+      const getImageUrl = (product: any): string => {
+        const imagen = product.imagenes?.[0]?.url || product.imagen || '';
+        if (!imagen) return '';
+        // Las imágenes vienen con rutas relativas tipo /images/productos/nombre.jpg
+        // Solo agregar BACKEND_URL si no es una URL completa
+        if (imagen.startsWith('http')) return imagen;
+        if (imagen.startsWith('/')) return `${BACKEND_URL}${imagen}`;
+        // Si no empieza con /, asumir que es relativa a /
+        return `${BACKEND_URL}/${imagen}`;
+      };
+
       // Mapear productos para extraer la imagen principal y convertir categoría
       const mapped = products.map((product: any) => {
-        const imagen = product.imagenes?.[0]?.url || product.imagen || '';
         const categoria = product.categoria?.nombre || product.categoria || 'Sin categoría';
         
         const mappedProduct: Product = {
@@ -34,7 +45,7 @@ export const productsService = {
           precio: product.precio || 0,
           stock: product.stock || 0,
           categoria,
-          imagen,
+          imagen: getImageUrl(product),
           activo: product.activo ?? true,
         };
         return mappedProduct;
@@ -53,6 +64,14 @@ export const productsService = {
       const response = await api.get(`/products/${id}`);
       const product = response.data;
       
+      // Función para obtener URL de imagen completa
+      const getImageUrl = (img: string): string => {
+        if (!img) return '';
+        if (img.startsWith('http')) return img;
+        if (img.startsWith('/')) return `${BACKEND_URL}${img}`;
+        return `${BACKEND_URL}/${img}`;
+      };
+
       // Procesar la respuesta
       const imagen = product.imagenes?.[0]?.url || product.imagen || '';
       const categoria = product.categoria?.nombre || product.categoria || 'Sin categoría';
@@ -64,7 +83,7 @@ export const productsService = {
         precio: product.precio || 0,
         stock: product.stock || 0,
         categoria,
-        imagen,
+        imagen: getImageUrl(imagen),
         activo: product.activo ?? true,
         imagenes: product.imagenes || [] // Incluir array completo de imágenes
       } as any;

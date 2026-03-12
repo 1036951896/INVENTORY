@@ -22,14 +22,18 @@ api.interceptors.request.use((config) => {
 });
 
 // Interceptor para manejar errores globalmente
+let redirectingToLogin = false;
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Token expirado o inválido
+    if (error.response?.status === 401 && !redirectingToLogin) {
+      // Token expirado o inválido — redirigir una sola vez
+      redirectingToLogin = true;
       localStorage.removeItem('admin-token');
       localStorage.removeItem('user-token');
-      window.location.href = '/login';
+      localStorage.removeItem('user');
+      localStorage.removeItem('admin-usuario');
+      window.location.replace('/login?expired=1');
     }
     return Promise.reject(error);
   }

@@ -1,6 +1,15 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import { CartProvider } from './context/CartContext';
 import { Toaster } from 'sonner';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
 import './App.css';
 
 // Páginas
@@ -32,6 +41,7 @@ function App() {
   return (
     <BrowserRouter>
       <CartProvider>
+        <ScrollToTop />
         <Toaster position="top-right" richColors />
         <Routes>
           {/* Rutas de la tienda */}

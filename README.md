@@ -108,15 +108,15 @@ El repositorio está configurado con **auto-deploy** mediante `render.yaml`:
 
 ## 🛠️ Tech Stack
 
-| Capa | Tecnología | 
-|------|-----------|
+| Capa         | Tecnología            |
+| ------------ | --------------------- |
 | **Frontend** | React 19 + TypeScript |
-| **Build** | Vite ^5 |
-| **Backend** | NestJS + TypeScript |
-| **Database** | PostgreSQL 14+ |
-| **ORM** | Prisma |
-| **Auth** | JWT |
-| **Hosting** | Render.com |
+| **Build**    | Vite ^5               |
+| **Backend**  | NestJS + TypeScript   |
+| **Database** | PostgreSQL 14+        |
+| **ORM**      | Prisma                |
+| **Auth**     | JWT                   |
+| **Hosting**  | Render.com            |
 
 ---
 
@@ -125,6 +125,7 @@ El repositorio está configurado con **auto-deploy** mediante `render.yaml`:
 La carpeta **`legacy/`** contiene el código HTML/CSS/JS original anterior a la migración a React.
 
 **¿Por qué está aquí?**
+
 - Referencia histórica del proyecto
 - Documentación de evolución
 - **⚠️ NO está en producción** - Solo para consulta
@@ -136,6 +137,7 @@ Ver [legacy/README.md](legacy/README.md) para más detalles.
 ## 🚀 Pasos al Deployar
 
 1. **Commit & Push** a `main`
+
    ```bash
    git add .
    git commit -m "Descripción del cambio"
@@ -155,12 +157,15 @@ Ver [legacy/README.md](legacy/README.md) para más detalles.
 ## 🐛 Problemas Comunes
 
 ### Frontend muestra 404 en rutas SPA
+
 ✅ **Solucionado**: `server.js` hace fallback a `index.html` para todas las rutas
 
 ### Backend responde lentamente (Plan gratuito Render)
+
 ✅ **Normal**: 30-60s cold start en plan gratuito
 
 ### Scroll va al footer al navegar
+
 ✅ **Solucionado**: Scroll automático al inicio en todas las páginas dinámicas
 
 ---
@@ -168,12 +173,14 @@ Ver [legacy/README.md](legacy/README.md) para más detalles.
 ## 📚 Documentación por Componente
 
 ### Frontend
+
 - **Pages**: Home, ProductDetail, Checkout, OrderConfirmation, OrderTracking, PublicOffers
 - **Components**: Header, Hero, ProductGrid, Categories, CartPanel
 - **Services**: products-service, auth-service, admin-api-service
 - **Context**: CartContext para estado global del carrito
 
 ### Backend
+
 - **Modules**: products, orders, categories, offers, auth, users
 - **Database**: Prisma schema con relaciones completas
 - **Authentication**: JWT con roles (admin/cliente)
