@@ -93,7 +93,16 @@ export default function Header({ onCartClick, onSearch, onHamburguesaClick }: He
       <div className="contenedor">
         <div className="encabezado-contenedor">
           {/* LOGO */}
-          <Link to="/" className="logo" style={{ textDecoration: 'none' }}>
+          <Link
+            to="/"
+            className="logo"
+            style={{ textDecoration: 'none' }}
+            onClick={() => {
+              setSearchTerm('');
+              localStorage.removeItem('searchTerm');
+              window.dispatchEvent(new CustomEvent('searchchange', { detail: { searchTerm: '' } }));
+            }}
+          >
             <img src="/logo-storehub.svg" alt="Logo StoreHub" className="logo-img" />
           </Link>
 
