@@ -140,7 +140,7 @@ export default function TermsConditions() {
 
           <div className="info-actions">
             <Link to="/" className="btn btn-secundario">← Volver al Inicio</Link>
-            <Link to="/register" className="btn btn-primario">Crear mi cuenta</Link>
+            <Link to="/registro" className="btn btn-primario">Crear mi cuenta</Link>
           </div>
         </div>
       </main>
