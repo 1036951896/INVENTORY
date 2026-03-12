@@ -384,8 +384,14 @@ export default function Register() {
               onChange={(e) => setTerminos(e.target.checked)}
             />
             <label htmlFor="terminos">
-              Acepto los <a href="#" target="_blank">términos y condiciones</a> y la{' '}
-              <a href="#" target="_blank">política de privacidad</a>
+              Acepto los{' '}
+              <a href="/terminos-condiciones" target="_blank" rel="noopener noreferrer">
+                términos y condiciones
+              </a>{' '}
+              y la{' '}
+              <a href="/politica-privacidad" target="_blank" rel="noopener noreferrer">
+                política de privacidad
+              </a>
             </label>
           </div>
 
