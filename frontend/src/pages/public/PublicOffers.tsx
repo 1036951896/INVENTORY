@@ -177,17 +177,13 @@ const PublicOffers: React.FC = () => {
           </div>
           {/* Derecha: visual decorativo */}
           <div className="banner-hero-visual">
-            <div className="banner-productos-visual">
-              <div className="banner-emoji-grande">🛒</div>
-              <div className="banner-emojis-fila">
-                <span>🥕</span>
-                <span>🥔</span>
-                <span>🌽</span>
-              </div>
-              <div className="banner-emojis-fila">
-                <span>📦</span>
-                <span>🧂</span>
-                <span>🥩</span>
+            <div className="banner-visual-decorativo">
+              <div className="banner-circulo-grande"></div>
+              <div className="banner-circulo-pequeno"></div>
+              <div className="banner-descuento-visual">
+                <span className="banner-v-hasta">HASTA</span>
+                <span className="banner-v-pct">40%</span>
+                <span className="banner-v-off">OFF</span>
               </div>
             </div>
           </div>
