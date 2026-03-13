@@ -108,6 +108,8 @@
 
 .kpi-content {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .kpi-label {
@@ -124,6 +126,9 @@
   font-weight: 700;
   color: #1f2937;
   margin-bottom: 0.5rem;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  min-width: 0;
 }
 
 .kpi-change {
@@ -324,13 +329,105 @@
 }
 
 /* ===== RESPONSIVE ===== */
+
+/* Pantallas intermedias: 769px – 1024px (tablet landscape / sidebar activo) */
 @media (max-width: 1024px) {
+  .dashboard-container {
+    padding: 1.5rem;
+  }
+
   .kpi-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .kpi-card {
+    gap: 1rem;
+    padding: 1.1rem;
+  }
+
+  .kpi-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+  }
+
+  .kpi-value {
+    font-size: 1.35rem;
+    word-break: break-all;
+    overflow-wrap: break-word;
+  }
+
+  .kpi-change {
+    font-size: 0.78rem;
+    line-height: 1.4;
   }
 
   .charts-grid {
     grid-template-columns: 1fr;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 1.5fr 1.5fr 0.8fr 1.2fr;
+    font-size: 0.82rem;
+  }
+}
+
+/* Tablet portrait: 769px – 900px con sidebar — columna única para KPI */
+@media (max-width: 900px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .kpi-value {
+    font-size: 1.2rem;
+  }
+
+  .kpi-label {
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1.25rem;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .kpi-card {
+    flex-direction: row;
+    gap: 0.75rem;
+    padding: 1rem;
+    align-items: flex-start;
+  }
+
+  .kpi-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+  }
+
+  .kpi-value {
+    font-size: 1.15rem;
+    word-break: break-all;
+    overflow-wrap: break-word;
+  }
+
+  .kpi-change {
+    font-size: 0.74rem;
+    line-height: 1.4;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    font-size: 0.8rem;
   }
 }
 
@@ -350,10 +447,19 @@
 
   .kpi-grid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
 
   .kpi-card {
-    flex-direction: column;
+    flex-direction: row;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .kpi-value {
+    font-size: 1.3rem;
+    word-break: break-all;
+    overflow-wrap: break-word;
   }
 
   .table-header,
