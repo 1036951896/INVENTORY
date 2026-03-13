@@ -189,7 +189,14 @@
   }
 
   .admin-content {
-    padding: 1.5rem;
+    padding: 1.25rem;
+  }
+
+  /* Contenedores de página */
+  .products-container,
+  .offers-container,
+  .categories-container {
+    padding: 1.25rem 1rem;
   }
 
   /* ===== FORMS ===== */
@@ -197,16 +204,109 @@
     grid-template-columns: repeat(2, 1fr) !important;
   }
 
-  /* ===== KPI GRID ===== */
+  /* ===== KPI / METRICS GRIDS ===== */
   .kpi-grid {
     grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
   }
 
-  /* ===== TABLAS ===== */
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+
+  /* Valores numéricos — evita desborde con cifras largas */
+  .kpi-value,
+  .metric-value {
+    font-size: 1.4rem !important;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    min-width: 0;
+  }
+
+  /* Contenidos flex con valor largo */
+  .kpi-content,
+  .metric-content {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  /* Iconos ligeramente más pequeños */
+  .kpi-icon,
+  .metric-icon {
+    width: 48px !important;
+    height: 48px !important;
+    flex-shrink: 0;
+  }
+
+  /* ===== TABLAS — scroll horizontal ===== */
+  .products-table-wrapper,
+  .orders-table-wrapper,
+  .users-table-wrapper,
+  .inventory-table-wrapper,
+  .categories-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .products-table,
   .orders-table,
-  .users-table {
-    font-size: 0.95rem;
+  .users-table,
+  .inventory-table,
+  .categories-table {
+    font-size: 0.88rem;
+    min-width: 560px;
+  }
+
+  .products-table th,
+  .products-table td,
+  .orders-table th,
+  .orders-table td,
+  .users-table th,
+  .users-table td,
+  .inventory-table th,
+  .inventory-table td,
+  .categories-table th,
+  .categories-table td {
+    padding: 0.65rem 0.6rem;
+  }
+
+  /* ===== FILTROS ===== */
+  .filters-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+
+  .filter-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+
+  /* ===== HEADERS ===== */
+  .products-header,
+  .orders-header,
+  .users-header,
+  .inventory-header,
+  .offers-header,
+  .categories-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  /* ===== OFERTAS GRID ===== */
+  .ofertas-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important;
+  }
+
+  /* ===== CARDS ===== */
+  .kpi-card {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .metric-card {
+    padding: 1.1rem;
   }
 }
 

@@ -570,25 +570,59 @@
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
+  .orders-container {
+    padding: 0 0.75rem;
+  }
+
+  .orders-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
   .metrics-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .metric-card {
+    padding: 1.1rem;
+  }
+
+  .metric-value {
+    font-size: 1.4rem;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    min-width: 0;
+  }
+
+  .metric-content {
+    min-width: 0;
+    overflow: hidden;
   }
 
   .filter-row {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
   }
 
   .filter-item.flex-2 {
     grid-column: span 1;
   }
 
+  /* Tabla con scroll horizontal */
+  .orders-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .orders-table {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
+    min-width: 580px;
   }
 
   .orders-table th,
   .orders-table td {
-    padding: 0.75rem;
+    padding: 0.65rem 0.6rem;
   }
 }
 
