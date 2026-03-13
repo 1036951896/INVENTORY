@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Header from '../components/Header';
 import Categories from '../components/Categories';
 import Hero from '../components/Hero';
@@ -6,20 +6,22 @@ import ProductGrid from '../components/ProductGrid';
 import Footer from '../components/Footer';
 import CartPanel from '../components/CartPanel';
 import MobileMenu from '../components/MobileMenu';
-import { mockProducts } from '../data/mockProducts';
+import type { Product } from '../types';
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState('todas');
-  const [products] = useState(mockProducts);
+  const [categories, setCategories] = useState<string[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Extraer categorías únicas de los productos
-  const categories = Array.from(
-    new Set(products
-      .map(p => p.categoria)
-      .filter(c => c && c.trim()))
-  ).sort() as string[];
+  const handleProductsLoaded = (products: Product[]) => {
+    const cats = Array.from(
+      new Set(products
+        .filter(p => p.precio > 0 && p.categoria && p.categoria.trim())
+        .map(p => p.categoria))
+    ).sort() as string[];
+    setCategories(cats);
+  };
 
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
@@ -34,7 +36,7 @@ export default function Home() {
         onHamburguesaClick={() => setIsMobileMenuOpen(true)}
       />
       <Categories 
-        products={products} 
+        products={categories.map(c => ({ categoria: c } as any))}
         onCategoryChange={handleCategoryChange}
         activeCategory={activeCategory}
       />
@@ -46,7 +48,7 @@ export default function Home() {
         onCategoryChange={handleCategoryChange}
       />
       <Hero />
-      <ProductGrid activeCategory={activeCategory} />
+      <ProductGrid activeCategory={activeCategory} onProductsLoaded={handleProductsLoaded} />
       <Footer />
       <CartPanel isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>

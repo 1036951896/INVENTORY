@@ -11,9 +11,10 @@ const USE_MOCK_DATA = false; // Cambiar a false cuando tengas el backend corrien
 
 interface ProductGridProps {
   activeCategory?: string;
+  onProductsLoaded?: (products: Product[]) => void;
 }
 
-export default function ProductGrid({ activeCategory = 'todas' }: ProductGridProps) {
+export default function ProductGrid({ activeCategory = 'todas', onProductsLoaded }: ProductGridProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,6 +42,7 @@ export default function ProductGrid({ activeCategory = 'todas' }: ProductGridPro
         
         setProducts(data);
         setFilteredProducts(data);
+        onProductsLoaded?.(data);
       }
       
     } catch (err: any) {
