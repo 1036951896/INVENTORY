@@ -8,14 +8,14 @@
 
 /* Banner de ofertas */
 .banner-ofertas {
-  background: linear-gradient(135deg, #00a650 0%, #00c865 100%);
+  background: linear-gradient(135deg, #386273 0%, #2a4a5a 100%);
   border-radius: 16px;
   padding: 4rem 2rem;
   margin-bottom: 3rem;
   text-align: center;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 166, 80, 0.15);
+  box-shadow: 0 8px 24px rgba(56, 98, 115, 0.25);
 }
 
 .banner-ofertas::before {
@@ -111,8 +111,8 @@
 
 .input-buscar:focus {
   outline: none;
-  border-color: #00a650;
-  box-shadow: 0 4px 16px rgba(0, 166, 80, 0.15);
+  border-color: #386273;
+  box-shadow: 0 4px 16px rgba(56, 98, 115, 0.15);
 }
 
 .input-buscar::placeholder {
@@ -163,14 +163,14 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: #f0f7f4;
+  background: #f0f5f9;
   transition: left 0.3s ease;
   z-index: -1;
 }
 
 .filter-btn:hover {
-  border-color: #00a650;
-  color: #00a650;
+  border-color: #386273;
+  color: #386273;
 }
 
 .filter-btn:hover::before {
@@ -178,10 +178,10 @@
 }
 
 .filter-btn.activo {
-  background: linear-gradient(135deg, #00a650 0%, #00c865 100%);
+  background: linear-gradient(135deg, #386273 0%, #2a4a5a 100%);
   color: white;
-  border-color: #00a650;
-  box-shadow: 0 4px 12px rgba(0, 166, 80, 0.25);
+  border-color: #386273;
+  box-shadow: 0 4px 12px rgba(56, 98, 115, 0.3);
 }
 
 .filter-btn.activo .filter-icon {
@@ -368,10 +368,10 @@
 .oferta-tipo-label {
   font-size: 13px;
   font-weight: 600;
-  color: #667eea;
+  color: #386273;
   margin-bottom: 10px;
   padding: 6px 8px;
-  background: #f0f4ff;
+  background: #edf4f7;
   border-radius: 4px;
   text-align: center;
 }
@@ -423,7 +423,7 @@
 .precio-oferta {
   font-size: 22px;
   font-weight: 700;
-  color: #00a650;
+  color: #386273;
   margin-bottom: 12px;
 }
 
@@ -434,7 +434,7 @@
 }
 
 .tarjeta-producto-stock strong {
-  color: #00a650;
+  color: #386273;
   font-weight: 600;
 }
 
@@ -457,25 +457,25 @@
 }
 
 .btn-principal {
-  background: linear-gradient(135deg, #00a650 0%, #00c865 100%);
+  background: linear-gradient(135deg, #386273 0%, #2a4a5a 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(0, 166, 80, 0.2);
+  box-shadow: 0 4px 12px rgba(56, 98, 115, 0.25);
 }
 
 .btn-principal:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 166, 80, 0.3);
+  box-shadow: 0 6px 16px rgba(56, 98, 115, 0.35);
 }
 
 .btn-secundario {
-  background: #f0f7f4;
-  color: #00a650;
-  border: 1px solid #e0f2e9;
+  background: #f0f5f9;
+  color: #386273;
+  border: 1px solid #d0dce6;
 }
 
 .btn-secundario:hover {
-  background: #e0f2e9;
-  border-color: #00a650;
+  background: #dce8ee;
+  border-color: #386273;
 }
 
 /* Sin ofertas */
