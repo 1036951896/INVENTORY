@@ -157,38 +157,40 @@ const PublicOffers: React.FC = () => {
     <div className="public-offers-container">
       {/* Banner */}
       <section className="banner-ofertas">
-        <div className="banner-content">
-          <svg className="banner-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
-          </svg>
-          <h2>OFERTAS ESPECIALES</h2>
-          <p>Aprovecha nuestros descuentos limitados en productos seleccionados</p>
-          <button 
-            onClick={() => navigate('/')}
-            style={{
-              marginTop: '2rem',
-              padding: '10px 24px',
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
-              color: 'white',
-              border: '2px solid white',
-              borderRadius: '8px',
-              fontSize: '15px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              backdropFilter: 'blur(10px)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-          >
-            ← Volver al Inicio
-          </button>
+        <div className="banner-hero-grid">
+          {/* Izquierda: texto */}
+          <div className="banner-hero-texto">
+            <span className="banner-badge-urgencia">🔥 Ofertas limitadas</span>
+            <h2 className="banner-hero-titulo">Descuentos<br/>Especiales</h2>
+            <div className="banner-descuento-bloque">
+              <span className="banner-hasta">HASTA</span>
+              <span className="banner-porcentaje">40%</span>
+              <span className="banner-off">OFF</span>
+            </div>
+            <p className="banner-hero-subtitulo">En productos seleccionados por tiempo limitado</p>
+            <div className="banner-hero-acciones">
+              <button className="btn-ofertas-hero" onClick={() => navigate('/')}>
+                ← Volver al inicio
+              </button>
+              <span className="banner-badge-urgencia">⏳ Solo por hoy</span>
+            </div>
+          </div>
+          {/* Derecha: visual decorativo */}
+          <div className="banner-hero-visual">
+            <div className="banner-productos-visual">
+              <div className="banner-emoji-grande">🛒</div>
+              <div className="banner-emojis-fila">
+                <span>🥕</span>
+                <span>🥔</span>
+                <span>🌽</span>
+              </div>
+              <div className="banner-emojis-fila">
+                <span>📦</span>
+                <span>🧂</span>
+                <span>🥩</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
