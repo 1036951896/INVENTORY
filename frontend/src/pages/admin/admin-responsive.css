@@ -310,57 +310,123 @@
   }
 }
 
-/* ===== RESPONSIVE TABLAS HORIZONTAL SCROLL ===== */
-@media (max-width: 768px) {
-  .table-container,
-  .products-container,
-  .orders-container,
-  .users-container,
-  .inventory-container {
+/* ===== TABLAS MÓVIL — sin scroll horizontal ===== */
+/*
+  Estrategia: ocultar columnas secundarias en ≤600px
+  para que la tabla quepa en pantalla sin scroll lateral.
+  Solo en tablet (601-1024px) se permite scroll contenido
+  dentro del wrapper con overflow-x: auto.
+*/
+
+/* Tablet — scroll contenido en el wrapper, NO en el contenedor */
+@media (max-width: 1024px) and (min-width: 601px) {
+  .orders-table-wrapper,
+  .users-table-wrapper,
+  .inventory-table-wrapper,
+  .categories-table-wrapper {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
 
-  .products-table,
   .orders-table,
   .users-table,
-  .inventory-table {
-    min-width: 500px;
-    overflow-x: auto;
+  .inventory-table,
+  .categories-table {
+    min-width: 520px;
+  }
+}
+
+/* Móvil — ocultar columnas secundarias */
+@media (max-width: 600px) {
+
+  /* Quitar min-width para que la tabla sea flexible */
+  .orders-table,
+  .users-table,
+  .inventory-table,
+  .categories-table {
+    min-width: 0;
+    width: 100%;
+    font-size: 0.82rem;
   }
 
-  /* Hacer columnas más compactas */
-  .products-table th,
+  /* Wrappers: solo clip vertical */
+  .orders-table-wrapper,
+  .users-table-wrapper,
+  .inventory-table-wrapper,
+  .categories-table-wrapper {
+    overflow-x: visible;
+  }
+
+  /* Padding compacto en celdas */
   .orders-table th,
-  .users-table th,
-  .inventory-table th {
-    padding: 0.75rem 0.5rem !important;
-    font-size: 0.85rem !important;
-  }
-
-  .products-table td,
   .orders-table td,
+  .users-table th,
   .users-table td,
-  .inventory-table td {
-    padding: 0.75rem 0.5rem !important;
+  .inventory-table th,
+  .inventory-table td,
+  .categories-table th,
+  .categories-table td {
+    padding: 0.6rem 0.5rem;
   }
 
-  /* Ocultar columnas menos importantes en móvil */
-  .table-col-hidden {
+  /* ── Pedidos: ocultar Código (#) y Fecha ── */
+  /* col 1 = Pedido, col 3 = Fecha */
+  .orders-table th:nth-child(1),
+  .orders-table td.code,
+  .orders-table th:nth-child(3),
+  .orders-table td.date {
     display: none;
   }
 
-  /* Hacer acciones más accesibles */
-  .actions-cell {
+  /* ── Usuarios: ocultar Teléfono, Fecha Creación ── */
+  /* col 3 = Teléfono, col 6 = Fecha Creación */
+  .users-table th:nth-child(3),
+  .users-table td:nth-child(3),
+  .users-table th:nth-child(6),
+  .users-table td.date {
+    display: none;
+  }
+
+  /* ── Inventario: ocultar SKU, Categoría, Stock Mínimo, Valor Total ── */
+  /* col 2=SKU, 3=Categoría, 5=StockMin, 7=ValorTotal */
+  .inventory-table th:nth-child(2),
+  .inventory-table td.sku,
+  .inventory-table th:nth-child(3),
+  .inventory-table td.category,
+  .inventory-table th:nth-child(5),
+  .inventory-table td.stock-min,
+  .inventory-table th:nth-child(7),
+  .inventory-table td.value {
+    display: none;
+  }
+
+  /* ── Categorías: ocultar Descripción y Conteo ── */
+  .categories-table th:nth-child(2),
+  .categories-table td.description,
+  .categories-table th:nth-child(3),
+  .categories-table td.products-count {
+    display: none;
+  }
+
+  /* Nombre categoría más compacto */
+  .category-badge {
+    min-width: 0;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  /* Botones de acción compactos */
+  .btn-action {
+    width: 32px;
+    height: 32px;
+    padding: 0.3rem;
+    flex: 0 0 auto;
+  }
+
+  td.actions {
     display: flex;
     gap: 0.25rem;
     flex-wrap: wrap;
-  }
-
-  .actions-cell .btn-editar,
-  .actions-cell .btn-suspend {
-    padding: 0.4rem 0.6rem !important;
-    font-size: 0.8rem !important;
   }
 }
 
@@ -386,12 +452,12 @@
   .form-group select {
     width: 100%;
     padding: 0.6rem 0.75rem;
-    font-size: 16px !important;
+    font-size: 16px !important; /* evita zoom en iOS */
     border: 1px solid #ddd;
     border-radius: 4px;
+    box-sizing: border-box;
   }
 
-  /* Asegurar que los inputs sean clicables */
   input[type="text"],
   input[type="email"],
   input[type="number"],
@@ -399,9 +465,9 @@
   textarea,
   select {
     min-height: 44px;
+    max-width: 100%;
   }
 
-  /* Botones formulario */
   .form-buttons {
     display: flex;
     flex-direction: column-reverse;

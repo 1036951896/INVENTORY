@@ -614,7 +614,7 @@
     grid-column: span 1;
   }
 
-  /* Tabla con scroll horizontal */
+  /* Tabla con scroll solo en tablet, dentro del wrapper */
   .orders-table-wrapper {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -628,6 +628,23 @@
   .orders-table th,
   .orders-table td {
     padding: 0.65rem 0.6rem;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Quitar min-width — columnas se ocultan via admin-responsive.css */
+  .orders-table {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .orders-table-wrapper {
+    overflow-x: visible;
+  }
+
+  .filter-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
   }
 }
 

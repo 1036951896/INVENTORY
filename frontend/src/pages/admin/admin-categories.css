@@ -381,9 +381,8 @@
     gap: 0.75rem;
   }
 
-  /* Tabla con scroll horizontal */
-  .categories-table-wrapper,
-  .categories-table {
+  /* Tabla con scroll solo en tablet, dentro del wrapper */
+  .categories-table-wrapper {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -396,6 +395,18 @@
   .categories-table th,
   .categories-table td {
     padding: 0.65rem 0.6rem;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Quitar min-width — columnas se ocultan via admin-responsive.css */
+  .categories-table {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .categories-table-wrapper {
+    overflow-x: visible;
   }
 }
 

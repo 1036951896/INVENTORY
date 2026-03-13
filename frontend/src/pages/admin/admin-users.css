@@ -540,6 +540,7 @@
     gap: 0.75rem;
   }
 
+  /* Tabla con scroll solo en tablet, dentro del wrapper */
   .users-table-wrapper {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -553,6 +554,23 @@
   .users-table th,
   .users-table td {
     padding: 0.65rem 0.6rem;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Quitar min-width — columnas se ocultan via admin-responsive.css */
+  .users-table {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .users-table-wrapper {
+    overflow-x: visible;
+  }
+
+  .filter-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
   }
 }
 
