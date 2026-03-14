@@ -6,14 +6,21 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Servir archivos estáticos desde dist
+// CSS de /public (sin hash) nunca se cachea
+app.use('/css', (req, res, next) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  next();
+});
+
+// Assets de Vite con hash se cachean normalmente
 app.use(express.static(join(__dirname, 'dist'), {
   maxAge: '1d',
   etag: false
 }));
 
-// SPA Fallback - redirigir todas las rutas desconocidas a index.html
+// index.html y SPA fallback nunca se cachean
 app.use((req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(join(__dirname, 'dist', 'index.html'));
 });
 

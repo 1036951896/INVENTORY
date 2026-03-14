@@ -498,16 +498,16 @@ header .contenedor {
 }
 
 .hero-porcentaje {
-  font-size: 5.5rem;
+  font-size: clamp(2rem, 10vw, 5.5rem);
   font-weight: 800;
   line-height: 1;
   color: #ffffff;
   text-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2);
-  letter-spacing: -3px;
+  letter-spacing: clamp(-1px, -0.5vw, -3px);
 }
 
 .hero-off {
-  font-size: 2.2rem;
+  font-size: clamp(1rem, 4vw, 2.2rem);
   font-weight: 800;
   opacity: 0.9;
   letter-spacing: 1px;
@@ -520,6 +520,7 @@ header .contenedor {
   gap: 1.2rem;
   flex-wrap: wrap;
   animation: slideInLeft 0.9s ease-out 0.3s both;
+  max-width: 100%;
 }
 
 .hero-urgencia-badge {
@@ -548,7 +549,7 @@ header .contenedor {
 
 /* Jerarquía tipográfica fuerte - ELEVADA */
 .hero-texto h1 {
-  font-size: 2.8rem;
+  font-size: clamp(1.3rem, 5vw, 2.8rem);
   font-weight: 700;
   letter-spacing: -0.5px;
   margin-bottom: 0.5rem;
@@ -660,30 +661,108 @@ header .contenedor {
 /* Responsive */
 @media (max-width: 768px) {
   .hero-premium {
-    padding: 2rem;
-    margin: 2rem 1rem;
+    padding: 1.5rem;
+    margin: 1.5rem 1rem;
+    box-sizing: border-box;
+    width: calc(100% - 2rem);
+    overflow: hidden;
   }
 
   .hero-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .hero-texto h1 {
-    font-size: 1.8rem;
-  }
-
-  .hero-texto p {
-    font-size: 0.95rem;
+    gap: 0;
   }
 
   .hero-acento {
-    min-height: 150px;
+    display: none;
   }
 
-  .hero-acento::before {
-    width: 200px;
-    height: 200px;
+  .hero-texto {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .hero-descuento-bloque {
+    flex-wrap: wrap;
+    row-gap: 0;
+    max-width: 100%;
+  }
+
+  .hero-porcentaje {
+    font-size: 3.5rem;
+    letter-spacing: -2px;
+  }
+
+  .hero-off {
+    font-size: 1.6rem;
+  }
+
+  .hero-hasta {
+    font-size: 0.8rem;
+  }
+
+  .hero-texto h1 {
+    font-size: 1.6rem;
+  }
+
+  .hero-texto p {
+    font-size: 0.875rem;
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .hero-acciones {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    max-width: 100%;
+  }
+
+  .btn-hero-premium {
+    width: 100%;
+    justify-content: center;
+    padding: 0.875rem 1.25rem;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    white-space: nowrap;
+  }
+
+  .hero-urgencia-badge {
+    font-size: 0.75rem;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-premium {
+    padding: 1.25rem 1rem;
+    margin: 1rem 0;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .hero-porcentaje {
+    font-size: 3rem;
+    letter-spacing: -1px;
+  }
+
+  .hero-off {
+    font-size: 1.4rem;
+  }
+
+  .hero-texto h1 {
+    font-size: 1.4rem;
+  }
+
+  .btn-hero-premium {
+    padding: 0.8rem 1rem;
+    font-size: 0.875rem;
   }
 }
 

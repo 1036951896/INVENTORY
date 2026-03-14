@@ -100,6 +100,11 @@ body {
   color: var(--foreground);
   line-height: 1.6;
   font-size: var(--font-size);
+  overflow-x: hidden;
+}
+
+html {
+  overflow-x: hidden;
 }
 
 /* ===== TIPOGRAFÍA ===== */

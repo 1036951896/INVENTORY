@@ -1,3 +1,5 @@
+import './Hero.css';
+
 export default function Hero() {
   return (
     <section className="hero-premium">
@@ -6,9 +8,11 @@ export default function Hero() {
           <span className="badge-oferta">OFERTA EXCLUSIVA</span>
           <h1>Descuentos<br/>Especiales</h1>
           <div className="hero-descuento-bloque">
-            <span className="hero-hasta">HASTA</span>
-            <span className="hero-porcentaje">40%</span>
-            <span className="hero-off">OFF</span>
+            <div className="hero-descuento-fila">
+              <span className="hero-hasta">HASTA</span>
+              <span className="hero-porcentaje">40%</span>
+              <span className="hero-off">OFF</span>
+            </div>
           </div>
           <p>En productos seleccionados por tiempo limitado</p>
           <div className="hero-acciones">
