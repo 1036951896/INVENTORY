@@ -87,14 +87,14 @@ header .contenedor {
 }
 
 .logo-img {
-  height: 48px;
+  height: 85px;
   width: auto;
   flex-shrink: 0;
   transition: all 0.3s ease;
 }
 
 header.header-scroll .logo-img {
-  height: 40px;
+  height: 68px;
 }
 
 .subtitulo-sistema {
@@ -596,7 +596,7 @@ header.header-scroll .barra-busqueda {
 
   .encabezado-contenedor {
     gap: 1rem;
-    height: 60px;
+    height: 64px;
   }
 
   .logo {
@@ -608,7 +608,7 @@ header.header-scroll .barra-busqueda {
   }
 
   .logo-img {
-    height: 32px;
+    height: 56px;
   }
 
   .btn-hamburguesa {
@@ -708,7 +708,7 @@ header.header-scroll .barra-busqueda {
 
   .encabezado-contenedor {
     gap: 0.6rem;
-    height: 56px;
+    height: 60px;
   }
 
   .logo {
@@ -721,7 +721,7 @@ header.header-scroll .barra-busqueda {
   }
 
   .logo-img {
-    height: 28px;
+    height: 52px;
   }
 
   .categorias-seccion {
