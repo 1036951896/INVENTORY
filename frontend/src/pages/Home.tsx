@@ -27,6 +27,15 @@ export default function Home() {
     setActiveCategory(category);
     // Limpiar búsqueda al cambiar categoría
     localStorage.removeItem('searchTerm');
+    // Notificar a Header y ProductGrid que la búsqueda fue limpiada
+    window.dispatchEvent(new CustomEvent('searchchange', { detail: { searchTerm: '' } }));
+  };
+
+  const handleSearch = (term: string) => {
+    // Al iniciar una búsqueda, resetear la categoría activa a "todas"
+    if (term.trim()) {
+      setActiveCategory('todas');
+    }
   };
 
   return (
@@ -34,6 +43,7 @@ export default function Home() {
       <Header 
         onCartClick={() => setIsCartOpen(!isCartOpen)}
         onHamburguesaClick={() => setIsMobileMenuOpen(true)}
+        onSearch={handleSearch}
       />
       <Categories 
         products={categories.map(c => ({ categoria: c } as any))}

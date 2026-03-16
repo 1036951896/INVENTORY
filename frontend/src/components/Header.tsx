@@ -44,6 +44,17 @@ export default function Header({ onCartClick, onSearch, onHamburguesaClick }: He
     }
   }, [showSearchMobile]);
 
+  // Escuchar cuando algún componente externo limpia la búsqueda (ej: al seleccionar categoría)
+  useEffect(() => {
+    const handleExternalSearchClear = (e: CustomEvent) => {
+      if (e.detail.searchTerm === '') {
+        setSearchTerm('');
+      }
+    };
+    window.addEventListener('searchchange', handleExternalSearchClear as EventListener);
+    return () => window.removeEventListener('searchchange', handleExternalSearchClear as EventListener);
+  }, []);
+
   const handleLogout = () => {
     authService.logout();
     setUser(null);
